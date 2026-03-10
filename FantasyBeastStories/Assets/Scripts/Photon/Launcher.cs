@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.Video;
 
 public class Launcher : MonoBehaviourPunCallbacks
 {
@@ -15,5 +16,13 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         base.OnConnectedToMaster();
         Debug.Log("Connected to master");
+
+        PhotonNetwork.JoinOrCreateRoom("Room", new Photon.Realtime.RoomOptions() { MaxPlayers = 4 }, default);
+    }
+
+    public override void OnJoinedRoom()
+    {
+        base.OnJoinedRoom();
+        PhotonNetwork.Instantiate("Protagonist", new Vector3(0, 1, 12), Quaternion.identity);
     }
 }
