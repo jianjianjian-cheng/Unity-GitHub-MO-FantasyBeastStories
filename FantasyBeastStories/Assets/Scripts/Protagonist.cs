@@ -102,8 +102,7 @@ namespace Player
             isJump = true;
             animator.SetBool("isJump", isJump);
             // 跳跃力
-            rb.AddForce(Vector3.up * 5f, ForceMode.Impulse);
-            Invoke(nameof(ResetIsJump), 1.2f);
+            rb.AddForce(Vector3.up * 3.2f, ForceMode.Impulse);
         }
 
         private void ResetIsJump()
