@@ -5,13 +5,11 @@ using Photon.Pun;
 
 namespace Player
 {
-    public class Protagonist : MonoBehaviourPun, IPunObservable
+    public class Protagonist : MonoBehaviourPun
     {
         [Header("角色变量设置")]
         private bool isRun;
         private bool isRight;
-        private bool currentFlipX;
-        private bool networkFlipX;
         private bool isJump;
         private bool isGround;
         [SerializeField] private float groundDistance = 0.2f; // 地面检测距离
@@ -20,7 +18,7 @@ namespace Player
 
         private Rigidbody rb; // 物理组件
         private Animator animator;// 动画组件
-        private SpriteRenderer spriteRenderer; // 渲染组件
+        [SerializeField] private SpriteRenderer spriteRenderer; // 渲染组件
         private Vector3 movement; // 移动方向
 
         // Start is called before the first frame update
@@ -42,8 +40,6 @@ namespace Player
             //检查是否是本地玩家
             if (!photonView.IsMine && PhotonNetwork.IsConnected)
             {
-                // 网络玩家：应用网络翻转状态
-                spriteRenderer.flipX = networkFlipX;
                 return;
             }
             // 获取输入
@@ -81,7 +77,6 @@ namespace Player
             if (spriteRenderer != null)
             {
                 spriteRenderer.flipX = !isRight;
-                currentFlipX = !isRight;
             }
 
             // 跳跃输入
@@ -134,20 +129,6 @@ namespace Player
             // 绘制角色与地面距离
             Gizmos.color = Color.red;
             Gizmos.DrawLine(transform.position, transform.position + Vector3.down * groundDistance);
-        }
-
-        void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-        {
-            if (stream.IsWriting)
-            {
-                // 本地玩家：发送翻转状态
-                stream.SendNext(currentFlipX);
-            }
-            else
-            {
-                // 网络玩家：接收翻转状态
-                networkFlipX = (bool)stream.ReceiveNext();
-            }
         }
     }
 }
