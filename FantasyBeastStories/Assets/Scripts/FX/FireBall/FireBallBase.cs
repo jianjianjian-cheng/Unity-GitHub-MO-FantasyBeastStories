@@ -6,10 +6,10 @@ namespace FX
 {
     public class FireBallBase : MonoBehaviour
     {
-        private GameObject tagetEnemy;
-        [SerializeField] private float moveSpeed = 4f; // 移动速度
+        protected GameObject tagetEnemy;
+        [SerializeField] protected float moveSpeed = 4f; // 移动速度
         // Update is called once per frame
-        void Update()
+        public virtual void Update()
         {
             //自动追踪敌人
             if (tagetEnemy == null)
@@ -21,9 +21,24 @@ namespace FX
             transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
         }
 
-        public void SetTarget(GameObject target)
+        public virtual void SetTarget(GameObject target)
         {
             tagetEnemy = target;
+        }
+
+        public virtual void HandleEnemyCollisionEnter(Collider enemy)
+        {
+
+        }
+
+        public virtual void HandleEnemyCollisionStay(Collider enemy)
+        {
+
+        }
+
+        public virtual void HandleEnemyCollisionExit(Collider enemy)
+        {
+
         }
     }
 }

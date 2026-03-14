@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using FX;
 using Manager;
+using UnityEngine.Video;
 
 namespace Trigger
 {
@@ -19,7 +20,12 @@ namespace Trigger
         {
             Debug.Log("AttackRangePlayer Start");
             if (firePoint == null)
-                firePoint = transform;
+            {
+                GameObject fp = new GameObject("FirePoint");
+                fp.transform.parent = transform;
+                fp.transform.localPosition = Vector3.up / 3; // 向上1单位
+                firePoint = fp.transform;
+            }
             attackTimer = 0;
         }
 
