@@ -7,10 +7,13 @@ namespace Manager
     public class ObjectPoolManager : ManagerBase
     {
         [SerializeField] private GameObject fireBallPrefab; // 火球预制体
+        [SerializeField] private GameObject fireBallHitEffectPrefab; // 火球击中效果预制体
         void Start()
         {
             //添加火球到对象池
             AddMultipleToPool("FireBallPool", fireBallPrefab, 10);
+            //添加火球击中效果到对象池
+            AddMultipleToPool("FireBallHitEffectPool", fireBallHitEffectPrefab, 10);
         }
         //对象池字典
         private Dictionary<string, List<GameObject>> objectPools = new Dictionary<string, List<GameObject>>();

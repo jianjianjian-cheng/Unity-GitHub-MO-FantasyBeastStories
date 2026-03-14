@@ -942,6 +942,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireBallPrefab: {fileID: 8946014064958124703, guid: 3c26de45a4d395348aa851cb10d46a2a, type: 3}
+  fireBallHitEffectPrefab: {fileID: 725748389856807714, guid: 4bda94453d2ca7444a0fff05b2d425f5, type: 3}
 --- !u!4 &1010396645
 Transform:
   m_ObjectHideFlags: 0
