@@ -29,11 +29,17 @@ namespace Manager
         //从对象池获取对象
         public GameObject GetFromPool(string poolName)
         {
-            if (objectPools.ContainsKey(poolName) && objectPools[poolName].Count > 0)
+            if (objectPools.ContainsKey(poolName))
             {
-                GameObject obj = objectPools[poolName][0];
-                objectPools[poolName].RemoveAt(0);
-                return obj;
+                for (int i = 0; i < objectPools[poolName].Count; i++)
+                {
+                    GameObject obj = objectPools[poolName][i];
+                    if (!obj.activeSelf)
+                    {
+                        objectPools[poolName].RemoveAt(i);
+                        return obj;
+                    }
+                }
             }
             return null;
         }

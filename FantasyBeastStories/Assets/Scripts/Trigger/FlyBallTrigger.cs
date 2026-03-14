@@ -14,9 +14,9 @@ namespace Trigger
             {
                 return;
             }
-            ManagerBase.instance.GetComponent<ObjectPoolManager>().ReturnToPool("FireBallPool", gameObject.transform.parent.gameObject);
             // 播放火球击中效果
             ManagerBase.instance.GetComponent<ObjectPoolManager>().GetFromPoolAndActivate("FireBallHitEffectPool", other.gameObject.transform.position);
+            ManagerBase.instance.GetComponent<ObjectPoolManager>().ReturnToPool("FireBallPool", gameObject.transform.parent.gameObject);
             base.OnTriggerEnter(other);
         }
         public override void OnTriggerStay(Collider other)

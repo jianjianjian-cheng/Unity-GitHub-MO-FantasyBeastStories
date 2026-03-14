@@ -5030,6 +5030,7 @@ GameObject:
   - component: {fileID: 725748389856807712}
   - component: {fileID: 725748389856807713}
   - component: {fileID: 725748389856807726}
+  - component: {fileID: 3895936615527845924}
   m_Layer: 0
   m_Name: FireBallHit
   m_TagString: Untagged
@@ -9764,7 +9765,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9205bc1bbacc90040a998067b5643d16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clearBehavior: 2
+  clearBehavior: 1
   cameraShake:
     enabled: 1
     useMainCamera: 1
@@ -9915,6 +9916,19 @@ MonoBehaviour:
     perlinColor: 0
     perlinColorSpeed: 1
   fadeOutReference: {fileID: 0}
+--- !u!114 &3895936615527845924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 725748389856807714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae3b1d2c6ebec9f4fbc4f8e095c77c14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolName: FireBallHitEffectPool
 --- !u!1 &725748390055121426
 GameObject:
   m_ObjectHideFlags: 0
