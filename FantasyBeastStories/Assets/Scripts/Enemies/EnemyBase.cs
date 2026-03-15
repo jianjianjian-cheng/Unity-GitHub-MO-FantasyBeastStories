@@ -74,6 +74,11 @@ namespace Enemies
                     }
                 }
             }
+            else
+            {
+                PlayerTarget = null;
+                return;
+            }
         }
 
         #region 状态机相关代码
@@ -127,6 +132,11 @@ namespace Enemies
             if (PlayerTarget)
             {
                 TransitionToState(EnemyState.Run);
+            }
+            else
+            {
+                TrackPlayer();
+                return;
             }
         }
         protected virtual void ExitIdle() { }

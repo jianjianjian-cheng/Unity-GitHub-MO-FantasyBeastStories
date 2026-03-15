@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 namespace Charactors
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviourPun
     {
         [Header("移动设置")]
         [SerializeField] private float moveSpeed = 2f; // 移动速度
@@ -21,6 +22,10 @@ namespace Charactors
         // Start is called before the first frame update
         void Start()
         {
+            if (!photonView.IsMine)
+            {
+                return; // 只处理本地玩家的输入和动画
+            }
             // 获取或添加Rigidbody组件
             if (rb == null)
             {
@@ -36,11 +41,19 @@ namespace Charactors
         // Update is called once per frame
         void Update()
         {
+            if (!photonView.IsMine)
+            {
+                return; // 只处理本地玩家的输入和动画
+            }
             HandleInput();
         }
 
         void FixedUpdate()
         {
+            if (!photonView.IsMine)
+            {
+                return; // 只处理本地玩家的输入和动画
+            }
             // 物理移动
             MoveCharacter();
         }
