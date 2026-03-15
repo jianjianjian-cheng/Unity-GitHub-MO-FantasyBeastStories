@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 namespace Manager
@@ -8,7 +9,30 @@ namespace Manager
     {
         [SerializeField] private GameObject fireBallPrefab; // 火球预制体
         [SerializeField] private GameObject fireBallHitEffectPrefab; // 火球击中效果预制体
+        private bool isPhotonReady = false; // Photon是否准备就绪
         void Start()
+        {
+            if (PhotonNetwork.IsConnectedAndReady && PhotonNetwork.InRoom)
+            {
+                InitializePool();
+                isPhotonReady = true;
+            }
+            else
+            {
+                Debug.LogWarning("等待Photon连接");
+            }
+        }
+
+        void Update()
+        {
+            if (!isPhotonReady && PhotonNetwork.IsConnectedAndReady && PhotonNetwork.InRoom)
+            {
+                InitializePool();
+                isPhotonReady = true;
+            }
+        }
+
+        private void InitializePool()
         {
             //添加火球到对象池
             AddMultipleToPool("FireBallPool", fireBallPrefab, 10);
@@ -31,9 +55,19 @@ namespace Manager
         {
             if (objectPools.ContainsKey(poolName))
             {
+                // Iterate and return first inactive (available) object.
+                // Clean up any destroyed objects that remained in the pool.
                 for (int i = 0; i < objectPools[poolName].Count; i++)
                 {
                     GameObject obj = objectPools[poolName][i];
+                    if (obj == null)
+                    {
+                        // Removed object was destroyed elsewhere but still in the pool.
+                        objectPools[poolName].RemoveAt(i);
+                        i--;
+                        continue;
+                    }
+
                     if (!obj.activeSelf)
                     {
                         objectPools[poolName].RemoveAt(i);
@@ -83,7 +117,7 @@ namespace Manager
             }
             for (int i = 0; i < count; i++)
             {
-                GameObject obj = Object.Instantiate(prefab);
+                GameObject obj = PhotonNetwork.Instantiate(prefab.name, transform.position, Quaternion.identity);
                 obj.SetActive(false);
                 objectPools[poolName].Add(obj);
             }

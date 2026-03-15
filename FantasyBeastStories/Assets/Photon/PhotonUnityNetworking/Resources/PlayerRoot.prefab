@@ -81,7 +81,7 @@ GameObject:
   - component: {fileID: 9195737920974269791}
   - component: {fileID: 2987272849217243295}
   m_Layer: 6
-  m_Name: LittleSquirrel_Happy
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

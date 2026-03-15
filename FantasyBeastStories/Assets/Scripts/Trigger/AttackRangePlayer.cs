@@ -3,10 +3,11 @@ using UnityEngine;
 using FX;
 using Manager;
 using UnityEngine.Video;
+using Photon.Pun;
 
 namespace Trigger
 {
-    public class AttackRangePlayer : MonoBehaviour
+    public class AttackRangePlayer : MonoBehaviourPun
     {
         [Header("攻击设置")]
         [SerializeField] private float attackInterval = 2f;
@@ -51,11 +52,21 @@ namespace Trigger
         //更新目标敌人为最近的敌人
         private void UpdateTargetEnemy()
         {
+            // Clean up destroyed targets from the list
+            for (int i = gameObjects.Count - 1; i >= 0; i--)
+            {
+                if (gameObjects[i] == null)
+                {
+                    gameObjects.RemoveAt(i);
+                }
+            }
+
             if (gameObjects.Count > 0)
             {
                 targetEnemy = gameObjects[0];
                 for (int i = 1; i < gameObjects.Count; i++)
                 {
+                    if (gameObjects[i] == null) continue;
                     if (Vector3.Distance(transform.position, gameObjects[i].transform.position) < Vector3.Distance(transform.position, targetEnemy.transform.position))
                     {
                         targetEnemy = gameObjects[i];
