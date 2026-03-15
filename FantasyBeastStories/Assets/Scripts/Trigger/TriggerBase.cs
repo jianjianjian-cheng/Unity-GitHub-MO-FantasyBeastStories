@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Enemies;
 using FX;
 using UnityEngine;
 
@@ -16,17 +17,23 @@ namespace Trigger
 
         public virtual void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Enemy"))
+            if (!other.CompareTag("Enemy") || other.GetComponent<EnemyBase>().GetIsDie())
             {
+                return;
+            }
+            if (other.CompareTag("Enemy"))
                 if (ballBase != null)
                 {
                     ballBase.HandleEnemyCollisionEnter(other);
                 }
-            }
         }
 
         public virtual void OnTriggerStay(Collider other)
         {
+            if (!other.CompareTag("Enemy") || other.GetComponent<EnemyBase>().GetIsDie())
+            {
+                return;
+            }
             if (other.CompareTag("Enemy"))
             {
                 if (ballBase != null)
@@ -38,6 +45,10 @@ namespace Trigger
 
         public virtual void OnTriggerExit(Collider other)
         {
+            if (!other.CompareTag("Enemy") || other.GetComponent<EnemyBase>().GetIsDie())
+            {
+                return;
+            }
             if (other.CompareTag("Enemy"))
             {
                 if (ballBase != null)

@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Enemies;
+using ExitGames.Client.Photon.StructWrapping;
 using UnityEngine;
 
 namespace FX
@@ -16,7 +18,15 @@ namespace FX
             {
                 return;
             }
-            transform.LookAt(tagetEnemy.transform);
+            //如果敌人已经死亡，火球以当前速度和方向直线飞行
+            if (tagetEnemy.GetComponent<EnemyBase>().GetIsDie())
+            {
+                transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+                return;
+            }
+            // 获取敌人位置
+            Transform getHitPos = tagetEnemy.transform.Find("GetHitPos");
+            transform.LookAt(getHitPos != null ? getHitPos : tagetEnemy.transform);
             // 移动 towards the enemy
             transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
         }
@@ -28,7 +38,10 @@ namespace FX
 
         public virtual void HandleEnemyCollisionEnter(Collider enemy)
         {
-
+            if (enemy.CompareTag("Enemy"))
+            {
+                enemy.GetComponent<EnemyBase>().TakeDamage(30f); // 这里的10f是示例伤害值，可以根据需要调整
+            }
         }
 
         public virtual void HandleEnemyCollisionStay(Collider enemy)

@@ -18,12 +18,11 @@ namespace Trigger
 
         private void Start()
         {
-            Debug.Log("AttackRangePlayer Start");
             if (firePoint == null)
             {
                 GameObject fp = new GameObject("FirePoint");
                 fp.transform.parent = transform;
-                fp.transform.localPosition = Vector3.up / 3; // 向上1单位
+                fp.transform.localPosition = Vector3.up / 1.8f; // 向上1单位
                 firePoint = fp.transform;
             }
             attackTimer = 0;
@@ -32,7 +31,6 @@ namespace Trigger
         private void Update()
         {
             UpdateTargetEnemy();
-            Debug.Log("攻击目标: " + (targetEnemy != null ? targetEnemy.name : "无"));
             // 计时器逻辑
             if (targetEnemy != null)
             {
@@ -72,7 +70,6 @@ namespace Trigger
 
         private void Attack()
         {
-            Debug.Log("开始攻击");
             if (targetEnemy == null) return;
             GameObject fireBall = ManagerBase.instance.GetComponent<ObjectPoolManager>().GetFromPoolAndActivate("FireBallPool", firePoint.position);
             if (fireBall != null)
@@ -90,7 +87,6 @@ namespace Trigger
         {
             if (other.CompareTag("Enemy"))
             {
-                Debug.Log("Enemy entered attack range: " + other.gameObject.name);
                 if (!gameObjects.Contains(other.gameObject))
                 {
                     gameObjects.Add(other.gameObject);
@@ -102,7 +98,6 @@ namespace Trigger
         {
             if (other.CompareTag("Enemy"))
             {
-                Debug.Log("Enemy exited attack range: " + other.gameObject.name);
                 gameObjects.Remove(other.gameObject);
             }
         }

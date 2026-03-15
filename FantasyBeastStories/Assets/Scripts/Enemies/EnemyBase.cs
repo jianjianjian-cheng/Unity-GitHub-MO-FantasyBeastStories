@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Charactors.Attribute;
 using UnityEngine;
 namespace Enemies
 {
     public class EnemyBase : MonoBehaviour
     {
-        protected enum EnemyState
+        public enum EnemyState
         {
             Idle,
             Run,
@@ -14,10 +15,16 @@ namespace Enemies
         }
         [SerializeField] protected Animator animator;
         [SerializeField] protected Rigidbody rb;
-        [SerializeField] protected float moveSpeed = 2f; // 移动速度
+        [SerializeField] protected AttributeEnemyBase attribute;
 
         protected GameObject PlayerTarget;
         protected EnemyState currentState;
+
+        void Awake()
+        {
+            attribute = GetComponent<AttributeEnemyBase>();
+        }
+
 
         protected virtual void Start()
         {
@@ -46,6 +53,10 @@ namespace Enemies
         //追踪最近的玩家
         protected virtual void TrackPlayer()
         {
+            if (GetIsDie())
+            {
+                return;
+            }
             List<GameObject> players = new List<GameObject>();
             foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
             {
@@ -136,7 +147,7 @@ namespace Enemies
                 // 计算移动向量
                 Vector3 moveDirection = (PlayerTarget.transform.position - transform.position).normalized;
                 // 移动敌人
-                rb.MovePosition(transform.position + moveDirection * moveSpeed * Time.deltaTime);
+                rb.MovePosition(transform.position + moveDirection * attribute.moveSpeed * Time.deltaTime);
                 // 旋转敌人朝向玩家
                 transform.LookAt(PlayerTarget.transform);
             }
@@ -152,9 +163,38 @@ namespace Enemies
         protected virtual void ExitAttack() { }
 
         // ========== Die状态 ==========
-        protected virtual void EnterDie() { }
+        protected virtual void EnterDie()
+        {
+            attribute.SetIsDie(true);
+            attribute.SetMoveSpeed(0);
+            animator.SetTrigger("die");
+            Invoke(nameof(DestorySelf), 3f); // 3秒后销毁敌人对象
+        }
         protected virtual void UpdateDie() { }
         protected virtual void ExitDie() { }
         #endregion
+
+        protected virtual void DestorySelf()
+        {
+            Destroy(gameObject);
+        }
+        public virtual void TakeDamage(float damage)
+        {
+            attribute.TakeDamage(damage);
+            if (attribute.currentHealth <= 0)
+            {
+                TransitionToState(EnemyState.Die);
+            }
+        }
+
+        public virtual EnemyState GetCurrentState()
+        {
+            return currentState;
+        }
+
+        public virtual bool GetIsDie()
+        {
+            return attribute.GetIsDie();
+        }
     }
 }
