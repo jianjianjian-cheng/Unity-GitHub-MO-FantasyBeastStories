@@ -23,6 +23,6 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         base.OnJoinedRoom();
-        PhotonNetwork.Instantiate("PlayerRoot", new Vector3(0, 1, 12), Quaternion.identity);
+        PhotonNetwork.Instantiate("PlayerRoot", new Vector3(15, 2, 12), Quaternion.identity);
     }
 }
