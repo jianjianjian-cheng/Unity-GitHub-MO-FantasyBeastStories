@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.tripo3d.unitybridge": "file:G:/插件/Tripo3d_Unity_Bridge",
     "com.unity.2d.animation": "9.2.2",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.cinemachine": "2.10.6",

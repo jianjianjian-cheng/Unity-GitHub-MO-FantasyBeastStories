@@ -1,5 +1,13 @@
 {
   "dependencies": {
+    "com.tripo3d.unitybridge": {
+      "version": "file:G:/插件/Tripo3d_Unity_Bridge",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "com.unity.modules.jsonserialize": "1.0.0"
+      }
+    },
     "com.unity.2d.animation": {
       "version": "9.2.2",
       "depth": 0,
