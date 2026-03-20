@@ -86,7 +86,7 @@ namespace Charactors
             {
                 Quaternion targetRotation = Quaternion.LookRotation(movement);
                 // 如果模型“面朝 +X”，要再转 90 度
-                targetRotation *= Quaternion.Euler(0f, 90f, 0f);
+                targetRotation *= Quaternion.Euler(0f, 0f, 0f);
 
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
             }
