@@ -9,6 +9,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
+        Application.runInBackground = true;
         PhotonNetwork.ConnectUsingSettings();
     }
 
@@ -23,6 +24,6 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         base.OnJoinedRoom();
-        PhotonNetwork.Instantiate("WizardBoyRoot", new Vector3(15, 2, 12), Quaternion.identity);
+        PhotonNetwork.Instantiate("WizardBoyRoot", new Vector3(80, 2, 80), Quaternion.identity);
     }
 }
