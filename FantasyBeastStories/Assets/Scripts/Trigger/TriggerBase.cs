@@ -2,17 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using Enemies;
 using FX;
+using Photon.Pun;
 using UnityEngine;
 
 namespace Trigger
 {
-    public class TriggerBase : MonoBehaviour
+    public class TriggerBase : MonoBehaviourPun
     {
-        protected FireBallBase ballBase;
         // Start is called before the first frame update
         public virtual void Start()
         {
-            ballBase = GetComponentInParent<FireBallBase>();
+
+        }
+
+        public virtual void Update()
+        {
+
         }
 
         public virtual void OnTriggerEnter(Collider other)
@@ -21,11 +26,7 @@ namespace Trigger
             {
                 return;
             }
-            if (other.CompareTag("Enemy"))
-                if (ballBase != null)
-                {
-                    ballBase.HandleEnemyCollisionEnter(other);
-                }
+
         }
 
         public virtual void OnTriggerStay(Collider other)
@@ -34,13 +35,7 @@ namespace Trigger
             {
                 return;
             }
-            if (other.CompareTag("Enemy"))
-            {
-                if (ballBase != null)
-                {
-                    ballBase.HandleEnemyCollisionStay(other);
-                }
-            }
+
         }
 
         public virtual void OnTriggerExit(Collider other)
@@ -48,13 +43,6 @@ namespace Trigger
             if (!other.CompareTag("Enemy") || other.GetComponent<EnemyBase>().GetIsDie())
             {
                 return;
-            }
-            if (other.CompareTag("Enemy"))
-            {
-                if (ballBase != null)
-                {
-                    ballBase.HandleEnemyCollisionExit(other);
-                }
             }
         }
 

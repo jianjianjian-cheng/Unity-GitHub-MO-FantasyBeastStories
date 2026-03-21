@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2444618757141537097}
   m_Layer: 0
   m_Name: Virtual Camera
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -56,7 +56,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 6185504820556481681}
   m_Follow: {fileID: 6185504820556481681}
   m_Lens:
-    FieldOfView: 35
+    FieldOfView: 60
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -120,11 +120,11 @@ GameObject:
   - component: {fileID: 6265433259380809336}
   m_Layer: 0
   m_Name: WizardBoyRoot
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6265433259380809336
 Transform:
   m_ObjectHideFlags: 0
@@ -136,7 +136,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 39.339993, y: 0.47, z: 15.69}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6185504820556481681}
   - {fileID: 9214032761187265579}
@@ -151,8 +151,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3479939664752032970}
-  - component: {fileID: 3184408941928055507}
   - component: {fileID: 7064572748405947047}
+  - component: {fileID: 6646249465345568054}
   m_Layer: 0
   m_Name: AttackRange
   m_TagString: Player
@@ -175,20 +175,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6185504820556481681}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3184408941928055507
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2990400970803704115}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52da19642e4e9e84abca50f18aaa555c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackInterval: 2
-  firePoint: {fileID: 6185504820556481681}
 --- !u!65 &7064572748405947047
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -210,6 +196,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 8, y: 0.9153899, z: 8}
   m_Center: {x: 0, y: 0.44416732, z: 0}
+--- !u!114 &6646249465345568054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2990400970803704115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 386750911a6f5d048a5dc794651fd199, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isTest: 1
+  offsetY: 1
+  attackInterval: 2
 --- !u!1 &7685021204660067884
 GameObject:
   m_ObjectHideFlags: 0
@@ -307,6 +308,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 6265433259380809336}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: fb0a818e2c4d1dd42b1f8b2ba5d96855, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fb0a818e2c4d1dd42b1f8b2ba5d96855, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fb0a818e2c4d1dd42b1f8b2ba5d96855, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fb0a818e2c4d1dd42b1f8b2ba5d96855, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -345,6 +358,10 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: fb0a818e2c4d1dd42b1f8b2ba5d96855, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fb0a818e2c4d1dd42b1f8b2ba5d96855, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: fb0a818e2c4d1dd42b1f8b2ba5d96855, type: 3}
       propertyPath: m_Name
@@ -457,7 +474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c50604d134e22245b0d51dd033c8c2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
+  moveSpeed: 4
   rb: {fileID: 2406815688151714110}
   animator: {fileID: 4690395130346847112}
   rotationSpeed: 10
