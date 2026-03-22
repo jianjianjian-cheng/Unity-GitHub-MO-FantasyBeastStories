@@ -46,25 +46,29 @@ namespace Trigger
             Vector3 pos = new Vector3(transform.position.x, transform.position.y + offsetY, transform.position.z);
             if (isTest)
             {
-                GameObject gameObject1 = ManagerBase.instance.GetComponent<ObjectPoolManager>().GetFromPoolAndActivate(ObjectPoolConst.TestPool, pos);
-                if (targetEnemy != null)
+                GameObject gameObject1 = ObjectPoolManager.instance.GetFromPoolAndActivate(ObjectPoolConst.TestPool, pos);
+                GameObject trigger1 = ObjectPoolManager.instance.GetFromPoolAndActivate(ObjectPoolConst.ImpactCannonTriggerPool, pos);
+                if (targetEnemy != null && gameObject1 != null)
                 {
                     gameObject1.GetComponentInChildren<ParticleSystem>().Play();
                     //仅仅在x和z轴上面朝向敌人
                     Vector3 targetPos = new Vector3(targetEnemy.transform.position.x, pos.y, targetEnemy.transform.position.z);
                     gameObject1.transform.LookAt(targetPos);
+                    trigger1.GetComponent<ImpactCannon>().StartShoot((targetEnemy.transform.position - pos).normalized);
                 }
+
                 return;
             }
             //触发攻击
-            GameObject gameObject = ManagerBase.instance.GetComponent<ObjectPoolManager>().GetFromPoolAndActivate(ObjectPoolConst.ImpactCannonCommonPool, pos);
+            GameObject gameObject = ObjectPoolManager.instance.GetFromPoolAndActivate("ImpactCannonCommonPool", pos);
+            GameObject trigger = ObjectPoolManager.instance.GetFromPoolAndActivate("ImpactCannonTriggerPool", pos);
             if (targetEnemy != null)
             {
                 gameObject.GetComponentInChildren<ParticleSystem>().Play();
                 //仅仅在x和z轴上面朝向敌人
                 Vector3 targetPos = new Vector3(targetEnemy.transform.position.x, pos.y, targetEnemy.transform.position.z);
-                gameObject.GetComponentInChildren<ImpactCannon>().transform.LookAt(targetPos);
                 gameObject.transform.LookAt(targetPos);
+                trigger.GetComponent<ImpactCannon>().StartShoot((targetEnemy.transform.position - pos).normalized);
             }
         }
 
@@ -73,12 +77,40 @@ namespace Trigger
         {
             if (gameObjects.Count == 0)
             {
+                targetEnemy = null;
                 return;
             }
+
+            // 清理无效目标（已销毁/已死亡/非敌人）
+            for (int i = gameObjects.Count - 1; i >= 0; i--)
+            {
+                var enemyGo = gameObjects[i];
+                if (enemyGo == null)
+                {
+                    gameObjects.RemoveAt(i);
+                    continue;
+                }
+
+                var enemyBase = enemyGo.GetComponent<EnemyBase>();
+                if (enemyBase == null || enemyBase.GetIsDie())
+                {
+                    gameObjects.RemoveAt(i);
+                }
+            }
+
+            if (gameObjects.Count == 0)
+            {
+                targetEnemy = null;
+                return;
+            }
+
             float minDistance = float.MaxValue;
             GameObject closestEnemy = null;
             foreach (GameObject enemy in gameObjects)
             {
+                if (enemy == null)
+                    continue;
+
                 float distance = Vector3.Distance(transform.position, enemy.transform.position);
                 if (distance < minDistance)
                 {
@@ -86,6 +118,7 @@ namespace Trigger
                     closestEnemy = enemy;
                 }
             }
+
             targetEnemy = closestEnemy;
         }
 

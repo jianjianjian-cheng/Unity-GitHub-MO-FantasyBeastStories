@@ -22,7 +22,7 @@ namespace Trigger
 
         public virtual void OnTriggerEnter(Collider other)
         {
-            if (!other.CompareTag("Enemy") || other.GetComponent<EnemyBase>().GetIsDie())
+            if (!other.gameObject.CompareTag("Enemy") || other.gameObject.GetComponent<EnemyBase>().GetIsDie())
             {
                 return;
             }
@@ -31,7 +31,7 @@ namespace Trigger
 
         public virtual void OnTriggerStay(Collider other)
         {
-            if (!other.CompareTag("Enemy") || other.GetComponent<EnemyBase>().GetIsDie())
+            if (!other.gameObject.CompareTag("Enemy") || other.gameObject.GetComponent<EnemyBase>().GetIsDie())
             {
                 return;
             }
@@ -40,7 +40,7 @@ namespace Trigger
 
         public virtual void OnTriggerExit(Collider other)
         {
-            if (!other.CompareTag("Enemy") || other.GetComponent<EnemyBase>().GetIsDie())
+            if (!other.gameObject.CompareTag("Enemy") || other.gameObject.GetComponent<EnemyBase>().GetIsDie())
             {
                 return;
             }
