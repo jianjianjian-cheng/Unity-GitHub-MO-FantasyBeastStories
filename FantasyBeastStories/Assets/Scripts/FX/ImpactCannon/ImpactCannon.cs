@@ -8,12 +8,14 @@ namespace FX
 {
     public class ImpactCannon : TriggerBase
     {
+        [SerializeField] private bool isTest;
         private float Speed = 15f;
         private Rigidbody rb;
         // Start is called before the first frame update
 
         void Awake()
         {
+            isTest = GameManager.instance != null && GameManager.isTest;
             rb = GetComponent<Rigidbody>();
         }
         public void OnEnable()
@@ -71,6 +73,10 @@ namespace FX
 
         private void DelayDestorySelf()
         {
+            if (isTest)
+            {
+                ObjectPoolManager.instance.ReturnToPool(ObjectPoolConst.TestPool, gameObject);
+            }
             ObjectPoolManager.instance.ReturnToPool(ObjectPoolConst.ImpactCannonTriggerPool, gameObject);
         }
     }

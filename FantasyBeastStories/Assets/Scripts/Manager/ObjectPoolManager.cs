@@ -64,7 +64,8 @@ namespace Manager
             if (isTest)
             {
                 AddMultipleToPool("TestPool", testPrefab, 5);
-                AddMultipleToPool("ImpactCannonTriggerPool", ImpactCannonTriggerPrefab, 10);
+                AddMultipleToPool("ImpactCannonCommonPool", ImpactCannonCommonPrefab, 10, ImpactCannonPath);
+                AddMultipleToPool("ImpactCannonTriggerPool", ImpactCannonTriggerPrefab, 10, ImpactCannonPath);
                 AddMultipleToPool("ImpactCannonHitCommonPool", ImpactCannonHitCommonPrefab, 20, ImpactCannonPath);
                 return;
             }

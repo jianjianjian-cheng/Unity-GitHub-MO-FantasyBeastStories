@@ -208,7 +208,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 386750911a6f5d048a5dc794651fd199, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isTest: 0
   offsetY: 0.5
   attackInterval: 2
 --- !u!1 &7685021204660067884

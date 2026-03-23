@@ -267,6 +267,12 @@
       },
       "url": "https://packages.unity.cn"
     },
+    "com.volorf.gen-ui-image": {
+      "version": "file:G:/插件/gen ui image/gen-ui-image-main",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,

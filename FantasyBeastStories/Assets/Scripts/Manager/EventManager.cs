@@ -7,6 +7,7 @@ namespace Manager
 {
     public class EventManager : MonoBehaviour
     {
+        [SerializeField] private bool isTest; // 是否测试模式
         //事件管理器(单例)
         private static EventManager instance;
         void Awake()
@@ -19,6 +20,14 @@ namespace Manager
             else
             {
                 Destroy(gameObject);
+            }
+        }
+
+        void Start()
+        {
+            if (isTest)
+            {
+
             }
         }
 

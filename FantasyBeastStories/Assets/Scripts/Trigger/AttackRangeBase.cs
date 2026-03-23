@@ -10,7 +10,7 @@ namespace Trigger
 {
     public class AttackRangeBase : TriggerBase
     {
-        [SerializeField] private bool isTest = false; // 是否测试模式
+        private bool isTest = false; // 是否测试模式
         private List<GameObject> gameObjects = new List<GameObject>();
         private GameObject targetEnemy;
         private float attackTimer;
@@ -25,6 +25,7 @@ namespace Trigger
         public override void Start()
         {
             base.Start();
+            isTest = GameManager.instance != null && GameManager.isTest;
         }
 
         // Update is called once per frame
