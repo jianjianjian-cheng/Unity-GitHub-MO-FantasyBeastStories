@@ -1,15 +1,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Events;
 using UnityEngine;
 
 namespace Manager
 {
     public class EventManager : MonoBehaviour
     {
+        #region 单例模式
         [SerializeField] private bool isTest; // 是否测试模式
         //事件管理器(单例)
-        private static EventManager instance;
+        public static EventManager instance;
         void Awake()
         {
             if (instance == null)
@@ -23,6 +25,8 @@ namespace Manager
             }
         }
 
+        #endregion
+
         void Start()
         {
             if (isTest)
@@ -34,7 +38,10 @@ namespace Manager
         /// <summary>
         /// 事件字典
         /// </summary>
+        /// <remarks> 无参数事件字典
         private Dictionary<string, Action> eventDictionary = new Dictionary<string, Action>();
+        /// </remarks> 复杂参数事件字典
+        private Dictionary<string, Action<EventArgsBase>> eventDictionaryComplex = new Dictionary<string, Action<EventArgsBase>>();
 
         /// <summary>
         /// 注册事件
@@ -75,5 +82,42 @@ namespace Manager
                 eventDictionary[eventName]?.Invoke();
             }
         }
+
+        /// <summary> 注册复杂事件
+        /// </summary>
+        public void RegisterEventComplex(string eventName, Action<EventArgsBase> action)
+        {
+            if (eventDictionaryComplex.ContainsKey(eventName))
+            {
+                eventDictionaryComplex[eventName] += action;
+            }
+            else
+            {
+                eventDictionaryComplex.Add(eventName, action);
+            }
+        }
+        /// <summary> 注销复杂事件
+        /// </summary>
+        public void UnRegisterEventComplex(string eventName, Action<EventArgsBase> action)
+        {
+            if (eventDictionaryComplex.ContainsKey(eventName))
+            {
+                eventDictionaryComplex[eventName] -= action;
+            }
+        }
+        /// <summary> 触发复杂事件
+        /// </summary>
+        public void TriggerEventComplex(string eventName, EventArgsBase args)
+        {
+            if (eventDictionaryComplex.ContainsKey(eventName))
+            {
+                eventDictionaryComplex[eventName]?.Invoke(args);
+            }
+        }
+    }
+
+    public class EventNames
+    {
+        public const string DamageReceived = "DamageReceived";
     }
 }

@@ -136,6 +136,13 @@
       "dependencies": {},
       "url": "https://packages.unity.cn"
     },
+    "com.unity.nuget.newtonsoft-json": {
+      "version": "3.2.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.cn"
+    },
     "com.unity.performance.profile-analyzer": {
       "version": "1.2.3",
       "depth": 1,
@@ -266,12 +273,6 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.cn"
-    },
-    "com.volorf.gen-ui-image": {
-      "version": "file:G:/插件/gen ui image/gen-ui-image-main",
-      "depth": 0,
-      "source": "local",
-      "dependencies": {}
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

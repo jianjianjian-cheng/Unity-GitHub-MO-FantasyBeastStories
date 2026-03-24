@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using Charactors.Attribute;
+using Events;
+using Manager;
 using UnityEngine;
 namespace Enemies
 {
@@ -22,7 +24,7 @@ namespace Enemies
 
         void Awake()
         {
-            attribute = GetComponent<AttributeEnemyBase>();
+            attribute = new AttributeEnemyBase();
         }
 
 
@@ -175,7 +177,6 @@ namespace Enemies
         // ========== Die状态 ==========
         protected virtual void EnterDie()
         {
-            attribute.SetIsDie(true);
             attribute.SetMoveSpeed(0);
             animator.SetTrigger("die");
             Invoke(nameof(DestorySelf), 3f); // 3秒后销毁敌人对象
@@ -188,15 +189,6 @@ namespace Enemies
         {
             Destroy(gameObject);
         }
-        public virtual void TakeDamage(float damage)
-        {
-            attribute.TakeDamage(damage);
-            if (attribute.currentHealth <= 0)
-            {
-                TransitionToState(EnemyState.Die);
-            }
-        }
-
         public virtual EnemyState GetCurrentState()
         {
             return currentState;
@@ -205,6 +197,42 @@ namespace Enemies
         public virtual bool GetIsDie()
         {
             return attribute.GetIsDie();
+        }
+
+        protected virtual void OnEnable()
+        {
+            EventManager.instance.RegisterEventComplex(EventNames.DamageReceived, OnDamageReceived);
+        }
+
+        protected virtual void OnDisable()
+        {
+            EventManager.instance.UnRegisterEventComplex(EventNames.DamageReceived, OnDamageReceived);
+        }
+
+        protected virtual void OnDamageReceived(EventArgsBase args)
+        {
+            DamageEventArgs damageEventArgs = args as DamageEventArgs;
+            if (damageEventArgs == null)
+            {
+                Debug.LogWarning($"期望 DamageEventArgs，但收到 {args?.GetType()}");
+                return;
+            }
+            if (damageEventArgs.GetDamgeTarget() != gameObject)
+            {
+                return;
+            }
+            TakeDamage(damageEventArgs);
+        }
+
+        public virtual void TakeDamage(DamageEventArgs damageEventArgs)
+        {
+            damageEventArgs.CalculateFinalDamageValue();
+            attribute.TakeDamage(damageEventArgs.finalDamageValue);
+            attribute.TakeDamageSpecial(damageEventArgs.damageType);
+            if (attribute.GetIsDie())
+            {
+                TransitionToState(EnemyState.Die);
+            }
         }
     }
 }

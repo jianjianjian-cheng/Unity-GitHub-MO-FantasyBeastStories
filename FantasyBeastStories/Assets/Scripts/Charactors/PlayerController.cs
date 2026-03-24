@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Atttibute;
 using Photon.Pun;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ namespace Charactors
 
         [Header("旋转设置")]
         [SerializeField] private float rotationSpeed = 10f; // 旋转速度
-
+        private AttributePlayerBase attributePlayerBase; // 玩家属性组件
         private Vector3 movement; // 移动方向
         private bool isRun; // 是否正在运行
 
@@ -26,6 +27,8 @@ namespace Charactors
             {
                 return; // 只处理本地玩家的输入和动画
             }
+            attributePlayerBase = new AttributePlayerBase(35, 10, 100, 3.5f, 1f, 0.2f);
+            moveSpeed = attributePlayerBase.GetMoveSpeed();
             // 获取或添加Rigidbody组件
             if (rb == null)
             {
@@ -90,6 +93,11 @@ namespace Charactors
 
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
             }
+        }
+
+        public AttributePlayerBase GetAttributePlayerBase()
+        {
+            return attributePlayerBase;
         }
     }
 }

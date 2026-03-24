@@ -38,10 +38,7 @@ namespace FX
 
         public virtual void HandleEnemyCollisionEnter(Collider enemy)
         {
-            if (enemy.CompareTag("Enemy"))
-            {
-                enemy.GetComponent<EnemyBase>().TakeDamage(30f); // 这里的10f是示例伤害值，可以根据需要调整
-            }
+
         }
 
         public virtual void HandleEnemyCollisionStay(Collider enemy)

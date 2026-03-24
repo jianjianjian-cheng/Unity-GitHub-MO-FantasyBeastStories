@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 namespace Charactors.Attribute
 {
-    public class AttributeEnemyBase : MonoBehaviour
+    public class AttributeEnemyBase
     {
         //基本属性
         [SerializeField] public float maxHealth = 100f;
-        [SerializeField] public float currentHealth;
+        [SerializeField] public float currentHealth = 100f;
         [SerializeField] public float attackPower = 10f;
         [SerializeField] public float moveSpeed = 2f;
         public bool isDead = false;
@@ -44,9 +45,24 @@ namespace Charactors.Attribute
         public virtual void SetMaxHealth(float newMaxHealth)
         {
             maxHealth = newMaxHealth;
-            if (currentHealth > maxHealth)
+            currentHealth = maxHealth;
+        }
+
+        //受到特殊伤害的方法
+        public virtual void TakeDamageSpecial(DamageType damageType)
+        {
+            //待写
+            switch (damageType)
             {
-                currentHealth = maxHealth;
+                case DamageType.Fire:
+
+                    break;
+                case DamageType.Ice:
+
+                    break;
+                case DamageType.Lightning:
+
+                    break;
             }
         }
 
@@ -61,7 +77,7 @@ namespace Charactors.Attribute
         }
         public virtual void Die()
         {
-
+            SetIsDie(true);
         }
     }
 }

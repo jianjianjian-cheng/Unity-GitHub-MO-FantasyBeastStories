@@ -14,6 +14,11 @@ namespace FX
 
         private void ReturnToPool()
         {
+            if (GameManager.isTest)
+            {
+                ObjectPoolManager.instance.ReturnToPool(ObjectPoolConst.TestPool, gameObject);
+                return;
+            }
             ObjectPoolManager.instance.ReturnToPool(ObjectPoolConst.ImpactCannonCommonPool, gameObject);
         }
     }

@@ -1,5 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Atttibute;
+using Charactors;
+using Events;
 using Manager;
 using Trigger;
 using UnityEngine;
@@ -9,6 +12,7 @@ namespace FX
     public class ImpactCannon : TriggerBase
     {
         [SerializeField] private bool isTest;
+        private AttributePlayerBase attributePlayerBase;
         private float Speed = 15f;
         private Rigidbody rb;
         // Start is called before the first frame update
@@ -23,6 +27,12 @@ namespace FX
             Invoke("DelayDestorySelf", 0.5f);
         }
 
+        void OnDisable()
+        {
+            Debug.Log("冲击炮被禁用，返回对象池");
+            rb.velocity = Vector3.zero;
+        }
+
         public void StartShoot(Vector3 direction)
         {
             //仅仅保留x和z轴平面所在的方向
@@ -30,15 +40,18 @@ namespace FX
             rb.velocity = direction.normalized * Speed;
         }
 
-        void OnDisable()
-        {
-            Debug.Log("冲击炮被禁用，返回对象池");
-            rb.velocity = Vector3.zero;
-        }
-
         public override void Start()
         {
             base.Start();
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            if (attributePlayerBase == null)
+            {
+                UpdateAttribute(GameObject.Find("WizardBoyRoot").GetComponentInChildren<PlayerController>().GetAttributePlayerBase());
+            }
         }
 
         public override void OnTriggerEnter(Collider other)
@@ -52,6 +65,19 @@ namespace FX
             {
                 gameObject.GetComponentInChildren<ParticleSystem>().Play();
             }
+            //是否暴击
+            bool isCritical = (Random.Range(0, 1f) <= attributePlayerBase.GetCriticalChance() ? true : false);
+            //伤害判定
+            DamageEventArgs damageEventArgs = new DamageEventArgs(
+                DamageType.Fire,
+                gameObject,
+                other.gameObject,
+                attributePlayerBase.GetAttackPower(),
+                isCritical,
+                attributePlayerBase.GetCriticalMultiplier()
+            );
+            //触发伤害事件
+            EventManager.instance.TriggerEventComplex(EventNames.DamageReceived, damageEventArgs);
         }
 
         public override void OnTriggerStay(Collider other)
@@ -73,11 +99,12 @@ namespace FX
 
         private void DelayDestorySelf()
         {
-            if (isTest)
-            {
-                ObjectPoolManager.instance.ReturnToPool(ObjectPoolConst.TestPool, gameObject);
-            }
             ObjectPoolManager.instance.ReturnToPool(ObjectPoolConst.ImpactCannonTriggerPool, gameObject);
+        }
+
+        private void UpdateAttribute(AttributePlayerBase attributePlayerBase)
+        {
+            this.attributePlayerBase = attributePlayerBase;
         }
     }
 }
