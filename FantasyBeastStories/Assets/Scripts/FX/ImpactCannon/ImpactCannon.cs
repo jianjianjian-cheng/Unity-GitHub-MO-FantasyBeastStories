@@ -12,6 +12,7 @@ namespace FX
     public class ImpactCannon : TriggerBase
     {
         [SerializeField] private bool isTest;
+        private int activeCount = 0;
         private AttributePlayerBase attributePlayerBase;
         private float Speed = 15f;
         private Rigidbody rb;
@@ -48,15 +49,15 @@ namespace FX
         public override void Update()
         {
             base.Update();
-            if (attributePlayerBase == null)
-            {
-                UpdateAttribute(GameObject.Find("WizardBoyRoot").GetComponentInChildren<PlayerController>().GetAttributePlayerBase());
-            }
         }
 
         public override void OnTriggerEnter(Collider other)
         {
             base.OnTriggerEnter(other);
+            if (activeCount == 0)
+            {
+                attributePlayerBase = EventManager.instance.GetAttributePlayerBase(EventNames.UpdateAttributeWizradBoy);
+            }
             //触发冲击炮击中效果
             if (!other.gameObject.CompareTag("Enemy")) return;
             Debug.Log("触发冲击炮击中效果");
@@ -65,8 +66,9 @@ namespace FX
             {
                 gameObject.GetComponentInChildren<ParticleSystem>().Play();
             }
+            activeCount++;
             //是否暴击
-            bool isCritical = (Random.Range(0, 1f) <= attributePlayerBase.GetCriticalChance() ? true : false);
+            bool isCritical = Random.Range(0, 1f) <= attributePlayerBase.GetCriticalChance() ? true : false;
             //伤害判定
             DamageEventArgs damageEventArgs = new DamageEventArgs(
                 DamageType.Fire,
@@ -100,11 +102,6 @@ namespace FX
         private void DelayDestorySelf()
         {
             ObjectPoolManager.instance.ReturnToPool(ObjectPoolConst.ImpactCannonTriggerPool, gameObject);
-        }
-
-        private void UpdateAttribute(AttributePlayerBase attributePlayerBase)
-        {
-            this.attributePlayerBase = attributePlayerBase;
         }
     }
 }

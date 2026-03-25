@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Atttibute;
 using Events;
 using UnityEngine;
 
@@ -42,7 +43,8 @@ namespace Manager
         private Dictionary<string, Action> eventDictionary = new Dictionary<string, Action>();
         /// </remarks> 复杂参数事件字典
         private Dictionary<string, Action<EventArgsBase>> eventDictionaryComplex = new Dictionary<string, Action<EventArgsBase>>();
-
+        //返回AttributePlayerBase组件字典
+        private Dictionary<string, AttributePlayerBase> attributePlayerBaseDictionary = new Dictionary<string, AttributePlayerBase>();
         /// <summary>
         /// 注册事件
         /// </summary>
@@ -114,10 +116,54 @@ namespace Manager
                 eventDictionaryComplex[eventName]?.Invoke(args);
             }
         }
+        /// <summary>
+        /// 注册AttributePlayerBase组件
+        /// </summary>
+        /// <param name="playerName">玩家名称</param>
+        /// <param name="attributePlayerBase">AttributePlayerBase组件</param>
+        public void RegisterAttributePlayerBase(string playerName, AttributePlayerBase attributePlayerBase)
+        {
+            if (attributePlayerBaseDictionary.ContainsKey(playerName))
+            {
+                attributePlayerBaseDictionary[playerName] = attributePlayerBase;
+            }
+            else
+            {
+                attributePlayerBaseDictionary.Add(playerName, attributePlayerBase);
+            }
+        }
+        /// <summary>
+        /// 注销AttributePlayerBase组件
+        /// </summary>
+        /// <param name="playerName">玩家名称</param>
+        public void UnRegisterAttributePlayerBase(string playerName)
+        {
+            if (attributePlayerBaseDictionary.ContainsKey(playerName))
+            {
+                attributePlayerBaseDictionary.Remove(playerName);
+            }
+        }
+        /// <summary>
+        /// 获取AttributePlayerBase组件
+        /// </summary>
+        /// <param name="playerName">玩家名称</param>
+        /// <returns>AttributePlayerBase组件</returns>
+        public AttributePlayerBase GetAttributePlayerBase(string playerName)
+        {
+            if (attributePlayerBaseDictionary.ContainsKey(playerName))
+            {
+                return attributePlayerBaseDictionary[playerName];
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 
     public class EventNames
     {
         public const string DamageReceived = "DamageReceived";
+        public const string UpdateAttributeWizradBoy = "UpdateAttributeWizradBoy";
     }
 }

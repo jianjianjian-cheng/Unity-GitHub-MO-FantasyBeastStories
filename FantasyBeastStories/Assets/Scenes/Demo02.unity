@@ -4849,7 +4849,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50a0ded286b397d4a8f6428037951a22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isTestInspector: 1
+  isTestInspector: 0
 --- !u!4 &536211031
 Transform:
   m_ObjectHideFlags: 0
@@ -8355,7 +8355,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1730347233849070163, guid: 73e94c4fb2665764cbf3589e09791fe1, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1831531437251709587, guid: 73e94c4fb2665764cbf3589e09791fe1, type: 3}
       propertyPath: sceneViewId

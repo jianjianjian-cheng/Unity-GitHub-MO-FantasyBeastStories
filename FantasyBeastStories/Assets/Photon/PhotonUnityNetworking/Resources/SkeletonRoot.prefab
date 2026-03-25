@@ -529,7 +529,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 3202466513927889513}
   rb: {fileID: 2424846866186777879}
-  attribute: {fileID: 0}
 --- !u!114 &7161046551835424150
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Atttibute;
+using Manager;
 using Photon.Pun;
 using UnityEngine;
 
@@ -20,14 +21,16 @@ namespace Charactors
         private bool isRun; // 是否正在运行
 
 
-        // Start is called before the first frame update
+        void Awake()
+        {
+            attributePlayerBase = new AttributePlayerBase(35, 10, 100, 3.5f, 1f, 0.2f);
+        }
         void Start()
         {
             if (!photonView.IsMine)
             {
                 return; // 只处理本地玩家的输入和动画
             }
-            attributePlayerBase = new AttributePlayerBase(35, 10, 100, 3.5f, 1f, 0.2f);
             moveSpeed = attributePlayerBase.GetMoveSpeed();
             // 获取或添加Rigidbody组件
             if (rb == null)
@@ -59,6 +62,16 @@ namespace Charactors
             }
             // 物理移动
             MoveCharacter();
+        }
+
+        protected virtual void OnEnable()
+        {
+            EventManager.instance.RegisterAttributePlayerBase(EventNames.UpdateAttributeWizradBoy, attributePlayerBase);
+        }
+
+        protected virtual void OnDisable()
+        {
+            EventManager.instance.UnRegisterAttributePlayerBase(EventNames.UpdateAttributeWizradBoy);
         }
 
         private void HandleInput()
@@ -93,11 +106,6 @@ namespace Charactors
 
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
             }
-        }
-
-        public AttributePlayerBase GetAttributePlayerBase()
-        {
-            return attributePlayerBase;
         }
     }
 }

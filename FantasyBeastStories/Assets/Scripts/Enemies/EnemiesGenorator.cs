@@ -15,11 +15,27 @@ namespace Enemies
         bool canGenorate = false;
         void Update()
         {
-
             if (!isPhotonReady)
             {
-                canGenorate = GameManager.isTest || (PhotonNetwork.IsConnectedAndReady && PhotonNetwork.InRoom && PhotonNetwork.IsMasterClient);
-                isPhotonReady = true;
+                // 更清晰的方式
+                if (GameManager.isTest)
+                {
+                    canGenorate = true;  // 测试模式：无条件允许
+                }
+                else
+                {
+                    canGenorate = PhotonNetwork.IsConnectedAndReady &&
+                                  PhotonNetwork.InRoom &&
+                                  PhotonNetwork.IsMasterClient;
+                    if (canGenorate)
+                    {
+                        isPhotonReady = true;
+                    }
+                }
+                Debug.Log($"IsConnectedAndReady: {PhotonNetwork.IsConnectedAndReady}");
+                Debug.Log($"InRoom: {PhotonNetwork.InRoom}");
+                Debug.Log($"IsMasterClient: {PhotonNetwork.IsMasterClient}");
+                Debug.Log($"canGenorate: {canGenorate}");
             }
             if (canGenorate)
             {
