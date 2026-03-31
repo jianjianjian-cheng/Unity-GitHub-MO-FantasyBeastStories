@@ -65,6 +65,7 @@ public class LobbyVCamera : MonoBehaviour
             return;
 
         float rad = currentAngle * Mathf.Deg2Rad;
+        distance = 3.5f; // 固定距离
         Vector3 offset = new Vector3(Mathf.Sin(rad), 0f, Mathf.Cos(rad)) * distance;
         Vector3 targetPosition = lookAt.position + offset;
 

@@ -262,7 +262,7 @@ namespace Photon.Pun
                 _AsyncLevelLoadingOperation.allowSceneActivation = false;
                 _AsyncLevelLoadingOperation = null;
             }
-            
+
             rpcEvent.Clear();   // none of the last RPC parameters are needed anymore
 
             bool wasInRoom = NetworkingClient.CurrentRoom != null;
@@ -855,7 +855,7 @@ namespace Photon.Pun
             {
                 Debug.Log("Network destroy Instantiated GO: " + go.name);
             }
-            
+
             foundPVs.Clear();           // as foundPVs is re-used, clean it to avoid lingering references
 
             go.SetActive(false);        // PUN 2 disables objects before the return to the pool
@@ -2385,7 +2385,7 @@ namespace Photon.Pun
                             {
                                 Player prevOwner = requestedView.Owner;
 
-                                requestedView.OwnerActorNr= newOwnerId;
+                                requestedView.OwnerActorNr = newOwnerId;
                                 requestedView.ControllerActorNr = newOwnerId;
 
                                 if (PhotonNetwork.OnOwnershipTransferedEv != null)
@@ -2439,7 +2439,7 @@ namespace Photon.Pun
                             Player prevOwner = view.Owner;
                             Player newOwner = CurrentRoom.GetPlayer(newOwnerId, true);
 
-                            view.OwnerActorNr= newOwnerId;
+                            view.OwnerActorNr = newOwnerId;
                             view.ControllerActorNr = newOwnerId;
 
                             reusablePVHashset.Add(view);
@@ -2530,17 +2530,17 @@ namespace Photon.Pun
 
 
             // the dev region overrides the best region selection in "development" builds (unless it was set but is empty).
-            
-            #if UNITY_EDITOR
+
+#if UNITY_EDITOR
             if (!PhotonServerSettings.DevRegionSetOnce)
             {
                 // if no dev region was defined before or if the dev region is unavailable, set a new dev region
                 PhotonServerSettings.DevRegionSetOnce = true;
                 PhotonServerSettings.DevRegion = _cachedRegionHandler.BestRegion.Code;
             }
-            #endif
+#endif
 
-            #if DEVELOPMENT_BUILD || UNITY_EDITOR
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
             if (!string.IsNullOrEmpty(PhotonServerSettings.DevRegion) && ConnectMethod == ConnectMethod.ConnectToBest)
             {
                 Debug.LogWarning("PUN is in development mode (development build). As the 'dev region' is not empty (" + PhotonServerSettings.DevRegion + ") it overrides the found best region. See PhotonServerSettings.");
@@ -2560,7 +2560,7 @@ namespace Photon.Pun
                 }
                 return;
             }
-            #endif
+#endif
 
             if (NetworkClientState == ClientState.ConnectedToNameServer)
             {

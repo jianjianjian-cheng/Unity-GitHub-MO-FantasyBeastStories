@@ -22,7 +22,7 @@ public class LocalCameraActivator : MonoBehaviourPun
             return;
         }
 
-        if (photonView.IsMine)
+        if (photonView.IsMine && photonView != null)
         {
             virtualCamera.gameObject.SetActive(true);
             parentPlayer.GetComponent<PlayerController>().enabled = true;

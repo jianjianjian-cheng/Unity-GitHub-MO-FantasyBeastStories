@@ -63,8 +63,8 @@ namespace Manager
 
         private void OnSceneLoaded(AsyncOperation operation)
         {
-            LoadingCanvas.instance.HideLoading();
-            loadingAnimator.SetBool("FadeIn", false);
+            // LoadingCanvas.instance.HideLoading();
+            // loadingAnimator.SetBool("FadeIn", false);
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Atttibute;
+using Cinemachine;
 using Manager;
 using Photon.Pun;
 using UnityEngine;
@@ -9,23 +10,24 @@ namespace Charactors
 {
     public class PlayerController : MonoBehaviourPun
     {
+        [SerializeField] private GameObject virtualCamera; // 虚拟摄像机组件
         [Header("移动设置")]
-        [SerializeField] private float moveSpeed = 2f; // 移动速度
-        [SerializeField] private Rigidbody rb; // 物理组件
-        [SerializeField] private Animator animator;// 动画组件
+        [SerializeField] protected float moveSpeed = 2f; // 移动速度
+        [SerializeField] protected Rigidbody rb; // 物理组件
+        [SerializeField] protected Animator animator;// 动画组件
 
         [Header("旋转设置")]
-        [SerializeField] private float rotationSpeed = 10f; // 旋转速度
-        private AttributePlayerBase attributePlayerBase; // 玩家属性组件
-        private Vector3 movement; // 移动方向
-        private bool isRun; // 是否正在运行
+        [SerializeField] protected float rotationSpeed = 10f; // 旋转速度
+        protected AttributePlayerBase attributePlayerBase; // 玩家属性组件
+        protected Vector3 movement; // 移动方向
+        protected bool isRun; // 是否正在运行
 
 
-        void Awake()
+        protected virtual void Awake()
         {
             attributePlayerBase = new AttributePlayerBase(35, 10, 100, 3.5f, 1f, 0.2f);
         }
-        void Start()
+        protected virtual void Start()
         {
             if (!photonView.IsMine)
             {
@@ -45,18 +47,22 @@ namespace Charactors
         }
 
         // Update is called once per frame
-        void Update()
+        protected virtual void Update()
         {
-            if (!photonView.IsMine)
+            if (!photonView.IsMine && photonView != null)
             {
                 return; // 只处理本地玩家的输入和动画
+            }
+            if (GameManager.isStayLobby)
+            {
+                return; // 如果在大厅场景，不处理输入
             }
             HandleInput();
         }
 
-        void FixedUpdate()
+        protected virtual void FixedUpdate()
         {
-            if (!photonView.IsMine)
+            if (!photonView.IsMine && photonView != null)
             {
                 return; // 只处理本地玩家的输入和动画
             }
@@ -74,7 +80,7 @@ namespace Charactors
             EventManager.instance.UnRegisterAttributePlayerBase(EventNames.UpdateAttributeWizradBoy);
         }
 
-        private void HandleInput()
+        protected virtual void HandleInput()
         {
             // 获取水平输入（A/D或左右箭头）
             float horizontal = Input.GetAxis("Horizontal");
@@ -84,7 +90,7 @@ namespace Charactors
             movement = new Vector3(horizontal, 0f, vertical).normalized;
         }
 
-        private void MoveCharacter()
+        protected virtual void MoveCharacter()
         {
             // 计算移动向量
             Vector3 moveVelocity = movement * moveSpeed;
