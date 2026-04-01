@@ -1,23 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using Trigger;
 using UnityEngine;
 
 namespace Other
 {
-    public class SpawnPoint : TriggerBase
+    public class SpawnPoint : MonoBehaviourPun
     {
         public bool isEmpty = true; // 是否为空闲的生成点
-        public override void OnTriggerEnter(Collider other)
+        public void OnTriggerEnter(Collider other)
         {
-            base.OnTriggerEnter(other);
-            isEmpty = false;
+            if (other.gameObject.tag == "Player")
+            {
+                isEmpty = false;
+            }
         }
 
-        public override void OnTriggerExit(Collider other)
+        public void OnTriggerExit(Collider other)
         {
-            base.OnTriggerExit(other);
-            isEmpty = true;
+            if (other.gameObject.tag == "Player")
+            {
+                isEmpty = true;
+            }
         }
     }
 }
