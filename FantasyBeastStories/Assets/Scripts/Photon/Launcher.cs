@@ -9,7 +9,9 @@ using Unity.VisualScripting;
 
 public class Launcher : MonoBehaviourPunCallbacks
 {
-    [SerializeField] public GameObject currrnySlecetedCharacter;
+    private bool isAutoCreate = false;
+    private bool isJoiningRoom = false;
+    [SerializeField] public GameObject currentlySelectedCharacter;
     private Photon.Realtime.Player localPlayer;
     private InputField nameUI;
     private Button joinRoom;
@@ -53,6 +55,26 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         base.OnDisable();
         SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    public override void OnConnectedToMaster()
+    {
+        if (isTest) return;
+        base.OnConnectedToMaster();
+        Debug.Log("Connected to master");
+        string roomName = "Room_" + Random.Range(1000, 9999);
+        if (!isAutoCreate)
+        {
+            PhotonNetwork.CreateRoom(roomName, new Photon.Realtime.RoomOptions() { MaxPlayers = 4 }, default);
+            isAutoCreate = true;
+        }
+
+        if (isJoiningRoom)
+        {
+            PhotonNetwork.JoinRoom(pendingRoomName);
+            Debug.Log("加入房间成功");
+            isJoiningRoom = false;
+        }
     }
 
     private void Initialize()
@@ -108,6 +130,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         if (PhotonNetwork.InRoom)
         {
             pendingRoomName = newRoomName;
+            isJoiningRoom = true;  // 设置标志，在 OnConnectedToMaster 中处理加入房间
             PhotonNetwork.LeaveRoom();  // 离开房间，等待 OnLeftRoom 回调
             Debug.Log("正在离开当前房间...");
         }
@@ -117,19 +140,10 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         Debug.Log("已离开房间");
-
         if (!string.IsNullOrEmpty(pendingRoomName))
         {
             Debug.Log($"正在加入房间: {pendingRoomName}");
-            StartCoroutine(DelayJoinRoom(pendingRoomName));
-            pendingRoomName = "";
         }
-    }
-
-    private IEnumerator DelayJoinRoom(string roomName)
-    {
-        yield return new WaitForSeconds(1f);
-        PhotonNetwork.JoinRoom(roomName);
     }
 
 
@@ -141,21 +155,20 @@ public class Launcher : MonoBehaviourPunCallbacks
         }
     }
 
-    public override void OnConnectedToMaster()
-    {
-        if (isTest) return;
-        base.OnConnectedToMaster();
-        Debug.Log("Connected to master");
-        string roomName = "Room_" + Random.Range(1000, 9999);
-        PhotonNetwork.CreateRoom(roomName, new Photon.Realtime.RoomOptions() { MaxPlayers = 4 }, default);
-    }
 
     public override void OnCreatedRoom()
     {
         if (isTest) return;
         base.OnCreatedRoom();
+        Debug.Log("Created room: " + PhotonNetwork.CurrentRoom.Name);
+    }
+
+    public void CreatedOrJoinedRoom()
+    {
+        Debug.Log("执行CreatedOrJoinedRoom");
         GameObject player = PhotonNetwork.Instantiate("WizardBoyRoot", new Vector3(80, 2, 80), Quaternion.identity);
-        Transform spawnPoint = GameManager.instance.GetEmptySpawnPoint();
+        player.name = "Player" + PhotonNetwork.LocalPlayer.UserId;
+        Transform spawnPoint = GameManager.instance.GetEmptySpawnPoint().transform;
         if (spawnPoint != null)
         {
             player.transform.position = spawnPoint.position;
@@ -178,8 +191,10 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
+        Debug.Log("Joined room: " + PhotonNetwork.CurrentRoom.Name);
         if (isTest) return;
         base.OnJoinedRoom();
+        CreatedOrJoinedRoom();
     }
 
     GameObject GetInactiveObjectByName(string objectName)

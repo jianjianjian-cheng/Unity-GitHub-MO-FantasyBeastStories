@@ -155,7 +155,7 @@ GameObject:
   - component: {fileID: 6646249465345568054}
   m_Layer: 0
   m_Name: AttackRange
-  m_TagString: Player
+  m_TagString: AttackTrigger
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

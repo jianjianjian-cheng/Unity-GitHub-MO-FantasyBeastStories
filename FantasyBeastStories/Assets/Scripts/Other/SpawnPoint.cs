@@ -1,27 +1,73 @@
-using System.Collections;
-using System.Collections.Generic;
 using Photon.Pun;
-using Trigger;
 using UnityEngine;
 
 namespace Other
 {
-    public class SpawnPoint : MonoBehaviourPun
+    public class SpawnPoint : MonoBehaviourPun, IPunObservable
     {
-        public bool isEmpty = true; // 是否为空闲的生成点
-        public void OnTriggerEnter(Collider other)
+        [SerializeField] private int Id;
+        public bool isEmpty = true;
+        private bool isLocalChanged = false;  // 标记是否本地修改
+
+        private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.tag == "Player")
+            if (other.CompareTag("Player"))
             {
-                isEmpty = false;
+                Debug.Log($"玩家进入生成点: {gameObject.name}，ID: {Id}");
+                SetEmpty(false);
             }
         }
 
-        public void OnTriggerExit(Collider other)
+        private void OnTriggerExit(Collider other)
         {
-            if (other.gameObject.tag == "Player")
+            if (other.CompareTag("Player"))
             {
-                isEmpty = true;
+                Debug.Log($"玩家离开生成点: {gameObject.name}，ID: {Id}");
+                SetEmpty(true);
+            }
+        }
+
+        private void SetEmpty(bool value)
+        {
+            if (isEmpty == value) return;
+
+            isEmpty = value;
+            isLocalChanged = true;
+
+            // 通知其他客户端
+            photonView.RPC("RPC_SetEmpty", RpcTarget.Others, isEmpty);
+        }
+
+        [PunRPC]
+        private void RPC_SetEmpty(bool value)
+        {
+            isEmpty = value;
+            Debug.Log($"同步: {gameObject.name} isEmpty = {isEmpty}");
+        }
+
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            if (stream.IsWriting)
+            {
+                // 只发送本地修改的状态
+                if (isLocalChanged)
+                {
+                    stream.SendNext(isEmpty);
+                    isLocalChanged = false;
+                }
+                else
+                {
+                    stream.SendNext(null);
+                }
+            }
+            else
+            {
+                // 接收时只在有数据时更新
+                object data = stream.ReceiveNext();
+                if (data != null)
+                {
+                    isEmpty = (bool)data;
+                }
             }
         }
     }

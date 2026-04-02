@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using Other;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 
 namespace Manager
 {
     public class GameManager : MonoBehaviour
     {
-        private List<Transform> spawnPoints = new List<Transform>(); // 生成点列表
+        [SerializeField] private List<GameObject> spawnPoints = new List<GameObject>(); // 生成点列表
         //静态全局变量isTest，控制是否进入测试模式
         public static bool isTest; // 是否测试模式
         public static bool isStayLobby = true; // 是否在大厅lobby场景
@@ -29,28 +30,49 @@ namespace Manager
             Intilize();
         }
 
+        void OnEnable()
+        {
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        void OnDisable()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
         private void Intilize()
         {
             FindSpawnPoints();
         }
 
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            // FindSpawnPoints();
+        }
+
         public void FindSpawnPoints()
         {
             GameObject[] spawnPointsList = GameObject.FindGameObjectsWithTag("SpawnPoint");
-            spawnPoints.Clear();
             spawnPointsList = GameObject.FindGameObjectsWithTag("SpawnPoint");
+            if (spawnPointsList.Length == 0)
+            {
+                Debug.LogError("没有找到生成点");
+                return;
+            }
             foreach (GameObject spawnPoint in spawnPointsList)
             {
-                spawnPoints.Add(spawnPoint.transform);
+                Debug.Log("找到生成点: " + spawnPoint.name);
+                spawnPoints.Add(spawnPoint);
             }
         }
 
-        public Transform GetEmptySpawnPoint()
+        public GameObject GetEmptySpawnPoint()
         {
-            foreach (Transform spawnPoint in spawnPoints)
+            foreach (GameObject spawnPoint in spawnPoints)
             {
                 if (spawnPoint.GetComponent<SpawnPoint>().isEmpty)
                 {
+                    Debug.Log("返回空闲的生成点: " + spawnPoint.name);
                     return spawnPoint;
                 }
             }

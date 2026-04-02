@@ -113,5 +113,10 @@ namespace Charactors
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
             }
         }
+
+        void OnDestroy()
+        {
+            Destroy(gameObject.transform.parent.gameObject);
+        }
     }
 }
