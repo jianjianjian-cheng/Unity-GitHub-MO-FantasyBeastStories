@@ -32,10 +32,10 @@ namespace Enemies
                         isPhotonReady = true;
                     }
                 }
-                Debug.Log($"IsConnectedAndReady: {PhotonNetwork.IsConnectedAndReady}");
-                Debug.Log($"InRoom: {PhotonNetwork.InRoom}");
-                Debug.Log($"IsMasterClient: {PhotonNetwork.IsMasterClient}");
-                Debug.Log($"canGenorate: {canGenorate}");
+                // Debug.Log($"IsConnectedAndReady: {PhotonNetwork.IsConnectedAndReady}");
+                // Debug.Log($"InRoom: {PhotonNetwork.InRoom}");
+                // Debug.Log($"IsMasterClient: {PhotonNetwork.IsMasterClient}");
+                // Debug.Log($"canGenorate: {canGenorate}");
             }
             if (canGenorate)
             {

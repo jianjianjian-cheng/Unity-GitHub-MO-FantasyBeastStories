@@ -21,10 +21,12 @@ namespace Charactors
         protected AttributePlayerBase attributePlayerBase; // 玩家属性组件
         protected Vector3 movement; // 移动方向
         protected bool isRun; // 是否正在运行
+        [SerializeField] private bool isInLobby; // 是否在大厅场景
 
 
         protected virtual void Awake()
         {
+            isInLobby = GameManager.isStayLobby;
             attributePlayerBase = new AttributePlayerBase(35, 10, 100, 3.5f, 1f, 0.2f);
         }
         protected virtual void Start()
@@ -53,7 +55,7 @@ namespace Charactors
             {
                 return; // 只处理本地玩家的输入和动画
             }
-            if (GameManager.isStayLobby)
+            if (isInLobby)
             {
                 return; // 如果在大厅场景，不处理输入
             }

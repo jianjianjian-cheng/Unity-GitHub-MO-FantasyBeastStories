@@ -9,6 +9,10 @@ namespace Other
         public bool isEmpty = true;
         private bool isLocalChanged = false;  // 标记是否本地修改
 
+        void Start()
+        {
+            transform.LookAt(new Vector3(0.182999998f, transform.position.y, -0.219999999f));
+        }
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Player"))

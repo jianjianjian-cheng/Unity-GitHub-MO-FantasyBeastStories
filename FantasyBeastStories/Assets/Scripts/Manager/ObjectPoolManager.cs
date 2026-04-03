@@ -115,7 +115,7 @@ namespace Manager
                 obj.SetActive(false);
                 obj.transform.SetParent(transform); // 重置父物体
                 obj.transform.localPosition = Vector3.zero; // 重置位置
-                Debug.Log($"将对象 '{obj.name}' 返回对象池 '{poolName}'");
+                // Debug.Log($"将对象 '{obj.name}' 返回对象池 '{poolName}'");
             }
         }
         //添加多个对象到对象池
@@ -124,7 +124,7 @@ namespace Manager
             if (!objectPools.ContainsKey(poolName))
             {
                 objectPools[poolName] = new List<GameObject>();
-                Debug.Log($"创建对象池 '{poolName}'");
+                // Debug.Log($"创建对象池 '{poolName}'");
             }
             for (int i = 0; i < count; i++)
             {

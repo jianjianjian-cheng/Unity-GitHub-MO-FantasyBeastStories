@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6260380353589471616}
   - component: {fileID: 2444618757141537097}
   m_Layer: 0
-  m_Name: Virtual Camera
+  m_Name: VirtualCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -478,6 +478,7 @@ MonoBehaviour:
   rb: {fileID: 2406815688151714110}
   animator: {fileID: 4690395130346847112}
   rotationSpeed: 10
+  isInLobby: 0
 --- !u!95 &4690395130346847112
 Animator:
   serializedVersion: 5

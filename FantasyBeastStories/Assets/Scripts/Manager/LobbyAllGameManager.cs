@@ -16,7 +16,7 @@ namespace Manager
         private Button exitButton;
         private Button optionButton;
         private GameObject gameNameModel;
-        private Animator loadingAnimator;
+
 
         private void Start()
         {
@@ -24,7 +24,6 @@ namespace Manager
             startButton = GameObject.Find("StartButton").GetComponent<Button>();
             exitButton = GameObject.Find("ExitButton").GetComponent<Button>();
             optionButton = GameObject.Find("OptionsButton").GetComponent<Button>();
-            loadingAnimator = GameObject.Find("LoadingPanel").GetComponent<Animator>();
             startButton.onClick.AddListener(Startbutton);
             exitButton.onClick.AddListener(Exitbutton);
             optionButton.onClick.AddListener(Optionsbutton);
@@ -54,7 +53,6 @@ namespace Manager
         IEnumerator loadScene(int index)
         {
             yield return new WaitForSeconds(2f);
-            loadingAnimator.SetBool("FadeIn", true);
             LoadingCanvas.instance.ShowLoading();
             yield return new WaitForSeconds(1f);
             AsyncOperation asyn = SceneManager.LoadSceneAsync(index);
