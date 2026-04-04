@@ -5020,7 +5020,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &536211030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5036,7 +5036,7 @@ MonoBehaviour:
   sceneIndex: 2
   lobbyButton: {fileID: 0}
   spawnPoints: []
-  isTestInspector: 1
+  isTestInspector: 0
 --- !u!4 &536211031
 Transform:
   m_ObjectHideFlags: 0
@@ -8980,7 +8980,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8869760731705481601, guid: 95a85cb559c94bf48a8c819135964829, type: 3}
       propertyPath: isTest
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8869760731705481601, guid: 95a85cb559c94bf48a8c819135964829, type: 3}
       propertyPath: testPrefab

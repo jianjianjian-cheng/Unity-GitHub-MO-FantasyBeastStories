@@ -413,9 +413,9 @@ GameObject:
   - component: {fileID: 32672503522574357}
   - component: {fileID: 2424846866186777879}
   - component: {fileID: 4397512172837865432}
-  - component: {fileID: 7161046551835424150}
   - component: {fileID: 2726188790719604096}
   - component: {fileID: 4024597144815189423}
+  - component: {fileID: 7161046551835424150}
   m_Layer: 7
   m_Name: mini simple skeleton demo
   m_TagString: Enemy
@@ -529,30 +529,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 3202466513927889513}
   rb: {fileID: 2424846866186777879}
---- !u!114 &7161046551835424150
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3511282440840379930}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 0
-  ObservedComponents:
-  - {fileID: 2726188790719604096}
-  - {fileID: 4024597144815189423}
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
 --- !u!114 &2726188790719604096
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -593,6 +569,30 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &7161046551835424150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3511282440840379930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 0
+  ObservedComponents:
+  - {fileID: 2726188790719604096}
+  - {fileID: 4024597144815189423}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &3743625664174147662
 GameObject:
   m_ObjectHideFlags: 0

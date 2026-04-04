@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using Charactors.Attribute;
 using Events;
 using Manager;
+using Photon.Pun;
 using UnityEngine;
 namespace Enemies
 {
-    public class EnemyBase : MonoBehaviour
+    public class EnemyBase : MonoBehaviourPun
     {
         public enum EnemyState
         {

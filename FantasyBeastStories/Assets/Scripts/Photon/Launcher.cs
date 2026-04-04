@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using Unity.VisualScripting;
 using ExitGames.Client.Photon;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using ExitGames.Client.Photon.StructWrapping;
 
 public class Launcher : MonoBehaviourPunCallbacks
 {
@@ -21,6 +22,9 @@ public class Launcher : MonoBehaviourPunCallbacks
     private GameObject TBGC;
     private GameObject joinRoomButton;
     private GameObject joinRoomInput;
+
+    private bool isLoadingScene = false;
+
     #region 单例模式
     public static Launcher instance;
     void Awake()
@@ -35,17 +39,42 @@ public class Launcher : MonoBehaviourPunCallbacks
             Destroy(gameObject);
         }
     }
-
     #endregion
-    private bool isTest; // 是否测试模式
-    // Start is called before the first frame update
+
+    private bool isTest;
+    private bool isRoomLoading = false;
+
     void Start()
     {
         isTest = GameManager.instance != null && GameManager.isTest;
         if (isTest) return;
+        PhotonNetwork.AutomaticallySyncScene = true;
         Application.runInBackground = true;
         PhotonNetwork.ConnectUsingSettings();
         Initialize();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            if (string.IsNullOrEmpty(nameUI.text))
+            {
+                Debug.LogError("Name is empty");
+                return;
+            }
+            else
+            {
+                localPlayer.NickName = nameUI.text;
+                Debug.Log("修改昵称成功");
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            TBGC.SetActive(false);
+            joinRoomButton.SetActive(false);
+            joinRoomInput.SetActive(false);
+        }
     }
 
     public override void OnEnable()
@@ -114,17 +143,6 @@ public class Launcher : MonoBehaviourPunCallbacks
         });
     }
 
-    //如果点击到TBGC以外的区域，关闭输入框
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            TBGC.SetActive(false);
-            joinRoomButton.SetActive(false);
-            joinRoomInput.SetActive(false);
-        }
-    }
-
     private string pendingRoomName = "";
 
     public void SwitchRoom(string newRoomName)
@@ -132,13 +150,78 @@ public class Launcher : MonoBehaviourPunCallbacks
         if (PhotonNetwork.InRoom)
         {
             pendingRoomName = newRoomName;
-            isJoiningRoom = true;  // 设置标志，在 OnConnectedToMaster 中处理加入房间
-            PhotonNetwork.LeaveRoom();  // 离开房间，等待 OnLeftRoom 回调
+            isJoiningRoom = true;
+            PhotonNetwork.LeaveRoom();
             Debug.Log("正在离开当前房间...");
         }
     }
 
-    // 离开房间完成回调
+    public void SetLocalReady(bool ready)
+    {
+        if (!PhotonNetwork.InRoom)
+        {
+            Debug.LogWarning("无法设置准备状态：未在房间中");
+            return;
+        }
+
+        Hashtable props = new Hashtable { { "PlayerReady", ready } };
+        PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+        Debug.Log($"[Launcher] 本地玩家准备状态: {ready} - {PhotonNetwork.LocalPlayer.NickName}");
+
+        // 移除房主检查，让所有玩家都能检查
+        CheckAllPlayersReady();
+    }
+
+    private bool AllPlayersReady()
+    {
+        foreach (Photon.Realtime.Player player in PhotonNetwork.PlayerList)
+        {
+            if (!player.CustomProperties.ContainsKey("PlayerReady") ||
+                (bool)player.CustomProperties["PlayerReady"] == false)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void CheckAllPlayersReady()
+    {
+        // 移除房主限制，让所有玩家都能触发检查
+        if (isRoomLoading || isLoadingScene)
+        {
+            return;
+        }
+
+        if (AllPlayersReady())
+        {
+            Debug.Log("所有玩家已准备，开始加载场景");
+            isRoomLoading = true;
+
+            if (LoadingCanvas.instance != null)
+            {
+                LoadingCanvas.instance.ShowLoading();
+            }
+
+            // 修改：不要在这里启动协程，而是直接加载场景
+            // PhotonNetwork.LoadLevel 会自动同步给所有玩家
+            StartCoroutine(LoadLevelAfterDelay());
+        }
+    }
+
+    // 新增：延迟加载场景的协程
+    IEnumerator LoadLevelAfterDelay()
+    {
+        isLoadingScene = true;
+        yield return new WaitForSeconds(1f);
+
+        // 只有房主加载场景
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LoadLevel(2);
+        }
+    }
+
     public override void OnLeftRoom()
     {
         Debug.Log("已离开房间");
@@ -148,40 +231,31 @@ public class Launcher : MonoBehaviourPunCallbacks
         }
     }
 
-
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (scene.buildIndex == 1)
         {
             GameManager.isStayLobby = true;
             Initialize();
+            return;
         }
 
         if (scene.buildIndex > 1)
         {
             GameManager.isStayLobby = false;
             // 玩家进入游戏场景后标记已加载完成
-            Hashtable hashtable = new Hashtable
+            Hashtable loadProps = new Hashtable
             {
                 { "PlayerLevel", true },
-                { "PlayerLoaded", true }
+                { "PlayerLoaded", true },
+                { "playerName", localPlayer.NickName }
             };
-            PhotonNetwork.LocalPlayer.SetCustomProperties(hashtable);
 
+            PhotonNetwork.LocalPlayer.SetCustomProperties(loadProps);
             Debug.Log($"[Launcher] 本地玩家场景加载完成，设置 PlayerLoaded=true: {PhotonNetwork.LocalPlayer.NickName}");
 
-            // 尝试检查所有玩家是否都加载完毕（房间中其他玩家也会触发 OnPlayerPropertiesUpdate）
-            CheckAllPlayersLoaded();
+            CreatedOrJoinedRoom();
         }
-    }
-
-    IEnumerator EnterLevel()
-    {
-        if (!allPlayersLoaded) yield break;
-        yield return new WaitForSeconds(1f);
-        CreatedOrJoinedRoom();
-        Debug.LogWarning("进入关卡");
-        LoadingCanvas.instance.HideLoading();
     }
 
 
@@ -194,13 +268,22 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public void CreatedOrJoinedRoom()
     {
-        GameManager.instance.FindSpawnPoints(); // 确保生成点列表已更新
+        GameManager.instance.FindSpawnPoints();
         Debug.Log("执行CreatedOrJoinedRoom");
         Transform spawnPoint = GameManager.instance.GetEmptySpawnPoint().transform;
+        GameObject player = null;
         if (spawnPoint != null)
         {
-            GameObject player = PhotonNetwork.Instantiate("WizardBoyRoot", spawnPoint.position, spawnPoint.rotation);
-            player.transform.rotation = Quaternion.Euler(0, player.transform.rotation.y, 0); // 确保玩家朝向正确
+            // 在生成点周围XZ平面内随机生成
+            Vector2 randomCircle = Random.insideUnitCircle * 10.0f;
+            Vector3 randomOffset = new Vector3(randomCircle.x, spawnPoint.position.y, randomCircle.y);
+            Vector3 spawnPosition = spawnPoint.position + spawnPoint.TransformVector(randomOffset);
+            if (GameManager.isStayLobby)
+            {
+                spawnPosition = spawnPoint.position;
+            }
+            player = PhotonNetwork.Instantiate("WizardBoyRoot", spawnPosition, spawnPoint.rotation);
+            player.transform.rotation = Quaternion.Euler(0, player.transform.rotation.y, 0);
             player.name = "Player" + PhotonNetwork.LocalPlayer.UserId;
             Debug.LogWarning("离开大厅" + GameManager.isStayLobby);
             if (!GameManager.isStayLobby)
@@ -209,18 +292,16 @@ public class Launcher : MonoBehaviourPunCallbacks
                 if (vcam != null)
                 {
                     vcam.SetActive(true);
-                    //确保摄像机朝向正确
                 }
             }
             else
             {
-                player.transform.LookAt(new Vector3(0.182999998f, player.transform.position.y, -0.219999999f)); // 朝向中心点                                                                                           //开启与玩家脚本同级的虚拟摄像机
+                player.transform.LookAt(new Vector3(0.182999998f, player.transform.position.y, -0.219999999f));
             }
         }
         if (LoadingCanvas.instance != null)
         {
             LoadingCanvas.instance.HideLoading();
-            LoadingCanvas.instance.GetComponentInChildren<Animator>().SetBool("FadeIn", false);
         }
         if (GameObject.Find("RoomName") != null)
         {
@@ -230,6 +311,7 @@ public class Launcher : MonoBehaviourPunCallbacks
             localPlayer.NickName = "玩家" + localPlayer.UserId;
             nameUI.text = localPlayer.NickName;
         }
+        player.GetComponentInChildren<WordlSpaceUI>().UpDatePlayerName(localPlayer.NickName);
     }
 
     public override void OnJoinedRoom()
@@ -258,11 +340,28 @@ public class Launcher : MonoBehaviourPunCallbacks
         {
             Debug.Log($"玩家 {targetPlayer.NickName} 的 PlayerLevel 属性已更新: {changedProps["PlayerLevel"]}");
         }
-        CheckAllPlayersLoaded();
+
+        if (changedProps.ContainsKey("PlayerReady"))
+        {
+            // 所有玩家都检查准备状态
+            CheckAllPlayersReady();
+        }
+
+        if (changedProps.ContainsKey("PlayerLoaded"))
+        {
+            // 所有玩家都检查加载完成状态
+            CheckAllPlayersLoaded();
+        }
     }
 
     private void CheckAllPlayersLoaded()
     {
+        // 添加防止重复加载的逻辑
+        if (isLoadingScene || allPlayersLoaded)
+        {
+            return;
+        }
+
         foreach (Photon.Realtime.Player player in PhotonNetwork.PlayerList)
         {
             if (!player.CustomProperties.ContainsKey("PlayerLoaded") ||
@@ -273,9 +372,12 @@ public class Launcher : MonoBehaviourPunCallbacks
             }
         }
 
-        // 所有玩家都已加载完成
+        if (LoadingCanvas.instance != null)
+        {
+            LoadingCanvas.instance.HideLoading();
+        }
+
         allPlayersLoaded = true;
         Debug.Log("所有玩家已加载完成，开始游戏！");
-        StartCoroutine(EnterLevel());
     }
 }

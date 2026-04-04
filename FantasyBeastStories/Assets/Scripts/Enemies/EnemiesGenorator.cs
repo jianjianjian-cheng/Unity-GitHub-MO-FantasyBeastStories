@@ -15,6 +15,7 @@ namespace Enemies
         bool canGenorate = false;
         void Update()
         {
+            if (!PhotonNetwork.IsMasterClient) return; // 只有房主执行生成逻辑
             if (!isPhotonReady)
             {
                 // 更清晰的方式
