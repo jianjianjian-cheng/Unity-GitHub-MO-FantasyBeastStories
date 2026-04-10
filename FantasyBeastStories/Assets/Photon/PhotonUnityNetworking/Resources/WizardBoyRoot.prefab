@@ -1523,6 +1523,7 @@ MonoBehaviour:
   animator: {fileID: 4690395130346847112}
   rotationSpeed: 10
   isInLobby: 0
+  isReadyPanel: {fileID: 3618823515155754854}
 --- !u!95 &4690395130346847112
 Animator:
   serializedVersion: 5

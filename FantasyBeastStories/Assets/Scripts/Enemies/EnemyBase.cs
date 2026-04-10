@@ -21,7 +21,7 @@ namespace Enemies
         [SerializeField] protected AttributeEnemyBase attribute;
 
         protected GameObject PlayerTarget;
-        protected EnemyState currentState;
+        [SerializeField] protected EnemyState currentState;
 
         void Awake()
         {
@@ -56,8 +56,14 @@ namespace Enemies
         //追踪最近的玩家
         protected virtual void TrackPlayer()
         {
-            if (GetIsDie())
+            if (GetIsDie() || currentState == EnemyState.Die)
             {
+                // 停止物理移动
+                if (rb != null)
+                {
+                    rb.velocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+                }
                 return;
             }
             List<GameObject> players = new List<GameObject>();
@@ -178,7 +184,12 @@ namespace Enemies
         // ========== Die状态 ==========
         protected virtual void EnterDie()
         {
-            attribute.SetMoveSpeed(0);
+            // 停止物理移动
+            if (rb != null)
+            {
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
             animator.SetTrigger("die");
             Invoke(nameof(DestorySelf), 3f); // 3秒后销毁敌人对象
         }

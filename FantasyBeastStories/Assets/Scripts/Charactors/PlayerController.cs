@@ -22,6 +22,7 @@ namespace Charactors
         protected Vector3 movement; // 移动方向
         protected bool isRun; // 是否正在运行
         [SerializeField] private bool isInLobby; // 是否在大厅场景
+        [SerializeField] private GameObject isReadyPanel; // 准备界面
 
 
         protected virtual void Awake()
@@ -34,6 +35,14 @@ namespace Charactors
             if (!photonView.IsMine)
             {
                 return; // 只处理本地玩家的输入和动画
+            }
+            if (isInLobby)
+            {
+                isReadyPanel.SetActive(true); // 显示准备界面
+            }
+            else
+            {
+                isReadyPanel.SetActive(false); // 隐藏准备界面
             }
             moveSpeed = attributePlayerBase.GetMoveSpeed();
             // 获取或添加Rigidbody组件
@@ -51,14 +60,16 @@ namespace Charactors
         // Update is called once per frame
         protected virtual void Update()
         {
-            if (!photonView.IsMine && photonView != null)
+            Debug.Log("PlayerController Update1" + GameManager.isTest + "  " + GameManager.isStayLobby);
+            if (!photonView.IsMine && photonView != null && GameManager.isTest == false)
             {
                 return; // 只处理本地玩家的输入和动画
             }
-            if (isInLobby)
+            if (GameManager.isStayLobby)
             {
                 return; // 如果在大厅场景，不处理输入
             }
+            Debug.Log("PlayerController Update2");
             HandleInput();
         }
 
@@ -74,12 +85,12 @@ namespace Charactors
 
         protected virtual void OnEnable()
         {
-            EventManager.instance.RegisterAttributePlayerBase(EventNames.UpdateAttributeWizradBoy, attributePlayerBase);
+            EventManager.instance.RegisterAttributePlayerBase(EventNames.UpdateAttributePlayer, attributePlayerBase);
         }
 
         protected virtual void OnDisable()
         {
-            EventManager.instance.UnRegisterAttributePlayerBase(EventNames.UpdateAttributeWizradBoy);
+            EventManager.instance.UnRegisterAttributePlayerBase(EventNames.UpdateAttributePlayer);
         }
 
         protected virtual void HandleInput()

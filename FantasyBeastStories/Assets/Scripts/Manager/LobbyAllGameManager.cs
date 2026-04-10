@@ -12,18 +12,18 @@ namespace Manager
     public class LobbyAllGameManager : MonoBehaviour
     {
         [SerializeField] private PlayableDirector vcTimeLine;
-        private Button startButton;
-        private Button exitButton;
-        private Button optionButton;
+        private Gameobject startButton;
+        private Gameobject exitButton;
+        private Gameobject optionButton;
         private GameObject gameNameModel;
 
 
         private void Start()
         {
             vcTimeLine = GameObject.Find("Director").GetComponent<PlayableDirector>();
-            startButton = GameObject.Find("StartButton").GetComponent<Button>();
-            exitButton = GameObject.Find("ExitButton").GetComponent<Button>();
-            optionButton = GameObject.Find("OptionsButton").GetComponent<Button>();
+            startButton = GameObject.Find("StartButton").GetComponent<Gameobject>();
+            exitButton = GameObject.Find("ExitButton").GetComponent<Gameobject>();
+            optionButton = GameObject.Find("OptionsButton").GetComponent<Gameobject>();
             startButton.onClick.AddListener(Startbutton);
             exitButton.onClick.AddListener(Exitbutton);
             optionButton.onClick.AddListener(Optionsbutton);

@@ -56,7 +56,7 @@ namespace FX
             base.OnTriggerEnter(other);
             if (activeCount == 0)
             {
-                attributePlayerBase = EventManager.instance.GetAttributePlayerBase(EventNames.UpdateAttributeWizradBoy);
+                attributePlayerBase = EventManager.instance.GetAttributePlayerBase(EventNames.UpdateAttributePlayer);
             }
             //触发冲击炮击中效果
             if (!other.gameObject.CompareTag("Enemy")) return;

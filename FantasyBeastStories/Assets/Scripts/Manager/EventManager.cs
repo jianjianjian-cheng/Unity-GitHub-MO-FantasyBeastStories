@@ -164,6 +164,7 @@ namespace Manager
     public class EventNames
     {
         public const string DamageReceived = "DamageReceived";
-        public const string UpdateAttributeWizradBoy = "UpdateAttributeWizradBoy";
+        public const string UpdateAttributePlayer = "UpdateAttributePlayer";
+        public const string RuneInfo = "RuneInfo";
     }
 }

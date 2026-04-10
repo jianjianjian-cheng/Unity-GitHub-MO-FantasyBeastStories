@@ -1,3 +1,4 @@
+using Manager;
 using Photon.Pun;
 using UnityEngine;
 
@@ -18,6 +19,7 @@ namespace Other
             if (other.CompareTag("Player"))
             {
                 Debug.Log($"玩家进入生成点: {gameObject.name}，ID: {Id}");
+                if (GameManager.isTest) return;
                 SetEmpty(false);
             }
         }

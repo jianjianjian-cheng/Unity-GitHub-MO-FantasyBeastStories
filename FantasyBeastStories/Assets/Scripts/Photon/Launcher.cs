@@ -18,7 +18,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField] public GameObject currentlySelectedCharacter;
     private Photon.Realtime.Player localPlayer;
     private InputField nameUI;
-    private Button joinRoom;
+    private Gameobject joinRoom;
     private GameObject TBGC;
     private GameObject joinRoomButton;
     private GameObject joinRoomInput;
@@ -56,6 +56,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     private void Update()
     {
+        if (isTest) return;
         if (Input.GetKeyDown(KeyCode.Return))
         {
             if (string.IsNullOrEmpty(nameUI.text))
@@ -115,7 +116,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         TBGC = GameObject.Find("TBGC");
         joinRoomButton = GameObject.Find("JoinRoomButton");
         joinRoomInput = GameObject.Find("JoinRoomInput");
-        joinRoom = GameObject.Find("JoinRoom").GetComponent<Button>();
+        joinRoom = GameObject.Find("JoinRoom").GetComponent<Gameobject>();
         TBGC = GetInactiveObjectByName("TBGC");
         joinRoomButton = GetInactiveObjectByName("JoinRoomButton");
         joinRoomInput = GetInactiveObjectByName("JoinRoomInput");
@@ -126,7 +127,7 @@ public class Launcher : MonoBehaviourPunCallbacks
             joinRoomInput.SetActive(true);
         });
 
-        joinRoomButton.GetComponent<Button>().onClick.AddListener(() =>
+        joinRoomButton.GetComponent<Gameobject>().onClick.AddListener(() =>
         {
             string roomName = joinRoomInput.GetComponent<InputField>().text;
             if (string.IsNullOrEmpty(roomName))
