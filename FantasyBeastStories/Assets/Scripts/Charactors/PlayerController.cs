@@ -60,7 +60,6 @@ namespace Charactors
         // Update is called once per frame
         protected virtual void Update()
         {
-            Debug.Log("PlayerController Update1" + GameManager.isTest + "  " + GameManager.isStayLobby);
             if (!photonView.IsMine && photonView != null && GameManager.isTest == false)
             {
                 return; // 只处理本地玩家的输入和动画
@@ -69,7 +68,6 @@ namespace Charactors
             {
                 return; // 如果在大厅场景，不处理输入
             }
-            Debug.Log("PlayerController Update2");
             HandleInput();
         }
 
@@ -85,7 +83,18 @@ namespace Charactors
 
         protected virtual void OnEnable()
         {
-            EventManager.instance.RegisterAttributePlayerBase(EventNames.UpdateAttributePlayer, attributePlayerBase);
+            if (EventManager.instance != null)
+            {
+                EventManager.instance.RegisterAttributePlayerBase(EventNames.UpdateAttributePlayer, attributePlayerBase);
+            }
+            else
+            {
+                //创建一个新的EventManager实例并注册事件
+                GameObject eventManagerObj = new GameObject("EventManager");
+                EventManager eventManager = eventManagerObj.AddComponent<EventManager>();
+                eventManager.RegisterAttributePlayerBase(EventNames.UpdateAttributePlayer, attributePlayerBase);
+                EventManager.instance = eventManager;
+            }
         }
 
         protected virtual void OnDisable()

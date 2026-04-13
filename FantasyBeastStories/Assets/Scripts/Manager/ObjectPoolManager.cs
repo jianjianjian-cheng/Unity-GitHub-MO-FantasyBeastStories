@@ -27,13 +27,13 @@ namespace Manager
         [SerializeField] private GameObject ImpactCannonCommonPrefab; // 火球预制体
         [SerializeField] private GameObject ImpactCannonHitCommonPrefab; // 火球击中效果预制体
         [SerializeField] private GameObject ImpactCannonTriggerPrefab; // 冲击炮Trigger预制体
+        [SerializeField] private GameObject FireFirePrefab; // 火焰预制体
         //冲击炮的路径
         private const string ImpactCannonPath = "FX/ImpactCannon/";
         private bool isPhotonReady = false; // Photon是否准备就绪
-        [SerializeField] private bool isTest = false; // 是否测试模式
         void Start()
         {
-            if (isTest)
+            if (GameManager.isTest)
             {
                 InitializePool();
                 return;
@@ -51,7 +51,7 @@ namespace Manager
 
         void Update()
         {
-            if (isTest) return;
+            if (GameManager.isTest) return;
             if (!isPhotonReady && PhotonNetwork.IsConnectedAndReady && PhotonNetwork.InRoom)
             {
                 InitializePool();
@@ -61,12 +61,13 @@ namespace Manager
 
         private void InitializePool()
         {
-            if (isTest)
+            if (GameManager.isTest)
             {
                 AddMultipleToPool("TestPool", testPrefab, 5);
                 AddMultipleToPool("ImpactCannonCommonPool", ImpactCannonCommonPrefab, 10, ImpactCannonPath);
                 AddMultipleToPool("ImpactCannonTriggerPool", ImpactCannonTriggerPrefab, 10, ImpactCannonPath);
                 AddMultipleToPool("ImpactCannonHitCommonPool", ImpactCannonHitCommonPrefab, 20, ImpactCannonPath);
+                // AddMultipleToPool("FireFirePool", FireFirePrefab, 20, "FX/FireFire/");
                 return;
             }
             //添加到对象池
@@ -75,6 +76,7 @@ namespace Manager
             AddMultipleToPool("ImpactCannonHitCommonPool", ImpactCannonHitCommonPrefab, 20, ImpactCannonPath);
             //添加冲击炮Trigger到对象池
             AddMultipleToPool("ImpactCannonTriggerPool", ImpactCannonTriggerPrefab, 10, ImpactCannonPath);
+            // AddMultipleToPool("FireFirePool", FireFirePrefab, 20, "FX/FireFire/");
         }
         //清空对象池
         public void ClearPool(string poolName)
@@ -129,7 +131,7 @@ namespace Manager
             for (int i = 0; i < count; i++)
             {
                 GameObject obj;
-                if (isTest)
+                if (GameManager.isTest)
                 {
                     obj = Instantiate(prefab, transform.position, Quaternion.identity);
                 }
@@ -146,6 +148,7 @@ namespace Manager
                 obj.transform.SetParent(transform);
                 obj.SetActive(false);
                 objectPools[poolName].Add(obj);
+                Debug.Log($"添加对象 '{obj.name}' 到对象池 '{poolName}'");
             }
         }
     }
@@ -156,5 +159,6 @@ namespace Manager
         public const string ImpactCannonHitCommonPool = "ImpactCannonHitCommonPool";
         public const string TestPool = "TestPool";
         public const string ImpactCannonTriggerPool = "ImpactCannonTriggerPool";
+        public const string FireFirePool = "FireFirePool";
     }
 }

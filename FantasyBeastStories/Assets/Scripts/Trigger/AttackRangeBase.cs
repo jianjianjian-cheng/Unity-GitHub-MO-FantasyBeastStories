@@ -17,9 +17,6 @@ namespace Trigger
 
         [SerializeField] private float offsetY = 1f;
 
-        // private GameObject ImpactCannonBase;
-        // private string impactCannonBasePath = "Photon/PhotonUnityNetworking/Resources/FX/ImpactCannon";
-        // private string impactCannonAttribute = "Common";
         [SerializeField] private float attackInterval = 2f;
         // Start is called before the first frame update
         public override void Start()

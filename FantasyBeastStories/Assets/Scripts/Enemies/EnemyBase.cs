@@ -167,8 +167,8 @@ namespace Enemies
                 Vector3 moveDirection = (PlayerTarget.transform.position - transform.position).normalized;
                 // 移动敌人
                 rb.MovePosition(transform.position + moveDirection * attribute.moveSpeed * Time.deltaTime);
-                // 旋转敌人朝向玩家
-                transform.LookAt(PlayerTarget.transform);
+                // 旋转敌人朝向玩家,只在xz轴上旋转
+                transform.LookAt(new Vector3(PlayerTarget.transform.position.x, transform.position.y, PlayerTarget.transform.position.z));
             }
         }
         protected virtual void ExitRun()
@@ -213,7 +213,18 @@ namespace Enemies
 
         protected virtual void OnEnable()
         {
-            EventManager.instance.RegisterEventComplex(EventNames.DamageReceived, OnDamageReceived);
+            if (EventManager.instance)
+            {
+                EventManager.instance.RegisterEventComplex(EventNames.DamageReceived, OnDamageReceived);
+            }
+            else
+            {
+                //创建一个新的EventManager实例并注册事件
+                GameObject eventManagerObj = new GameObject("EventManager");
+                EventManager eventManager = eventManagerObj.AddComponent<EventManager>();
+                eventManager.RegisterEventComplex(EventNames.DamageReceived, OnDamageReceived);
+                EventManager.instance = eventManager;
+            }
         }
 
         protected virtual void OnDisable()
