@@ -11,7 +11,7 @@ namespace Charactors.Pets
     {
         protected float attackDistance = 3f; // 攻击距离
         protected float moveSpeed = 4f; // 移动速度
-        protected GameObject hostPlayer; // 主人玩家
+        [SerializeField] protected GameObject hostPlayer; // 主人玩家
         [SerializeField] protected GameObject targetEnemy; // 目标敌人
         protected Animator animator; // 动画组件
         protected Rigidbody rb; // 物理组件
@@ -41,7 +41,6 @@ namespace Charactors.Pets
         protected PetState previousState = PetState.Idle; // 上一个状态
         protected virtual void Update()
         {
-            Debug.Log(rb.velocity);
             // 根据当前状态执行相应的行为
             switch (currentState)
             {
@@ -92,9 +91,12 @@ namespace Charactors.Pets
             animator.SetBool("isRun", true);
             animator.SetBool("isAttack", false);
             //在x和z轴上移动到目标敌人位置
-            Vector3 direction = (targetEnemy.transform.position - transform.position).normalized;
-            direction.y = 0;
-            rb.velocity = direction * moveSpeed;
+            if (targetEnemy != null)
+            {
+                Vector3 direction = (targetEnemy.transform.position - transform.position).normalized;
+                direction.y = 0;
+                rb.velocity = direction * moveSpeed;
+            }
         }
         protected virtual void RunStay()
         {
@@ -109,7 +111,6 @@ namespace Charactors.Pets
 
         protected virtual void RunExit()
         {
-            Debug.Log("RunExit");
             // 更新Run状态退出时的行为，例如停止Run动画、重置移动参数等
             animator.SetBool("isRun", false);
             rb.velocity = Vector3.zero;

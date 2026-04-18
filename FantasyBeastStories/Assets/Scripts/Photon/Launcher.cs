@@ -283,7 +283,7 @@ public class Launcher : MonoBehaviourPunCallbacks
             {
                 spawnPosition = spawnPoint.position;
             }
-            player = PhotonNetwork.Instantiate("WizardBoyRoot", spawnPosition, spawnPoint.rotation);
+            player = PhotonNetwork.Instantiate(this.currentlySelectedCharacter.name, spawnPosition, spawnPoint.rotation);
             player.transform.rotation = Quaternion.Euler(0, player.transform.rotation.y, 0);
             player.name = "Player" + PhotonNetwork.LocalPlayer.UserId;
             Debug.LogWarning("离开大厅" + GameManager.isStayLobby);
@@ -332,7 +332,12 @@ public class Launcher : MonoBehaviourPunCallbacks
     public GameObject GetInactiveObjectByName(string objectName)
     {
         var allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
-        return System.Array.Find(allObjects, obj => obj.name == objectName && !obj.activeInHierarchy);
+        return System.Array.Find(allObjects, obj =>
+            obj != null && // 过滤null对象
+            obj.name == objectName &&
+            !obj.activeInHierarchy &&
+            obj.scene.IsValid() // 确保是场景中的物体，不是预制体资源
+        );
     }
 
     public override void OnPlayerPropertiesUpdate(Photon.Realtime.Player targetPlayer, Hashtable changedProps)

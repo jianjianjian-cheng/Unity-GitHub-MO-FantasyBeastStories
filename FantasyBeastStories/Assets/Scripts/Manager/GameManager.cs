@@ -24,6 +24,13 @@ namespace Manager
         private Gameobject EquipButton; //符文装备按钮
         private int[] currentEquippedRuneIds = new int[2]; //当前装备的符文ID数组
 
+        //角色选择面板
+        private Gameobject nextCharacterButton; //下一个角色按钮
+        private Gameobject previousCharacterButton; //上一个角色按钮
+        private Gameobject SwitchButton; //切换角色按钮
+        private Gameobject CharactorIll; //当前角色
+        private int currentCharactorIndex = 0; //当前角色索引
+
         private Gameobject MassionButton;
         private Text nameUIText;
         public int sceneIndex = 2;
@@ -92,6 +99,55 @@ namespace Manager
             RuneIcon_1 = GameObject.Find("RuneIcon_1").GetComponent<Gameobject>();
             RuneIcon_2 = GameObject.Find("RuneIcon_2").GetComponent<Gameobject>();
             startButton = GameObject.Find("StartButton").GetComponent<Gameobject>();
+
+            //角色选择面板
+            CharactorIll = Launcher.instance.GetInactiveObjectByName("CharactorIll")?.GetComponent<Gameobject>();
+            nextCharacterButton = Launcher.instance.GetInactiveObjectByName("nextCharacterButton")?.GetComponent<Gameobject>();
+            previousCharacterButton = Launcher.instance.GetInactiveObjectByName("previousCharacterButton")?.GetComponent<Gameobject>();
+            SwitchButton = Launcher.instance.GetInactiveObjectByName("SwitchButton")?.GetComponent<Gameobject>();
+
+            if (SwitchButton == null)
+            {
+                Debug.LogWarning("未找到 SwitchButton 按钮");
+            }
+            if (nextCharacterButton == null)
+            {
+                Debug.LogWarning("未找到 NextCharacterButton 按钮");
+            }
+            if (previousCharacterButton == null)
+            {
+                Debug.LogWarning("未找到 PreviousCharacterButton 按钮");
+            }
+
+            if (CharactorIll == null)
+            {
+                Debug.LogWarning("未找到 Charactor 对象");
+            }
+
+            //翻转nextCharacterButton的图片
+            Image previousCharacterButtonImage = previousCharacterButton.GetComponent<Image>();
+            Vector3 scale = previousCharacterButtonImage.transform.localScale;
+            scale.x *= -1;
+            previousCharacterButtonImage.transform.localScale = scale;
+            SwitchCharactor(0); //默认角色为第一个角色
+            //添加角色选择按钮的点击事件
+            previousCharacterButton.onClick.AddListener(() =>
+            {
+                int newIndex = currentCharactorIndex - 1;
+                if (newIndex < 0)
+                    newIndex = 0;
+                SwitchCharactor(newIndex);
+            });
+
+            nextCharacterButton.onClick.AddListener(() =>
+            {
+                int newIndex = currentCharactorIndex + 1;
+                if (newIndex >= 2)
+                    newIndex = 1;
+                SwitchCharactor(newIndex);
+            });
+
+
 
             //寻找符文插槽
             FindRuneIcons();
@@ -494,5 +550,34 @@ namespace Manager
             });
             trigger.triggers.Add(entryExit);
         }
+        #region  UI切换角色相关方法区域
+        //切换角色
+        private void SwitchCharactor(int charactorIndex)
+        {
+            Image characterImage = CharactorIll.GetComponent<Image>();
+            if (characterImage)
+            {
+                Sprite newSprite = Resources.Load<Sprite>("UI/Characters/" + charactorIndex);
+                if (newSprite == null)
+                {
+                    Debug.LogWarning($"未找到角色图片资源: UI/Characters/{charactorIndex}");
+                    return;
+                }
+                characterImage.sprite = newSprite;
+            }
+            else
+            {
+                Debug.LogWarning("CharactorIll对象上没有Image组件");
+            }
+        }
+        #endregion
+
+
+    }
+
+    public class CharactorIndex
+    {
+        public const int WiZardBoy = 0;
+        public const int LittleRedGirl = 1;
     }
 }
