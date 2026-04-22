@@ -37,6 +37,9 @@ MonoBehaviour:
   - ClickRpc
   - DestroyRpc
   - RPC_SetEmpty
+  - RPC_UpdateSpawnPointState
+  - RPC_DealDamage
+  - RPC_OnFireballCast
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

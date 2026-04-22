@@ -927,6 +927,8 @@ GameObject:
   - component: {fileID: 3479939664752032970}
   - component: {fileID: 7064572748405947047}
   - component: {fileID: 6646249465345568054}
+  - component: {fileID: 2600900453968760568}
+  - component: {fileID: 6501645544571950971}
   m_Layer: 0
   m_Name: AttackRange
   m_TagString: AttackTrigger
@@ -984,6 +986,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offsetY: 0.5
   attackInterval: 2
+--- !u!114 &2600900453968760568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2990400970803704115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4993b433f3f4f1247beb4b441aa834fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6501645544571950971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2990400970803704115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &3200181468221493055
 GameObject:
   m_ObjectHideFlags: 0
@@ -1517,6 +1553,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c50604d134e22245b0d51dd033c8c2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnPointIndex: 0
+  isOnlyShow: 0
   virtualCamera: {fileID: 530324406809236268}
   moveSpeed: 4
   rb: {fileID: 2406815688151714110}

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Atttibute;
 using Events;
+using Photon.Pun;
 using UnityEngine;
 
 namespace Manager
@@ -43,8 +44,15 @@ namespace Manager
         private Dictionary<string, Action> eventDictionary = new Dictionary<string, Action>();
         /// </remarks> 复杂参数事件字典
         private Dictionary<string, Action<EventArgsBase>> eventDictionaryComplex = new Dictionary<string, Action<EventArgsBase>>();
-        //返回AttributePlayerBase组件字典
-        private Dictionary<string, AttributePlayerBase> attributePlayerBaseDictionary = new Dictionary<string, AttributePlayerBase>();
+        private Dictionary<(int actorNumber, string key), AttributePlayerBase> attributePlayerBaseDictionary
+            = new Dictionary<(int, string), AttributePlayerBase>();
+        //返回bool组件字典
+        private Dictionary<string, bool> boolDictionary = new Dictionary<string, bool>();
+        //bool参数事件字典
+        private Dictionary<string, Action<bool>> boolEventDictionary = new Dictionary<string, Action<bool>>();
+
+
+
         /// <summary>
         /// 注册事件
         /// </summary>
@@ -119,44 +127,143 @@ namespace Manager
         /// <summary>
         /// 注册AttributePlayerBase组件
         /// </summary>
-        /// <param name="playerName">玩家名称</param>
+        /// <param name="actorNumber">玩家ActorNumber（Photon唯一标识）</param>
+        /// <param name="key">属性Key（如"MainPlayer"、"Enemy"等）</param>
         /// <param name="attributePlayerBase">AttributePlayerBase组件</param>
-        public void RegisterAttributePlayerBase(string playerName, AttributePlayerBase attributePlayerBase)
+        public void RegisterAttributePlayerBase(int actorNumber, string key, AttributePlayerBase attributePlayerBase)
         {
-            if (attributePlayerBaseDictionary.ContainsKey(playerName))
+            var dictKey = (actorNumber, key);
+            if (attributePlayerBaseDictionary.ContainsKey(dictKey))
             {
-                attributePlayerBaseDictionary[playerName] = attributePlayerBase;
+                attributePlayerBaseDictionary[dictKey] = attributePlayerBase;
             }
             else
             {
-                attributePlayerBaseDictionary.Add(playerName, attributePlayerBase);
+                attributePlayerBaseDictionary.Add(dictKey, attributePlayerBase);
             }
         }
+
         /// <summary>
         /// 注销AttributePlayerBase组件
         /// </summary>
-        /// <param name="playerName">玩家名称</param>
-        public void UnRegisterAttributePlayerBase(string playerName)
+        public void UnRegisterAttributePlayerBase(int actorNumber, string key)
         {
-            if (attributePlayerBaseDictionary.ContainsKey(playerName))
+            var dictKey = (actorNumber, key);
+            if (attributePlayerBaseDictionary.ContainsKey(dictKey))
             {
-                attributePlayerBaseDictionary.Remove(playerName);
+                attributePlayerBaseDictionary.Remove(dictKey);
             }
         }
+
         /// <summary>
         /// 获取AttributePlayerBase组件
         /// </summary>
-        /// <param name="playerName">玩家名称</param>
-        /// <returns>AttributePlayerBase组件</returns>
-        public AttributePlayerBase GetAttributePlayerBase(string playerName)
+        /// <param name="actorNumber">玩家ActorNumber</param>
+        /// <param name="key">属性Key</param>
+        public AttributePlayerBase GetAttributePlayerBase(int actorNumber, string key)
         {
-            if (attributePlayerBaseDictionary.ContainsKey(playerName))
+            var dictKey = (actorNumber, key);
+            if (attributePlayerBaseDictionary.ContainsKey(dictKey))
             {
-                return attributePlayerBaseDictionary[playerName];
+                return attributePlayerBaseDictionary[dictKey];
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 获取本地玩家的AttributePlayerBase组件（便捷方法）
+        /// </summary>
+        public AttributePlayerBase GetLocalPlayerAttribute(string key)
+        {
+            if (PhotonNetwork.LocalPlayer != null)
+            {
+                return GetAttributePlayerBase(PhotonNetwork.LocalPlayer.ActorNumber, key);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 注册bool组件
+        /// </summary>
+        /// <param name="playerName">玩家名称</param>
+        /// <param name="boolValue">bool组件值</param>
+        public void RegisterBool(string playerName, bool boolValue)
+        {
+            if (boolDictionary.ContainsKey(playerName))
+            {
+                boolDictionary[playerName] = boolValue;
             }
             else
             {
-                return null;
+                boolDictionary.Add(playerName, boolValue);
+            }
+        }
+        /// <summary>
+        /// 注销bool组件
+        /// </summary>
+        /// <param name="playerName">玩家名称</param>
+        public void UnRegisterBool(string playerName)
+        {
+            if (boolDictionary.ContainsKey(playerName))
+            {
+                boolDictionary.Remove(playerName);
+            }
+        }
+        /// <summary>
+        /// 获取bool组件
+        /// </summary>
+        /// <param name="playerName">玩家名称</param>
+        /// <returns>bool组件值</returns>
+        public bool GetBool(string playerName)
+        {
+            if (boolDictionary.ContainsKey(playerName))
+            {
+                return boolDictionary[playerName];
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// 注册bool参数事件
+        /// </summary>
+        /// <param name="playerName">玩家名称</param>
+        /// <param name="action">bool参数事件</param>
+        public void RegisterBoolEvent(string playerName, Action<bool> action)
+        {
+            if (boolEventDictionary.ContainsKey(playerName))
+            {
+                boolEventDictionary[playerName] += action;
+            }
+            else
+            {
+                boolEventDictionary.Add(playerName, action);
+            }
+        }
+        /// <summary>
+        /// 注销bool参数事件
+        /// </summary>
+        /// <param name="playerName">玩家名称</param>
+        public void UnRegisterBoolEvent(string playerName)
+        {
+            if (boolEventDictionary.ContainsKey(playerName))
+            {
+                boolEventDictionary.Remove(playerName);
+            }
+        }
+        /// <summary>
+        /// 触发bool参数事件
+        /// </summary>
+        /// <param name="playerName">玩家名称</param>
+        /// <param name="boolValue">bool参数值</param>
+        public void TriggerBoolEvent(string playerName, bool boolValue)
+        {
+            if (boolEventDictionary.ContainsKey(playerName))
+            {
+                boolEventDictionary[playerName]?.Invoke(boolValue);
             }
         }
     }
@@ -166,5 +273,10 @@ namespace Manager
         public const string DamageReceived = "DamageReceived";
         public const string UpdateAttributePlayer = "UpdateAttributePlayer";
         public const string RuneInfo = "RuneInfo";
+        public const string ChangeCanRotate = "ChangeCanRotate";
+
+        // 玩家属性Key常量
+        public const string PlayerAttribute_Main = "MainPlayer";
+        public const string PlayerAttribute_Current = "CurrentPlayer";
     }
 }

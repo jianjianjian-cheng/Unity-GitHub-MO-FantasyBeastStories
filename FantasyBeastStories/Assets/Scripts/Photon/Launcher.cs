@@ -9,6 +9,8 @@ using Unity.VisualScripting;
 using ExitGames.Client.Photon;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using ExitGames.Client.Photon.StructWrapping;
+using Other;
+using Charactors;
 
 public class Launcher : MonoBehaviourPunCallbacks
 {
@@ -234,6 +236,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (GameManager.isTest) return;
         if (scene.buildIndex == 1)
         {
             GameManager.isStayLobby = true;
@@ -271,49 +274,259 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         GameManager.instance.FindSpawnPoints();
         Debug.Log("执行CreatedOrJoinedRoom");
-        Transform spawnPoint = GameManager.instance.GetEmptySpawnPoint().transform;
-        GameObject player = null;
-        if (spawnPoint != null)
+
+        // 生成玩家
+        GameObject player = SpawnPlayer();
+
+        if (player != null)
         {
-            // 在生成点周围XZ平面内随机生成
-            Vector2 randomCircle = Random.insideUnitCircle * 10.0f;
-            Vector3 randomOffset = new Vector3(randomCircle.x, spawnPoint.position.y, randomCircle.y);
-            Vector3 spawnPosition = spawnPoint.position + spawnPoint.TransformVector(randomOffset);
-            if (GameManager.isStayLobby)
+            // 初始化玩家设置
+            InitializePlayerSettings(player);
+
+            // 设置玩家UI
+            SetupPlayerUI(player);
+        }
+
+        // 隐藏加载界面
+        HideLoadingCanvas();
+
+        // 设置房间信息
+        SetupRoomInfo();
+    }
+
+    /// <summary>
+    /// 生成玩家角色
+    /// </summary>
+    private GameObject SpawnPlayer()
+    {
+        Transform spawnPoint = GameManager.instance.GetEmptySpawnPoint()?.transform;
+
+        if (spawnPoint == null)
+        {
+            Debug.LogError("[Launcher] 没有可用的生成点！");
+            return null;
+        }
+
+        Vector3 spawnPosition = CalculateSpawnPosition(spawnPoint);
+
+        // 生成玩家
+        GameObject player = PhotonNetwork.Instantiate(
+            currentlySelectedCharacter.name,
+            spawnPosition,
+            spawnPoint.rotation
+        );
+
+        player.transform.rotation = Quaternion.Euler(0, spawnPoint.rotation.eulerAngles.y, 0);
+        player.name = "Player_" + PhotonNetwork.LocalPlayer.UserId;
+
+        // 记录当前使用的生成点ID到玩家属性
+        SpawnPoint sp = spawnPoint.GetComponent<SpawnPoint>();
+        if (sp != null)
+        {
+            var props = new Hashtable
+        {
+            { "CurrentSpawnPoint", sp.Id }
+        };
+            PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+        }
+
+        return player;
+    }
+
+
+    /// <summary>
+    /// 重新生成角色（用于切换角色）
+    /// </summary>
+    public void RespawnCharacter()
+    {
+        // 获取玩家当前使用的生成点ID
+        int currentSpawnPointId = -1;
+        if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("CurrentSpawnPoint"))
+        {
+            currentSpawnPointId = (int)PhotonNetwork.LocalPlayer.CustomProperties["CurrentSpawnPoint"];
+        }
+
+        // 销毁当前角色
+        if (localPlayerObject != null)
+        {
+            PhotonNetwork.Destroy(localPlayerObject);
+        }
+
+        // 在原生成点生成新角色
+        GameObject newPlayer = RespawnAtSpawnPoint(currentSpawnPointId);
+
+        if (newPlayer != null)
+        {
+            InitializePlayerSettings(newPlayer);
+            SetupPlayerUI(newPlayer);
+            Debug.Log($"[Launcher] 在原生成点 {currentSpawnPointId} 重新生成角色");
+        }
+    }
+
+    // 在指定生成点生成角色
+    private GameObject RespawnAtSpawnPoint(int spawnPointId)
+    {
+        SpawnPoint targetSpawnPoint = GameManager.instance.GetSpawnPointById(spawnPointId);
+
+        if (targetSpawnPoint == null)
+        {
+            Debug.LogWarning($"[Launcher] 找不到ID为 {spawnPointId} 的生成点，使用第一个空闲生成点");
+            return SpawnPlayer();
+        }
+
+        Transform spawnTransform = targetSpawnPoint.transform;
+        Vector3 spawnPosition = CalculateSpawnPosition(spawnTransform);
+
+        GameObject player = PhotonNetwork.Instantiate(
+            currentlySelectedCharacter.name,
+            spawnPosition,
+            spawnTransform.rotation
+        );
+
+        player.transform.rotation = Quaternion.Euler(0, spawnTransform.rotation.eulerAngles.y, 0);
+        player.name = "Player_" + PhotonNetwork.LocalPlayer.UserId;
+
+        return player;
+    }
+
+    // 添加玩家退出时的清理逻辑
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
+    {
+        Debug.Log($"[Launcher] 玩家 {otherPlayer.NickName} 离开房间");
+        if (!PhotonNetwork.IsConnected || !PhotonNetwork.InRoom)
+        {
+            Debug.LogWarning("[Launcher] 连接状态异常，跳过生成点释放");
+            return;
+        }
+        // 释放该玩家占用的生成点
+        if (otherPlayer.CustomProperties.ContainsKey("CurrentSpawnPoint"))
+        {
+            int spawnPointId = (int)otherPlayer.CustomProperties["CurrentSpawnPoint"];
+            SpawnPoint sp = GameManager.instance.GetSpawnPointById(spawnPointId);
+            if (sp != null)
             {
-                spawnPosition = spawnPoint.position;
-            }
-            player = PhotonNetwork.Instantiate(this.currentlySelectedCharacter.name, spawnPosition, spawnPoint.rotation);
-            player.transform.rotation = Quaternion.Euler(0, player.transform.rotation.y, 0);
-            player.name = "Player" + PhotonNetwork.LocalPlayer.UserId;
-            Debug.LogWarning("离开大厅" + GameManager.isStayLobby);
-            if (!GameManager.isStayLobby)
-            {
-                GameObject vcam = player.transform.Find("VirtualCamera").gameObject;
-                if (vcam != null)
-                {
-                    vcam.SetActive(true);
-                }
-            }
-            else
-            {
-                player.transform.LookAt(new Vector3(0.182999998f, player.transform.position.y, -0.219999999f));
+                sp.ForceRelease();
+                Debug.Log($"[Launcher] 释放玩家 {otherPlayer.NickName} 占用的生成点 {spawnPointId}");
             }
         }
+    }
+
+    // 修改 OnPlayerPropertiesUpdate 以处理生成点状态
+    public override void OnPlayerPropertiesUpdate(Photon.Realtime.Player targetPlayer, Hashtable changedProps)
+    {
+        if (changedProps.ContainsKey("PlayerLevel"))
+        {
+            Debug.Log($"玩家 {targetPlayer.NickName} 的 PlayerLevel 属性已更新: {changedProps["PlayerLevel"]}");
+        }
+
+        if (changedProps.ContainsKey("PlayerReady"))
+        {
+            CheckAllPlayersReady();
+        }
+
+        if (changedProps.ContainsKey("PlayerLoaded"))
+        {
+            CheckAllPlayersLoaded();
+        }
+
+        // 处理生成点属性变化
+        if (changedProps.ContainsKey("CurrentSpawnPoint"))
+        {
+            object spawnPointValue = changedProps["CurrentSpawnPoint"];
+            Debug.Log($"玩家 {targetPlayer.NickName} 的生成点更新: {spawnPointValue}");
+        }
+    }
+
+    /// <summary>
+    /// 计算生成位置
+    /// </summary>
+    private Vector3 CalculateSpawnPosition(Transform spawnPoint)
+    {
+        if (GameManager.isStayLobby)
+        {
+            return spawnPoint.position;
+        }
+
+        // 在生成点周围XZ平面内随机生成
+        Vector2 randomCircle = Random.insideUnitCircle * 10.0f;
+        Vector3 randomOffset = new Vector3(randomCircle.x, spawnPoint.position.y, randomCircle.y);
+        return spawnPoint.position + spawnPoint.TransformVector(randomOffset);
+    }
+
+    /// <summary>
+    /// 初始化玩家设置
+    /// </summary>
+    private void InitializePlayerSettings(GameObject player)
+    {
+        if (!GameManager.isStayLobby)
+        {
+            // 激活虚拟摄像机
+            GameObject vcam = player.transform.Find("VirtualCamera")?.gameObject;
+            if (vcam != null)
+            {
+                vcam.SetActive(true);
+            }
+        }
+        else
+        {
+            // 在大厅中看向指定方向
+            player.transform.LookAt(new Vector3(0.182999998f, player.transform.position.y, -0.219999999f));
+        }
+    }
+
+    /// <summary>
+    /// 设置玩家UI
+    /// </summary>
+    private void SetupPlayerUI(GameObject player)
+    {
+        localPlayer = PhotonNetwork.LocalPlayer;
+        localPlayer.NickName = "玩家" + localPlayer.UserId;
+
+        // 设置本地UI
+        if (nameUI != null)
+        {
+            nameUI.text = localPlayer.NickName;
+        }
+
+        // 设置世界空间UI
+        var worldSpaceUI = player.GetComponentInChildren<WordlSpaceUI>();
+        if (worldSpaceUI != null)
+        {
+            worldSpaceUI.UpDatePlayerName(localPlayer.NickName);
+        }
+
+        localPlayerObject = player;
+    }
+
+    /// <summary>
+    /// 隐藏加载画布
+    /// </summary>
+    private void HideLoadingCanvas()
+    {
         if (LoadingCanvas.instance != null)
         {
             LoadingCanvas.instance.HideLoading();
         }
-        if (GameObject.Find("RoomName") != null)
-        {
-            string roomName = PhotonNetwork.CurrentRoom.Name;
-            GameObject.Find("RoomName").GetComponent<Text>().text = roomName;
-            localPlayer = PhotonNetwork.LocalPlayer;
-            localPlayer.NickName = "玩家" + localPlayer.UserId;
-            nameUI.text = localPlayer.NickName;
-        }
-        player.GetComponentInChildren<WordlSpaceUI>().UpDatePlayerName(localPlayer.NickName);
     }
+
+    /// <summary>
+    /// 设置房间信息显示
+    /// </summary>
+    private void SetupRoomInfo()
+    {
+        GameObject roomNameObj = GameObject.Find("RoomName");
+        if (roomNameObj != null && PhotonNetwork.CurrentRoom != null)
+        {
+            Text roomNameText = roomNameObj.GetComponent<Text>();
+            if (roomNameText != null)
+            {
+                roomNameText.text = PhotonNetwork.CurrentRoom.Name;
+            }
+        }
+    }
+
+    // 添加一个字段来保存当前玩家对象的引用
+    private GameObject localPlayerObject;
 
     public override void OnJoinedRoom()
     {
@@ -340,23 +553,21 @@ public class Launcher : MonoBehaviourPunCallbacks
         );
     }
 
-    public override void OnPlayerPropertiesUpdate(Photon.Realtime.Player targetPlayer, Hashtable changedProps)
+    // 切换角色示例
+    public void SwitchCharacter(string newCharacterName)
     {
-        if (changedProps.ContainsKey("PlayerLevel"))
-        {
-            Debug.Log($"玩家 {targetPlayer.NickName} 的 PlayerLevel 属性已更新: {changedProps["PlayerLevel"]}");
-        }
+        this.currentlySelectedCharacter.name = newCharacterName;
+        RespawnCharacter();
+    }
 
-        if (changedProps.ContainsKey("PlayerReady"))
+    public void ResetSpawnPointState(int spawnPointIndex)
+    {
+        foreach (var spawnPoint in GameManager.instance.spawnPoints)
         {
-            // 所有玩家都检查准备状态
-            CheckAllPlayersReady();
-        }
+            if (spawnPoint.GetComponent<SpawnPoint>().Id == spawnPointIndex)
+            {
 
-        if (changedProps.ContainsKey("PlayerLoaded"))
-        {
-            // 所有玩家都检查加载完成状态
-            CheckAllPlayersLoaded();
+            }
         }
     }
 

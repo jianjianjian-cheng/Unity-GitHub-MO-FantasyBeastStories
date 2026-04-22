@@ -704,6 +704,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2da86cb05723f2846bedfccd50116978, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnPointIndex: 0
+  isOnlyShow: 0
   virtualCamera: {fileID: 4919121492267631130}
   moveSpeed: 2
   rb: {fileID: 8641907677009114111}

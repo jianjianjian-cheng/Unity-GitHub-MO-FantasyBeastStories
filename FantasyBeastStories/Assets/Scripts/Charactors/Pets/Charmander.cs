@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Manager;
 using Trigger;
 using UnityEngine;
+using Charactors;
 
 namespace Charactors.Pets
 {
@@ -735,6 +736,10 @@ namespace Charactors.Pets
             Debug.Log($"设置新的玩家跟随位置: {playerFollowPosition}, 距离玩家: {radius}");
         }
 
+        public void SetOwner(GameObject owner)
+        {
+            this.hostPlayer = owner; // 设置宠物的主人玩家
+        }
         // 可选：添加Gizmos可视化调试
 #if UNITY_EDITOR
         private void OnDrawGizmosSelected()
@@ -772,10 +777,6 @@ namespace Charactors.Pets
                 Gizmos.color = Color.magenta;
                 Gizmos.DrawWireSphere(transform.position, attackDistance);
             }
-        }
-        public void SetHostPlayer(GameObject hostPlayer)
-        {
-            this.hostPlayer = hostPlayer; // 设置宠物的主人玩家
         }
 #endif
     }

@@ -37,7 +37,7 @@ namespace UI
 
         private void OnDisable()
         {
-            EventManager.instance.UnRegisterAttributePlayerBase(EventNames.RuneInfo);
+            EventManager.instance.UnRegisterEventComplex(EventNames.RuneInfo, RuneEventTran);
         }
 
         private void RuneEventTran(EventArgsBase args)

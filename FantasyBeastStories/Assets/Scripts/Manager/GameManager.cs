@@ -17,6 +17,7 @@ namespace Manager
 {
     public class GameManager : MonoBehaviour
     {
+        public static bool isOpenUI = false;
         //符文部分
         private Gameobject runeButton;//大厅打开符文面板
         private GameObject RunePanel;//整个符文面板对象
@@ -29,7 +30,9 @@ namespace Manager
         private Gameobject previousCharacterButton; //上一个角色按钮
         private Gameobject SwitchButton; //切换角色按钮
         private Gameobject CharactorIll; //当前角色
+        private GameObject CharactorShowPosition; //当前角色位置对象
         private int currentCharactorIndex = 0; //当前角色索引
+        private GameObject currentCharactorInstance; //当前角色实例
 
         private Gameobject MassionButton;
         private Text nameUIText;
@@ -46,7 +49,8 @@ namespace Manager
         private Gameobject selectedRuneListItem;
         private Sprite selectedButtonImage;
         private Sprite defaultButtonImage;
-        [SerializeField] GameObject[] spawnPoints = { }; // 生成点列表
+        [SerializeField] public GameObject[] spawnPoints = { }; // 生成点列表
+        private Dictionary<int, SpawnPoint> spawnPointDict = new Dictionary<int, SpawnPoint>();
         //静态全局变量isTest，控制是否进入测试模式
         public static bool isTest = false; // 是否测试模式
         public static bool isStayLobby = true; // 是否在大厅lobby场景
@@ -105,24 +109,7 @@ namespace Manager
             nextCharacterButton = Launcher.instance.GetInactiveObjectByName("nextCharacterButton")?.GetComponent<Gameobject>();
             previousCharacterButton = Launcher.instance.GetInactiveObjectByName("previousCharacterButton")?.GetComponent<Gameobject>();
             SwitchButton = Launcher.instance.GetInactiveObjectByName("SwitchButton")?.GetComponent<Gameobject>();
-
-            if (SwitchButton == null)
-            {
-                Debug.LogWarning("未找到 SwitchButton 按钮");
-            }
-            if (nextCharacterButton == null)
-            {
-                Debug.LogWarning("未找到 NextCharacterButton 按钮");
-            }
-            if (previousCharacterButton == null)
-            {
-                Debug.LogWarning("未找到 PreviousCharacterButton 按钮");
-            }
-
-            if (CharactorIll == null)
-            {
-                Debug.LogWarning("未找到 Charactor 对象");
-            }
+            CharactorShowPosition = GameObject.Find("CharactorShowPosition");
 
             //翻转nextCharacterButton的图片
             Image previousCharacterButtonImage = previousCharacterButton.GetComponent<Image>();
@@ -145,6 +132,11 @@ namespace Manager
                 if (newIndex >= 2)
                     newIndex = 1;
                 SwitchCharactor(newIndex);
+            });
+            //添加切换按钮的点击事件
+            SwitchButton.onClick.AddListener(() =>
+            {
+                SwitchCharactorButtonClicked();
             });
 
 
@@ -320,6 +312,7 @@ namespace Manager
                 return;
             if (RunePanel.activeSelf)
                 return;
+            isOpenUI = true;
             SetRuneIconSelected(RuneIcon_1);
             PostProcessVolume.weight = 1f;
             RunePanel.SetActive(true);
@@ -345,6 +338,7 @@ namespace Manager
                 RunePanel.SetActive(false);
                 return;
             }
+            isOpenUI = false;
             PostProcessVolume.weight = 0f;
             panelRect.DOKill();
             panelRect.DOAnchorPosY(Screen.height, 0.3f).SetEase(Ease.InBack).OnComplete(() => RunePanel.SetActive(false));
@@ -359,7 +353,8 @@ namespace Manager
             RectTransform panelRect = CharactorPanel.GetComponent<RectTransform>();
             if (panelRect == null)
                 return;
-
+            isOpenUI = true;
+            EventManager.instance.TriggerBoolEvent(EventNames.ChangeCanRotate, true);
             panelRect.DOKill();
             panelRect.anchoredPosition = new Vector2(panelRect.anchoredPosition.x, -Screen.height);
             panelRect.DOAnchorPosY(-180.34f, 0.6f).SetEase(Ease.OutBack);
@@ -376,6 +371,8 @@ namespace Manager
                 CharactorPanel.SetActive(false);
                 return;
             }
+            EventManager.instance.TriggerBoolEvent(EventNames.ChangeCanRotate, false);
+            isOpenUI = false;
             PostProcessVolume.weight = 0f;
             panelRect.DOKill();
             panelRect.DOAnchorPosY(-Screen.height, 0.3f).SetEase(Ease.InBack).OnComplete(() => CharactorPanel.SetActive(false));
@@ -386,16 +383,23 @@ namespace Manager
             FindSpawnPoints();
         }
 
+        #region 生成点管理
         public void FindSpawnPoints()
         {
-            GameObject[] spawnPointsArray = GameObject.FindGameObjectsWithTag("SpawnPoint");
-            spawnPointsArray = GameObject.FindGameObjectsWithTag("SpawnPoint");
-            spawnPoints = new GameObject[spawnPointsArray.Length];
-            for (int i = 0; i < spawnPointsArray.Length; i++)
+            spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
+            spawnPointDict.Clear();
+
+            for (int i = 0; i < spawnPoints.Length; i++)
             {
-                if (spawnPointsArray[i] != null
-                && spawnPointsArray[i].GetComponent<SpawnPoint>() != null)
-                    spawnPoints[i] = spawnPointsArray[i];
+                if (spawnPoints[i] != null)
+                {
+                    SpawnPoint sp = spawnPoints[i].GetComponent<SpawnPoint>();
+                    if (sp != null)
+                    {
+                        spawnPointDict[sp.Id] = sp;
+                        Debug.Log($"[GameManager] 找到生成点: ID={sp.Id}, Name={sp.name}");
+                    }
+                }
             }
         }
 
@@ -403,25 +407,48 @@ namespace Manager
         {
             foreach (GameObject spawnPoint in spawnPoints)
             {
-                if (spawnPoint == null)
+                if (spawnPoint == null) continue;
+
+                SpawnPoint sp = spawnPoint.GetComponent<SpawnPoint>();
+                if (sp == null) continue;
+
+                if (sp.IsEmpty())
                 {
-                    Debug.LogWarning("生成点列表中有空引用");
-                    return null;
-                }
-                if (spawnPoint.GetComponent<SpawnPoint>() == null)
-                {
-                    Debug.LogWarning($"生成点 '{spawnPoint.name}' 没有 SpawnPoint 组件");
-                    return null;
-                }
-                if (spawnPoint.GetComponent<SpawnPoint>().isEmpty)
-                {
-                    Debug.Log("返回空闲的生成点: " + spawnPoint.name);
+                    Debug.Log($"[GameManager] 返回空闲生成点: {spawnPoint.name}, ID={sp.Id}");
                     return spawnPoint;
                 }
             }
-            Debug.LogWarning("没有空闲的生成点了");
+
+            Debug.LogWarning("[GameManager] 没有空闲的生成点了");
             return null;
         }
+
+        // 根据玩家 ActorNumber 获取其当前使用的生成点
+        public SpawnPoint GetSpawnPointByPlayer(int actorNumber)
+        {
+            foreach (var sp in spawnPointDict.Values)
+            {
+                if (sp.GetOccupiedByPlayer() == actorNumber)
+                {
+                    return sp;
+                }
+            }
+            return null;
+        }
+
+        // 根据 ID 获取生成点
+        public SpawnPoint GetSpawnPointById(int id)
+        {
+            spawnPointDict.TryGetValue(id, out SpawnPoint sp);
+            return sp;
+        }
+
+        // 生成点状态变化时的回调
+        public void OnSpawnPointStateChanged()
+        {
+            Debug.Log("[GameManager] 生成点状态已更新");
+        }
+        #endregion
 
         //设置按钮为选中状态，其他按钮为正常
         public void SetButtonSelected(Gameobject button)
@@ -554,24 +581,37 @@ namespace Manager
         //切换角色
         private void SwitchCharactor(int charactorIndex)
         {
-            Image characterImage = CharactorIll.GetComponent<Image>();
-            if (characterImage)
+            GameObject prefab = Resources.Load<GameObject>("UI/Model/" + charactorIndex);
+            if (prefab == null)
             {
-                Sprite newSprite = Resources.Load<Sprite>("UI/Characters/" + charactorIndex);
-                if (newSprite == null)
-                {
-                    Debug.LogWarning($"未找到角色图片资源: UI/Characters/{charactorIndex}");
-                    return;
-                }
-                characterImage.sprite = newSprite;
+                Debug.LogWarning($"未找到角色模型资源: UI/Model/{charactorIndex}");
+                return;
             }
-            else
+            if (currentCharactorInstance != null)
             {
-                Debug.LogWarning("CharactorIll对象上没有Image组件");
+                Destroy(currentCharactorInstance);
+                currentCharactorInstance = null;
+            }
+            currentCharactorIndex = charactorIndex;
+            currentCharactorInstance = Instantiate(prefab, CharactorShowPosition.transform);
+            currentCharactorInstance.transform.localPosition = Vector3.zero;
+        }
+
+        private void SwitchCharactorButtonClicked()
+        {
+            switch (currentCharactorIndex)
+            {
+                case CharactorIndex.WiZardBoy:
+                    Launcher.instance.SwitchCharacter(CharactorName.WiZardBoy);
+                    break;
+                case CharactorIndex.LittleRedGirl:
+                    Launcher.instance.SwitchCharacter(CharactorName.LittleRedGirl);
+                    break;
+                default:
+                    break;
             }
         }
         #endregion
-
 
     }
 
@@ -579,5 +619,11 @@ namespace Manager
     {
         public const int WiZardBoy = 0;
         public const int LittleRedGirl = 1;
+    }
+
+    public class CharactorName
+    {
+        public const string WiZardBoy = "WizardBoyRoot";
+        public const string LittleRedGirl = "LittleRedGirlRoot";
     }
 }

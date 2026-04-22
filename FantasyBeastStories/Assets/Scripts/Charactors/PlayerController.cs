@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using Atttibute;
 using Cinemachine;
 using Manager;
+using Other;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
 namespace Charactors
 {
     public class PlayerController : MonoBehaviourPun
     {
-        [SerializeField] private GameObject virtualCamera; // 虚拟摄像机组件
+        public int spawnPointIndex;
+        [SerializeField] protected bool isOnlyShow = false; // 是否只为显示角色而不用于其他操作
+        [SerializeField] protected GameObject virtualCamera; // 虚拟摄像机组件
         [Header("移动设置")]
         [SerializeField] protected float moveSpeed = 2f; // 移动速度
         [SerializeField] protected Rigidbody rb; // 物理组件
@@ -21,8 +25,9 @@ namespace Charactors
         protected AttributePlayerBase attributePlayerBase; // 玩家属性组件
         protected Vector3 movement; // 移动方向
         protected bool isRun; // 是否正在运行
-        [SerializeField] private bool isInLobby; // 是否在大厅场景
-        [SerializeField] private GameObject isReadyPanel; // 准备界面
+        [SerializeField] protected bool isInLobby; // 是否在大厅场景
+        [SerializeField] protected GameObject isReadyPanel; // 准备界面
+        int localActorNumber; // 本地玩家ActorNumber
 
 
         protected virtual void Awake()
@@ -50,7 +55,8 @@ namespace Charactors
             {
                 rb = gameObject.GetComponent<Rigidbody>();
             }
-            rb.useGravity = true; // 启用重力
+            if (!isOnlyShow)
+                rb.useGravity = true; // 启用重力
             if (animator == null)
             {
                 animator = GetComponent<Animator>();
@@ -60,6 +66,10 @@ namespace Charactors
         // Update is called once per frame
         protected virtual void Update()
         {
+            if (isOnlyShow)
+            {
+                return; // 如果只显示角色，不处理输入
+            }
             if (!photonView.IsMine && photonView != null && GameManager.isTest == false)
             {
                 return; // 只处理本地玩家的输入和动画
@@ -83,23 +93,34 @@ namespace Charactors
 
         protected virtual void OnEnable()
         {
+            localActorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
             if (EventManager.instance != null)
             {
-                EventManager.instance.RegisterAttributePlayerBase(EventNames.UpdateAttributePlayer, attributePlayerBase);
+                EventManager.instance.RegisterAttributePlayerBase(
+                    localActorNumber,
+                    EventNames.PlayerAttribute_Main,
+                    attributePlayerBase
+                );
             }
             else
             {
                 //创建一个新的EventManager实例并注册事件
                 GameObject eventManagerObj = new GameObject("EventManager");
                 EventManager eventManager = eventManagerObj.AddComponent<EventManager>();
-                eventManager.RegisterAttributePlayerBase(EventNames.UpdateAttributePlayer, attributePlayerBase);
+                eventManager.RegisterAttributePlayerBase(
+                    localActorNumber,
+                    EventNames.PlayerAttribute_Main,
+                    attributePlayerBase);
                 EventManager.instance = eventManager;
             }
         }
 
         protected virtual void OnDisable()
         {
-            EventManager.instance.UnRegisterAttributePlayerBase(EventNames.UpdateAttributePlayer);
+            EventManager.instance.UnRegisterAttributePlayerBase(
+                localActorNumber,
+                EventNames.PlayerAttribute_Main
+            );
         }
 
         protected virtual void HandleInput()
@@ -138,7 +159,48 @@ namespace Charactors
 
         void OnDestroy()
         {
-            Destroy(gameObject.transform.parent.gameObject);
+            // 当玩家对象被销毁时，通知生成点释放
+            if (photonView.IsMine)
+            {
+                ClearSpawnPointOccupation();
+            }
+            // 在 OnDestroy 中也进行清理，确保万无一失
+            if (EventManager.instance != null)
+            {
+                EventManager.instance.UnRegisterAttributePlayerBase(
+                    localActorNumber,
+                    EventNames.PlayerAttribute_Main
+                );
+                Debug.Log($"[PlayerController] OnDestroy - 注销属性组件");
+            }
+        }
+
+        private void ClearSpawnPointOccupation()
+        {
+            if (!PhotonNetwork.IsConnected || PhotonNetwork.NetworkClientState == ClientState.Disconnecting)
+            {
+                Debug.LogWarning("[PlayerController] Photon 已断开连接，跳过清理生成点属性");
+                return;
+            }
+            if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("CurrentSpawnPoint"))
+            {
+                int spawnPointId = (int)PhotonNetwork.LocalPlayer.CustomProperties["CurrentSpawnPoint"];
+                SpawnPoint sp = GameManager.instance.GetSpawnPointById(spawnPointId);
+                if (sp != null && sp.GetOccupiedByPlayer() == PhotonNetwork.LocalPlayer.ActorNumber)
+                {
+                    sp.ForceRelease();
+                }
+
+                // 清除玩家属性
+                ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable() { { "CurrentSpawnPoint", null } };
+                PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+            }
+        }
+
+        // 当玩家断开连接时
+        void OnApplicationQuit()
+        {
+            ClearSpawnPointOccupation();
         }
     }
 }

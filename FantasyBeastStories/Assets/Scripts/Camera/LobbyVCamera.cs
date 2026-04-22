@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Manager;
 using UnityEngine;
 
 public class LobbyVCamera : MonoBehaviour
@@ -34,7 +35,7 @@ public class LobbyVCamera : MonoBehaviour
 
     void Update()
     {
-        if (lookAt == null)
+        if (lookAt == null || GameManager.isOpenUI)
             return;
 
         bool dragging = !requireMouseButton || Input.GetMouseButton(0);

@@ -1,78 +1,208 @@
+using Charactors;
 using Manager;
 using Photon.Pun;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Collections;
 
 namespace Other
 {
     public class SpawnPoint : MonoBehaviourPun, IPunObservable
     {
-        [SerializeField] private int Id;
-        public bool isEmpty = true;
-        private bool isLocalChanged = false;  // 标记是否本地修改
+        [SerializeField] public int Id;
+        [SerializeField] private bool isEmpty = true;
+        [SerializeField] private GameObject spawnFx;
+
+        // 记录占用此生成点的玩家 ActorNumber
+        private int occupiedByPlayer = -1;
+
+        // 同步变量
+        private bool networkIsEmpty = true;
+        private int networkOccupiedBy = -1;
 
         void Start()
         {
+            // 初始化时确保所有生成点都为空
+            if (PhotonNetwork.IsMasterClient)
+            {
+                isEmpty = true;
+                occupiedByPlayer = -1;
+                photonView.RPC("RPC_UpdateSpawnPointState", RpcTarget.AllBuffered, true, -1);
+            }
+            InitializeSpawnPoint();
             transform.LookAt(new Vector3(0.182999998f, transform.position.y, -0.219999999f));
         }
+
+        private void InitializeSpawnPoint()
+        {
+            spawnFx = Launcher.instance.GetInactiveObjectByName("SpawnFX" + Id);
+            if (spawnFx == null)
+            {
+                Debug.Log($"未找到生成点的特效: SpawnFX{Id}");
+            }
+        }
+
+        IEnumerator PlayFxCoroutine()
+        {
+            PlayFx();
+            yield return new WaitForSeconds(1.5f);
+            StopFx();
+        }
+
+        private void PlayFx()
+        {
+            if (spawnFx != null)
+            {
+                spawnFx.SetActive(true);
+            }
+        }
+
+        private void StopFx()
+        {
+            if (spawnFx != null)
+            {
+                spawnFx.SetActive(false);
+            }
+        }
+
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player"))
+            if (!other.gameObject.CompareTag("Player")) return;
+
+            PhotonView playerPhotonView = other.GetComponent<PhotonView>();
+            if (playerPhotonView == null || !playerPhotonView.IsMine) return;
+
+            Debug.Log($"玩家进入生成点: {gameObject.name}，ID: {Id}");
+            StartCoroutine(PlayFxCoroutine());
+
+            PlayerController playerController = other.GetComponent<PlayerController>();
+            if (playerController != null)
             {
-                Debug.Log($"玩家进入生成点: {gameObject.name}，ID: {Id}");
-                if (GameManager.isTest) return;
-                SetEmpty(false);
+                playerController.spawnPointIndex = Id;
             }
+
+            // 只有本地玩家才触发占用
+            int playerActorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
+            SetOccupied(true, playerActorNumber);
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag("Player"))
+            if (!other.gameObject.CompareTag("Player")) return;
+
+            PhotonView playerPhotonView = other.GetComponent<PhotonView>();
+            if (playerPhotonView == null || !playerPhotonView.IsMine) return;
+
+            Debug.Log($"玩家离开生成点: {gameObject.name}，ID: {Id}");
+
+            PlayerController playerController = other.GetComponent<PlayerController>();
+            if (playerController != null)
             {
-                Debug.Log($"玩家离开生成点: {gameObject.name}，ID: {Id}");
-                SetEmpty(true);
+                playerController.spawnPointIndex = -1;
+            }
+
+            // 只有当前占用者离开时才释放
+            if (occupiedByPlayer == PhotonNetwork.LocalPlayer.ActorNumber)
+            {
+                SetOccupied(false, -1);
             }
         }
 
-        private void SetEmpty(bool value)
+        private void SetOccupied(bool occupied, int playerActorNumber)
         {
-            if (isEmpty == value) return;
+            if (isEmpty == !occupied && occupiedByPlayer == playerActorNumber) return;
 
-            isEmpty = value;
-            isLocalChanged = true;
+            isEmpty = !occupied;
+            occupiedByPlayer = playerActorNumber;
 
-            // 通知其他客户端
-            photonView.RPC("RPC_SetEmpty", RpcTarget.Others, isEmpty);
+            Debug.Log($"[SpawnPoint {Id}] 设置占用状态: isEmpty={isEmpty}, occupiedBy={occupiedByPlayer}");
+
+            // 通过 RPC 同步状态
+            photonView.RPC("RPC_UpdateSpawnPointState", RpcTarget.AllBuffered, isEmpty, occupiedByPlayer);
+
+            // 更新玩家属性
+            if (occupied)
+            {
+                UpdatePlayerSpawnPointProperty(Id);
+            }
+            else if (PhotonNetwork.LocalPlayer.ActorNumber == playerActorNumber)
+            {
+                ClearPlayerSpawnPointProperty();
+            }
         }
 
         [PunRPC]
-        private void RPC_SetEmpty(bool value)
+        private void RPC_UpdateSpawnPointState(bool newIsEmpty, int newOccupiedBy)
         {
-            isEmpty = value;
-            Debug.Log($"同步: {gameObject.name} isEmpty = {isEmpty}");
+            isEmpty = newIsEmpty;
+            occupiedByPlayer = newOccupiedBy;
+            networkIsEmpty = newIsEmpty;
+            networkOccupiedBy = newOccupiedBy;
+
+            Debug.Log($"[SpawnPoint {Id}] RPC更新状态: isEmpty={isEmpty}, occupiedBy={occupiedByPlayer}");
+
+            // 通知 GameManager 更新生成点列表
+            if (GameManager.instance != null)
+            {
+                // GameManager.instance.OnSpawnPointStateChanged();
+            }
+        }
+
+        private void UpdatePlayerSpawnPointProperty(int spawnPointId)
+        {
+            var props = new ExitGames.Client.Photon.Hashtable
+            {
+                { "CurrentSpawnPoint", spawnPointId }
+            };
+            PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+        }
+
+        private void ClearPlayerSpawnPointProperty()
+        {
+            var props = new ExitGames.Client.Photon.Hashtable
+            {
+                { "CurrentSpawnPoint", null }
+            };
+            PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+        }
+
+        public bool IsEmpty()
+        {
+            return isEmpty;
+        }
+
+        public int GetOccupiedByPlayer()
+        {
+            return occupiedByPlayer;
+        }
+
+        // 强制释放生成点（用于玩家退出时）
+        public void ForceRelease()
+        {
+            if (!isEmpty)
+            {
+                Debug.Log($"[SpawnPoint {Id}] 强制释放生成点");
+                photonView.RPC("RPC_UpdateSpawnPointState", RpcTarget.AllBuffered, true, -1);
+            }
         }
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
             if (stream.IsWriting)
             {
-                // 只发送本地修改的状态
-                if (isLocalChanged)
-                {
-                    stream.SendNext(isEmpty);
-                    isLocalChanged = false;
-                }
-                else
-                {
-                    stream.SendNext(null);
-                }
+                stream.SendNext(isEmpty);
+                stream.SendNext(occupiedByPlayer);
             }
             else
             {
-                // 接收时只在有数据时更新
-                object data = stream.ReceiveNext();
-                if (data != null)
+                networkIsEmpty = (bool)stream.ReceiveNext();
+                networkOccupiedBy = (int)stream.ReceiveNext();
+
+                // 只在初始化或值变化时更新
+                if (isEmpty != networkIsEmpty || occupiedByPlayer != networkOccupiedBy)
                 {
-                    isEmpty = (bool)data;
+                    isEmpty = networkIsEmpty;
+                    occupiedByPlayer = networkOccupiedBy;
                 }
             }
         }
