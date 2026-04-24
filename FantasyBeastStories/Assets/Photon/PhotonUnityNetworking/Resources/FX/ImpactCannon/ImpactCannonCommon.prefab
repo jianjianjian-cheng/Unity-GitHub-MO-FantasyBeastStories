@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7082810331003681289}
   - component: {fileID: 2822404450113324787}
   - component: {fileID: 9124210202483505598}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Glow_Along
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4853,9 +4853,9 @@ GameObject:
   - component: {fileID: 2225093043607303225}
   - component: {fileID: 5739929171292905045}
   - component: {fileID: 7806274087606850403}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: ImpactCannon_Common
-  m_TagString: Untagged
+  m_TagString: NoCollisionFX
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9765,7 +9765,7 @@ GameObject:
   - component: {fileID: 3655799563061050016}
   - component: {fileID: 410763037432521902}
   - component: {fileID: 3997697773031923076}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Sparks_Along
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14643,7 +14643,7 @@ GameObject:
   - component: {fileID: 1985217418862127551}
   - component: {fileID: 3464888167037856815}
   - component: {fileID: 7064747456299624334}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Smoke_Along
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19494,7 +19494,7 @@ GameObject:
   - component: {fileID: 992703795567459030}
   - component: {fileID: 4804470682333374535}
   - component: {fileID: 6442828809371646747}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Trails_Along
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24373,7 +24373,7 @@ GameObject:
   - component: {fileID: 7922693104836228657}
   - component: {fileID: 119670614118388604}
   - component: {fileID: 7631894644537740812}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29314,7 +29314,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5871714673956397529}
   - component: {fileID: 8425493588740455345}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: ImpactCannonCommon
   m_TagString: Untagged
   m_Icon: {fileID: 0}

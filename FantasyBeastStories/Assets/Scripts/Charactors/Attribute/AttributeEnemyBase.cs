@@ -79,5 +79,19 @@ namespace Charactors.Attribute
         {
             SetIsDie(true);
         }
+
+        public virtual void Heal(float health)
+        {
+            currentHealth += health;
+            if (currentHealth > maxHealth)
+            {
+                currentHealth = maxHealth;
+            }
+        }
+
+        public virtual void ResetHealth()
+        {
+            currentHealth = maxHealth;
+        }
     }
 }

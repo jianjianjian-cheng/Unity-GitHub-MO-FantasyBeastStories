@@ -9,11 +9,13 @@ namespace Enemies
         protected override void OnEnable()
         {
             base.OnEnable();
+            RegisterDamageEvent();
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
+            UnregisterDamageEvent();
         }
     }
 }

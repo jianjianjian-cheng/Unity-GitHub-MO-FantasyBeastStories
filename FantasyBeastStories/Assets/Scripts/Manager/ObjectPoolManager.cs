@@ -29,6 +29,7 @@ namespace Manager
         [SerializeField] private GameObject ImpactCannonHitCommonPrefab;
         [SerializeField] private GameObject ImpactCannonTriggerPrefab;
         [SerializeField] private GameObject FireFirePrefab;
+        [SerializeField] private GameObject DamageNumPrefab;
 
         private const string ImpactCannonPath = "FX/ImpactCannon/";
         private bool isPhotonReady = false;
@@ -69,6 +70,7 @@ namespace Manager
             CachePrefab("ImpactCannonCommonPool", ImpactCannonCommonPrefab);
             CachePrefab("ImpactCannonTriggerPool", ImpactCannonTriggerPrefab);
             CachePrefab("ImpactCannonHitCommonPool", ImpactCannonHitCommonPrefab);
+            CachePrefab("DamageNumPool", DamageNumPrefab);
 
             if (GameManager.isTest)
             {
@@ -76,12 +78,14 @@ namespace Manager
                 AddMultipleToPool("ImpactCannonCommonPool", ImpactCannonCommonPrefab, 10);
                 AddMultipleToPool("ImpactCannonTriggerPool", ImpactCannonTriggerPrefab, 10);
                 AddMultipleToPool("ImpactCannonHitCommonPool", ImpactCannonHitCommonPrefab, 20);
+                AddMultipleToPool("DamageNumPool", DamageNumPrefab, 100);
                 return;
             }
 
             AddMultipleToPool("ImpactCannonCommonPool", ImpactCannonCommonPrefab, 10);
             AddMultipleToPool("ImpactCannonHitCommonPool", ImpactCannonHitCommonPrefab, 20);
             AddMultipleToPool("ImpactCannonTriggerPool", ImpactCannonTriggerPrefab, 10);
+            AddMultipleToPool("DamageNumPool", DamageNumPrefab, 100);
         }
 
         private void CachePrefab(string key, GameObject prefab)
@@ -269,5 +273,6 @@ namespace Manager
         public const string TestPool = "TestPool";
         public const string ImpactCannonTriggerPool = "ImpactCannonTriggerPool";
         public const string FireFirePool = "FireFirePool";
+        public const string DamageNumPool = "DamageNumPool";
     }
 }

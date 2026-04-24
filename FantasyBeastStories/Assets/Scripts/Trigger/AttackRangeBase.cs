@@ -70,17 +70,15 @@ namespace Trigger
             else
             {
                 // ===== 联机模式：本地先行 + 网络广播 =====
-
-                // 步骤1：本地立即生成火球（零延迟，手感最佳）
+                // 步骤1：本地立即生成发射物
                 SpawnFireballLocal(pos, direction, isMine: true);
-
-                // 步骤2：通知其他玩家生成火球
+                // 步骤2：通知其他玩家生成发射物
                 _networkCaster?.RequestFireball(pos, direction, 10f);
             }
         }
 
         /// <summary>
-        /// 纯本地生成火球（视觉特效 + 碰撞触发器）
+        /// 纯本地生成发射物（视觉特效 + 碰撞触发器）
         /// </summary>
         /// <param name="spawnPos">发射位置</param>
         /// <param name="direction">发射方向</param>
@@ -90,6 +88,8 @@ namespace Trigger
             string visualPool = isTest ? ObjectPoolConst.TestPool : ObjectPoolConst.ImpactCannonCommonPool;
             string triggerPool = ObjectPoolConst.ImpactCannonTriggerPool;
 
+            //仅在xz平面上生成发射物
+            direction.y = 0;
             // 1. 生成视觉特效（纯表现，不参与逻辑）
             GameObject visualObj = ObjectPoolManager.instance.GetFromPoolAndActivate(visualPool, spawnPos);
             if (visualObj != null)

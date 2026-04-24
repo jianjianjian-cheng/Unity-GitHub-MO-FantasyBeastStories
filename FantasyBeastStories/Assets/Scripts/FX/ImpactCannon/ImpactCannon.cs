@@ -42,9 +42,6 @@ namespace FX
             rb.velocity = Vector3.zero;
         }
 
-        /// <summary>
-        /// 延迟销毁自身
-        /// </summary>
         public void GetAttributeFromPlayer(AttributePlayerBase attributePlayerBase)
         {
             this.attributePlayerBase = attributePlayerBase;

@@ -76,13 +76,17 @@ namespace Photon.CastSciprt
             PhotonView enemyView = enemyObj.GetComponent<PhotonView>();
             if (enemyView == null) return;
 
-            // 发给所有人（RpcTarget.All），包括自己
-            photonView.RPC("RPC_DealDamage", RpcTarget.All,
+            // 发给其他玩家（RpcTarget.Others）
+            photonView.RPC("RPC_DealDamage", RpcTarget.Others,
                 enemyView.ViewID,
                 damage,
                 isCritical,
                 criticalMultiplier,
                 hitPoint);
+            photonView.RPC("RPC_ShowDamageNum", RpcTarget.All,
+                (int)damage,
+                hitPoint,
+                isCritical);
         }
 
         /// <summary>
@@ -115,6 +119,33 @@ namespace Photon.CastSciprt
             );
 
             EventManager.instance.TriggerEventComplex(EventNames.DamageReceived, damageEventArgs);
+        }
+
+        /// <summary>
+        /// RPC：所有客户端显示伤害数字
+        /// 用于在敌人被攻击时，显示伤害数字    
+        /// </summary>
+        /// <param name="damageValue"></param>
+        /// <param name="position"></param>
+        [PunRPC]
+        void RPC_ShowDamageNum(int damageValue, Vector3 position, bool isCritical)
+        {
+            Vector3 spawnPos = position + Vector3.up * 0f;
+            // 1. 从对象池获取伤害数字对象
+            GameObject damageNumObj = ObjectPoolManager.instance.GetFromPoolAndActivate(
+                ObjectPoolConst.DamageNumPool, spawnPos);
+            if (damageNumObj != null)
+            {
+                DamageNum damageNum = damageNumObj.GetComponent<DamageNum>();
+                if (damageNum != null)
+                {
+                    damageNum.Play(damageValue, spawnPos, isCritical);
+                }
+            }
+            else
+            {
+                Debug.LogError($"DamageNumPool 为空，无法显示伤害数字：{damageValue}, {position}, {isCritical}");
+            }
         }
     }
 }

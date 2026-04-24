@@ -5,6 +5,7 @@ using Events;
 using Manager;
 using Photon.Pun;
 using UnityEngine;
+
 namespace Enemies
 {
     public class EnemyBase : MonoBehaviourPun
@@ -27,7 +28,6 @@ namespace Enemies
         {
             attribute = new AttributeEnemyBase();
         }
-
 
         protected virtual void Start()
         {
@@ -213,6 +213,14 @@ namespace Enemies
 
         protected virtual void OnEnable()
         {
+        }
+
+        protected virtual void OnDisable()
+        {
+        }
+
+        protected virtual void RegisterDamageEvent()
+        {
             if (EventManager.instance)
             {
                 EventManager.instance.RegisterEventComplex(EventNames.DamageReceived, OnDamageReceived);
@@ -227,9 +235,12 @@ namespace Enemies
             }
         }
 
-        protected virtual void OnDisable()
+        protected virtual void UnregisterDamageEvent()
         {
-            EventManager.instance.UnRegisterEventComplex(EventNames.DamageReceived, OnDamageReceived);
+            if (EventManager.instance)
+            {
+                EventManager.instance.UnRegisterEventComplex(EventNames.DamageReceived, OnDamageReceived);
+            }
         }
 
         protected virtual void OnDamageReceived(EventArgsBase args)
@@ -256,6 +267,11 @@ namespace Enemies
             {
                 TransitionToState(EnemyState.Die);
             }
+        }
+
+        private void ShowDamageNum(int damageValue)
+        {
+
         }
     }
 }
