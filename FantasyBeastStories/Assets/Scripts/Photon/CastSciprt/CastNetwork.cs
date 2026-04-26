@@ -77,16 +77,17 @@ namespace Photon.CastSciprt
             if (enemyView == null) return;
 
             // 发给其他玩家（RpcTarget.Others）
-            photonView.RPC("RPC_DealDamage", RpcTarget.Others,
+            photonView.RPC("RPC_DealDamage", RpcTarget.All,
                 enemyView.ViewID,
                 damage,
                 isCritical,
                 criticalMultiplier,
                 hitPoint);
             photonView.RPC("RPC_ShowDamageNum", RpcTarget.All,
-                (int)damage,
+                damage,
                 hitPoint,
-                isCritical);
+                isCritical,
+                criticalMultiplier);
         }
 
         /// <summary>
@@ -128,8 +129,13 @@ namespace Photon.CastSciprt
         /// <param name="damageValue"></param>
         /// <param name="position"></param>
         [PunRPC]
-        void RPC_ShowDamageNum(int damageValue, Vector3 position, bool isCritical)
+        void RPC_ShowDamageNum(float damageValue, Vector3 position, bool isCritical, float criticalMultiplier)
         {
+            if (isCritical)
+            {
+                damageValue *= criticalMultiplier;
+            }
+            damageValue = Mathf.Ceil(damageValue);
             Vector3 spawnPos = position + Vector3.up * 0f;
             // 1. 从对象池获取伤害数字对象
             GameObject damageNumObj = ObjectPoolManager.instance.GetFromPoolAndActivate(

@@ -16,12 +16,12 @@ namespace Charactors
         [SerializeField] protected bool isOnlyShow = false; // 是否只为显示角色而不用于其他操作
         [SerializeField] protected GameObject virtualCamera; // 虚拟摄像机组件
         [Header("移动设置")]
-        [SerializeField] protected float moveSpeed = 2f; // 移动速度
+        protected float moveSpeed = 2.6f; // 移动速度
         [SerializeField] protected Rigidbody rb; // 物理组件
         [SerializeField] protected Animator animator;// 动画组件
 
         [Header("旋转设置")]
-        [SerializeField] protected float rotationSpeed = 10f; // 旋转速度
+        [SerializeField] protected float rotationSpeed = 6f; // 旋转速度
         protected AttributePlayerBase attributePlayerBase; // 玩家属性组件
         protected Vector3 movement; // 移动方向
         protected bool isRun; // 是否正在运行
@@ -33,7 +33,7 @@ namespace Charactors
         protected virtual void Awake()
         {
             isInLobby = GameManager.isStayLobby;
-            attributePlayerBase = new AttributePlayerBase(35, 10, 100, 3.5f, 1f, 0.2f);
+            attributePlayerBase = new AttributePlayerBase(35, 10, 100, moveSpeed, 1.1f, 0.5f);
         }
         protected virtual void Start()
         {

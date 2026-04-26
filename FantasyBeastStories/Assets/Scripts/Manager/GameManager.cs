@@ -19,34 +19,34 @@ namespace Manager
     {
         public static bool isOpenUI = false;
         //符文部分
-        private Gameobject runeButton;//大厅打开符文面板
+        private GameObject runeButton;//大厅打开符文面板
         private GameObject RunePanel;//整个符文面板对象
-        private List<Gameobject> runeList = new List<Gameobject>(); //符文图标按钮数组
-        private Gameobject EquipButton; //符文装备按钮
+        private List<GameObject> runeList = new List<GameObject>(); //符文图标按钮数组
+        private GameObject EquipButton; //符文装备按钮
         private int[] currentEquippedRuneIds = new int[2]; //当前装备的符文ID数组
 
         //角色选择面板
-        private Gameobject nextCharacterButton; //下一个角色按钮
-        private Gameobject previousCharacterButton; //上一个角色按钮
-        private Gameobject SwitchButton; //切换角色按钮
-        private Gameobject CharactorIll; //当前角色
+        private GameObject nextCharacterButton; //下一个角色按钮
+        private GameObject previousCharacterButton; //上一个角色按钮
+        private GameObject SwitchButton; //切换角色按钮
+        private GameObject CharactorIll; //当前角色
         private GameObject CharactorShowPosition; //当前角色位置对象
         private int currentCharactorIndex = 0; //当前角色索引
         private GameObject currentCharactorInstance; //当前角色实例
 
-        private Gameobject MassionButton;
+        private GameObject MassionButton;
         private Text nameUIText;
         public int sceneIndex = 2;
-        private Gameobject startButton;
+        private GameObject startButton;
         private bool isReady = false;
         private GameObject CharactorPanel;
         private Volume PostProcessVolume;
-        public Gameobject lobbyButton;
-        private Gameobject characterButton;
-        private Gameobject RuneIcon_1;
-        private Gameobject RuneIcon_2;
-        private Gameobject selectedRuneIcon;
-        private Gameobject selectedRuneListItem;
+        public GameObject lobbyButton;
+        private GameObject characterButton;
+        private GameObject RuneIcon_1;
+        private GameObject RuneIcon_2;
+        private GameObject selectedRuneIcon;
+        private GameObject selectedRuneListItem;
         private Sprite selectedButtonImage;
         private Sprite defaultButtonImage;
         [SerializeField] public GameObject[] spawnPoints = { }; // 生成点列表
@@ -89,26 +89,26 @@ namespace Manager
         private void Intilize()
         {
             if (isTest) return;
-            EquipButton = Launcher.instance.GetInactiveObjectByName("EquipButton")?.GetComponent<Gameobject>();
-            MassionButton = GameObject.Find("MassionButton").GetComponent<Gameobject>();
-            runeButton = GameObject.Find("RuneButton").GetComponent<Gameobject>();
+            EquipButton = Launcher.instance.GetInactiveObjectByName("EquipButton");
+            MassionButton = GameObject.Find("MassionButton");
+            runeButton = GameObject.Find("RuneButton");
             RunePanel = Launcher.instance.GetInactiveObjectByName("RunePanel");
             nameUIText = GameObject.Find("NameUIText").GetComponent<Text>();
             PostProcessVolume = GameObject.Find("PostProcessVolume").GetComponent<Volume>();
             CharactorPanel = Launcher.instance.GetInactiveObjectByName("CharactorPanel");
             selectedButtonImage = Resources.Load<Sprite>("UI/SelectedButton");
             defaultButtonImage = Resources.Load<Sprite>("UI/DefaultButton");
-            lobbyButton = GameObject.Find("LobbyButton").GetComponent<Gameobject>();
-            characterButton = GameObject.Find("CharactorButton").GetComponent<Gameobject>();
-            RuneIcon_1 = GameObject.Find("RuneIcon_1").GetComponent<Gameobject>();
-            RuneIcon_2 = GameObject.Find("RuneIcon_2").GetComponent<Gameobject>();
-            startButton = GameObject.Find("StartButton").GetComponent<Gameobject>();
+            lobbyButton = GameObject.Find("LobbyButton");
+            characterButton = GameObject.Find("CharactorButton");
+            RuneIcon_1 = GameObject.Find("RuneIcon_1");
+            RuneIcon_2 = GameObject.Find("RuneIcon_2");
+            startButton = GameObject.Find("StartButton");
 
             //角色选择面板
-            CharactorIll = Launcher.instance.GetInactiveObjectByName("CharactorIll")?.GetComponent<Gameobject>();
-            nextCharacterButton = Launcher.instance.GetInactiveObjectByName("nextCharacterButton")?.GetComponent<Gameobject>();
-            previousCharacterButton = Launcher.instance.GetInactiveObjectByName("previousCharacterButton")?.GetComponent<Gameobject>();
-            SwitchButton = Launcher.instance.GetInactiveObjectByName("SwitchButton")?.GetComponent<Gameobject>();
+            CharactorIll = Launcher.instance.GetInactiveObjectByName("CharactorIll");
+            nextCharacterButton = Launcher.instance.GetInactiveObjectByName("nextCharacterButton");
+            previousCharacterButton = Launcher.instance.GetInactiveObjectByName("previousCharacterButton");
+            SwitchButton = Launcher.instance.GetInactiveObjectByName("SwitchButton");
             CharactorShowPosition = GameObject.Find("CharactorShowPosition");
 
             //翻转nextCharacterButton的图片
@@ -118,7 +118,7 @@ namespace Manager
             previousCharacterButtonImage.transform.localScale = scale;
             SwitchCharactor(0); //默认角色为第一个角色
             //添加角色选择按钮的点击事件
-            previousCharacterButton.onClick.AddListener(() =>
+            previousCharacterButton.GetComponent<Button>().onClick.AddListener(() =>
             {
                 int newIndex = currentCharactorIndex - 1;
                 if (newIndex < 0)
@@ -126,7 +126,7 @@ namespace Manager
                 SwitchCharactor(newIndex);
             });
 
-            nextCharacterButton.onClick.AddListener(() =>
+            nextCharacterButton.GetComponent<Button>().onClick.AddListener(() =>
             {
                 int newIndex = currentCharactorIndex + 1;
                 if (newIndex >= 2)
@@ -134,7 +134,7 @@ namespace Manager
                 SwitchCharactor(newIndex);
             });
             //添加切换按钮的点击事件
-            SwitchButton.onClick.AddListener(() =>
+            SwitchButton.GetComponent<Button>().onClick.AddListener(() =>
             {
                 SwitchCharactorButtonClicked();
             });
@@ -147,22 +147,22 @@ namespace Manager
 
             //设置默认选中大厅按钮
             SetButtonSelected(lobbyButton);
-            lobbyButton.onClick.AddListener(LobbyButtonOnClick);
-            characterButton.onClick.AddListener(CharacterButtonOnClick);
-            RuneIcon_1.onClick.AddListener(Rune_1ButtonOnClick);
-            RuneIcon_2.onClick.AddListener(Rune_2ButtonOnClick);
-            startButton.onClick.AddListener(StartButtonOnClick);
-            runeButton.onClick.AddListener(RuneButtonOnClick);
-            EquipButton.onClick.AddListener(EquipButtonOnClick);
+            lobbyButton.GetComponent<Button>().onClick.AddListener(LobbyButtonOnClick);
+            characterButton.GetComponent<Button>().onClick.AddListener(CharacterButtonOnClick);
+            RuneIcon_1.GetComponent<Button>().onClick.AddListener(Rune_1ButtonOnClick);
+            RuneIcon_2.GetComponent<Button>().onClick.AddListener(Rune_2ButtonOnClick);
+            startButton.GetComponent<Button>().onClick.AddListener(StartButtonOnClick);
+            runeButton.GetComponent<Button>().onClick.AddListener(RuneButtonOnClick);
+            EquipButton.GetComponent<Button>().onClick.AddListener(EquipButtonOnClick);
 
             for (int i = 0; i < runeList.Count; i++)
             {
-                Gameobject runeIcon = runeList[i];
+                GameObject runeIcon = runeList[i];
                 if (runeIcon == null)
                     continue;
 
                 int index = i;
-                runeIcon.onClick.AddListener(() => OnRuneListItemClicked(runeList[index]));
+                runeIcon.GetComponent<Button>().onClick.AddListener(() => OnRuneListItemClicked(runeList[index]));
             }
 
             if (runeList.Count > 0)
@@ -196,7 +196,7 @@ namespace Manager
         {
             for (int i = 1; i <= 2; i++)
             {
-                Gameobject runeIcon = Launcher.instance.GetInactiveObjectByName($"RuneSlot_{i}")?.GetComponent<Gameobject>();
+                GameObject runeIcon = Launcher.instance.GetInactiveObjectByName($"RuneSlot_{i}");
                 if (runeIcon != null)
                 {
                     runeList.Add(runeIcon);
@@ -257,7 +257,7 @@ namespace Manager
             }
 
             isReady = true;
-            startButton.interactable = false;
+            startButton.GetComponent<Button>().interactable = false;
             Text buttonText = startButton.GetComponentInChildren<Text>();
             if (buttonText != null)
             {
@@ -451,26 +451,26 @@ namespace Manager
         #endregion
 
         //设置按钮为选中状态，其他按钮为正常
-        public void SetButtonSelected(Gameobject button)
+        public void SetButtonSelected(GameObject button)
         {
             EventSystem.current.SetSelectedGameObject(button.gameObject);
-            lobbyButton.interactable = button != lobbyButton;
-            characterButton.interactable = button != characterButton;
-            runeButton.interactable = button != runeButton;
-            MassionButton.interactable = button != MassionButton;
+            lobbyButton.GetComponent<Button>().interactable = button != lobbyButton;
+            characterButton.GetComponent<Button>().interactable = button != characterButton;
+            runeButton.GetComponent<Button>().interactable = button != runeButton;
+            MassionButton.GetComponent<Button>().interactable = button != MassionButton;
             //设置图片
-            lobbyButton.image.sprite = button == lobbyButton ? selectedButtonImage : defaultButtonImage;
-            characterButton.image.sprite = button == characterButton ? selectedButtonImage : defaultButtonImage;
-            runeButton.image.sprite = button == runeButton ? selectedButtonImage : defaultButtonImage;
-            MassionButton.image.sprite = button == MassionButton ? selectedButtonImage : defaultButtonImage;
+            lobbyButton.GetComponent<Image>().sprite = button == lobbyButton ? selectedButtonImage : defaultButtonImage;
+            characterButton.GetComponent<Image>().sprite = button == characterButton ? selectedButtonImage : defaultButtonImage;
+            runeButton.GetComponent<Image>().sprite = button == runeButton ? selectedButtonImage : defaultButtonImage;
+            MassionButton.GetComponent<Image>().sprite = button == MassionButton ? selectedButtonImage : defaultButtonImage;
         }
 
         //设置RuneIcon为选中状态
-        private void SetRuneIconSelected(Gameobject button)
+        private void SetRuneIconSelected(GameObject button)
         {
             selectedRuneIcon = button;
-            RuneIcon_1.image.sprite = (button == RuneIcon_1) ? selectedButtonImage : defaultButtonImage;
-            RuneIcon_2.image.sprite = (button == RuneIcon_2) ? selectedButtonImage : defaultButtonImage;
+            RuneIcon_1.GetComponent<Image>().sprite = (button == RuneIcon_1) ? selectedButtonImage : defaultButtonImage;
+            RuneIcon_2.GetComponent<Image>().sprite = (button == RuneIcon_2) ? selectedButtonImage : defaultButtonImage;
 
             RuneIcon_1.transform.DOScale(button == RuneIcon_1 ? 1.1f : 1f, 0.2f);
             RuneIcon_2.transform.DOScale(button == RuneIcon_2 ? 1.1f : 1f, 0.2f);
@@ -482,21 +482,21 @@ namespace Manager
                 return;
 
             selectedRuneIcon = null;
-            RuneIcon_1.image.sprite = defaultButtonImage;
-            RuneIcon_2.image.sprite = defaultButtonImage;
+            RuneIcon_1.GetComponent<Image>().sprite = defaultButtonImage;
+            RuneIcon_2.GetComponent<Image>().sprite = defaultButtonImage;
             RuneIcon_1.transform.DOScale(1f, 0.2f);
             RuneIcon_2.transform.DOScale(1f, 0.2f);
         }
 
-        private void OnRuneListItemClicked(Gameobject runeIcon)
+        private void OnRuneListItemClicked(GameObject runeIcon)
         {
             SetRuneListSelected(runeIcon);
         }
 
-        private void SetRuneListSelected(Gameobject button)
+        private void SetRuneListSelected(GameObject button)
         {
             selectedRuneListItem = button;
-            foreach (Gameobject runeIcon in runeList)
+            foreach (GameObject runeIcon in runeList)
             {
                 if (runeIcon == null)
                 {
@@ -522,12 +522,12 @@ namespace Manager
                 return;
 
             selectedRuneListItem = null;
-            foreach (Gameobject runeIcon in runeList)
+            foreach (GameObject runeIcon in runeList)
             {
                 if (runeIcon == null)
                     continue;
 
-                runeIcon.image.sprite = defaultButtonImage;
+                runeIcon.GetComponent<Image>().sprite = defaultButtonImage;
                 runeIcon.transform.DOScale(1f, 0.2f);
             }
         }
@@ -557,7 +557,7 @@ namespace Manager
         }
 
         //添加RuneIcon的鼠标悬停动画
-        private void AddRuneIconHoverAnimation(Gameobject button)
+        private void AddRuneIconHoverAnimation(GameObject button)
         {
             EventTrigger trigger = button.gameObject.AddComponent<EventTrigger>();
 

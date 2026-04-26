@@ -20,7 +20,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField] public GameObject currentlySelectedCharacter;
     private Photon.Realtime.Player localPlayer;
     private InputField nameUI;
-    private Gameobject joinRoom;
+    private GameObject joinRoom;
     private GameObject TBGC;
     private GameObject joinRoomButton;
     private GameObject joinRoomInput;
@@ -115,21 +115,19 @@ public class Launcher : MonoBehaviourPunCallbacks
     private void Initialize()
     {
         nameUI = GameObject.Find("NameUI").GetComponent<InputField>();
-        TBGC = GameObject.Find("TBGC");
-        joinRoomButton = GameObject.Find("JoinRoomButton");
-        joinRoomInput = GameObject.Find("JoinRoomInput");
-        joinRoom = GameObject.Find("JoinRoom").GetComponent<Gameobject>();
         TBGC = GetInactiveObjectByName("TBGC");
         joinRoomButton = GetInactiveObjectByName("JoinRoomButton");
         joinRoomInput = GetInactiveObjectByName("JoinRoomInput");
-        joinRoom.onClick.AddListener(() =>
+        joinRoom = GameObject.Find("JoinRoom");
+
+        joinRoom.GetComponent<Button>().onClick.AddListener(() =>
         {
             TBGC.SetActive(true);
             joinRoomButton.SetActive(true);
             joinRoomInput.SetActive(true);
         });
 
-        joinRoomButton.GetComponent<Gameobject>().onClick.AddListener(() =>
+        joinRoomButton.GetComponent<Button>().onClick.AddListener(() =>
         {
             string roomName = joinRoomInput.GetComponent<InputField>().text;
             if (string.IsNullOrEmpty(roomName))
@@ -216,7 +214,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     IEnumerator LoadLevelAfterDelay()
     {
         isLoadingScene = true;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
 
         // 只有房主加载场景
         if (PhotonNetwork.IsMasterClient)

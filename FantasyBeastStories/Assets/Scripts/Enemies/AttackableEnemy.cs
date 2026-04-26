@@ -31,19 +31,19 @@ namespace Enemies
 
         protected override void UpdateRun()
         {
-            if (!PlayerTarget)
-            {
-                TransitionToState(EnemyState.Idle);
-                return;
-            }
+            // if (!PlayerTarget)
+            // {
+            //     TransitionToState(EnemyState.Idle);
+            //     return;
+            // }
 
-            // 检查是否在攻击范围内
-            float distanceToPlayer = Vector3.Distance(transform.position, PlayerTarget.transform.position);
-            if (distanceToPlayer <= attackRange)
-            {
-                TransitionToState(EnemyState.Attack);
-                return;
-            }
+            // // 检查是否在攻击范围内
+            // float distanceToPlayer = Vector3.Distance(transform.position, PlayerTarget.transform.position);
+            // if (distanceToPlayer <= attackRange)
+            // {
+            //     TransitionToState(EnemyState.Attack);
+            //     return;
+            // }
 
             // 移动向玩家
             Vector3 moveDirection = (PlayerTarget.transform.position - transform.position).normalized;
@@ -59,29 +59,29 @@ namespace Enemies
 
         protected override void UpdateAttack()
         {
-            if (!PlayerTarget)
-            {
-                TransitionToState(EnemyState.Idle);
-                return;
-            }
+            // if (!PlayerTarget)
+            // {
+            //     TransitionToState(EnemyState.Idle);
+            //     return;
+            // }
 
-            float distanceToPlayer = Vector3.Distance(transform.position, PlayerTarget.transform.position);
+            // float distanceToPlayer = Vector3.Distance(transform.position, PlayerTarget.transform.position);
 
-            // 如果玩家离开攻击范围，返回追踪状态
-            if (distanceToPlayer > attackRange * 1.1f) // 稍微扩大脱离范围
-            {
-                TransitionToState(EnemyState.Run);
-                return;
-            }
+            // // 如果玩家离开攻击范围，返回追踪状态
+            // if (distanceToPlayer > attackRange * 1.1f) // 稍微扩大脱离范围
+            // {
+            //     TransitionToState(EnemyState.Run);
+            //     return;
+            // }
 
-            // 朝向玩家
-            transform.LookAt(new Vector3(PlayerTarget.transform.position.x, transform.position.y, PlayerTarget.transform.position.z));
+            // // 朝向玩家
+            // transform.LookAt(new Vector3(PlayerTarget.transform.position.x, transform.position.y, PlayerTarget.transform.position.z));
 
-            // 攻击冷却检查
-            if (Time.time - lastAttackTime >= attackCooldown && !isAttacking)
-            {
-                PerformAttack();
-            }
+            // // 攻击冷却检查
+            // if (Time.time - lastAttackTime >= attackCooldown && !isAttacking)
+            // {
+            //     PerformAttack();
+            // }
         }
 
         protected virtual void PerformAttack()

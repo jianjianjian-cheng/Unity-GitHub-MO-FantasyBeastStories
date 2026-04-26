@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Enemies
 {
-    public class Skeleton : EnemyBase
+    public class Skeleton : AttackableEnemy
     {
         protected override void OnEnable()
         {

@@ -18,8 +18,8 @@ namespace LayerLab.GUIScripts
 
         [SerializeField] private Transform panelTransformDefault;
         [SerializeField] private Transform panelTransformOther;
-        [SerializeField] private Gameobject buttonPrev;
-        [SerializeField] private Gameobject buttonNext;
+        [SerializeField] private GameObject buttonPrev;
+        [SerializeField] private GameObject buttonNext;
 
         private bool IsOtherMode { get; set; }
 
@@ -29,8 +29,8 @@ namespace LayerLab.GUIScripts
             var panels = GameObject.Find("Panels");
             if (panels) panelTransformDefault = panels.transform;
 
-            buttonPrev = transform.GetChild(0).GetComponent<Gameobject>();
-            buttonNext = transform.GetChild(2).GetComponent<Gameobject>();
+            buttonPrev = transform.GetChild(0).gameObject;
+            buttonNext = transform.GetChild(2).gameObject;
         }
 
         private void Reset()
@@ -41,8 +41,8 @@ namespace LayerLab.GUIScripts
         private void Start()
         {
             _textTitle = transform.GetComponentInChildren<TextMeshProUGUI>();
-            buttonPrev.onClick.AddListener(Click_Prev);
-            buttonNext.onClick.AddListener(Click_Next);
+            buttonPrev.GetComponent<Button>().onClick.AddListener(Click_Prev);
+            buttonNext.GetComponent<Button>().onClick.AddListener(Click_Next);
 
             foreach (Transform t in panelTransformDefault)
             {

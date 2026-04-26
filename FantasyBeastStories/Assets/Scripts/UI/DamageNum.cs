@@ -79,7 +79,7 @@ public class DamageNum : MonoBehaviour
     /// <param name="damage">伤害数值</param>
     /// <param name="worldPos">世界坐标起始位置（角色头顶）</param>
     /// <param name="isCritical">是否暴击（影响颜色/大小）</param>
-    public void Play(int damage, Vector3 worldPos, bool isCritical = false)
+    public void Play(float damage, Vector3 worldPos, bool isCritical = false)
     {
         // 如果正在播放动画，先停止
         if (isPlaying)

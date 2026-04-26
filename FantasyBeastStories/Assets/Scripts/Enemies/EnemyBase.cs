@@ -261,17 +261,13 @@ namespace Enemies
         public virtual void TakeDamage(DamageEventArgs damageEventArgs)
         {
             damageEventArgs.CalculateFinalDamageValue();
+            damageEventArgs.finalDamageValue = Mathf.Ceil(damageEventArgs.finalDamageValue);
             attribute.TakeDamage(damageEventArgs.finalDamageValue);
             attribute.TakeDamageSpecial(damageEventArgs.damageType);
             if (attribute.GetIsDie())
             {
                 TransitionToState(EnemyState.Die);
             }
-        }
-
-        private void ShowDamageNum(int damageValue)
-        {
-
         }
     }
 }

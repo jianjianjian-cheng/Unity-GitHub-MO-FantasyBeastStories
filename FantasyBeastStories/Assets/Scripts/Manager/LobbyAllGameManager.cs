@@ -12,21 +12,21 @@ namespace Manager
     public class LobbyAllGameManager : MonoBehaviour
     {
         [SerializeField] private PlayableDirector vcTimeLine;
-        private Gameobject startButton;
-        private Gameobject exitButton;
-        private Gameobject optionButton;
+        private GameObject startButton;
+        private GameObject exitButton;
+        private GameObject optionButton;
         private GameObject gameNameModel;
 
 
         private void Start()
         {
             vcTimeLine = GameObject.Find("Director").GetComponent<PlayableDirector>();
-            startButton = GameObject.Find("StartButton").GetComponent<Gameobject>();
-            exitButton = GameObject.Find("ExitButton").GetComponent<Gameobject>();
-            optionButton = GameObject.Find("OptionsButton").GetComponent<Gameobject>();
-            startButton.onClick.AddListener(Startbutton);
-            exitButton.onClick.AddListener(Exitbutton);
-            optionButton.onClick.AddListener(Optionsbutton);
+            startButton = GameObject.Find("StartButton");
+            exitButton = GameObject.Find("ExitButton");
+            optionButton = GameObject.Find("OptionsButton");
+            startButton.GetComponent<Button>().onClick.AddListener(Startbutton);
+            exitButton.GetComponent<Button>().onClick.AddListener(Exitbutton);
+            optionButton.GetComponent<Button>().onClick.AddListener(Optionsbutton);
             gameNameModel = GameObject.Find("GameNameModel");
         }
         public void Startbutton()
@@ -54,7 +54,7 @@ namespace Manager
         {
             yield return new WaitForSeconds(2f);
             LoadingCanvas.instance.ShowLoading();
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
             AsyncOperation asyn = SceneManager.LoadSceneAsync(index);
             asyn.completed += OnSceneLoaded;
         }

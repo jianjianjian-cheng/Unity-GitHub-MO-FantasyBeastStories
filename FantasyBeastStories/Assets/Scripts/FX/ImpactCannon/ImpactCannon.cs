@@ -73,7 +73,7 @@ namespace FX
         {
             base.OnTriggerEnter(other);
 
-            // ===== 核心改动：只有发射者的火球才判定命中 =====
+            // ===== 只有发射者的火球才判定命中 =====
             // 这样避免了"每个客户端都扣一次血"的问题
             if (!_isMyCast) return;
             if (!other.CompareTag("Enemy")) return;

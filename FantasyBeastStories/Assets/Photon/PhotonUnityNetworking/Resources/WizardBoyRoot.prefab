@@ -1556,10 +1556,9 @@ MonoBehaviour:
   spawnPointIndex: 0
   isOnlyShow: 0
   virtualCamera: {fileID: 530324406809236268}
-  moveSpeed: 4
   rb: {fileID: 2406815688151714110}
   animator: {fileID: 4690395130346847112}
-  rotationSpeed: 10
+  rotationSpeed: 6
   isInLobby: 0
   isReadyPanel: {fileID: 3618823515155754854}
 --- !u!95 &4690395130346847112
