@@ -2,51 +2,47 @@ using System.Collections;
 using System.Collections.Generic;
 using Atttibute;
 using Enemies;
-using FX;
 using Manager;
-using Photon.CastSciprt;
-using Trigger;
 using UnityEngine;
 
 namespace Trigger
 {
-    public class AttackRangeBase : TriggerBase
+    /// <summary>
+    /// 攻击范围基类：负责检测范围内的敌人，攻击逻辑由子类实现
+    /// </summary>
+    public abstract class AttackRangeBase : TriggerBase
     {
-        private AttributePlayerBase attributePlayerBase;
-        private CastNetwork _networkCaster;
-        private bool isTest = false; // 是否测试模式
-        private List<GameObject> gameObjects = new List<GameObject>();
-        private GameObject targetEnemy;
+        protected AttributePlayerBase attributePlayerBase;
+        protected List<GameObject> gameObjects = new List<GameObject>();
+        protected GameObject targetEnemy;
+
+        [SerializeField] protected float offsetY = 0.5f;
+        [SerializeField] protected float attackInterval = 2f;
+        [SerializeField] protected float searchRadius = 5f; // 搜索半径（可用于可视化）
+
         private float attackTimer;
 
-        [SerializeField] private float offsetY = 1f;
-
-        [SerializeField] private float attackInterval = 2f;
-        // Start is called before the first frame update
         public override void Start()
         {
             base.Start();
-            _networkCaster = GetComponent<CastNetwork>();
-            isTest = GameManager.instance != null && GameManager.isTest;
-            if (_networkCaster == null && !isTest)
-            {
-                _networkCaster = gameObject.AddComponent<CastNetwork>();
-            }
-            attributePlayerBase = EventManager.instance.GetLocalPlayerAttribute(EventNames.PlayerAttribute_Main);
+            attributePlayerBase = EventManager.instance != null
+                ? EventManager.instance.GetLocalPlayerAttribute(EventNames.PlayerAttribute_Main)
+                : null;
         }
 
-        // Update is called once per frame
         public override void Update()
         {
             base.Update();
             Attack();
         }
+
         /// <summary>
-        /// 攻击逻辑：检查目标、控制间隔、发射火球
+        /// 攻击逻辑：基类负责更新目标和控制攻击间隔，具体攻击行为由子类实现
         /// </summary>
         private void Attack()
         {
             UpdateEnemyTarget();
+
             if (targetEnemy == null) return;
 
             // 攻击间隔控制
@@ -57,64 +53,19 @@ namespace Trigger
             }
             attackTimer = attackInterval;
 
-            // 计算发射位置和方向
-            Vector3 pos = new Vector3(transform.position.x, transform.position.y + offsetY, transform.position.z);
-            Vector3 targetPos = new Vector3(targetEnemy.transform.position.x, pos.y, targetEnemy.transform.position.z);
-            Vector3 direction = (targetEnemy.transform.position - pos).normalized;
-
-            if (isTest)
-            {
-                // ===== 测试模式：纯本地生成 =====
-                SpawnFireballLocal(pos, direction, isMine: true);
-            }
-            else
-            {
-                // ===== 联机模式：本地先行 + 网络广播 =====
-                // 步骤1：本地立即生成发射物
-                SpawnFireballLocal(pos, direction, isMine: true);
-                // 步骤2：通知其他玩家生成发射物
-                _networkCaster?.RequestFireball(pos, direction, 10f);
-            }
+            // 调用子类实现的攻击方法
+            PerformAttack();
         }
 
         /// <summary>
-        /// 纯本地生成发射物（视觉特效 + 碰撞触发器）
+        /// 由子类实现的具体攻击逻辑
         /// </summary>
-        /// <param name="spawnPos">发射位置</param>
-        /// <param name="direction">发射方向</param>
-        /// <param name="isMine">是否由本炮塔发射（决定是否负责伤害判定）</param>
-        private void SpawnFireballLocal(Vector3 spawnPos, Vector3 direction, bool isMine = true)
-        {
-            string visualPool = isTest ? ObjectPoolConst.TestPool : ObjectPoolConst.ImpactCannonCommonPool;
-            string triggerPool = ObjectPoolConst.ImpactCannonTriggerPool;
+        protected abstract void PerformAttack();
 
-            //仅在xz平面上生成发射物
-            direction.y = 0;
-            // 1. 生成视觉特效（纯表现，不参与逻辑）
-            GameObject visualObj = ObjectPoolManager.instance.GetFromPoolAndActivate(visualPool, spawnPos);
-            if (visualObj != null)
-            {
-                visualObj.GetComponentInChildren<ParticleSystem>()?.Play();
-                visualObj.transform.rotation = Quaternion.LookRotation(direction);
-            }
-
-            // 2. 生成碰撞触发器（负责物理移动和伤害判定）
-            GameObject triggerObj = ObjectPoolManager.instance.GetFromPoolAndActivate(triggerPool, spawnPos);
-            if (triggerObj != null)
-            {
-                ImpactCannon cannon = triggerObj.GetComponent<ImpactCannon>();
-                if (cannon == null)
-                {
-                    cannon = triggerObj.AddComponent<ImpactCannon>();
-                }
-                // 传入 isMine 参数，决定这个火球是否负责伤害判定
-                cannon.StartShoot(direction, isMine);
-                cannon.GetAttributeFromPlayer(attributePlayerBase);
-            }
-        }
-
-        //寻找最近的敌人
-        private void UpdateEnemyTarget()
+        /// <summary>
+        /// 寻找最近的敌人
+        /// </summary>
+        protected virtual void UpdateEnemyTarget()
         {
             if (gameObjects.Count == 0)
             {
@@ -147,10 +98,10 @@ namespace Trigger
 
             float minDistance = float.MaxValue;
             GameObject closestEnemy = null;
+
             foreach (GameObject enemy in gameObjects)
             {
-                if (enemy == null)
-                    continue;
+                if (enemy == null) continue;
 
                 float distance = Vector3.Distance(transform.position, enemy.transform.position);
                 if (distance < minDistance)
@@ -163,21 +114,41 @@ namespace Trigger
             targetEnemy = closestEnemy;
         }
 
+        /// <summary>
+        /// 获取目标位置（带Y轴偏移）
+        /// </summary>
+        protected Vector3 GetSpawnPosition()
+        {
+            return new Vector3(transform.position.x, transform.position.y + offsetY, transform.position.z);
+        }
+
+        /// <summary>
+        /// 获取目标方向（忽略Y轴）
+        /// </summary>
+        protected Vector3 GetTargetDirection()
+        {
+            if (targetEnemy == null) return transform.forward;
+
+            Vector3 pos = GetSpawnPosition();
+            Vector3 direction = (targetEnemy.transform.position - pos).normalized;
+            direction.y = 0;
+            return direction;
+        }
+
         public override void OnTriggerEnter(Collider other)
         {
             base.OnTriggerEnter(other);
-            gameObjects.Add(other.gameObject);
+            if (other.gameObject.GetComponent<EnemyBase>() != null)
+            {
+                gameObjects.Add(other.gameObject);
+            }
         }
 
         public override void OnTriggerStay(Collider other)
         {
             base.OnTriggerStay(other);
-            if (other.gameObject.GetComponent<EnemyBase>() == null)
-            {
-                gameObjects.Remove(other.gameObject);
-                return;
-            }
-            if (other.gameObject.GetComponent<EnemyBase>().GetIsDie())
+            var enemyBase = other.gameObject.GetComponent<EnemyBase>();
+            if (enemyBase == null || enemyBase.GetIsDie())
             {
                 gameObjects.Remove(other.gameObject);
             }
@@ -187,6 +158,24 @@ namespace Trigger
         {
             base.OnTriggerExit(other);
             gameObjects.Remove(other.gameObject);
+        }
+
+        /// <summary>
+        /// 在编辑器中可视化攻击范围
+        /// </summary>
+        protected virtual void OnDrawGizmosSelected()
+        {
+            if (searchRadius > 0)
+            {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireSphere(transform.position, searchRadius);
+
+                if (targetEnemy != null)
+                {
+                    Gizmos.color = Color.red;
+                    Gizmos.DrawLine(GetSpawnPosition(), targetEnemy.transform.position);
+                }
+            }
         }
     }
 }

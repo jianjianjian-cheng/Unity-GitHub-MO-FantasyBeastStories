@@ -225,7 +225,7 @@ GameObject:
   m_Component:
   - component: {fileID: 976218795276108220}
   - component: {fileID: 267470645199439874}
-  - component: {fileID: 1611140944326519985}
+  - component: {fileID: 2089218675849406610}
   m_Layer: 0
   m_Name: AttackRange
   m_TagString: AttackTrigger
@@ -269,7 +269,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 8, y: 0.9153899, z: 8}
   m_Center: {x: 0, y: 0.44416732, z: 0}
---- !u!114 &1611140944326519985
+--- !u!114 &2089218675849406610
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -278,11 +278,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1026751417346737611}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 386750911a6f5d048a5dc794651fd199, type: 3}
+  m_Script: {fileID: 11500000, guid: f300be027306f42438e8619d4badc94f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   offsetY: 0.5
   attackInterval: 2
+  searchRadius: 5
+  projectileSpeed: 10
 --- !u!1 &1101658866346967338
 GameObject:
   m_ObjectHideFlags: 0
@@ -356,9 +358,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c50604d134e22245b0d51dd033c8c2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnPointIndex: 0
   isOnlyShow: 1
   virtualCamera: {fileID: 1849476767045699363}
-  moveSpeed: 4
   rb: {fileID: 0}
   animator: {fileID: 3925115453844729273}
   rotationSpeed: 10

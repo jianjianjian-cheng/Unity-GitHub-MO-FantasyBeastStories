@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Enemies
 {
@@ -15,13 +16,30 @@ namespace Enemies
         [SerializeField] protected float attackDamage = 10f;
         [SerializeField] protected float attackCooldown = 1.5f;
         [SerializeField] protected LayerMask playerLayer;
+        private NavMeshAgent navMeshAgent;
 
         protected float lastAttackTime;
         protected bool isAttacking;
 
+        protected override void Start()
+        {
+            base.Start();
+            navMeshAgent = GetComponent<NavMeshAgent>();
+            if (navMeshAgent != null)
+            {
+                navMeshAgent.speed = attribute.moveSpeed;
+            }
+        }
+
         override protected void OnEnable()
         {
             RegisterDamageEvent();
+            if (PlayerTarget == null) return;
+            if (navMeshAgent != null)
+            {
+                navMeshAgent.speed = attribute.moveSpeed;
+                navMeshAgent.updatePosition = true;
+            }
         }
 
         override protected void OnDisable()
@@ -31,24 +49,17 @@ namespace Enemies
 
         protected override void UpdateRun()
         {
-            // if (!PlayerTarget)
-            // {
-            //     TransitionToState(EnemyState.Idle);
-            //     return;
-            // }
+            if (PlayerTarget == null) return;
+            if (navMeshAgent == null) return;
 
-            // // 检查是否在攻击范围内
-            // float distanceToPlayer = Vector3.Distance(transform.position, PlayerTarget.transform.position);
-            // if (distanceToPlayer <= attackRange)
-            // {
-            //     TransitionToState(EnemyState.Attack);
-            //     return;
-            // }
+            navMeshAgent.isStopped = false;
+            navMeshAgent.SetDestination(PlayerTarget.transform.position);
+        }
 
-            // 移动向玩家
-            Vector3 moveDirection = (PlayerTarget.transform.position - transform.position).normalized;
-            rb.MovePosition(transform.position + moveDirection * attribute.moveSpeed * Time.deltaTime);
-            transform.LookAt(new Vector3(PlayerTarget.transform.position.x, transform.position.y, PlayerTarget.transform.position.z));
+        protected override void EnterDie()
+        {
+            base.EnterDie();
+            navMeshAgent.isStopped = true;
         }
 
         protected override void EnterAttack()

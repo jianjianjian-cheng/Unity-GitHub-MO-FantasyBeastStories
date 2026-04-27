@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
+using System.Runtime.Serialization;
 using Atttibute;
 using Charactors;
 using Events;
 using Manager;
+using Other;
 using Photon.CastSciprt;
 using Trigger;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace FX
@@ -18,7 +21,8 @@ namespace FX
         private bool _isMyCast = true;
         private CastNetwork _networkCaster;
         [SerializeField] private bool isTest;
-        private int activeCount = 0;
+        private int maxAttackCount = 1;
+        private int attackCount = 0;
         private AttributePlayerBase attributePlayerBase;
         private float Speed = 15f;
         private Rigidbody rb;
@@ -32,7 +36,7 @@ namespace FX
         }
         public void OnEnable()
         {
-            activeCount = 0;
+            attackCount = 0;
             Invoke("DelayDestorySelf", 0.5f);
         }
 
@@ -40,6 +44,7 @@ namespace FX
         {
             Debug.Log("冲击炮被禁用，返回对象池");
             rb.velocity = Vector3.zero;
+            CancelInvoke();
         }
 
         public void GetAttributeFromPlayer(AttributePlayerBase attributePlayerBase)
@@ -85,8 +90,8 @@ namespace FX
 
             // 播放命中特效（本地先行，让发射者立即看到效果）
             PlayHitEffect(hitPoint);
-
-            activeCount++;
+            // 记录攻击次数
+            attackCount++;
 
             // 计算伤害和暴击
             bool isCritical = Random.Range(0, 1f) <= attributePlayerBase.GetCriticalChance();
@@ -108,6 +113,11 @@ namespace FX
                     attributePlayerBase.GetCriticalMultiplier(),
                     hitPoint
                 );
+            }
+            if (attackCount >= maxAttackCount)
+            {
+                // 达到最大攻击次数，销毁自身
+                RecycleWithEffect();
             }
         }
 
@@ -161,6 +171,30 @@ namespace FX
         private void DelayDestorySelf()
         {
             ObjectPoolManager.instance.ReturnToPool(ObjectPoolConst.ImpactCannonTriggerPool, gameObject);
+        }
+
+        // 令牌 用于绑定特效
+        private AttackToken token;
+        public void SetToken(AttackToken newToken)
+        {
+            token = newToken;
+        }
+
+        void RecycleWithEffect()
+        {
+            StopAllCoroutines();
+
+            if (token != null)
+            {
+                token.RecycleAll();
+                token = null;
+            }
+            else
+            {
+                Debug.LogWarning("令牌丢失，无法回收所有特效");
+                // 降级处理：如果令牌丢失，至少回收自己
+                ObjectPoolManager.instance.ReturnToPool(ObjectPoolConst.ImpactCannonTriggerPool, gameObject);
+            }
         }
     }
 }

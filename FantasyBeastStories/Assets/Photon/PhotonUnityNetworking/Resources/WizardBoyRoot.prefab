@@ -926,9 +926,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3479939664752032970}
   - component: {fileID: 7064572748405947047}
-  - component: {fileID: 6646249465345568054}
   - component: {fileID: 2600900453968760568}
   - component: {fileID: 6501645544571950971}
+  - component: {fileID: 7587851068067997088}
   m_Layer: 0
   m_Name: AttackRange
   m_TagString: AttackTrigger
@@ -972,20 +972,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 15, y: 0.9153899, z: 15}
   m_Center: {x: 0, y: 0.44416732, z: 0}
---- !u!114 &6646249465345568054
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2990400970803704115}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 386750911a6f5d048a5dc794651fd199, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  offsetY: 0.5
-  attackInterval: 2
 --- !u!114 &2600900453968760568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1020,6 +1006,22 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &7587851068067997088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2990400970803704115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f300be027306f42438e8619d4badc94f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offsetY: 0.5
+  attackInterval: 2
+  searchRadius: 5
+  projectileSpeed: 10
 --- !u!1 &3200181468221493055
 GameObject:
   m_ObjectHideFlags: 0

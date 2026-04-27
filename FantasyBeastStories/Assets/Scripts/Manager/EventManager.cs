@@ -50,7 +50,8 @@ namespace Manager
         private Dictionary<string, bool> boolDictionary = new Dictionary<string, bool>();
         //bool参数事件字典
         private Dictionary<string, Action<bool>> boolEventDictionary = new Dictionary<string, Action<bool>>();
-
+        //用于回收触发器和特效分开处理的攻击
+        private Dictionary<string, Action> attackEventDictionary = new Dictionary<string, Action>();
 
 
         /// <summary>
