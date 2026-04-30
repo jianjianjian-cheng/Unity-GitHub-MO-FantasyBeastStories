@@ -255,7 +255,7 @@ namespace Manager
             {
                 return;
             }
-
+            PlayerManager.instance.SyncAllPlayers();
             isReady = true;
             startButton.GetComponent<Button>().interactable = false;
             Text buttonText = startButton.GetComponentInChildren<Text>();

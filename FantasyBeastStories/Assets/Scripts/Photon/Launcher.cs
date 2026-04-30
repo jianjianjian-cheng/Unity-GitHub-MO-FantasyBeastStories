@@ -68,7 +68,8 @@ public class Launcher : MonoBehaviourPunCallbacks
             }
             else
             {
-                localPlayer.NickName = nameUI.text;
+                PhotonNetwork.LocalPlayer.NickName = nameUI.text;
+                Debug.Log($"修改昵称成功: {PhotonNetwork.LocalPlayer.NickName}");
                 Debug.Log("修改昵称成功");
             }
         }
@@ -98,9 +99,10 @@ public class Launcher : MonoBehaviourPunCallbacks
         base.OnConnectedToMaster();
         Debug.Log("Connected to master");
         string roomName = "Room_" + Random.Range(1000, 9999);
+        SetDefaultName();
         if (!isAutoCreate)
         {
-            PhotonNetwork.CreateRoom(roomName, new Photon.Realtime.RoomOptions() { MaxPlayers = 4 }, default);
+            PhotonNetwork.CreateRoom(roomName, new Photon.Realtime.RoomOptions() { MaxPlayers = 4, PublishUserId = true }, default);
             isAutoCreate = true;
         }
 
@@ -109,6 +111,17 @@ public class Launcher : MonoBehaviourPunCallbacks
             PhotonNetwork.JoinRoom(pendingRoomName);
             Debug.Log("加入房间成功");
             isJoiningRoom = false;
+        }
+    }
+
+    /// <summary>
+    /// 设置默认昵称（后面修改为从数据库获取）
+    /// </summary>
+    private void SetDefaultName()
+    {
+        if (string.IsNullOrEmpty(PhotonNetwork.LocalPlayer.NickName))
+        {
+            PhotonNetwork.LocalPlayer.NickName = "玩家" + PhotonNetwork.LocalPlayer.UserId;
         }
     }
 
@@ -273,6 +286,9 @@ public class Launcher : MonoBehaviourPunCallbacks
         GameManager.instance.FindSpawnPoints();
         Debug.Log("执行CreatedOrJoinedRoom");
 
+        // 确保PlayerManager存在
+        EnsurePlayerManagerExists();
+
         // 生成玩家
         GameObject player = SpawnPlayer();
 
@@ -290,6 +306,27 @@ public class Launcher : MonoBehaviourPunCallbacks
 
         // 设置房间信息
         SetupRoomInfo();
+    }
+
+    // 确保PlayerManager存在
+    private void EnsurePlayerManagerExists()
+    {
+        if (PlayerManager.instance == null)
+        {
+            // 先检查场景中是否已经存在
+            PlayerManager existingPM = FindObjectOfType<PlayerManager>();
+            if (existingPM == null)
+            {
+                GameObject pmObj = new GameObject("PlayerManager");
+                pmObj.AddComponent<PlayerManager>();
+                Debug.Log("[Launcher] 创建PlayerManager");
+            }
+        }
+        else
+        {
+            // PlayerManager已存在，强制同步
+            PlayerManager.instance.SyncAllPlayers();
+        }
     }
 
     /// <summary>
@@ -478,7 +515,8 @@ public class Launcher : MonoBehaviourPunCallbacks
     private void SetupPlayerUI(GameObject player)
     {
         localPlayer = PhotonNetwork.LocalPlayer;
-        localPlayer.NickName = "玩家" + localPlayer.UserId;
+        if (string.IsNullOrEmpty(localPlayer.NickName))
+            localPlayer.NickName = "玩家" + localPlayer.UserId;
 
         // 设置本地UI
         if (nameUI != null)
@@ -531,6 +569,9 @@ public class Launcher : MonoBehaviourPunCallbacks
         Debug.Log("Joined room: " + PhotonNetwork.CurrentRoom.Name);
         if (isTest) return;
         base.OnJoinedRoom();
+        // 确保PlayerManager存在且先同步所有玩家数据
+        EnsurePlayerManagerExists();
+
         StartCoroutine(DelayJoinRoom());
     }
 
