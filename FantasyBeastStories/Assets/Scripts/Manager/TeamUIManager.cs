@@ -25,8 +25,6 @@ namespace Manager
             }
         }
         #endregion
-        private GameObject playerLocal;
-        private Text namePlayerLocal;
         private GameObject player1;
         private Text namePlayer1;
         private GameObject player2;
@@ -41,15 +39,9 @@ namespace Manager
 
         void Intilize()
         {
-            playerLocal = GameObject.Find("PlayerLocal");
             player1 = GameObject.Find("Player1");
             player2 = GameObject.Find("Player2");
             player3 = GameObject.Find("Player3");
-            if (playerLocal == null)
-            {
-                Debug.LogError("PlayerLocal 未找到");
-                return;
-            }
             if (player1 == null)
             {
                 Debug.LogError("Player1 未找到");
@@ -65,7 +57,6 @@ namespace Manager
                 Debug.LogError("Player3 未找到");
                 return;
             }
-            namePlayerLocal = playerLocal.GetComponentInChildren<Text>();
             namePlayer1 = player1.GetComponentInChildren<Text>();
             namePlayer2 = player2.GetComponentInChildren<Text>();
             namePlayer3 = player3.GetComponentInChildren<Text>();
@@ -75,13 +66,6 @@ namespace Manager
 
         private void SetUpTeamUI()
         {
-            // 设置本地玩家的UI
-            PlayerData localPlayerData = PlayerManager.instance.GetLocalPlayer();
-            //只获取前六位字符
-            string playerName = localPlayerData.PlayerName;
-            int maxLength = Mathf.Min(playerName.Length, 6);
-            namePlayerLocal.text = playerName.Substring(0, maxLength);
-            // 设置其他玩家的UI
             SetOtherTeamUI();
         }
 

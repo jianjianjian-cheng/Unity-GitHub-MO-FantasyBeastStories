@@ -707,7 +707,6 @@ MonoBehaviour:
   spawnPointIndex: 0
   isOnlyShow: 0
   virtualCamera: {fileID: 4919121492267631130}
-  moveSpeed: 2
   rb: {fileID: 8641907677009114111}
   animator: {fileID: 9145193619973641101}
   rotationSpeed: 10
