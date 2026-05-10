@@ -27,18 +27,53 @@ namespace Manager
         #endregion
         private GameObject player1;
         private Text namePlayer1;
+        private Slider sliderPlayer1_HP;
         private GameObject player2;
         private Text namePlayer2;
+        private Slider sliderPlayer2_HP;
         private GameObject player3;
         private Text namePlayer3;
+        private Slider sliderPlayer3_HP;
+
+        //用于绑定血条UI的ID，其他玩家的UI需要根据ID来更新血条数值.分别对应三个玩家(排除本地玩家)
+        // 玩家ID与血条的映射
+        private Dictionary<string, Slider> otherPlayerSlidersDict = new Dictionary<string, Slider>();
+        private Dictionary<string, Text> otherPlayerNameTextsDict = new Dictionary<string, Text>();
+
+        //本地玩家的血条UI
+        private Slider localPlayerSlider_HP;
+        private Text localPlayer_HP_Text;
 
         void Start()
         {
             Intilize();
         }
 
+        void OnEnable()
+        {
+            EventManager.instance.RegisterFloatEvent(EventNames.HPChanged, SetLocalPlayerSlider_HP);
+        }
+
+        void OnDisable()
+        {
+            EventManager.instance.UnRegisterFloatEvent(EventNames.HPChanged);
+        }
+
         void Intilize()
         {
+            localPlayerSlider_HP = GameObject.Find("LocalPlayerSlider_HP").GetComponentInChildren<Slider>();
+            if (localPlayerSlider_HP == null)
+            {
+                Debug.LogError("LocalPlayerSlider_HP 未找到");
+                return;
+            }
+            localPlayer_HP_Text = localPlayerSlider_HP.GetComponentInChildren<Text>();
+            if (localPlayer_HP_Text == null)
+            {
+                Debug.LogError("LocalPlayer_HP_Text 未找到");
+                return;
+            }
+
             player1 = GameObject.Find("Player1");
             player2 = GameObject.Find("Player2");
             player3 = GameObject.Find("Player3");
@@ -81,18 +116,24 @@ namespace Manager
                     break;
                 case 2:
                     player1.SetActive(true);
+                    sliderPlayer1_HP = player1.GetComponentInChildren<Slider>();
                     player2.SetActive(false);
                     player3.SetActive(false);
                     break;
                 case 3:
                     player1.SetActive(true);
+                    sliderPlayer1_HP = player1.GetComponentInChildren<Slider>();
                     player2.SetActive(true);
+                    sliderPlayer2_HP = player2.GetComponentInChildren<Slider>();
                     player3.SetActive(false);
                     break;
                 case 4:
                     player1.SetActive(true);
+                    sliderPlayer1_HP = player1.GetComponentInChildren<Slider>();
                     player2.SetActive(true);
+                    sliderPlayer2_HP = player2.GetComponentInChildren<Slider>();
                     player3.SetActive(true);
+                    sliderPlayer3_HP = player3.GetComponentInChildren<Slider>();
                     break;
             }
             #endregion
@@ -104,6 +145,8 @@ namespace Manager
                 .ToList();
 
             Text[] nameTexts = { namePlayer1, namePlayer2, namePlayer3 };
+            Slider[] otherPlayersliders = { sliderPlayer1_HP, sliderPlayer2_HP, sliderPlayer3_HP };
+
 
             for (int i = 0; i < nameTexts.Length; i++)
             {
@@ -112,11 +155,47 @@ namespace Manager
                     string playerName = otherPlayers[i].PlayerName;
                     int maxLength = Mathf.Min(playerName.Length, 6);
                     nameTexts[i].text = playerName.Substring(0, maxLength);
+                    otherPlayerNameTextsDict.Add(otherPlayers[i].PlayerId, nameTexts[i]);
+                    otherPlayerSlidersDict.Add(otherPlayers[i].PlayerId, otherPlayersliders[i]);
+
                 }
                 else
                 {
                     nameTexts[i].text = i < otherPlayers.Count ? "未命名" : "";
                 }
+            }
+        }
+
+        //设置UI血条的数值
+        public void SetLocalPlayerSlider_HP(float MaxHP, float CurrentHP)
+        {
+            if (localPlayerSlider_HP == null)
+            {
+                Debug.LogError("LocalPlayerSlider_HP 未找到");
+                return;
+            }
+            localPlayerSlider_HP.maxValue = 1;
+            localPlayerSlider_HP.value = CurrentHP / MaxHP;
+            if (localPlayer_HP_Text != null)
+            {
+                localPlayer_HP_Text.text = $"{CurrentHP}/{MaxHP}";
+            }
+        }
+
+        // 设置其他玩家的血条数值,在玩家脚本中RPC方法中调用
+        public void SetOtherPlayerSlider_HP(string playerId, float MaxHP, float CurrentHP)
+        {
+            if (otherPlayerSlidersDict.ContainsKey(playerId))
+            {
+                Slider slider = otherPlayerSlidersDict[playerId];
+                slider.maxValue = 1;
+                slider.value = CurrentHP / MaxHP;
+                Debug.Log($"更新玩家 {playerId} 的血条: {CurrentHP}/{MaxHP}");
+            }
+            else
+            {
+                Debug.LogWarning($"未找到玩家 {playerId} 的血条绑定");
+
             }
         }
     }

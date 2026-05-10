@@ -52,7 +52,8 @@ namespace Manager
         private Dictionary<string, Action<bool>> boolEventDictionary = new Dictionary<string, Action<bool>>();
         //用于回收触发器和特效分开处理的攻击
         private Dictionary<string, Action> attackEventDictionary = new Dictionary<string, Action>();
-
+        //双浮点数参数字典
+        private Dictionary<string, Action<float, float>> floatEventDictionary = new Dictionary<string, Action<float, float>>();
 
         /// <summary>
         /// 注册事件
@@ -267,6 +268,47 @@ namespace Manager
                 boolEventDictionary[playerName]?.Invoke(boolValue);
             }
         }
+
+
+        /// <summary>
+        /// 注册攻击事件 
+        /// 双浮点数参数事件注册方法
+        /// </summary>
+        public void RegisterFloatEvent(string eventName, Action<float, float> action)
+        {
+            if (floatEventDictionary.ContainsKey(eventName))
+            {
+                floatEventDictionary[eventName] += action;
+            }
+            else
+            {
+                floatEventDictionary.Add(eventName, action);
+            }
+        }
+        /// <summary>
+        /// 注销双浮点数参数事件
+        /// </summary>
+        /// <param name="eventName">事件名称</param>
+        public void UnRegisterFloatEvent(string eventName)
+        {
+            if (floatEventDictionary.ContainsKey(eventName))
+            {
+                floatEventDictionary.Remove(eventName);
+            }
+        }
+        /// <summary>
+        /// 触发双浮点数参数事件
+        /// </summary>
+        /// <param name="eventName">事件名称</param>
+        /// <param name="MaxHP">最大生命值</param>
+        /// <param name="CurrentHP">当前生命值</param>
+        public void TriggerFloatEvent(string eventName, float MaxHP, float CurrentHP)
+        {
+            if (floatEventDictionary.ContainsKey(eventName))
+            {
+                floatEventDictionary[eventName]?.Invoke(MaxHP, CurrentHP);
+            }
+        }
     }
 
     public class EventNames
@@ -279,5 +321,7 @@ namespace Manager
         // 玩家属性Key常量
         public const string PlayerAttribute_Main = "MainPlayer";
         public const string PlayerAttribute_Current = "CurrentPlayer";
+        public const string HPChanged = "HPChanged";
+        public const string DamageReceiverPlayer = "DamageReceiverPlayer";
     }
 }

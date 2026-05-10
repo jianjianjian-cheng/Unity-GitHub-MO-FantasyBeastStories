@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Events;
+using Manager;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,24 +14,75 @@ namespace Enemies
     public class AttackableEnemy : EnemyBase
     {
         [Header("攻击设置")]
-        [SerializeField] protected float attackRange = 2f;
         [SerializeField] protected float attackDamage = 10f;
         [SerializeField] protected float attackCooldown = 1.5f;
         [SerializeField] protected LayerMask playerLayer;
         private NavMeshAgent navMeshAgent;
+        private List<GameObject> targetAttackPlayers;
 
-        protected float lastAttackTime;
-        protected bool isAttacking;
+
 
         protected override void Start()
         {
             base.Start();
+            targetAttackPlayers = new List<GameObject>();
             navMeshAgent = GetComponent<NavMeshAgent>();
             if (navMeshAgent != null)
             {
                 navMeshAgent.speed = attribute.moveSpeed;
             }
         }
+
+        protected override void Update()
+        {
+            base.Update();
+            DealDamageToPlayers();
+        }
+
+        public void OnHandleTriggerEnter(GameObject player)
+        {
+            targetAttackPlayers.Add(player);
+        }
+
+        public void OnHandleTriggerExit(GameObject player)
+        {
+            targetAttackPlayers.Remove(player);
+        }
+
+
+        protected float attackInterval = 0.7f;
+        protected float attackCooldownTimer = 0f;
+
+        private void DealDamageToPlayers()
+        {
+            // 累加时间
+            attackCooldownTimer += Time.deltaTime;
+
+            // 检查是否达到攻击间隔
+            if (attackCooldownTimer >= attackInterval)
+            {
+                // 重置计时器
+                attackCooldownTimer = 0f;
+
+                // 对所有目标玩家造成伤害
+                foreach (var player in targetAttackPlayers)
+                {
+                    if (player == null) continue; // 安全检查
+
+                    DamageEventArgs damageEventArgs = new DamageEventArgs(
+                        DamageType.normal,
+                        gameObject,
+                        player,
+                        attribute.attackPower,
+                        false,
+                        0f
+                    );
+                    EventManager.instance.TriggerEventComplex(EventNames.DamageReceiverPlayer, damageEventArgs);
+                }
+            }
+        }
+
+
 
         override protected void OnEnable()
         {
@@ -64,86 +117,19 @@ namespace Enemies
 
         protected override void EnterAttack()
         {
-            isAttacking = false;
-            lastAttackTime = Time.time;
+
         }
 
         protected override void UpdateAttack()
         {
-            // if (!PlayerTarget)
-            // {
-            //     TransitionToState(EnemyState.Idle);
-            //     return;
-            // }
 
-            // float distanceToPlayer = Vector3.Distance(transform.position, PlayerTarget.transform.position);
-
-            // // 如果玩家离开攻击范围，返回追踪状态
-            // if (distanceToPlayer > attackRange * 1.1f) // 稍微扩大脱离范围
-            // {
-            //     TransitionToState(EnemyState.Run);
-            //     return;
-            // }
-
-            // // 朝向玩家
-            // transform.LookAt(new Vector3(PlayerTarget.transform.position.x, transform.position.y, PlayerTarget.transform.position.z));
-
-            // // 攻击冷却检查
-            // if (Time.time - lastAttackTime >= attackCooldown && !isAttacking)
-            // {
-            //     PerformAttack();
-            // }
         }
 
-        protected virtual void PerformAttack()
-        {
-            isAttacking = true;
-            lastAttackTime = Time.time;
 
-            // 触发攻击动画
-            animator?.SetTrigger("attack");
-
-            // 可以在这里添加攻击逻辑，如造成伤害等
-            AttackPlayer();
-
-            // 攻击结束
-            Invoke(nameof(OnAttackFinished), 0.5f); // 根据动画时间调整
-        }
-
-        protected virtual void AttackPlayer()
-        {
-            if (PlayerTarget == null) return;
-
-            // 检查是否在攻击范围内
-            float distanceToPlayer = Vector3.Distance(transform.position, PlayerTarget.transform.position);
-            if (distanceToPlayer <= attackRange)
-            {
-                // 这里实现具体的伤害逻辑
-                // 可以通过事件系统或直接调用玩家受伤方法
-                Debug.Log($"敌人攻击了 {PlayerTarget.name}，造成 {attackDamage} 点伤害");
-
-                // 示例：发送伤害事件
-                // DamageEventArgs damageArgs = new DamageEventArgs(gameObject, PlayerTarget, attackDamage, DamageType.Physical);
-                // EventManager.instance.TriggerEvent(EventNames.PlayerDamage, damageArgs);
-            }
-        }
-
-        protected virtual void OnAttackFinished()
-        {
-            isAttacking = false;
-        }
 
         protected override void ExitAttack()
         {
-            isAttacking = false;
-            CancelInvoke(nameof(OnAttackFinished));
         }
 
-        // 在编辑器中可视化攻击范围
-        protected virtual void OnDrawGizmosSelected()
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, attackRange);
-        }
     }
 }

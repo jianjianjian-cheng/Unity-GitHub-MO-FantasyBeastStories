@@ -4956,7 +4956,7 @@ GameObject:
   - component: {fileID: 495419034}
   - component: {fileID: 495419033}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: LevelCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6631,7 +6631,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 7119248104912989977}
     m_Modifications:
     - target: {fileID: 2353403205936854721, guid: f9ce21cdd3921b6429df963bed50f615, type: 3}
       propertyPath: sceneViewId
@@ -6639,27 +6639,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4353288436481215264, guid: f9ce21cdd3921b6429df963bed50f615, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 30.907
+      value: -0.04140541
       objectReference: {fileID: 0}
     - target: {fileID: 4353288436481215264, guid: f9ce21cdd3921b6429df963bed50f615, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.14
+      value: 1.03
       objectReference: {fileID: 0}
     - target: {fileID: 4353288436481215264, guid: f9ce21cdd3921b6429df963bed50f615, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 98.379
+      value: -0.56708044
       objectReference: {fileID: 0}
     - target: {fileID: 4353288436481215264, guid: f9ce21cdd3921b6429df963bed50f615, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.57583416
       objectReference: {fileID: 0}
     - target: {fileID: 4353288436481215264, guid: f9ce21cdd3921b6429df963bed50f615, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4353288436481215264, guid: f9ce21cdd3921b6429df963bed50f615, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.8175666
       objectReference: {fileID: 0}
     - target: {fileID: 4353288436481215264, guid: f9ce21cdd3921b6429df963bed50f615, type: 3}
       propertyPath: m_LocalRotation.z
@@ -6694,6 +6694,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f9ce21cdd3921b6429df963bed50f615, type: 3}
+--- !u!4 &687430391 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4353288436481215264, guid: f9ce21cdd3921b6429df963bed50f615, type: 3}
+  m_PrefabInstance: {fileID: 687430390}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &696400241
 GameObject:
   m_ObjectHideFlags: 0
@@ -37257,7 +37262,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5316231943136156361}
   m_Layer: 5
-  m_Name: Slider04_Demo_Red
+  m_Name: LocalPlayerSlider_HP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37781,7 +37786,7 @@ GameObject:
   - component: {fileID: 540193298220471069}
   - component: {fileID: 7119248104912989978}
   m_Layer: 0
-  m_Name: Stylised_round_01_prefab
+  m_Name: Monster_partal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37936,12 +37941,13 @@ Transform:
   m_GameObject: {fileID: 6095621779808640266}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.8175666, z: -0, w: 0.57583416}
-  m_LocalPosition: {x: 30.61094, y: 0.11, z: 97.95867}
+  m_LocalPosition: {x: 71.5, y: 0.11, z: 83.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 899509619357295994}
   - {fileID: 134714937}
+  - {fileID: 687430391}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 109.684, z: 0}
 --- !u!114 &7119248104912989978
@@ -38471,7 +38477,6 @@ SceneRoots:
   - {fileID: 610284368}
   - {fileID: 1237342111}
   - {fileID: 647791537}
-  - {fileID: 687430390}
   - {fileID: 436213932}
   - {fileID: 1041818540}
   - {fileID: 1433241684}

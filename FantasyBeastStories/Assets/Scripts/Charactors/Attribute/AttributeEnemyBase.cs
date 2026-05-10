@@ -10,7 +10,7 @@ namespace Charactors.Attribute
         //基本属性
         [SerializeField] public float maxHealth = 100f;
         [SerializeField] public float currentHealth = 100f;
-        [SerializeField] public float attackPower = 10f;
+        [SerializeField] public float attackPower = 50f;
         [SerializeField] public float moveSpeed = 2f;
         public bool isDead = false;
         public virtual bool GetIsDie()
@@ -92,6 +92,11 @@ namespace Charactors.Attribute
         public virtual void ResetHealth()
         {
             currentHealth = maxHealth;
+        }
+
+        public float GetAttackPower()
+        {
+            return attackPower;
         }
     }
 }

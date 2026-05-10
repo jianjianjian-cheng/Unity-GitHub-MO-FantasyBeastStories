@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Atttibute;
 using Cinemachine;
+using Events;
 using Manager;
 using Other;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Charactors
 {
@@ -28,12 +30,12 @@ namespace Charactors
         [SerializeField] protected bool isInLobby; // 是否在大厅场景
         [SerializeField] protected GameObject isReadyPanel; // 准备界面
         int localActorNumber; // 本地玩家ActorNumber
-
+        int sceneIndex; // 场景索引
 
         protected virtual void Awake()
         {
             isInLobby = GameManager.isStayLobby;
-            attributePlayerBase = new AttributePlayerBase(35, 10, 100, moveSpeed, 1.1f, 0.5f);
+            attributePlayerBase = new AttributePlayerBase(35, 5, 500, moveSpeed, 1.1f, 0.5f);
         }
         protected virtual void Start()
         {
@@ -61,6 +63,8 @@ namespace Charactors
             {
                 animator = GetComponent<Animator>();
             }
+            sceneIndex = SceneManager.GetActiveScene().buildIndex;
+            SetAndChangeHPUI();
         }
 
         // Update is called once per frame
@@ -101,6 +105,10 @@ namespace Charactors
                     EventNames.PlayerAttribute_Main,
                     attributePlayerBase
                 );
+                EventManager.instance.RegisterEventComplex(
+                    EventNames.DamageReceiverPlayer,
+                    OnDamageReceived
+                );
             }
             else
             {
@@ -111,6 +119,10 @@ namespace Charactors
                     localActorNumber,
                     EventNames.PlayerAttribute_Main,
                     attributePlayerBase);
+                eventManager.RegisterEventComplex(
+                    EventNames.DamageReceiverPlayer,
+                    OnDamageReceived
+                );
                 EventManager.instance = eventManager;
             }
         }
@@ -120,6 +132,10 @@ namespace Charactors
             EventManager.instance.UnRegisterAttributePlayerBase(
                 localActorNumber,
                 EventNames.PlayerAttribute_Main
+            );
+            EventManager.instance.UnRegisterEventComplex(
+                EventNames.DamageReceiverPlayer,
+                OnDamageReceived
             );
         }
 
@@ -196,6 +212,51 @@ namespace Charactors
                 PhotonNetwork.LocalPlayer.SetCustomProperties(props);
             }
         }
+
+        //触发HP变化事件
+        private void SetAndChangeHPUI()
+        {
+            if (sceneIndex > 1)
+            {
+                EventManager.instance.TriggerFloatEvent(EventNames.HPChanged, attributePlayerBase.GetMaxHealth(), attributePlayerBase.GetCurrentHealth());
+            }
+        }
+
+        //遭受伤害时触发的事件
+        private void OnDamageReceived(EventArgsBase args)
+        {
+            DamageEventArgs damageEventArgs = args as DamageEventArgs;
+            if (damageEventArgs.damgeTarget != gameObject)
+            {
+                return;
+            }
+            if (!photonView.IsMine) return;
+            //向上取整
+            int damage = Mathf.CeilToInt(damageEventArgs.baseDamageValue);
+            int finalDamage = CalculateFinalDamage(damage);
+            Debug.LogWarning($"受到伤害：{finalDamage}");
+            // 应用最终伤害
+            attributePlayerBase.Damage(finalDamage);
+            // 触发HP变化事件
+            SetAndChangeHPUI();
+            // 通知其他玩家我受到了伤害
+            photonView.RPC("NoticeOtherPlayerDamage", RpcTarget.Others, PlayerManager.instance.GetLocalPlayer().PlayerId.ToString(), attributePlayerBase.GetMaxHealth(), attributePlayerBase.GetCurrentHealth());
+        }
+
+        //根据防御伤害计算最终伤害
+        private int CalculateFinalDamage(int damage)
+        {
+            return damage - (int)attributePlayerBase.GetDefensePower();
+        }
+        //通知其他玩家我受到了伤害，让其更新UI
+        [PunRPC]
+        private void NoticeOtherPlayerDamage(string playerId, float MaxHP, float CurrentHP)
+        {
+            // 更新其他玩家的血条数值
+            TeamUIManager.instance.SetOtherPlayerSlider_HP(playerId, MaxHP, CurrentHP);
+        }
+
+
 
         // 当玩家断开连接时
         void OnApplicationQuit()

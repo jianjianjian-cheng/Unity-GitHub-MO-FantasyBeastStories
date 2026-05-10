@@ -183,5 +183,12 @@ namespace Manager
         }
 
 
+        //返回除本地玩家外的其他玩家的ID列表
+        public List<string> GetOtherPlayersIds()
+        {
+            return playerDataDict.Keys.Where(p => !IsLocalPlayer(p)).ToList();
+        }
+
+
     }
 }

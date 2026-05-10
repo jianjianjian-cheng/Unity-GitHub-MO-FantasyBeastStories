@@ -7,7 +7,7 @@ namespace Atttibute
     public class AttributePlayerBase
     {
         private float attackPower;
-        private float defensePower;
+        private float defensePower = 0;//防御伤害,默认0
         private float criticalMultiplier = 1;//暴击倍率,默认1倍
         private float criticalChance = 0.2f;//暴击概率,默认20%
         private float maxHealth = 100f;//最大生命值,默认100
@@ -110,6 +110,18 @@ namespace Atttibute
         public float GetCriticalChance()
         {
             return criticalChance;
+        }
+
+
+
+
+        public void Damage(float damage)
+        {
+            currentHealth -= damage;
+            if (currentHealth < 0)
+            {
+                currentHealth = 0;
+            }
         }
     }
 }
