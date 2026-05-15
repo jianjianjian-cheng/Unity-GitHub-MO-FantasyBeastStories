@@ -56,7 +56,7 @@ namespace Trigger
         /// </summary>
         private void SpawnFireballLocal(Vector3 spawnPos, Vector3 direction, bool isMine = true)
         {
-            string visualPool = isTest ? ObjectPoolConst.TestPool : ObjectPoolConst.ImpactCannonCommonPool;
+            string visualPool = ObjectPoolConst.ImpactCannonCommonPool;
             string triggerPool = ObjectPoolConst.ImpactCannonTriggerPool;
 
             // 1. 生成视觉特效

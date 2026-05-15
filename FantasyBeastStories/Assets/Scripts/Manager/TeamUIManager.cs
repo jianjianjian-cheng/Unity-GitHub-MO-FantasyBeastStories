@@ -106,6 +106,7 @@ namespace Manager
 
         public void SetOtherTeamUI()
         {
+            if (GameManager.isTest) return;
             #region  设置其他玩家的UI可见性
             switch (PlayerManager.instance.PlayerCount)
             {
@@ -171,7 +172,6 @@ namespace Manager
         {
             if (localPlayerSlider_HP == null)
             {
-                Debug.LogError("LocalPlayerSlider_HP 未找到");
                 return;
             }
             localPlayerSlider_HP.maxValue = 1;

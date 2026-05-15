@@ -71,17 +71,6 @@ namespace Manager
             CachePrefab("ImpactCannonTriggerPool", ImpactCannonTriggerPrefab);
             CachePrefab("ImpactCannonHitCommonPool", ImpactCannonHitCommonPrefab);
             CachePrefab("DamageNumPool", DamageNumPrefab);
-
-            if (GameManager.isTest)
-            {
-                AddMultipleToPool("TestPool", testPrefab, 5);
-                AddMultipleToPool("ImpactCannonCommonPool", ImpactCannonCommonPrefab, 10);
-                AddMultipleToPool("ImpactCannonTriggerPool", ImpactCannonTriggerPrefab, 10);
-                AddMultipleToPool("ImpactCannonHitCommonPool", ImpactCannonHitCommonPrefab, 20);
-                AddMultipleToPool("DamageNumPool", DamageNumPrefab, 100);
-                return;
-            }
-
             AddMultipleToPool("ImpactCannonCommonPool", ImpactCannonCommonPrefab, 10);
             AddMultipleToPool("ImpactCannonHitCommonPool", ImpactCannonHitCommonPrefab, 20);
             AddMultipleToPool("ImpactCannonTriggerPool", ImpactCannonTriggerPrefab, 10);

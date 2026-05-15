@@ -269,5 +269,11 @@ namespace Enemies
                 TransitionToState(EnemyState.Die);
             }
         }
+
+        //死亡后掉落经验
+        protected virtual void DropExperience()
+        {
+
+        }
     }
 }

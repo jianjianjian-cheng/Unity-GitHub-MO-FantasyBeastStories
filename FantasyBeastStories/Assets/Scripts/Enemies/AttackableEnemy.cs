@@ -109,27 +109,31 @@ namespace Enemies
             navMeshAgent.SetDestination(PlayerTarget.transform.position);
         }
 
+
         protected override void EnterDie()
         {
             base.EnterDie();
             navMeshAgent.isStopped = true;
         }
 
-        protected override void EnterAttack()
+        protected override void UpdateDie()
         {
-
+            base.UpdateDie();
         }
 
-        protected override void UpdateAttack()
+        protected override void ExitDie()
         {
-
+            base.ExitDie();
         }
 
-
-
-        protected override void ExitAttack()
+        public override void TakeDamage(DamageEventArgs damageEventArgs)
         {
+            base.TakeDamage(damageEventArgs);
         }
 
+        protected override void DropExperience()
+        {
+            base.DropExperience();
+        }
     }
 }

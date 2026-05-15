@@ -126,7 +126,7 @@ namespace FX
         /// </summary>
         private void PlayHitEffect(Vector3 hitPosition)
         {
-            string poolKey = isTest ? "ImpactCannonHitTestPool" : "ImpactCannonHitCommonPool";
+            string poolKey = "ImpactCannonHitCommonPool";
             GameObject hitEffect = ObjectPoolManager.instance.GetFromPoolAndActivate(poolKey, hitPosition);
             if (hitEffect != null)
             {

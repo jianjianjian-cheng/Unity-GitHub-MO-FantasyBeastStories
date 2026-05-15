@@ -1,0 +1,128 @@
+[
+    {
+        "Name": "锋利的短剑",
+        "Content": "攻击力提升",
+        "Value": 8,
+        "Quality": "普通"
+    },
+    {
+        "Name": "沉重的巨斧",
+        "Content": "攻击力提升，攻速降低",
+        "Value": 15,
+        "Quality": "普通"
+    },
+    {
+        "Name": "淬毒的匕首",
+        "Content": "攻击力提升，附加中毒",
+        "Value": 6,
+        "Quality": "普通"
+    },
+    {
+        "Name": "坚固的木盾",
+        "Content": "防御力提升",
+        "Value": 5,
+        "Quality": "普通"
+    },
+    {
+        "Name": "厚实的皮甲",
+        "Content": "受到伤害降低",
+        "Value": 8,
+        "Quality": "普通"
+    },
+    {
+        "Name": "坚韧的意志",
+        "Content": "防御力提升，生命越低防御越高",
+        "Value": 8,
+        "Quality": "普通"
+    },
+    {
+        "Name": "饱满的生命",
+        "Content": "最大生命值提升",
+        "Value": 30,
+        "Quality": "普通"
+    },
+    {
+        "Name": "鲜红的血瓶",
+        "Content": "最大生命值提升，立即回复等量生命",
+        "Value": 25,
+        "Quality": "普通"
+    },
+    {
+        "Name": "野性的身躯",
+        "Content": "最大生命值提升，体型略微增大",
+        "Value": 40,
+        "Quality": "普通"
+    },
+    {
+        "Name": "温柔的愈合",
+        "Content": "每秒回复生命",
+        "Value": 2,
+        "Quality": "普通"
+    },
+    {
+        "Name": "贪婪的渴求",
+        "Content": "击杀敌人回复生命",
+        "Value": 12,
+        "Quality": "普通"
+    },
+    {
+        "Name": "温暖的篝火",
+        "Content": "每秒回复生命，受伤后翻倍",
+        "Value": 2,
+        "Quality": "普通"
+    },
+    {
+        "Name": "敏锐的直觉",
+        "Content": "暴击率提升",
+        "Value": 6,
+        "Quality": "普通"
+    },
+    {
+        "Name": "精准的瞄准",
+        "Content": "暴击率提升，对满血敌人额外暴击",
+        "Value": 8,
+        "Quality": "普通"
+    },
+    {
+        "Name": "幸运的硬币",
+        "Content": "暴击率提升，暴击时掉落金币",
+        "Value": 5,
+        "Quality": "普通"
+    },
+    {
+        "Name": "沉重的一击",
+        "Content": "暴击伤害提升",
+        "Value": 30,
+        "Quality": "普通"
+    },
+    {
+        "Name": "致命的冷刃",
+        "Content": "暴击伤害提升，背击额外伤害",
+        "Value": 40,
+        "Quality": "普通"
+    },
+    {
+        "Name": "涌动的暗劲",
+        "Content": "暴击伤害提升，暴击时小范围溅射",
+        "Value": 25,
+        "Quality": "普通"
+    },
+    {
+        "Name": "迅捷的手腕",
+        "Content": "攻击间隔缩短",
+        "Value": 12,
+        "Quality": "普通"
+    },
+    {
+        "Name": "轻盈的步调",
+        "Content": "攻击间隔缩短，移动速度提升",
+        "Value": 15,
+        "Quality": "普通"
+    },
+    {
+        "Name": "急促的呼吸",
+        "Content": "攻击间隔缩短，连续攻击每层提升",
+        "Value": 10,
+        "Quality": "普通"
+    }
+]

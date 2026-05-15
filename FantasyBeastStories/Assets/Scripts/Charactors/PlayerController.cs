@@ -240,6 +240,7 @@ namespace Charactors
             // 触发HP变化事件
             SetAndChangeHPUI();
             // 通知其他玩家我受到了伤害
+            if (GameManager.isTest) return;
             photonView.RPC("NoticeOtherPlayerDamage", RpcTarget.Others, PlayerManager.instance.GetLocalPlayer().PlayerId.ToString(), attributePlayerBase.GetMaxHealth(), attributePlayerBase.GetCurrentHealth());
         }
 

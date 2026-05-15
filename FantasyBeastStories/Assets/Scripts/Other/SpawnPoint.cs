@@ -110,6 +110,7 @@ namespace Other
 
         private void SetOccupied(bool occupied, int playerActorNumber)
         {
+            if (GameManager.isTest) return;
             if (isEmpty == !occupied && occupiedByPlayer == playerActorNumber) return;
 
             isEmpty = !occupied;

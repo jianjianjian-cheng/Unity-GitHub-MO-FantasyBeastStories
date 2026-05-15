@@ -1,0 +1,128 @@
+[
+    {
+        "Name": "锐利的狼牙",
+        "Content": "攻击力大幅提升",
+        "Value": 20,
+        "Quality": "史诗"
+    },
+    {
+        "Name": "灼热的战刃",
+        "Content": "攻击力提升，附加灼烧",
+        "Value": 18,
+        "Quality": "史诗"
+    },
+    {
+        "Name": "狂战士之怒",
+        "Content": "攻击力提升，低血时翻倍",
+        "Value": 25,
+        "Quality": "史诗"
+    },
+    {
+        "Name": "晶化的护甲",
+        "Content": "防御力大幅提升",
+        "Value": 15,
+        "Quality": "史诗"
+    },
+    {
+        "Name": "反伤的荆棘",
+        "Content": "受到伤害降低，反弹伤害",
+        "Value": 12,
+        "Quality": "史诗"
+    },
+    {
+        "Name": "不朽的壁垒",
+        "Content": "防御力提升，受击回血",
+        "Value": 18,
+        "Quality": "史诗"
+    },
+    {
+        "Name": "巨人的血脉",
+        "Content": "最大生命值大幅提升",
+        "Value": 80,
+        "Quality": "史诗"
+    },
+    {
+        "Name": "不灭的魂火",
+        "Content": "最大生命值提升，受致命伤害保留1血",
+        "Value": 60,
+        "Quality": "史诗"
+    },
+    {
+        "Name": "远古的盟约",
+        "Content": "最大生命值提升，与队友共享生命",
+        "Value": 50,
+        "Quality": "史诗"
+    },
+    {
+        "Name": "涌动的生机",
+        "Content": "每秒回复生命",
+        "Value": 6,
+        "Quality": "史诗"
+    },
+    {
+        "Name": "嗜血的利齿",
+        "Content": "伤害转化生命",
+        "Value": 8,
+        "Quality": "史诗"
+    },
+    {
+        "Name": "共享的源泉",
+        "Content": "每秒回复生命，同时治疗最近队友",
+        "Value": 5,
+        "Quality": "史诗"
+    },
+    {
+        "Name": "鹰眼的凝视",
+        "Content": "暴击率大幅提升",
+        "Value": 15,
+        "Quality": "史诗"
+    },
+    {
+        "Name": "破绽的洞察",
+        "Content": "暴击率提升，暴击降低敌人防御",
+        "Value": 12,
+        "Quality": "史诗"
+    },
+    {
+        "Name": "命运的眷顾",
+        "Content": "暴击率提升，未暴击累积幸运值",
+        "Value": 15,
+        "Quality": "史诗"
+    },
+    {
+        "Name": "碎裂的重锤",
+        "Content": "暴击伤害大幅提升",
+        "Value": 80,
+        "Quality": "史诗"
+    },
+    {
+        "Name": "断罪的裁决",
+        "Content": "暴击伤害提升，低血目标额外伤害",
+        "Value": 70,
+        "Quality": "史诗"
+    },
+    {
+        "Name": "残忍的利刃",
+        "Content": "暴击伤害提升，暴击附加流血",
+        "Value": 90,
+        "Quality": "史诗"
+    },
+    {
+        "Name": "疾风的残影",
+        "Content": "攻击间隔大幅缩短",
+        "Value": 25,
+        "Quality": "史诗"
+    },
+    {
+        "Name": "奔涌的电流",
+        "Content": "攻击间隔缩短，攻击附加连锁闪电",
+        "Value": 22,
+        "Quality": "史诗"
+    },
+    {
+        "Name": "狂乱的舞步",
+        "Content": "攻击间隔缩短，击杀后加速",
+        "Value": 20,
+        "Quality": "史诗"
+    }
+]
