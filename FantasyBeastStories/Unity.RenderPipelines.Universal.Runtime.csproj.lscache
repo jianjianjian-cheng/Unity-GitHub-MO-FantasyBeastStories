@@ -485,9 +485,7 @@ Temp/bin/Debug/
  Unity.RenderPipelines.Core.Runtime.dll
  Unity.RenderPipelines.Universal.2D.Internal.dll
  Unity.RenderPipelines.Universal.Config.Runtime.dll
- UnityEditor.TestRunner.dll
  UnityEditor.UI.dll
- UnityEngine.TestRunner.dll
  UnityEngine.UI.dll
 
 [analyzerReferences]

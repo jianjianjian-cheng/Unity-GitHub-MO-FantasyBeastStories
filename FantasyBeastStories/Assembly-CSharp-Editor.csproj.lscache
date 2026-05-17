@@ -364,7 +364,6 @@ Temp/bin/Debug/
  Unity.Searcher.Editor.dll
  Unity.Settings.Editor.dll
  Unity.ShaderGraph.Editor.dll
- Unity.ShaderGraph.Utilities.dll
  Unity.TestTools.CodeCoverage.Editor.dll
  Unity.TestTools.CodeCoverage.Editor.OpenCover.Model.dll
  Unity.TestTools.CodeCoverage.Editor.OpenCover.Mono.Reflection.dll

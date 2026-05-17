@@ -323,9 +323,7 @@ Library/PackageCache/
 Temp/bin/Debug/
  Unity.VisualScripting.Core.dll
  Unity.VisualScripting.Flow.dll
- UnityEditor.TestRunner.dll
  UnityEditor.UI.dll
- UnityEngine.TestRunner.dll
  UnityEngine.UI.dll
 
 [analyzerReferences]

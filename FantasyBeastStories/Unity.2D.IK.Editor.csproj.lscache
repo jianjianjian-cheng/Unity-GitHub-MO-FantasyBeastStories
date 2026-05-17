@@ -304,16 +304,11 @@ Library/PackageCache/
   Runtime/VisualScripting.Flow/Dependencies/NCalc/Unity.VisualScripting.Antlr3.Runtime.dll
 Temp/bin/Debug/
  Unity.2D.Animation.Editor.dll
- Unity.2D.Animation.Runtime.dll
  Unity.2D.Common.Editor.dll
  Unity.2D.Common.Runtime.dll
  Unity.2D.IK.Runtime.dll
- Unity.2D.Sprite.Editor.dll
- Unity.Burst.dll
- Unity.Collections.dll
  Unity.InternalAPIEditorBridge.001.dll
  Unity.InternalAPIEngineBridge.001.dll
- Unity.Mathematics.dll
  UnityEditor.TestRunner.dll
  UnityEditor.UI.dll
  UnityEngine.TestRunner.dll

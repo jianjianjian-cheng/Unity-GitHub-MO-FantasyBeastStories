@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Photon.Pun;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Manager
@@ -30,8 +31,10 @@ namespace Manager
         [SerializeField] private GameObject ImpactCannonTriggerPrefab;
         [SerializeField] private GameObject FireFirePrefab;
         [SerializeField] private GameObject DamageNumPrefab;
+        [SerializeField] private GameObject ExperienceBall_BluePrefab;
 
         private const string ImpactCannonPath = "FX/ImpactCannon/";
+        private const string ExperienceBallsPath = "FX/ExperienceBalls/";
         private bool isPhotonReady = false;
 
         void Start()
@@ -75,6 +78,7 @@ namespace Manager
             AddMultipleToPool("ImpactCannonHitCommonPool", ImpactCannonHitCommonPrefab, 20);
             AddMultipleToPool("ImpactCannonTriggerPool", ImpactCannonTriggerPrefab, 10);
             AddMultipleToPool("DamageNumPool", DamageNumPrefab, 100);
+            AddMultipleToPool("ExperienceBall_BluePool", ExperienceBall_BluePrefab, 10);
         }
 
         private void CachePrefab(string key, GameObject prefab)
@@ -263,5 +267,6 @@ namespace Manager
         public const string ImpactCannonTriggerPool = "ImpactCannonTriggerPool";
         public const string FireFirePool = "FireFirePool";
         public const string DamageNumPool = "DamageNumPool";
+        public const string ExperienceBall_BluePool = "ExperienceBall_BluePool";
     }
 }

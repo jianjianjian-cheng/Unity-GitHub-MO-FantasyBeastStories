@@ -336,7 +336,6 @@ Temp/bin/Debug/
  Unity.Searcher.Editor.dll
  Unity.Settings.Editor.dll
  Unity.ShaderGraph.Editor.dll
- Unity.ShaderGraph.Utilities.dll
  Unity.TestTools.CodeCoverage.Editor.dll
  Unity.TestTools.CodeCoverage.Editor.OpenCover.Model.dll
  Unity.TestTools.CodeCoverage.Editor.OpenCover.Mono.Reflection.dll
@@ -356,9 +355,7 @@ Temp/bin/Debug/
  Unity.VisualScripting.State.Editor.dll
  Unity.VisualStudio.Editor.dll
  Unity.VSCode.Editor.dll
- UnityEditor.TestRunner.dll
  UnityEditor.UI.dll
- UnityEngine.TestRunner.dll
  UnityEngine.UI.dll
 
 [analyzerReferences]

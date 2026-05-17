@@ -10,9 +10,14 @@ namespace Enemies
     {
         [SerializeField] GameObject testPrefab;
         private bool isPhotonReady = false; // Photon是否准备就绪
-        private float spawnInterval = 1f; // 生成间隔
+        private float spawnInterval; // 生成间隔
         private float timer = 0f; // 计时器
         bool canGenorate = false;
+
+        void Start()
+        {
+            spawnInterval = Random.Range(2f, 5f); // 随机生成间隔
+        }
         void Update()
         {
             if (!PhotonNetwork.IsMasterClient) return; // 只有房主执行生成逻辑
@@ -33,10 +38,6 @@ namespace Enemies
                         isPhotonReady = true;
                     }
                 }
-                // Debug.Log($"IsConnectedAndReady: {PhotonNetwork.IsConnectedAndReady}");
-                // Debug.Log($"InRoom: {PhotonNetwork.InRoom}");
-                // Debug.Log($"IsMasterClient: {PhotonNetwork.IsMasterClient}");
-                // Debug.Log($"canGenorate: {canGenorate}");
             }
             if (canGenorate)
             {
@@ -55,17 +56,8 @@ namespace Enemies
 
         private void SpawnEnemy()
         {
-            if (GameManager.isTest)
-            {
-                if (testPrefab != null)
-                {
-                    Debug.Log("生成测试敌人");
-                    Instantiate(testPrefab, transform.position, Quaternion.identity);
-                }
-                return;
-            }
             // 生成敌人
-            PhotonNetwork.Instantiate("SkeletonRoot", transform.position, Quaternion.identity);
+            MonsterPoolManager.instance.SpawnMonster(MonsterPoolConst.SkeletonPool, transform.position, Quaternion.identity);
         }
     }
 }

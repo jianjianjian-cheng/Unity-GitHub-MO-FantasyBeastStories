@@ -296,7 +296,6 @@ Library/PackageCache/
 Temp/bin/Debug/
  Unity.Burst.dll
  Unity.Collections.dll
- Unity.Mathematics.dll
  UnityEditor.TestRunner.dll
  UnityEditor.UI.dll
  UnityEngine.TestRunner.dll

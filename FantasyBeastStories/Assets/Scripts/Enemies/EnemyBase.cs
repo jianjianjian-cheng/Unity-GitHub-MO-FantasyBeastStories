@@ -148,7 +148,10 @@ namespace Enemies
                 return;
             }
         }
-        protected virtual void ExitIdle() { }
+        protected virtual void ExitIdle()
+        {
+
+        }
 
         // ========== Run状态 ==========
         protected virtual void EnterRun()
@@ -191,6 +194,7 @@ namespace Enemies
                 rb.angularVelocity = Vector3.zero;
             }
             animator.SetTrigger("die");
+            DropExperience();
             Invoke(nameof(DestorySelf), 3f); // 3秒后销毁敌人对象
         }
         protected virtual void UpdateDie() { }
@@ -260,9 +264,17 @@ namespace Enemies
 
         public virtual void TakeDamage(DamageEventArgs damageEventArgs)
         {
+            if (attribute.GetIsDie())
+            {
+                return;
+            }
             damageEventArgs.CalculateFinalDamageValue();
             damageEventArgs.finalDamageValue = Mathf.Ceil(damageEventArgs.finalDamageValue);
             attribute.TakeDamage(damageEventArgs.finalDamageValue);
+            if (GameManager.isTest)
+            {
+                ObjectPoolManager.instance.GetFromPoolAndActivate(ObjectPoolConst.DamageNumPool, transform.position).GetComponent<DamageNum>().Play(damageEventArgs.finalDamageValue, transform.position, damageEventArgs.isCritical);
+            }
             attribute.TakeDamageSpecial(damageEventArgs.damageType);
             if (attribute.GetIsDie())
             {
@@ -273,7 +285,7 @@ namespace Enemies
         //死亡后掉落经验
         protected virtual void DropExperience()
         {
-
+            Debug.Log("敌人死亡，掉落经验");
         }
     }
 }

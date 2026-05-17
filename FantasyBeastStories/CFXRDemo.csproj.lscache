@@ -294,16 +294,9 @@ Library/PackageCache/
 Temp/bin/Debug/
  CFXRRuntime.dll
  KinoBloom.Runtime.dll
- Unity.Burst.dll
- Unity.Mathematics.dll
- Unity.RenderPipeline.Universal.ShaderLibrary.dll
  Unity.RenderPipelines.Core.Runtime.dll
- Unity.RenderPipelines.Universal.2D.Internal.dll
- Unity.RenderPipelines.Universal.Config.Runtime.dll
  Unity.RenderPipelines.Universal.Runtime.dll
- UnityEditor.TestRunner.dll
  UnityEditor.UI.dll
- UnityEngine.TestRunner.dll
  UnityEngine.UI.dll
 
 [analyzerReferences]

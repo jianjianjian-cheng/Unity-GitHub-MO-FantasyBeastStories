@@ -324,9 +324,7 @@ Library/PackageCache/
 Temp/bin/Debug/
  PhotonRealtime.dll
  PhotonUnityNetworking.dll
- UnityEditor.TestRunner.dll
  UnityEditor.UI.dll
- UnityEngine.TestRunner.dll
  UnityEngine.UI.dll
 
 [analyzerReferences]

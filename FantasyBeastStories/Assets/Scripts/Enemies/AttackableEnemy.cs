@@ -55,6 +55,7 @@ namespace Enemies
 
         private void DealDamageToPlayers()
         {
+            if (currentState == EnemyState.Die) return;
             // 累加时间
             attackCooldownTimer += Time.deltaTime;
 
@@ -98,6 +99,7 @@ namespace Enemies
         override protected void OnDisable()
         {
             UnregisterDamageEvent();
+            TransitionToState(EnemyState.Idle);
         }
 
         protected override void UpdateRun()
