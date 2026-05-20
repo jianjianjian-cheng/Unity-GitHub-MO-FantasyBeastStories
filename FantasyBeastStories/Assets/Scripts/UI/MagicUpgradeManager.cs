@@ -4,6 +4,7 @@ using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UI
@@ -26,10 +27,14 @@ namespace UI
             }
         }
         #endregion
+
         #region 全局变量
         GameObject GrossUpgradePanel;
+        GameObject Card_1Effect;
         List<ParticleSystem> OneCardEffects;
+        GameObject Card_2Effect;
         List<ParticleSystem> TwoCardEffects;
+        GameObject Card_3Effect;
         List<ParticleSystem> ThreeCardEffects;
 
         //魔法升级面板，以及面板下卡片的文字变量
@@ -47,16 +52,18 @@ namespace UI
         TextMeshProUGUI ContentText_3;
         TextMeshProUGUI QualityText_3;
 
-
         //背景阴影
         private Image shadowImage;
-
 
         //卡片动画相关位置
         private GameObject AnimPoints;
         private Transform StartPoint;
         private Transform[] EndPoints;
+
+        //保存特效原始Scale
+        private Dictionary<ParticleSystem, Vector3> originalEffectScales = new Dictionary<ParticleSystem, Vector3>();
         #endregion
+
         void Start()
         {
             OneCardEffects = new List<ParticleSystem>();
@@ -144,8 +151,6 @@ namespace UI
                 }
             }
 
-
-
             //寻找第三卡片
             Card_3 = MagicUpgradePanel.transform.Find("Card_3").gameObject;
             if (Card_3 == null)
@@ -176,10 +181,11 @@ namespace UI
                 }
             }
             #endregion
+
             #region 寻找特效
             //寻找卡片一位置的特效
-            GameObject oneCard = MagicUpgradePanel.transform.Find("OneCardEffect").gameObject;
-            if (oneCard == null)
+            Card_1Effect = MagicUpgradePanel.transform.Find("OneCardEffect").gameObject;
+            if (Card_1Effect == null)
             {
                 Debug.LogError("OneCardEffect 未找到");
                 return;
@@ -187,7 +193,7 @@ namespace UI
             else
             {
                 //寻找该该卡片位置下的所有特效
-                foreach (Transform child in oneCard.transform)
+                foreach (Transform child in Card_1Effect.transform)
                 {
                     if (child.GetComponent<ParticleSystem>() != null)
                     {
@@ -197,8 +203,8 @@ namespace UI
             }
 
             //寻找卡片二位置的特效
-            GameObject twoCard = MagicUpgradePanel.transform.Find("TwoCardEffect").gameObject;
-            if (twoCard == null)
+            Card_2Effect = MagicUpgradePanel.transform.Find("TwoCardEffect").gameObject;
+            if (Card_2Effect == null)
             {
                 Debug.LogError("TwoCardEffect 未找到");
                 return;
@@ -206,7 +212,7 @@ namespace UI
             else
             {
                 //寻找该该卡片位置下的所有特效
-                foreach (Transform child in twoCard.transform)
+                foreach (Transform child in Card_2Effect.transform)
                 {
                     if (child.GetComponent<ParticleSystem>() != null)
                     {
@@ -216,8 +222,8 @@ namespace UI
             }
 
             //寻找卡片三位置的特效
-            GameObject threeCard = MagicUpgradePanel.transform.Find("ThreeCardEffect").gameObject;
-            if (threeCard == null)
+            Card_3Effect = MagicUpgradePanel.transform.Find("ThreeCardEffect").gameObject;
+            if (Card_3Effect == null)
             {
                 Debug.LogError("ThreeCardEffect 未找到");
                 return;
@@ -225,7 +231,7 @@ namespace UI
             else
             {
                 //寻找该该卡片位置下的所有特效
-                foreach (Transform child in threeCard.transform)
+                foreach (Transform child in Card_3Effect.transform)
                 {
                     if (child.GetComponent<ParticleSystem>() != null)
                     {
@@ -234,6 +240,7 @@ namespace UI
                 }
             }
             #endregion
+
             #region 其他元素
             //寻找背景阴影
             shadowImage = GrossUpgradePanel.transform.Find("Shadow").GetComponent<Image>();
@@ -251,8 +258,7 @@ namespace UI
                 return;
             }
             EndPoints = AnimPoints.GetComponentsInChildren<Transform>()
-            .Where
-            (x => x.name != "EndPoint").ToArray();
+            .Where(x => x.name == "EndPoint").ToArray();
             if (EndPoints.Length < 3)
             {
                 Debug.LogError("EndPoints 数量不足");
@@ -265,7 +271,113 @@ namespace UI
                 return;
             }
             #endregion
+
+            //保存所有特效的原始Scale
+            SaveOriginalScales();
+
+            RegisterCardHoverEvents();
         }
+
+        //保存所有特效的原始Scale
+        private void SaveOriginalScales()
+        {
+            foreach (var effect in OneCardEffects)
+            {
+                if (effect != null && !originalEffectScales.ContainsKey(effect))
+                {
+                    originalEffectScales[effect] = effect.transform.localScale;
+                }
+            }
+            foreach (var effect in TwoCardEffects)
+            {
+                if (effect != null && !originalEffectScales.ContainsKey(effect))
+                {
+                    originalEffectScales[effect] = effect.transform.localScale;
+                }
+            }
+            foreach (var effect in ThreeCardEffects)
+            {
+                if (effect != null && !originalEffectScales.ContainsKey(effect))
+                {
+                    originalEffectScales[effect] = effect.transform.localScale;
+                }
+            }
+        }
+
+        #region 鼠标悬停处理
+
+        // 为卡片添加鼠标悬停事件（在Initialize中调用）
+        private void RegisterCardHoverEvents()
+        {
+            AddHoverEffect(Card_1, 1.2f, 0.2f, OneCardEffects);
+            AddHoverEffect(Card_2, 1.2f, 0.2f, TwoCardEffects);
+            AddHoverEffect(Card_3, 1.2f, 0.2f, ThreeCardEffects);
+        }
+
+        // 为单个卡片的特效列表添加悬停缩放效果
+        private void AddHoverEffect(GameObject card, float scaleMultiplier, float duration, List<ParticleSystem> effectList)
+        {
+            if (card == null) return;
+
+            // 获取或添加EventTrigger组件
+            EventTrigger trigger = card.GetComponent<EventTrigger>();
+            if (trigger == null)
+                trigger = card.AddComponent<EventTrigger>();
+
+            // 鼠标进入事件
+            EventTrigger.Entry enterEntry = new EventTrigger.Entry();
+            enterEntry.eventID = EventTriggerType.PointerEnter;
+            enterEntry.callback.AddListener((data) => OnCardPointerEnter(card, scaleMultiplier, duration, effectList));
+            trigger.triggers.Add(enterEntry);
+
+            // 鼠标退出事件
+            EventTrigger.Entry exitEntry = new EventTrigger.Entry();
+            exitEntry.eventID = EventTriggerType.PointerExit;
+            exitEntry.callback.AddListener((data) => OnCardPointerExit(card, duration, effectList));
+            trigger.triggers.Add(exitEntry);
+        }
+
+        private void OnCardPointerEnter(GameObject card, float scaleMultiplier, float duration, List<ParticleSystem> effectList)
+        {
+            card.transform.DOKill();
+            card.transform.DOScale(scaleMultiplier, duration).SetEase(Ease.OutBack);
+            card.transform.SetAsLastSibling();
+
+            // 基于原始Scale放大列表中每一个特效
+            if (effectList != null)
+            {
+                foreach (var effect in effectList)
+                {
+                    if (effect != null && originalEffectScales.ContainsKey(effect))
+                    {
+                        effect.transform.DOKill();
+                        Vector3 targetScale = originalEffectScales[effect] * scaleMultiplier;
+                        effect.transform.DOScale(targetScale, duration).SetEase(Ease.OutBack);
+                    }
+                }
+            }
+        }
+
+        private void OnCardPointerExit(GameObject card, float duration, List<ParticleSystem> effectList)
+        {
+            card.transform.DOKill();
+            card.transform.DOScale(Vector3.one, duration).SetEase(Ease.OutBack);
+
+            // 恢复到原始Scale
+            if (effectList != null)
+            {
+                foreach (var effect in effectList)
+                {
+                    if (effect != null && originalEffectScales.ContainsKey(effect))
+                    {
+                        effect.transform.DOKill();
+                        effect.transform.DOScale(originalEffectScales[effect], duration).SetEase(Ease.OutBack);
+                    }
+                }
+            }
+        }
+
+        #endregion
 
         #region 动画处理
         private void OpenMagicUpgradePanelAnim()
@@ -280,15 +392,19 @@ namespace UI
             float moveTime = 0.3f;
             // ===== 第1步：发第1张牌 =====
             seq.Append(Card_1.transform.DOMove(EndPoints[0].position, moveTime));
-
+            //特效移动
+            //特效仅仅在x,y轴移动，不改变z轴位置
+            seq.Join(Card_1Effect.transform.DOMove(new Vector3(EndPoints[0].position.x, EndPoints[0].position.y, EndPoints[0].position.z - 1f), moveTime));
 
             // ===== 第2步：发第2张牌 =====
             seq.Append(Card_2.transform.DOMove(EndPoints[1].position, moveTime));
-
+            //特效移动
+            seq.Join(Card_2Effect.transform.DOMove(new Vector3(EndPoints[1].position.x, EndPoints[1].position.y, EndPoints[1].position.z - 1f), moveTime));
 
             // ===== 第3步：发第3张牌 =====
             seq.Append(Card_3.transform.DOMove(EndPoints[2].position, moveTime));
-
+            //特效移动
+            seq.Join(Card_3Effect.transform.DOMove(new Vector3(EndPoints[2].position.x, EndPoints[2].position.y, EndPoints[2].position.z - 1f), moveTime));
 
             yield return seq.WaitForCompletion();
             OnCardMoveToEndPositionComplete();
@@ -313,6 +429,7 @@ namespace UI
             }
             StartCoroutine(MoveCardEndToPosition());
         }
+
         //阴影背景1秒内透明度变化，协程
         private IEnumerator AnimateShadowAlphaBack()
         {
@@ -330,6 +447,9 @@ namespace UI
         //打开魔法升级面板
         public void OpenMagicUpgradePanel()
         {
+            // 打开魔法升级面板时，全局Bloom强度增加
+            if (GlobalVolumeManager.instance != null)
+                GlobalVolumeManager.instance.SetBloomIntensity(15f);
             Debug.Log("打开魔法升级面板");
             GrossUpgradePanel.SetActive(true);
             OpenMagicUpgradePanelAnim();
@@ -338,6 +458,9 @@ namespace UI
         //关闭魔法升级面板
         public void CloseMagicUpgradePanel()
         {
+            // 关闭魔法升级面板时，全局Bloom强度减少
+            if (GlobalVolumeManager.instance != null)
+                GlobalVolumeManager.instance.SetBloomIntensity(5f);
             Debug.Log("关闭魔法升级面板");
             StartCoroutine(AnimateShadowAlphaBack());
             GrossUpgradePanel.SetActive(false);
