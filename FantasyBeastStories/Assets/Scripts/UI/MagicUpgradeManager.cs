@@ -63,8 +63,6 @@ namespace UI
         //保存特效原始Scale
         private Dictionary<ParticleSystem, Vector3> originalEffectScales = new Dictionary<ParticleSystem, Vector3>();
         #endregion
-        //基本变量
-        bool canSelect = false;
         void Start()
         {
             OneCardEffects = new List<ParticleSystem>();
@@ -408,6 +406,40 @@ namespace UI
         private void OnCardPointerClick()
         {
             Debug.Log("点击了卡片");
+            GameObject selectedCard = EventSystem.current.currentSelectedGameObject;
+            if (selectedCard != null)
+            {
+                StartCoroutine(RotateCard(selectedCard, 1f));
+            }
+        }
+        
+        //点击卡片后进行旋转的方法
+        private IEnumerator RotateCard(GameObject card, float rotationSpeed)
+        {
+            EventTrigger trigger = card.GetComponent<EventTrigger>();
+            if (trigger == null)
+            {
+                yield return null;
+            }
+            trigger.enabled = false;
+            Sequence rotateSequence = DOTween.Sequence();
+            // 先旋转到90度（侧面对玩家）
+            rotateSequence.Append(card.transform.DORotate(new Vector3(0, 90, 0), 0.3f, RotateMode.Fast));
+    
+            // 更新卡片内容（如果需要显示升级后的信息）
+            rotateSequence.AppendCallback(() =>
+            {
+                // 在这里可以更新卡片显示的内容
+                UpdateCardContentAfterRotation(card);
+            });
+    
+            // 再旋转到0度（正面对玩家）
+            rotateSequence.Append(card.transform.DORotate(new Vector3(0, 0, 0), 0.3f, RotateMode.Fast));
+        }
+
+        private void UpdateCardContentAfterRotation(GameObject card)
+        {
+            //更新卡片图片显示背面
         }
 
 
