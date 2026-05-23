@@ -28,7 +28,7 @@ namespace UI
         }
         #endregion
 
-        #region 全局变量
+        #region UI对象
         GameObject GrossUpgradePanel;
         GameObject Card_1Effect;
         List<ParticleSystem> OneCardEffects;
@@ -63,13 +63,19 @@ namespace UI
         //保存特效原始Scale
         private Dictionary<ParticleSystem, Vector3> originalEffectScales = new Dictionary<ParticleSystem, Vector3>();
         #endregion
-
+        //基本变量
+        bool canSelect = false;
         void Start()
         {
             OneCardEffects = new List<ParticleSystem>();
             TwoCardEffects = new List<ParticleSystem>();
             ThreeCardEffects = new List<ParticleSystem>();
             Initialize();
+        }
+
+        void Update()
+        {
+
         }
 
         private void Initialize()
@@ -274,9 +280,10 @@ namespace UI
 
             //保存所有特效的原始Scale
             SaveOriginalScales();
-
-            RegisterCardHoverEvents();
         }
+
+
+
 
         //保存所有特效的原始Scale
         private void SaveOriginalScales()
@@ -379,6 +386,33 @@ namespace UI
 
         #endregion
 
+        #region 卡片点击事件
+        // 卡片点击事件
+        private void AddOnClickEvent(GameObject card, UnityEngine.Events.UnityAction callBack)
+        {
+            // 为卡片添加点击事件
+            if (card == null) return;
+
+            EventTrigger trigger = card.GetComponent<EventTrigger>();
+            if (trigger == null)
+                trigger = card.AddComponent<EventTrigger>();
+
+            // 点击事件
+            EventTrigger.Entry clickEntry = new EventTrigger.Entry();
+            clickEntry.eventID = EventTriggerType.PointerClick;
+            clickEntry.callback.AddListener((data) => callBack?.Invoke());
+            trigger.triggers.Add(clickEntry);
+        }
+
+        //点击回调处理
+        private void OnCardPointerClick()
+        {
+            Debug.Log("点击了卡片");
+        }
+
+
+        #endregion
+
         #region 动画处理
         private void OpenMagicUpgradePanelAnim()
         {
@@ -407,6 +441,11 @@ namespace UI
             seq.Join(Card_3Effect.transform.DOMove(new Vector3(EndPoints[2].position.x, EndPoints[2].position.y, EndPoints[2].position.z - 1f), moveTime));
 
             yield return seq.WaitForCompletion();
+
+            RegisterCardHoverEvents();
+            AddOnClickEvent(Card_1, OnCardPointerClick);
+            AddOnClickEvent(Card_2, OnCardPointerClick);
+            AddOnClickEvent(Card_3, OnCardPointerClick);
             OnCardMoveToEndPositionComplete();
         }
 
@@ -415,6 +454,7 @@ namespace UI
         {
             Debug.Log("卡片移动到end位置");
         }
+
 
         //阴影背景1秒内透明度变化，协程
         private IEnumerator AnimateShadowAlpha()

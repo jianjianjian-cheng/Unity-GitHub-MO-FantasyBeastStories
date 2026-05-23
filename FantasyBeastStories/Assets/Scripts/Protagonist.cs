@@ -15,7 +15,6 @@ namespace Player
         [SerializeField] private float groundDistance = 0.2f; // 地面检测距离
         [Header("移动设置")]
         [SerializeField] private float moveSpeed = 5f; // 移动速度
-
         private Rigidbody rb; // 物理组件
         private Animator animator;// 动画组件
         [SerializeField] private SpriteRenderer spriteRenderer; // 渲染组件
