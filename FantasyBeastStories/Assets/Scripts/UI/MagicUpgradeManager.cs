@@ -37,6 +37,11 @@ namespace UI
         GameObject Card_3Effect;
         List<ParticleSystem> ThreeCardEffects;
 
+        //事件捕获层（透明Image覆盖层，确保鼠标事件不被子对象拦截）
+        GameObject Card_1Catcher;
+        GameObject Card_2Catcher;
+        GameObject Card_3Catcher;
+
         //魔法升级面板，以及面板下卡片的文字变量
         GameObject MagicUpgradePanel;
         GameObject Card_1;
@@ -51,6 +56,7 @@ namespace UI
         TextMeshProUGUI NameText_3;
         TextMeshProUGUI ContentText_3;
         TextMeshProUGUI QualityText_3;
+        private List<GameObject> Cards;
 
         //背景阴影
         private Image shadowImage;
@@ -65,6 +71,7 @@ namespace UI
         #endregion
         void Start()
         {
+            Cards = new List<GameObject>();
             OneCardEffects = new List<ParticleSystem>();
             TwoCardEffects = new List<ParticleSystem>();
             ThreeCardEffects = new List<ParticleSystem>();
@@ -103,6 +110,7 @@ namespace UI
             }
             else
             {
+                Cards.Add(Card_1);
                 //寻找该卡片卡片位置下的所有文字
                 NameText_1 = Card_1.transform.Find("NameText").GetComponent<TextMeshProUGUI>();
                 if (NameText_1 == null)
@@ -134,6 +142,7 @@ namespace UI
             }
             else
             {
+                Cards.Add(Card_2);
                 //寻找该卡片卡片位置下的所有文字
                 NameText_2 = Card_2.transform.Find("NameText").GetComponent<TextMeshProUGUI>();
                 if (NameText_2 == null)
@@ -164,6 +173,7 @@ namespace UI
             }
             else
             {
+                Cards.Add(Card_3);
                 //寻找该卡片卡片位置下的所有文字
                 NameText_3 = Card_3.transform.Find("NameText").GetComponent<TextMeshProUGUI>();
                 if (NameText_3 == null)
@@ -278,10 +288,38 @@ namespace UI
 
             //保存所有特效的原始Scale
             SaveOriginalScales();
+
+            //为每张卡片创建事件捕获层，确保鼠标事件不被子对象拦截
+            Card_1Catcher = CreateEventCatcher(Card_1);
+            Card_2Catcher = CreateEventCatcher(Card_2);
+            Card_3Catcher = CreateEventCatcher(Card_3);
         }
 
 
 
+
+        // 为卡片创建透明的事件捕获层，覆盖在所有子对象之上
+        // 确保鼠标射线始终命中捕获层而非子对象，避免悬停动画被文字等子对象拦截
+        private GameObject CreateEventCatcher(GameObject card)
+        {
+            if (card == null) return null;
+
+            GameObject catcher = new GameObject("EventCatcher");
+            catcher.transform.SetParent(card.transform, false);
+            catcher.transform.SetAsLastSibling();
+
+            Image img = catcher.AddComponent<Image>();
+            img.color = Color.clear;
+            img.raycastTarget = true;
+
+            RectTransform rt = catcher.GetComponent<RectTransform>();
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+
+            return catcher;
+        }
 
         //保存所有特效的原始Scale
         private void SaveOriginalScales()
@@ -311,23 +349,25 @@ namespace UI
 
         #region 鼠标悬停处理
 
-        // 为卡片添加鼠标悬停事件（在Initialize中调用）
+        // 为卡片添加鼠标悬停事件
         private void RegisterCardHoverEvents()
         {
-            AddHoverEffect(Card_1, 1.2f, 0.2f, OneCardEffects);
-            AddHoverEffect(Card_2, 1.2f, 0.2f, TwoCardEffects);
-            AddHoverEffect(Card_3, 1.2f, 0.2f, ThreeCardEffects);
+            AddHoverEffect(Card_1Catcher, Card_1, 1.2f, 0.2f, OneCardEffects);
+            AddHoverEffect(Card_2Catcher, Card_2, 1.2f, 0.2f, TwoCardEffects);
+            AddHoverEffect(Card_3Catcher, Card_3, 1.2f, 0.2f, ThreeCardEffects);
         }
 
         // 为单个卡片的特效列表添加悬停缩放效果
-        private void AddHoverEffect(GameObject card, float scaleMultiplier, float duration, List<ParticleSystem> effectList)
+        // catcher: 事件捕获层，用于接收鼠标事件
+        // card: 实际需要执行动画的卡片对象
+        private void AddHoverEffect(GameObject catcher, GameObject card, float scaleMultiplier, float duration, List<ParticleSystem> effectList)
         {
-            if (card == null) return;
+            if (catcher == null) return;
 
-            // 获取或添加EventTrigger组件
-            EventTrigger trigger = card.GetComponent<EventTrigger>();
+            // 获取或添加EventTrigger组件到捕获层
+            EventTrigger trigger = catcher.GetComponent<EventTrigger>();
             if (trigger == null)
-                trigger = card.AddComponent<EventTrigger>();
+                trigger = catcher.AddComponent<EventTrigger>();
 
             // 鼠标进入事件
             EventTrigger.Entry enterEntry = new EventTrigger.Entry();
@@ -346,7 +386,6 @@ namespace UI
         {
             card.transform.DOKill();
             card.transform.DOScale(scaleMultiplier, duration).SetEase(Ease.OutBack);
-            card.transform.SetAsLastSibling();
 
             // 基于原始Scale放大列表中每一个特效
             if (effectList != null)
@@ -386,55 +425,62 @@ namespace UI
 
         #region 卡片点击事件
         // 卡片点击事件
-        private void AddOnClickEvent(GameObject card, UnityEngine.Events.UnityAction callBack)
+        private void AddOnClickEvent(GameObject catcher, GameObject card)
         {
             // 为卡片添加点击事件
-            if (card == null) return;
+            if (catcher == null) return;
 
-            EventTrigger trigger = card.GetComponent<EventTrigger>();
+            EventTrigger trigger = catcher.GetComponent<EventTrigger>();
             if (trigger == null)
-                trigger = card.AddComponent<EventTrigger>();
+                trigger = catcher.AddComponent<EventTrigger>();
 
             // 点击事件
             EventTrigger.Entry clickEntry = new EventTrigger.Entry();
             clickEntry.eventID = EventTriggerType.PointerClick;
-            clickEntry.callback.AddListener((data) => callBack?.Invoke());
+            clickEntry.callback.AddListener((data) => OnCardPointerClick(card, catcher));
             trigger.triggers.Add(clickEntry);
         }
 
         //点击回调处理
-        private void OnCardPointerClick()
+        private void OnCardPointerClick(GameObject selectedCard, GameObject catcher)
         {
             Debug.Log("点击了卡片");
-            GameObject selectedCard = EventSystem.current.currentSelectedGameObject;
-            if (selectedCard != null)
+            if (selectedCard != null && catcher != null)
             {
-                StartCoroutine(RotateCard(selectedCard, 1f));
+                StartCoroutine(RotateCard(selectedCard, catcher, 1f));
             }
         }
         
-        //点击卡片后进行旋转的方法
-        private IEnumerator RotateCard(GameObject card, float rotationSpeed)
+        //点击卡片后进行一定的动画播放
+        private IEnumerator RotateCard(GameObject card, GameObject catcher, float rotationSpeed)
         {
-            EventTrigger trigger = card.GetComponent<EventTrigger>();
+            EventTrigger trigger = catcher.GetComponent<EventTrigger>();
             if (trigger == null)
             {
-                yield return null;
+                yield break;
             }
             trigger.enabled = false;
-            Sequence rotateSequence = DOTween.Sequence();
-            // 先旋转到90度（侧面对玩家）
-            rotateSequence.Append(card.transform.DORotate(new Vector3(0, 90, 0), 0.3f, RotateMode.Fast));
-    
-            // 更新卡片内容（如果需要显示升级后的信息）
-            rotateSequence.AppendCallback(() =>
+            Sequence seq = DOTween.Sequence();
+            float moveTime = 0.3f;
+            foreach (GameObject Card in Cards)
             {
-                // 在这里可以更新卡片显示的内容
-                UpdateCardContentAfterRotation(card);
-            });
-    
-            // 再旋转到0度（正面对玩家）
-            rotateSequence.Append(card.transform.DORotate(new Vector3(0, 0, 0), 0.3f, RotateMode.Fast));
+                if (Card != card)
+                {
+                    seq.Append(Card.transform.DOMove(StartPoint.position, moveTime));
+                    seq.Join(Card.transform.DOScale(Card.transform.localScale * 0.1f, moveTime));
+                }
+                else
+                {
+                    StartCoroutine(DelayMoveCard(Card, 0.4f));                      
+                }
+            }
+            yield return seq.WaitForCompletion();
+        }
+        
+        IEnumerator DelayMoveCard(GameObject card, float duration)
+        {
+            yield return new WaitForSeconds(duration);
+            card.transform.DOMove(EndPoints[1].position, 1f);
         }
 
         private void UpdateCardContentAfterRotation(GameObject card)
@@ -473,11 +519,10 @@ namespace UI
             seq.Join(Card_3Effect.transform.DOMove(new Vector3(EndPoints[2].position.x, EndPoints[2].position.y, EndPoints[2].position.z - 1f), moveTime));
 
             yield return seq.WaitForCompletion();
-
             RegisterCardHoverEvents();
-            AddOnClickEvent(Card_1, OnCardPointerClick);
-            AddOnClickEvent(Card_2, OnCardPointerClick);
-            AddOnClickEvent(Card_3, OnCardPointerClick);
+            AddOnClickEvent(Card_1Catcher, Card_1);
+            AddOnClickEvent(Card_2Catcher, Card_2);
+            AddOnClickEvent(Card_3Catcher, Card_3);
             OnCardMoveToEndPositionComplete();
         }
 
