@@ -7,14 +7,24 @@ namespace Items
     public class DropItemBase : MonoBehaviour
     {
         [Header("掉落参数")]
-        [SerializeField] private float explosionForce = 3f;
-        [SerializeField] private float upwardForce = 4f;
-        [SerializeField] private float lifeTime = 2f;
-        [SerializeField] private float flyToPlayerSpeed = 5f;
+        [SerializeField]
+        private float explosionForce = 3f;
+
+        [SerializeField]
+        private float upwardForce = 4f;
+
+        [SerializeField]
+        private float lifeTime = 2f;
+
+        [SerializeField]
+        private float flyToPlayerSpeed = 5f;
 
         [Header("拾取弹开参数")]
-        [SerializeField] private float pushBackForce = 3f;      // 向后弹开的力度
-        [SerializeField] private float pushBackDelay = 0.2f;    // 弹开后延迟多久开始飞向玩家
+        [SerializeField]
+        private float pushBackForce = 3f; // 向后弹开的力度
+
+        [SerializeField]
+        private float pushBackDelay = 0.2f; // 弹开后延迟多久开始飞向玩家
 
         private Rigidbody rb;
         private GameObject moveTarget;
@@ -26,10 +36,7 @@ namespace Items
             rb = GetComponent<Rigidbody>();
         }
 
-        protected virtual void Start()
-        {
-
-        }
+        protected virtual void Start() { }
 
         protected virtual void Update()
         {
@@ -67,9 +74,10 @@ namespace Items
 
         private void ApplyExplosionEffect()
         {
-            if (rb == null) return;
+            if (rb == null)
+                return;
 
-            Debug.LogWarning("ApplyExplosionEffect");
+            // Debug.LogWarning("ApplyExplosionEffect");
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
 
@@ -83,13 +91,18 @@ namespace Items
         public void ExplodeAtPosition(Vector3 centerPosition, float radius = 1f)
         {
             transform.position = centerPosition + Random.insideUnitSphere * radius;
-            transform.position = new Vector3(transform.position.x, centerPosition.y, transform.position.z);
+            transform.position = new Vector3(
+                transform.position.x,
+                centerPosition.y,
+                transform.position.z
+            );
             ApplyExplosionEffect();
         }
 
         public virtual void HandlePickupEnter(GameObject player)
         {
-            if (isFlyingToPlayer) return;
+            if (isFlyingToPlayer)
+                return;
 
             moveTarget = player;
 
@@ -128,7 +141,10 @@ namespace Items
 
         protected virtual void OnReachPlayer()
         {
-            ObjectPoolManager.instance.ReturnToPool(ObjectPoolConst.ExperienceBall_BluePool, gameObject);
+            ObjectPoolManager.instance.ReturnToPool(
+                ObjectPoolConst.ExperienceBall_BluePool,
+                gameObject
+            );
         }
     }
 }

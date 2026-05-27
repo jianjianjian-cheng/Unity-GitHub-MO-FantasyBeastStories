@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
+using Charactors.Attribute;
 using Manager;
 using UnityEngine;
 
@@ -8,28 +6,22 @@ namespace Enemies
 {
     public class Skeleton : AttackableEnemy
     {
-        protected override void OnEnable()
+        protected override void Awake()
         {
-            base.OnEnable();
-            RegisterDamageEvent();
-        }
-
-        protected override void OnDisable()
-        {
-            base.OnDisable();
-            UnregisterDamageEvent();
-        }
-
-        protected override void EnterDie()
-        {
-            base.EnterDie();
+            base.Awake();
         }
 
         protected override void DropExperience()
         {
             base.DropExperience();
-            Vector3 spawnPosition = transform.position + Vector3.up * 0.5f; // 调整生成位置，使经验球稍微悬浮在敌人上方
-            ObjectPoolManager.instance.GetFromPoolAndActivate(ObjectPoolConst.ExperienceBall_BluePool, spawnPosition);
+            Vector3 spawnPosition = transform.position + Vector3.up * 0.5f;
+            ObjectPoolManager.instance.GetFromPoolAndActivate(
+                ObjectPoolConst.ExperienceBall_BluePool,
+                spawnPosition
+            );
         }
+
+        // 指定该怪物回收到骷髅池
+        protected override string GetPoolName() => MonsterPoolConst.Skeleton;
     }
 }

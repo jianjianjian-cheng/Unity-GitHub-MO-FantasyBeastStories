@@ -15,27 +15,59 @@ namespace Enemies
             Idle,
             Run,
             Attack,
-            Die
+            Die,
         }
-        [SerializeField] protected Animator animator;
-        [SerializeField] protected Rigidbody rb;
-        [SerializeField] protected AttributeEnemyBase attribute;
+
+        [SerializeField]
+        protected Animator animator;
+
+        [SerializeField]
+        protected Rigidbody rb;
+
+        [SerializeField]
+        protected AttributeEnemyBase attribute;
 
         protected GameObject PlayerTarget;
-        [SerializeField] protected EnemyState currentState;
 
-        void Awake()
+        [SerializeField]
+        protected EnemyState currentState;
+
+        // 标记是否已初始化
+        private bool isInitialized = false;
+
+        // 标记是否已注册伤害事件，防止重复注册
+        private bool isDamageEventRegistered = false;
+
+        protected virtual void Awake()
         {
-            attribute = new AttributeEnemyBase();
+            attribute = new AttributeEnemyBase(30, 30, 50, 2);
         }
 
         protected virtual void Start()
         {
+            InitializeEnemy();
+        }
+
+        // 初始化方法，从池中取出时也会调用
+        protected virtual void InitializeEnemy()
+        {
+            if (!isInitialized)
+            {
+                // 首次初始化
+                RegisterDamageEvent();
+                isInitialized = true;
+            }
             TransitionToState(EnemyState.Idle);
         }
 
         protected virtual void Update()
         {
+            // 如果已死亡，不执行更新逻辑
+            if (currentState == EnemyState.Die)
+            {
+                return;
+            }
+
             switch (currentState)
             {
                 case EnemyState.Idle:
@@ -76,8 +108,10 @@ namespace Enemies
                 PlayerTarget = players[0];
                 for (int i = 1; i < players.Count; i++)
                 {
-                    if (Vector3.Distance(transform.position, players[i].transform.position) <
-                        Vector3.Distance(transform.position, PlayerTarget.transform.position))
+                    if (
+                        Vector3.Distance(transform.position, players[i].transform.position)
+                        < Vector3.Distance(transform.position, PlayerTarget.transform.position)
+                    )
                     {
                         PlayerTarget = players[i];
                     }
@@ -134,8 +168,12 @@ namespace Enemies
         protected virtual void EnterIdle()
         {
             TrackPlayer();
-            animator.SetBool("isRun", false);
+            if (animator != null)
+            {
+                animator.SetBool("isRun", false);
+            }
         }
+
         protected virtual void UpdateIdle()
         {
             if (PlayerTarget)
@@ -148,16 +186,18 @@ namespace Enemies
                 return;
             }
         }
-        protected virtual void ExitIdle()
-        {
 
-        }
+        protected virtual void ExitIdle() { }
 
         // ========== Run状态 ==========
         protected virtual void EnterRun()
         {
-            animator.SetBool("isRun", true);
+            if (animator != null)
+            {
+                animator.SetBool("isRun", true);
+            }
         }
+
         protected virtual void UpdateRun()
         {
             if (!PlayerTarget)
@@ -167,21 +207,43 @@ namespace Enemies
             else
             {
                 // 计算移动向量
-                Vector3 moveDirection = (PlayerTarget.transform.position - transform.position).normalized;
+                Vector3 moveDirection = (
+                    PlayerTarget.transform.position - transform.position
+                ).normalized;
                 // 移动敌人
-                rb.MovePosition(transform.position + moveDirection * attribute.moveSpeed * Time.deltaTime);
+                if (rb != null)
+                {
+                    rb.MovePosition(
+                        transform.position + moveDirection * attribute.moveSpeed * Time.deltaTime
+                    );
+                }
                 // 旋转敌人朝向玩家,只在xz轴上旋转
-                transform.LookAt(new Vector3(PlayerTarget.transform.position.x, transform.position.y, PlayerTarget.transform.position.z));
+                if (PlayerTarget != null)
+                {
+                    transform.LookAt(
+                        new Vector3(
+                            PlayerTarget.transform.position.x,
+                            transform.position.y,
+                            PlayerTarget.transform.position.z
+                        )
+                    );
+                }
             }
         }
+
         protected virtual void ExitRun()
         {
-            animator.SetBool("isRun", false);
+            if (animator != null)
+            {
+                animator.SetBool("isRun", false);
+            }
         }
 
         // ========== Attack状态 ==========
         protected virtual void EnterAttack() { }
+
         protected virtual void UpdateAttack() { }
+
         protected virtual void ExitAttack() { }
 
         // ========== Die状态 ==========
@@ -193,18 +255,35 @@ namespace Enemies
                 rb.velocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
             }
-            animator.SetTrigger("die");
+
+            if (animator != null)
+            {
+                animator.SetTrigger("die");
+            }
+
             DropExperience();
-            Invoke(nameof(DestorySelf), 3f); // 3秒后销毁敌人对象
+
+            // 使用对象池回收而不是直接销毁
+            Invoke(nameof(ReturnToPool), 3f);
         }
+
         protected virtual void UpdateDie() { }
+
         protected virtual void ExitDie() { }
         #endregion
 
-        protected virtual void DestorySelf()
+        // 返回对象池（子类可重写以指定池名）
+        protected virtual void ReturnToPool()
         {
-            Destroy(gameObject);
+            MonsterPoolManager.instance.Despawn(GetPoolName(), gameObject);
         }
+
+        // 获取对象池名称（子类重写以指定自己所属的池）
+        protected virtual string GetPoolName()
+        {
+            return MonsterPoolConst.Skeleton;
+        }
+
         public virtual EnemyState GetCurrentState()
         {
             return currentState;
@@ -217,17 +296,36 @@ namespace Enemies
 
         protected virtual void OnEnable()
         {
+            // 从对象池取出时重新初始化
+            if (isInitialized)
+            {
+                InitializeEnemy();
+            }
         }
 
         protected virtual void OnDisable()
         {
+            // 取消所有Invoke调用
+            CancelInvoke();
+
+            // 停止所有协程
+            StopAllCoroutines();
+
+            // 取消事件注册
+            UnregisterDamageEvent();
         }
 
         protected virtual void RegisterDamageEvent()
         {
+            if (isDamageEventRegistered)
+                return; // 防止重复注册
             if (EventManager.instance)
             {
-                EventManager.instance.RegisterEventComplex(EventNames.DamageReceived, OnDamageReceived);
+                EventManager.instance.RegisterEventComplex(
+                    EventNames.DamageReceived,
+                    OnDamageReceived
+                );
+                isDamageEventRegistered = true;
             }
             else
             {
@@ -236,19 +334,30 @@ namespace Enemies
                 EventManager eventManager = eventManagerObj.AddComponent<EventManager>();
                 eventManager.RegisterEventComplex(EventNames.DamageReceived, OnDamageReceived);
                 EventManager.instance = eventManager;
+                isDamageEventRegistered = true;
             }
         }
 
         protected virtual void UnregisterDamageEvent()
         {
+            if (!isDamageEventRegistered)
+                return; // 未注册则不需要注销
             if (EventManager.instance)
             {
-                EventManager.instance.UnRegisterEventComplex(EventNames.DamageReceived, OnDamageReceived);
+                EventManager.instance.UnRegisterEventComplex(
+                    EventNames.DamageReceived,
+                    OnDamageReceived
+                );
+                isDamageEventRegistered = false;
             }
         }
 
         protected virtual void OnDamageReceived(EventArgsBase args)
         {
+            if (attribute.GetIsDie())
+            {
+                return;
+            }
             DamageEventArgs damageEventArgs = args as DamageEventArgs;
             if (damageEventArgs == null)
             {
@@ -271,9 +380,25 @@ namespace Enemies
             damageEventArgs.CalculateFinalDamageValue();
             damageEventArgs.finalDamageValue = Mathf.Ceil(damageEventArgs.finalDamageValue);
             attribute.TakeDamage(damageEventArgs.finalDamageValue);
+            Debug.Log(
+                "最终伤害为："
+                    + damageEventArgs.finalDamageValue
+                    + "是否死亡:"
+                    + attribute.GetIsDie()
+            );
             if (GameManager.isTest)
             {
-                ObjectPoolManager.instance.GetFromPoolAndActivate(ObjectPoolConst.DamageNumPool, transform.position).GetComponent<DamageNum>().Play(damageEventArgs.finalDamageValue, transform.position, damageEventArgs.isCritical);
+                ObjectPoolManager
+                    .instance.GetFromPoolAndActivate(
+                        ObjectPoolConst.DamageNumPool,
+                        transform.position
+                    )
+                    .GetComponent<DamageNum>()
+                    .Play(
+                        damageEventArgs.finalDamageValue,
+                        transform.position,
+                        damageEventArgs.isCritical
+                    );
             }
             attribute.TakeDamageSpecial(damageEventArgs.damageType);
             if (attribute.GetIsDie())
@@ -286,6 +411,49 @@ namespace Enemies
         protected virtual void DropExperience()
         {
             Debug.Log("敌人死亡，掉落经验");
+        }
+
+        // 重置状态（对象池回收时调用）
+        public virtual void ResetState()
+        {
+            // 1. 取消所有Invoke和协程
+            CancelInvoke();
+            StopAllCoroutines();
+
+            // 2. 重置状态机
+            if (currentState == EnemyState.Die)
+            {
+                CancelInvoke(nameof(ReturnToPool));
+            }
+            currentState = EnemyState.Idle;
+
+            // 3. 重置动画
+            if (animator != null)
+            {
+                animator.ResetTrigger("die");
+                animator.SetBool("isRun", false);
+                animator.Rebind(); // 重置所有动画状态
+                animator.Update(0f); // 立即更新动画
+            }
+
+            // 4. 重置物理
+            if (rb != null)
+            {
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
+
+            // 5. 重置属性
+            if (attribute != null)
+            {
+                attribute.ResetAttribute();
+            }
+
+            // 6. 清除目标
+            PlayerTarget = null;
+
+            // 7. 重新注册事件（因为OnDisable中注销了）
+            RegisterDamageEvent();
         }
     }
 }

@@ -8,7 +8,8 @@ namespace Enemies
 {
     public class EnemiesGenorator : MonoBehaviourPun
     {
-        [SerializeField] GameObject testPrefab;
+        [SerializeField]
+        GameObject testPrefab;
         private bool isPhotonReady = false; // Photon是否准备就绪
         private float spawnInterval; // 生成间隔
         private float timer = 0f; // 计时器
@@ -18,21 +19,24 @@ namespace Enemies
         {
             spawnInterval = Random.Range(2f, 5f); // 随机生成间隔
         }
+
         void Update()
         {
-            if (!PhotonNetwork.IsMasterClient) return; // 只有房主执行生成逻辑
+            if (!PhotonNetwork.IsMasterClient)
+                return; // 只有房主执行生成逻辑
             if (!isPhotonReady)
             {
                 // 更清晰的方式
                 if (GameManager.isTest)
                 {
-                    canGenorate = true;  // 测试模式：无条件允许
+                    canGenorate = true; // 测试模式：无条件允许
                 }
                 else
                 {
-                    canGenorate = PhotonNetwork.IsConnectedAndReady &&
-                                  PhotonNetwork.InRoom &&
-                                  PhotonNetwork.IsMasterClient;
+                    canGenorate =
+                        PhotonNetwork.IsConnectedAndReady
+                        && PhotonNetwork.InRoom
+                        && PhotonNetwork.IsMasterClient;
                     if (canGenorate)
                     {
                         isPhotonReady = true;
@@ -41,7 +45,6 @@ namespace Enemies
             }
             if (canGenorate)
             {
-
                 if (timer >= spawnInterval)
                 {
                     SpawnEnemy();
@@ -56,8 +59,12 @@ namespace Enemies
 
         private void SpawnEnemy()
         {
+            if (!PhotonNetwork.IsMasterClient)
+            {
+                return;
+            }
             // 生成敌人
-            MonsterPoolManager.instance.SpawnMonster(MonsterPoolConst.SkeletonPool, transform.position, Quaternion.identity);
+            MonsterPoolManager.instance.Spawn(MonsterPoolConst.Skeleton, transform.position);
         }
     }
 }

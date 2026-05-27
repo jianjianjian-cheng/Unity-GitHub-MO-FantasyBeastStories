@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using DG.Tweening;
+using Manager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 
 namespace UI
 {
@@ -29,6 +32,7 @@ namespace UI
         #endregion
 
         #region UI对象
+        List<GameObject> CardEffects;
         GameObject GrossUpgradePanel;
         GameObject Card_1Effect;
         List<ParticleSystem> OneCardEffects;
@@ -71,6 +75,7 @@ namespace UI
         #endregion
         void Start()
         {
+            CardEffects = new List<GameObject>();
             Cards = new List<GameObject>();
             OneCardEffects = new List<ParticleSystem>();
             TwoCardEffects = new List<ParticleSystem>();
@@ -206,6 +211,7 @@ namespace UI
             }
             else
             {
+                CardEffects.Add(Card_1Effect);
                 //寻找该该卡片位置下的所有特效
                 foreach (Transform child in Card_1Effect.transform)
                 {
@@ -225,6 +231,7 @@ namespace UI
             }
             else
             {
+                CardEffects.Add(Card_2Effect);
                 //寻找该该卡片位置下的所有特效
                 foreach (Transform child in Card_2Effect.transform)
                 {
@@ -244,6 +251,7 @@ namespace UI
             }
             else
             {
+                CardEffects.Add(Card_3Effect);
                 //寻找该该卡片位置下的所有特效
                 foreach (Transform child in Card_3Effect.transform)
                 {
@@ -468,10 +476,17 @@ namespace UI
                 {
                     seq.Append(Card.transform.DOMove(StartPoint.position, moveTime));
                     seq.Join(Card.transform.DOScale(Card.transform.localScale * 0.1f, moveTime));
+                    GameObject effect = GetEffect(Card);
+                    //特效仅仅在x,y轴移动，不改变z轴位置
+                    if (effect != null)
+                    {
+                        seq.Join(effect.transform.DOMove(new Vector3(StartPoint.transform.position.x, StartPoint.transform.position.y, effect.transform.position.z), moveTime));
+                        seq.Join(effect.transform.DOScale(effect.transform.localScale * 0.1f, moveTime));
+                    }
                 }
                 else
                 {
-                    StartCoroutine(DelayMoveCard(Card, 0.4f));                      
+                    StartCoroutine(DelayMoveCard(Card, 0.4f));   
                 }
             }
             yield return seq.WaitForCompletion();
@@ -480,7 +495,44 @@ namespace UI
         IEnumerator DelayMoveCard(GameObject card, float duration)
         {
             yield return new WaitForSeconds(duration);
-            card.transform.DOMove(EndPoints[1].position, 1f);
+            card.transform.DOMove(EndPoints[1].position, duration);
+            GameObject effect = GetEffect(card);
+            if (effect != null)
+            {
+                effect.transform.DOMove(new Vector3(EndPoints[1].transform.position.x, EndPoints[1].transform.position.y, effect.transform.position.z), duration);
+                effect.transform.DOScale(effect.transform.localScale * 0.1f, duration);
+            }
+
+            yield return new WaitForSeconds(1f);
+            OnCardSelectionComplete();
+        }
+        
+        //选择完卡片后的处理
+        
+        private void OnCardSelectionComplete()
+        {
+            GamePlayingManager.instance.OnPlayerUpgradeChoiceConfirmed();
+        }
+        
+        //获取卡牌对应特效
+        private GameObject GetEffect(GameObject card)
+        {
+            string cardName = card.name;
+            //获取卡牌对应特效
+            foreach (GameObject effect in CardEffects)
+            {
+                switch (cardName)
+                {
+                    case "Card_1":
+                    return Card_1Effect;
+                    case "Card_2":
+                    return Card_2Effect;
+                    case "Card_3":
+                    return Card_3Effect;
+                }
+            }
+
+            return null;
         }
 
         private void UpdateCardContentAfterRotation(GameObject card)

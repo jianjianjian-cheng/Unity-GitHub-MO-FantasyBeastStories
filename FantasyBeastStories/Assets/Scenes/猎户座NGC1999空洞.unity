@@ -2435,7 +2435,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6764355703866427931, guid: 57525729c06505546ae848045aa1dd19, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 77.78074
+      value: 76.98
       objectReference: {fileID: 0}
     - target: {fileID: 6764355703866427931, guid: 57525729c06505546ae848045aa1dd19, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2443,7 +2443,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6764355703866427931, guid: 57525729c06505546ae848045aa1dd19, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 82.61296
+      value: 80.29
       objectReference: {fileID: 0}
     - target: {fileID: 6764355703866427931, guid: 57525729c06505546ae848045aa1dd19, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2650,7 +2650,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2943166597812424074, guid: 5337f55a35380bb46aabe1897116ff79, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4727717494980050526, guid: 5337f55a35380bb46aabe1897116ff79, type: 3}
       propertyPath: m_Layer
@@ -11154,7 +11154,7 @@ MonoBehaviour:
   lobbyButton: {fileID: 0}
   spawnPoints: []
   isStayLobbyInspector: 0
-  isTestInspector: 1
+  isTestInspector: 0
 --- !u!4 &536211031
 Transform:
   m_ObjectHideFlags: 0
@@ -21432,8 +21432,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d7f3b6ef887a7248a35a77c8f35d5e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SkeletonPrefab: {fileID: 3480699876331511206, guid: 57525729c06505546ae848045aa1dd19, type: 3}
-  monsterConfigs: []
+  poolConfigs:
+  - poolName: SkeletonPool
+    prefab: {fileID: 3480699876331511206, guid: 57525729c06505546ae848045aa1dd19, type: 3}
+    preloadCount: 10
 --- !u!4 &1075204671
 Transform:
   m_ObjectHideFlags: 0
@@ -26946,7 +26948,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2943166597812424074, guid: 5337f55a35380bb46aabe1897116ff79, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4727717494980050526, guid: 5337f55a35380bb46aabe1897116ff79, type: 3}
       propertyPath: m_Layer
@@ -30367,7 +30369,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2943166597812424074, guid: 5337f55a35380bb46aabe1897116ff79, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4727717494980050526, guid: 5337f55a35380bb46aabe1897116ff79, type: 3}
       propertyPath: m_Layer
@@ -31424,7 +31426,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2943166597812424074, guid: 5337f55a35380bb46aabe1897116ff79, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4727717494980050526, guid: 5337f55a35380bb46aabe1897116ff79, type: 3}
       propertyPath: m_Layer
@@ -40712,6 +40714,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1858373374}
   - component: {fileID: 1858373375}
+  - component: {fileID: 1858373376}
   m_Layer: 0
   m_Name: GamePlayingManager
   m_TagString: Untagged
@@ -40749,6 +40752,28 @@ MonoBehaviour:
   experienceSlider: {fileID: 2546343530324888095}
   levelText: {fileID: 861993119}
   smoothSpeed: 5
+--- !u!114 &1858373376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1858373373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 17
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1861574931
 GameObject:
   m_ObjectHideFlags: 0
@@ -78832,7 +78857,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!223 &1807832879012551910
 Canvas:
   m_ObjectHideFlags: 0
@@ -86744,7 +86769,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2943166597812424074, guid: 5337f55a35380bb46aabe1897116ff79, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

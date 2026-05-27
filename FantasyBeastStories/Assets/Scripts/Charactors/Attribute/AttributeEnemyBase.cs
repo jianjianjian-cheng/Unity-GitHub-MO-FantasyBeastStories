@@ -2,21 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace Charactors.Attribute
 {
     public class AttributeEnemyBase
     {
         //基本属性
-        [SerializeField] public float maxHealth = 100f;
-        [SerializeField] public float currentHealth = 100f;
-        [SerializeField] public float attackPower = 50f;
-        [SerializeField] public float moveSpeed = 2f;
+        public float maxHealth = 100f;
+        public float currentHealth = 100f;
+        public float attackPower = 50f;
+        public float moveSpeed = 2f;
         public bool isDead = false;
+
+        public AttributeEnemyBase(
+            float maxHealth,
+            float currentHealth,
+            float attackPower,
+            float moveSpeed
+        )
+        {
+            this.maxHealth = maxHealth;
+            this.currentHealth = currentHealth;
+            this.attackPower = attackPower;
+            this.moveSpeed = moveSpeed;
+            isDead = false;
+        }
+
         public virtual bool GetIsDie()
         {
             return isDead;
         }
+
         public virtual void SetIsDie(bool value)
         {
             isDead = value;
@@ -26,6 +43,7 @@ namespace Charactors.Attribute
         public virtual void TakeDamage(float damage)
         {
             currentHealth -= damage;
+            Debug.Log("当前生命值: " + currentHealth + " / " + maxHealth);
             if (currentHealth <= 0)
             {
                 Die();
@@ -75,6 +93,7 @@ namespace Charactors.Attribute
         {
             moveSpeed = newMoveSpeed;
         }
+
         public virtual void Die()
         {
             SetIsDie(true);
@@ -97,6 +116,12 @@ namespace Charactors.Attribute
         public float GetAttackPower()
         {
             return attackPower;
+        }
+
+        public void ResetAttribute()
+        {
+            currentHealth = maxHealth;
+            isDead = false;
         }
     }
 }
