@@ -1,21 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using Enemies;
+using Items;
 using Photon.Pun;
 using UnityEngine;
 
 namespace Manager
 {
     /// <summary>
-    /// 怪物对象池管理器
+    /// 统一网络对象池管理器（怪物 + 掉落物）
     /// 用法：
-    ///   生成怪物：MonsterPoolManager.instance.Spawn(MonsterPoolConst.Skeleton, position);
-    ///   回收怪物：MonsterPoolManager.instance.Despawn(MonsterPoolConst.Skeleton, gameObject);
+    ///   生成怪物：NetworkObjectPoolManager.instance.Spawn(NetworkObjectPoolConst.Skeleton, position);
+    ///   回收怪物：NetworkObjectPoolManager.instance.Despawn(NetworkObjectPoolConst.Skeleton, gameObject);
+    ///   生成掉落物：NetworkObjectPoolManager.instance.Spawn(NetworkObjectPoolConst.ExperienceBall_Blue, position);
+    ///   回收掉落物：NetworkObjectPoolManager.instance.Despawn(NetworkObjectPoolConst.ExperienceBall_Blue, gameObject);
     /// </summary>
-    public class MonsterPoolManager : MonoBehaviourPunCallbacks, IPunPrefabPool
+    public class NetworkObjectPoolManager : MonoBehaviourPunCallbacks, IPunPrefabPool
     {
-        // ===================== 单例 =====================
-        public static MonsterPoolManager instance;
+        #region 单例模式
+
+        public static NetworkObjectPoolManager instance;
 
         void Awake()
         {
@@ -27,12 +31,13 @@ namespace Manager
             else
                 Destroy(gameObject);
         }
+        #endregion
 
         // ===================== Inspector 配置 =====================
         [System.Serializable]
         public class PoolConfig
         {
-            [Tooltip("与 MonsterPoolConst 中常量保持一致")]
+            [Tooltip("与 NetworkObjectPoolConst 中常量保持一致")]
             public string poolName;
             public GameObject prefab;
 
@@ -40,7 +45,7 @@ namespace Manager
             public int preloadCount = 5;
         }
 
-        [Header("怪物池配置（在 Inspector 中添加）")]
+        [Header("网络对象池配置（在 Inspector 中添加）")]
         [SerializeField]
         private List<PoolConfig> poolConfigs = new List<PoolConfig>();
 
@@ -83,19 +88,19 @@ namespace Manager
             {
                 if (cfg.prefab == null)
                 {
-                    Debug.LogWarning($"[MonsterPool] {cfg.poolName} 未配置预制体");
+                    Debug.LogWarning($"[NetworkObjectPool] {cfg.poolName} 未配置预制体");
                     continue;
                 }
                 prefabs[cfg.poolName] = cfg.prefab;
                 pools[cfg.poolName] = new Queue<GameObject>();
                 Preload(cfg.poolName, cfg.preloadCount);
             }
-            Debug.Log("[MonsterPool] 初始化完成");
+            Debug.Log("[NetworkObjectPool] 初始化完成");
         }
 
         // ===================== 公共接口 =====================
 
-        /// <summary>生成怪物，自动处理测试模式与网络模式</summary>
+        /// <summary>生成对象，自动处理测试模式与网络模式</summary>
         public GameObject Spawn(string poolName, Vector3 position, Quaternion rotation = default)
         {
             if (rotation == default)
@@ -106,21 +111,21 @@ namespace Manager
 
             if (!PhotonNetwork.IsMasterClient)
             {
-                Debug.LogWarning("[MonsterPool] 只有房主可以生成怪物");
+                Debug.LogWarning("[NetworkObjectPool] 只有房主可以生成网络对象");
                 return null;
             }
             return PhotonNetwork.Instantiate(poolName, position, rotation);
         }
 
-        /// <summary>回收怪物，支持延迟回收</summary>
-        public void Despawn(string poolName, GameObject monster, float delay = 0f)
+        /// <summary>回收对象，支持延迟回收</summary>
+        public void Despawn(string poolName, GameObject obj, float delay = 0f)
         {
-            if (monster == null)
+            if (obj == null)
                 return;
             if (delay > 0f)
-                StartCoroutine(DespawnDelay(poolName, monster, delay));
+                StartCoroutine(DespawnDelay(poolName, obj, delay));
             else
-                DespawnNow(poolName, monster);
+                DespawnNow(poolName, obj);
         }
 
         /// <summary>回收该池内所有激活中的怪物</summary>
@@ -131,14 +136,25 @@ namespace Manager
             if (!prefabs.TryGetValue(poolName, out var prefab))
                 return;
 
-            foreach (var obj in FindObjectsOfType<EnemyBase>())
+            // 尝试匹配怪物
+            foreach (var enemy in FindObjectsOfType<EnemyBase>())
             {
-                if (obj != null && obj.gameObject.activeSelf && obj.name.Contains(prefab.name))
-                    DespawnNow(poolName, obj.gameObject);
+                if (
+                    enemy != null
+                    && enemy.gameObject.activeSelf
+                    && enemy.name.Contains(prefab.name)
+                )
+                    DespawnNow(poolName, enemy.gameObject);
+            }
+            // 尝试匹配掉落物
+            foreach (var item in FindObjectsOfType<DropItemBase>())
+            {
+                if (item != null && item.gameObject.activeSelf && item.name.Contains(prefab.name))
+                    DespawnNow(poolName, item.gameObject);
             }
         }
 
-        /// <summary>回收所有池的怪物</summary>
+        /// <summary>回收所有池的对象</summary>
         public void DespawnAll()
         {
             foreach (var poolName in new List<string>(prefabs.Keys))
@@ -150,15 +166,18 @@ namespace Manager
         /// <summary>Photon 调用：必须返回未激活的对象，Photon 自行激活</summary>
         public GameObject Instantiate(string prefabId, Vector3 position, Quaternion rotation)
         {
-            // 怪物走对象池
+            // 库内对象（怪物/掉落物）走对象池
             if (prefabs.ContainsKey(prefabId))
                 return GetFromPool(prefabId, position, rotation, activateOnGet: false);
 
-            // 非怪物（如玩家）回退到默认 Resources 加载
+            // 非库内对象（如玩家）回退到默认 Resources 加载
             var prefab = Resources.Load<GameObject>(prefabId);
             if (prefab != null)
                 return Object.Instantiate(prefab, position, rotation);
 
+            Debug.LogError(
+                $"[NetworkObjectPool] 无法实例化: {prefabId}，未在对象池或 Resources 中找到"
+            );
             return null;
         }
 
@@ -175,21 +194,20 @@ namespace Manager
 
         // ===================== 内部方法 =====================
 
-        private IEnumerator DespawnDelay(string poolName, GameObject monster, float delay)
+        private IEnumerator DespawnDelay(string poolName, GameObject obj, float delay)
         {
             yield return new WaitForSeconds(delay);
-            DespawnNow(poolName, monster);
+            DespawnNow(poolName, obj);
         }
 
-        private void DespawnNow(string poolName, GameObject monster)
+        private void DespawnNow(string poolName, GameObject obj)
         {
             // 无论测试模式还是网络模式，都直接本地回池
-            // 网络模式下不使用 PhotonNetwork.Destroy，因为它会先销毁子对象的网络组件，
-            // 导致子对象在入池前就“消失”
-            ReturnToPool(poolName, monster);
+            // 网络模式下不使用 PhotonNetwork.Destroy，因为它会先销毁子对象的网络组件
+            ReturnToPool(poolName, obj);
         }
 
-        public GameObject GetFromPool(
+        private GameObject GetFromPool(
             string poolName,
             Vector3 position,
             Quaternion rotation,
@@ -215,7 +233,7 @@ namespace Manager
                 }
             }
 
-            // 池空了则动态创建（始终返回未激活状态，让调用方决定）
+            // 池空了则动态创建
             if (prefabs.TryGetValue(poolName, out var prefab))
             {
                 var newObj = Object.Instantiate(prefab, position, rotation);
@@ -226,44 +244,48 @@ namespace Manager
                 return newObj;
             }
 
-            Debug.LogError($"[MonsterPool] 未找到预制体: {poolName}");
+            Debug.LogError($"[NetworkObjectPool] 未找到预制体: {poolName}");
             return null;
         }
 
-        private void ReturnToPool(string poolName, GameObject monster)
+        private void ReturnToPool(string poolName, GameObject obj)
         {
-            if (monster == null)
+            if (obj == null)
                 return;
 
-            // 重置状态
-            monster.SetActive(false);
-            monster.name = poolName; // 统一标记名称，方便 FindPoolName 匹配
-            monster.transform.SetParent(transform);
-            monster.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            // 重置对应组件状态
+            obj.GetComponent<EnemyBase>()?.ResetState();
+            obj.GetComponent<DropItemBase>()?.ResetState();
+            obj.SetActive(false);
+            obj.name = poolName; // 统一标记名称，方便 FindPoolName 匹配
+            obj.transform.SetParent(transform);
+            obj.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
 
-            var rb = monster.GetComponent<Rigidbody>();
+            var rb = obj.GetComponent<Rigidbody>();
             if (rb != null)
             {
                 rb.velocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
             }
 
-            monster.GetComponent<EnemyBase>()?.ResetState();
-
             if (!pools.ContainsKey(poolName))
                 pools[poolName] = new Queue<GameObject>();
-            pools[poolName].Enqueue(monster);
+            pools[poolName].Enqueue(obj);
         }
 
         private void Preload(string poolName, int count)
         {
             for (int i = 0; i < count; i++)
             {
+                // 预加载时先禁用 PhotonView，防止本地 Instantiate 触发 Photon 网络销毁流程
                 var obj = Object.Instantiate(prefabs[poolName], Vector3.zero, Quaternion.identity);
                 obj.name = poolName;
+                var photonView = obj.GetComponent<PhotonView>();
+                if (photonView != null)
+                    photonView.enabled = false;
                 ReturnToPool(poolName, obj);
             }
-            Debug.Log($"[MonsterPool] 预创建 {poolName} x{count}");
+            Debug.Log($"[NetworkObjectPool] 预创建 {poolName} x{count}");
         }
 
         /// <summary>通过对象名称反查所属池（回收时已统一设为 poolName）</summary>
@@ -280,7 +302,7 @@ namespace Manager
                     return kvp.Key;
             }
 
-            Debug.LogWarning($"[MonsterPool] FindPoolName 失败，无法识别对象: {obj.name}");
+            Debug.LogWarning($"[NetworkObjectPool] FindPoolName 失败，无法识别对象: {obj.name}");
             return null;
         }
 
@@ -307,11 +329,15 @@ namespace Manager
     }
 
     /// <summary>
-    /// 怪物对象池名称常量
+    /// 网络对象池名称常量
     /// 与 Inspector 中 PoolConfig.poolName 保持一致
     /// </summary>
-    public static class MonsterPoolConst
+    public static class NetworkObjectPoolConst
     {
+        // 掉落物
+        public const string ExperienceBall_Blue = "ExperienceBall_BluePool";
+
+        // 怪物
         public const string Skeleton = "SkeletonPool";
     }
 }

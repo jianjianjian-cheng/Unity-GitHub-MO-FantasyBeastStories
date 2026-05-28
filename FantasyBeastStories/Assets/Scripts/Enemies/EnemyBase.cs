@@ -275,13 +275,13 @@ namespace Enemies
         // 返回对象池（子类可重写以指定池名）
         protected virtual void ReturnToPool()
         {
-            MonsterPoolManager.instance.Despawn(GetPoolName(), gameObject);
+            NetworkObjectPoolManager.instance.Despawn(GetPoolName(), gameObject);
         }
 
         // 获取对象池名称（子类重写以指定自己所属的池）
         protected virtual string GetPoolName()
         {
-            return MonsterPoolConst.Skeleton;
+            return NetworkObjectPoolConst.Skeleton;
         }
 
         public virtual EnemyState GetCurrentState()

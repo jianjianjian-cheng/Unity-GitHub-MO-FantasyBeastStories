@@ -64,7 +64,7 @@ namespace Enemies
                 return;
             }
             // 生成敌人
-            MonsterPoolManager.instance.Spawn(MonsterPoolConst.Skeleton, transform.position);
+            NetworkObjectPoolManager.instance.Spawn(NetworkObjectPoolConst.Skeleton, transform.position);
         }
     }
 }

@@ -1,17 +1,22 @@
+using System.Collections;
+using System.Collections.Generic;
 using Charactors;
 using Manager;
 using Photon.Pun;
 using UnityEngine;
-using System.Collections.Generic;
-using System.Collections;
 
 namespace Other
 {
     public class SpawnPoint : MonoBehaviourPun, IPunObservable
     {
-        [SerializeField] public int Id;
-        [SerializeField] private bool isEmpty = true;
-        [SerializeField] private GameObject spawnFx;
+        [SerializeField]
+        public int Id;
+
+        [SerializeField]
+        private bool isEmpty = true;
+
+        [SerializeField]
+        private GameObject spawnFx;
 
         // 记录占用此生成点的玩家 ActorNumber
         private int occupiedByPlayer = -1;
@@ -67,10 +72,12 @@ namespace Other
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!other.gameObject.CompareTag("Player")) return;
+            if (!other.gameObject.CompareTag("Player"))
+                return;
 
             PhotonView playerPhotonView = other.GetComponent<PhotonView>();
-            if (playerPhotonView == null || !playerPhotonView.IsMine) return;
+            if (playerPhotonView == null || !playerPhotonView.IsMine)
+                return;
 
             Debug.Log($"玩家进入生成点: {gameObject.name}，ID: {Id}");
             StartCoroutine(PlayFxCoroutine());
@@ -88,10 +95,12 @@ namespace Other
 
         private void OnTriggerExit(Collider other)
         {
-            if (!other.gameObject.CompareTag("Player")) return;
+            if (!other.gameObject.CompareTag("Player"))
+                return;
 
             PhotonView playerPhotonView = other.GetComponent<PhotonView>();
-            if (playerPhotonView == null || !playerPhotonView.IsMine) return;
+            if (playerPhotonView == null || !playerPhotonView.IsMine)
+                return;
 
             Debug.Log($"玩家离开生成点: {gameObject.name}，ID: {Id}");
 
@@ -110,16 +119,25 @@ namespace Other
 
         private void SetOccupied(bool occupied, int playerActorNumber)
         {
-            if (GameManager.isTest) return;
-            if (isEmpty == !occupied && occupiedByPlayer == playerActorNumber) return;
+            if (GameManager.isTest)
+                return;
+            if (isEmpty == !occupied && occupiedByPlayer == playerActorNumber)
+                return;
 
             isEmpty = !occupied;
             occupiedByPlayer = playerActorNumber;
 
-            Debug.Log($"[SpawnPoint {Id}] 设置占用状态: isEmpty={isEmpty}, occupiedBy={occupiedByPlayer}");
+            Debug.Log(
+                $"[SpawnPoint {Id}] 设置占用状态: isEmpty={isEmpty}, occupiedBy={occupiedByPlayer}"
+            );
 
             // 通过 RPC 同步状态
-            photonView.RPC("RPC_UpdateSpawnPointState", RpcTarget.AllBuffered, isEmpty, occupiedByPlayer);
+            photonView.RPC(
+                "RPC_UpdateSpawnPointState",
+                RpcTarget.AllBuffered,
+                isEmpty,
+                occupiedByPlayer
+            );
 
             // 更新玩家属性
             if (occupied)
@@ -133,14 +151,16 @@ namespace Other
         }
 
         [PunRPC]
-        private void RPC_UpdateSpawnPointState(bool newIsEmpty, int newOccupiedBy)
+        public void RPC_UpdateSpawnPointState(bool newIsEmpty, int newOccupiedBy)
         {
             isEmpty = newIsEmpty;
             occupiedByPlayer = newOccupiedBy;
             networkIsEmpty = newIsEmpty;
             networkOccupiedBy = newOccupiedBy;
 
-            Debug.Log($"[SpawnPoint {Id}] RPC更新状态: isEmpty={isEmpty}, occupiedBy={occupiedByPlayer}");
+            Debug.Log(
+                $"[SpawnPoint {Id}] RPC更新状态: isEmpty={isEmpty}, occupiedBy={occupiedByPlayer}"
+            );
 
             // 通知 GameManager 更新生成点列表
             if (GameManager.instance != null)
@@ -153,17 +173,14 @@ namespace Other
         {
             var props = new ExitGames.Client.Photon.Hashtable
             {
-                { "CurrentSpawnPoint", spawnPointId }
+                { "CurrentSpawnPoint", spawnPointId },
             };
             PhotonNetwork.LocalPlayer.SetCustomProperties(props);
         }
 
         private void ClearPlayerSpawnPointProperty()
         {
-            var props = new ExitGames.Client.Photon.Hashtable
-            {
-                { "CurrentSpawnPoint", null }
-            };
+            var props = new ExitGames.Client.Photon.Hashtable { { "CurrentSpawnPoint", null } };
             PhotonNetwork.LocalPlayer.SetCustomProperties(props);
         }
 

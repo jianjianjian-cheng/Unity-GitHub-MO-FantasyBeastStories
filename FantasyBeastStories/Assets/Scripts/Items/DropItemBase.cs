@@ -139,10 +139,12 @@ namespace Items
             isFlyingToPlayer = true;
         }
 
+        public virtual void ResetState() { }
+
         protected virtual void OnReachPlayer()
         {
-            ObjectPoolManager.instance.ReturnToPool(
-                ObjectPoolConst.ExperienceBall_BluePool,
+            NetworkObjectPoolManager.instance.Despawn(
+                NetworkObjectPoolConst.ExperienceBall_Blue,
                 gameObject
             );
         }

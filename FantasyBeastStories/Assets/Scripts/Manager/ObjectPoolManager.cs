@@ -22,19 +22,29 @@ namespace Manager
             }
         }
 
-        private Dictionary<string, List<GameObject>> objectPools = new Dictionary<string, List<GameObject>>();
+        private Dictionary<string, List<GameObject>> objectPools =
+            new Dictionary<string, List<GameObject>>();
         private Dictionary<string, GameObject> prefabCache = new Dictionary<string, GameObject>();
 
-        [SerializeField] private GameObject testPrefab;
-        [SerializeField] private GameObject ImpactCannonCommonPrefab;
-        [SerializeField] private GameObject ImpactCannonHitCommonPrefab;
-        [SerializeField] private GameObject ImpactCannonTriggerPrefab;
-        [SerializeField] private GameObject FireFirePrefab;
-        [SerializeField] private GameObject DamageNumPrefab;
-        [SerializeField] private GameObject ExperienceBall_BluePrefab;
+        [SerializeField]
+        private GameObject testPrefab;
+
+        [SerializeField]
+        private GameObject ImpactCannonCommonPrefab;
+
+        [SerializeField]
+        private GameObject ImpactCannonHitCommonPrefab;
+
+        [SerializeField]
+        private GameObject ImpactCannonTriggerPrefab;
+
+        [SerializeField]
+        private GameObject FireFirePrefab;
+
+        [SerializeField]
+        private GameObject DamageNumPrefab;
 
         private const string ImpactCannonPath = "FX/ImpactCannon/";
-        private const string ExperienceBallsPath = "FX/ExperienceBalls/";
         private bool isPhotonReady = false;
 
         void Start()
@@ -58,7 +68,8 @@ namespace Manager
 
         void Update()
         {
-            if (GameManager.isTest) return;
+            if (GameManager.isTest)
+                return;
             if (!isPhotonReady && PhotonNetwork.IsConnectedAndReady && PhotonNetwork.InRoom)
             {
                 InitializePool();
@@ -78,7 +89,6 @@ namespace Manager
             AddMultipleToPool("ImpactCannonHitCommonPool", ImpactCannonHitCommonPrefab, 20);
             AddMultipleToPool("ImpactCannonTriggerPool", ImpactCannonTriggerPrefab, 10);
             AddMultipleToPool("DamageNumPool", DamageNumPrefab, 100);
-            AddMultipleToPool("ExperienceBall_BluePool", ExperienceBall_BluePrefab, 10);
         }
 
         private void CachePrefab(string key, GameObject prefab)
@@ -98,7 +108,8 @@ namespace Manager
             {
                 foreach (var obj in objectPools[poolName])
                 {
-                    if (obj != null) Destroy(obj);
+                    if (obj != null)
+                        Destroy(obj);
                 }
                 objectPools[poolName].Clear();
             }
@@ -152,7 +163,8 @@ namespace Manager
         /// </summary>
         public void ReturnToPool(string poolName, GameObject obj)
         {
-            if (obj == null) return;
+            if (obj == null)
+                return;
 
             if (objectPools.TryGetValue(poolName, out var pool) && pool.Contains(obj))
             {
@@ -251,7 +263,8 @@ namespace Manager
                 int count = 0;
                 foreach (var obj in pool)
                 {
-                    if (obj != null && obj.activeSelf) count++;
+                    if (obj != null && obj.activeSelf)
+                        count++;
                 }
                 return count;
             }
@@ -267,6 +280,5 @@ namespace Manager
         public const string ImpactCannonTriggerPool = "ImpactCannonTriggerPool";
         public const string FireFirePool = "FireFirePool";
         public const string DamageNumPool = "DamageNumPool";
-        public const string ExperienceBall_BluePool = "ExperienceBall_BluePool";
     }
 }
