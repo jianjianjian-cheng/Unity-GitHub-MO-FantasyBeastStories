@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Atttibute;
+using CardData;
 using Events;
 using Photon.Pun;
 using UnityEngine;
@@ -11,9 +12,12 @@ namespace Manager
     public class EventManager : MonoBehaviour
     {
         #region 单例模式
-        [SerializeField] private bool isTest; // 是否测试模式
+        [SerializeField]
+        private bool isTest; // 是否测试模式
+
         //事件管理器(单例)
         public static EventManager instance;
+
         void Awake()
         {
             if (instance == null)
@@ -31,10 +35,7 @@ namespace Manager
 
         void Start()
         {
-            if (isTest)
-            {
-
-            }
+            if (isTest) { }
         }
 
         /// <summary>
@@ -42,18 +43,34 @@ namespace Manager
         /// </summary>
         /// <remarks> 无参数事件字典
         private Dictionary<string, Action> eventDictionary = new Dictionary<string, Action>();
+
         /// </remarks> 复杂参数事件字典
-        private Dictionary<string, Action<EventArgsBase>> eventDictionaryComplex = new Dictionary<string, Action<EventArgsBase>>();
-        private Dictionary<(int actorNumber, string key), AttributePlayerBase> attributePlayerBaseDictionary
-            = new Dictionary<(int, string), AttributePlayerBase>();
+        private Dictionary<string, Action<EventArgsBase>> eventDictionaryComplex =
+            new Dictionary<string, Action<EventArgsBase>>();
+        private Dictionary<
+            (int actorNumber, string key),
+            AttributePlayerBase
+        > attributePlayerBaseDictionary = new Dictionary<(int, string), AttributePlayerBase>();
+
         //返回bool组件字典
         private Dictionary<string, bool> boolDictionary = new Dictionary<string, bool>();
+
         //bool参数事件字典
-        private Dictionary<string, Action<bool>> boolEventDictionary = new Dictionary<string, Action<bool>>();
+        private Dictionary<string, Action<bool>> boolEventDictionary =
+            new Dictionary<string, Action<bool>>();
+
         //用于回收触发器和特效分开处理的攻击
         private Dictionary<string, Action> attackEventDictionary = new Dictionary<string, Action>();
+
         //双浮点数参数字典
-        private Dictionary<string, Action<float, float>> floatEventDictionary = new Dictionary<string, Action<float, float>>();
+        private Dictionary<string, Action<float, float>> floatEventDictionary =
+            new Dictionary<string, Action<float, float>>();
+
+        //CardConfigBase参数字典
+        private Dictionary<string, Action<CardConfigBase>> cardConfigDictionary =
+            new Dictionary<string, Action<CardConfigBase>>();
+
+        #region  事件相关的方法
 
         /// <summary>
         /// 注册事件
@@ -71,6 +88,7 @@ namespace Manager
                 eventDictionary.Add(eventName, action);
             }
         }
+
         /// <summary>
         /// 注销事件
         /// </summary>
@@ -83,6 +101,7 @@ namespace Manager
                 eventDictionary[eventName] -= action;
             }
         }
+
         /// <summary>
         /// 触发事件
         /// </summary>
@@ -108,6 +127,7 @@ namespace Manager
                 eventDictionaryComplex.Add(eventName, action);
             }
         }
+
         /// <summary> 注销复杂事件
         /// </summary>
         public void UnRegisterEventComplex(string eventName, Action<EventArgsBase> action)
@@ -117,6 +137,7 @@ namespace Manager
                 eventDictionaryComplex[eventName] -= action;
             }
         }
+
         /// <summary> 触发复杂事件
         /// </summary>
         public void TriggerEventComplex(string eventName, EventArgsBase args)
@@ -126,13 +147,18 @@ namespace Manager
                 eventDictionaryComplex[eventName]?.Invoke(args);
             }
         }
+
         /// <summary>
         /// 注册AttributePlayerBase组件
         /// </summary>
         /// <param name="actorNumber">玩家ActorNumber（Photon唯一标识）</param>
         /// <param name="key">属性Key（如"MainPlayer"、"Enemy"等）</param>
         /// <param name="attributePlayerBase">AttributePlayerBase组件</param>
-        public void RegisterAttributePlayerBase(int actorNumber, string key, AttributePlayerBase attributePlayerBase)
+        public void RegisterAttributePlayerBase(
+            int actorNumber,
+            string key,
+            AttributePlayerBase attributePlayerBase
+        )
         {
             var dictKey = (actorNumber, key);
             if (attributePlayerBaseDictionary.ContainsKey(dictKey))
@@ -200,6 +226,7 @@ namespace Manager
                 boolDictionary.Add(playerName, boolValue);
             }
         }
+
         /// <summary>
         /// 注销bool组件
         /// </summary>
@@ -211,6 +238,7 @@ namespace Manager
                 boolDictionary.Remove(playerName);
             }
         }
+
         /// <summary>
         /// 获取bool组件
         /// </summary>
@@ -228,7 +256,6 @@ namespace Manager
             }
         }
 
-
         /// <summary>
         /// 注册bool参数事件
         /// </summary>
@@ -245,6 +272,7 @@ namespace Manager
                 boolEventDictionary.Add(playerName, action);
             }
         }
+
         /// <summary>
         /// 注销bool参数事件
         /// </summary>
@@ -256,6 +284,7 @@ namespace Manager
                 boolEventDictionary.Remove(playerName);
             }
         }
+
         /// <summary>
         /// 触发bool参数事件
         /// </summary>
@@ -269,9 +298,8 @@ namespace Manager
             }
         }
 
-
         /// <summary>
-        /// 注册攻击事件 
+        /// 注册攻击事件
         /// 双浮点数参数事件注册方法
         /// </summary>
         public void RegisterFloatEvent(string eventName, Action<float, float> action)
@@ -285,6 +313,7 @@ namespace Manager
                 floatEventDictionary.Add(eventName, action);
             }
         }
+
         /// <summary>
         /// 注销双浮点数参数事件
         /// </summary>
@@ -296,6 +325,7 @@ namespace Manager
                 floatEventDictionary.Remove(eventName);
             }
         }
+
         /// <summary>
         /// 触发双浮点数参数事件
         /// </summary>
@@ -309,6 +339,34 @@ namespace Manager
                 floatEventDictionary[eventName]?.Invoke(MaxHP, CurrentHP);
             }
         }
+
+        //注册CardConfigBase参数字典的方法
+        public void RegisterIntEvent(string eventName, Action<CardConfigBase> action)
+        {
+            if (cardConfigDictionary.ContainsKey(eventName))
+            {
+                cardConfigDictionary[eventName] += action;
+            }
+        }
+
+        //注销事件
+        public void UnRegisterIntEvent(string eventName)
+        {
+            if (cardConfigDictionary.ContainsKey(eventName))
+            {
+                cardConfigDictionary.Remove(eventName);
+            }
+        }
+
+        //触发
+        public void TriggerCardConfigEvent(string eventName, CardConfigBase cardConfig)
+        {
+            if (cardConfigDictionary.ContainsKey(eventName))
+            {
+                cardConfigDictionary[eventName]?.Invoke(cardConfig);
+            }
+        }
+        #endregion
     }
 
     public class EventNames

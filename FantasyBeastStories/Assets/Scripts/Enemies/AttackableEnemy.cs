@@ -17,8 +17,10 @@ namespace Enemies
         [SerializeField] protected float attackDamage = 10f;
         [SerializeField] protected float attackCooldown = 1.5f;
         [SerializeField] protected LayerMask playerLayer;
+        [SerializeField] protected float pathUpdateInterval = 0.3f; // NavMesh寻路更新间隔（秒）
         private NavMeshAgent navMeshAgent;
         private List<GameObject> targetAttackPlayers;
+        private float pathUpdateTimer; // 寻路更新计时器
 
 
 
@@ -108,7 +110,20 @@ namespace Enemies
             if (navMeshAgent == null) return;
 
             navMeshAgent.isStopped = false;
-            navMeshAgent.SetDestination(PlayerTarget.transform.position);
+
+            // 限制寻路更新频率，避免每帧重算路径
+            pathUpdateTimer -= Time.deltaTime;
+            if (pathUpdateTimer <= 0f)
+            {
+                navMeshAgent.SetDestination(PlayerTarget.transform.position);
+                pathUpdateTimer = pathUpdateInterval;
+            }
+        }
+
+        protected override void EnterRun()
+        {
+            base.EnterRun();
+            pathUpdateTimer = 0f; // 进入Run状态时立即更新一次寻路
         }
 
 

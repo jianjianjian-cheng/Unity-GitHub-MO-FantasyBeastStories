@@ -94,7 +94,7 @@ Transform:
   m_GameObject: {fileID: 530324406809236268}
   serializedVersion: 2
   m_LocalRotation: {x: 0.3894374, y: -0, z: -0, w: 0.921053}
-  m_LocalPosition: {x: 0, y: 7.1738496, z: -6.96677}
+  m_LocalPosition: {x: 0, y: 7.5365148, z: -6.5933228}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -122,7 +122,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 6185504820556481681}
   m_Follow: {fileID: 6185504820556481681}
   m_Lens:
-    FieldOfView: 40
+    FieldOfView: 55
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -1464,11 +1464,11 @@ GameObject:
   - component: {fileID: 6185504820556481681}
   - component: {fileID: 2406815688151714110}
   - component: {fileID: 357811467520012096}
-  - component: {fileID: 6788475284787099532}
   - component: {fileID: 4690395130346847112}
   - component: {fileID: 4818412066041303934}
   - component: {fileID: 5025619477296063117}
   - component: {fileID: 1831531437251709587}
+  - component: {fileID: 8661408668765890891}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -1543,26 +1543,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.49156952, y: 0.9774722, z: 0.46574116}
   m_Center: {x: 0.005203247, y: 0.49092382, z: -0.0055098534}
---- !u!114 &6788475284787099532
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6817468453713878571}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c50604d134e22245b0d51dd033c8c2c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnPointIndex: 0
-  isOnlyShow: 0
-  virtualCamera: {fileID: 530324406809236268}
-  rb: {fileID: 2406815688151714110}
-  animator: {fileID: 4690395130346847112}
-  rotationSpeed: 6
-  isInLobby: 0
-  isReadyPanel: {fileID: 3618823515155754854}
 --- !u!95 &4690395130346847112
 Animator:
   serializedVersion: 5
@@ -1645,6 +1625,26 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &8661408668765890891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6817468453713878571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72764ce4f5641124181f87990d0420c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnPointIndex: 0
+  isOnlyShow: 0
+  virtualCamera: {fileID: 530324406809236268}
+  rb: {fileID: 2406815688151714110}
+  animator: {fileID: 4690395130346847112}
+  rotationSpeed: 6
+  isInLobby: 0
+  isReadyPanel: {fileID: 605483236507991687}
 --- !u!1 &6827718404249638607
 GameObject:
   m_ObjectHideFlags: 0
@@ -1935,7 +1935,7 @@ MonoBehaviour:
   m_ZDamping: 1
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
-  m_ScreenY: 0.5
+  m_ScreenY: 0.55
   m_CameraDistance: 10
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0

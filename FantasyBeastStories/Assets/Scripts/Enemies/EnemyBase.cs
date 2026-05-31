@@ -68,6 +68,14 @@ namespace Enemies
                 return;
             }
 
+            // 只有拥有者（Master Client）执行AI逻辑和移动
+            // 其他客户端通过Photon网络同步获取位置和动画
+            // 测试模式下无Photon网络，直接执行
+            if (!GameManager.isTest && !photonView.IsMine)
+            {
+                return;
+            }
+
             switch (currentState)
             {
                 case EnemyState.Idle:
@@ -98,29 +106,28 @@ namespace Enemies
                 }
                 return;
             }
-            List<GameObject> players = new List<GameObject>();
-            foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
-            {
-                players.Add(player);
-            }
-            if (players.Count > 0)
-            {
-                PlayerTarget = players[0];
-                for (int i = 1; i < players.Count; i++)
-                {
-                    if (
-                        Vector3.Distance(transform.position, players[i].transform.position)
-                        < Vector3.Distance(transform.position, PlayerTarget.transform.position)
-                    )
-                    {
-                        PlayerTarget = players[i];
-                    }
-                }
-            }
-            else
+
+            // 从 PlayerManager 获取缓存的玩家列表，避免每帧 FindGameObjectsWithTag
+            IReadOnlyList<GameObject> players = PlayerManager.instance != null
+                ? PlayerManager.instance.ActivePlayerObjects
+                : null;
+
+            if (players == null || players.Count == 0)
             {
                 PlayerTarget = null;
                 return;
+            }
+
+            PlayerTarget = players[0];
+            for (int i = 1; i < players.Count; i++)
+            {
+                if (players[i] == null) continue;
+                if (PlayerTarget == null ||
+                    Vector3.Distance(transform.position, players[i].transform.position)
+                    < Vector3.Distance(transform.position, PlayerTarget.transform.position))
+                {
+                    PlayerTarget = players[i];
+                }
             }
         }
 

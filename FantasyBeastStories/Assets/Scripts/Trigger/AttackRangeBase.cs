@@ -16,22 +16,32 @@ namespace Trigger
         protected List<GameObject> gameObjects = new List<GameObject>();
         protected GameObject targetEnemy;
 
-        [SerializeField] protected float offsetY = 0.5f;
-        [SerializeField] protected float attackInterval = 2f;
-        [SerializeField] protected float searchRadius = 5f; // 搜索半径（可用于可视化）
+        [SerializeField]
+        protected float offsetY = 0.5f;
+
+        [SerializeField]
+        protected float attackInterval = 2f;
+
+        [SerializeField]
+        protected float searchRadius = 5f; // 搜索半径（可用于可视化）
 
         private float attackTimer;
 
         public override void Start()
         {
             base.Start();
-            attributePlayerBase = EventManager.instance != null
-                ? EventManager.instance.GetLocalPlayerAttribute(EventNames.PlayerAttribute_Main)
-                : null;
+            attributePlayerBase =
+                EventManager.instance != null
+                    ? EventManager.instance.GetLocalPlayerAttribute(EventNames.PlayerAttribute_Main)
+                    : null;
         }
 
         public override void Update()
         {
+            if (!photonView.IsMine)
+            {
+                return;
+            }
             base.Update();
             Attack();
         }
@@ -43,7 +53,8 @@ namespace Trigger
         {
             UpdateEnemyTarget();
 
-            if (targetEnemy == null) return;
+            if (targetEnemy == null)
+                return;
 
             // 攻击间隔控制
             if (attackTimer > 0)
@@ -101,7 +112,8 @@ namespace Trigger
 
             foreach (GameObject enemy in gameObjects)
             {
-                if (enemy == null) continue;
+                if (enemy == null)
+                    continue;
 
                 float distance = Vector3.Distance(transform.position, enemy.transform.position);
                 if (distance < minDistance)
@@ -119,7 +131,11 @@ namespace Trigger
         /// </summary>
         protected Vector3 GetSpawnPosition()
         {
-            return new Vector3(transform.position.x, transform.position.y + offsetY, transform.position.z);
+            return new Vector3(
+                transform.position.x,
+                transform.position.y + offsetY,
+                transform.position.z
+            );
         }
 
         /// <summary>
@@ -127,7 +143,8 @@ namespace Trigger
         /// </summary>
         protected Vector3 GetTargetDirection()
         {
-            if (targetEnemy == null) return transform.forward;
+            if (targetEnemy == null)
+                return transform.forward;
 
             Vector3 pos = GetSpawnPosition();
             Vector3 direction = (targetEnemy.transform.position - pos).normalized;

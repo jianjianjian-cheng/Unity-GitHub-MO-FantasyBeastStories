@@ -2,17 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using CardData;
 using DG.Tweening;
 using Manager;
+using MyNamespace;
+using Photon.Pun;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace UI
 {
-    public class MagicUpgradeManager : MonoBehaviour
+    public class MagicUpgradeManager : MonoBehaviourPunCallbacks
     {
         #region 单例模式
         public static MagicUpgradeManager instance;
@@ -35,10 +39,13 @@ namespace UI
         List<GameObject> CardEffects;
         GameObject GrossUpgradePanel;
         GameObject Card_1Effect;
+        ParticleSystem[] effects_1 = new ParticleSystem[3];
         List<ParticleSystem> OneCardEffects;
         GameObject Card_2Effect;
+        ParticleSystem[] effects_2 = new ParticleSystem[3];
         List<ParticleSystem> TwoCardEffects;
         GameObject Card_3Effect;
+        ParticleSystem[] effects_3 = new ParticleSystem[3];
         List<ParticleSystem> ThreeCardEffects;
 
         //事件捕获层（透明Image覆盖层，确保鼠标事件不被子对象拦截）
@@ -71,8 +78,17 @@ namespace UI
         private Transform[] EndPoints;
 
         //保存特效原始Scale
-        private Dictionary<ParticleSystem, Vector3> originalEffectScales = new Dictionary<ParticleSystem, Vector3>();
+        private Dictionary<ParticleSystem, Vector3> originalEffectScales =
+            new Dictionary<ParticleSystem, Vector3>();
+
+        // 初始化完成标志
+        private bool isInitialized = false;
         #endregion
+
+        // 是否已确认
+        private bool isConfirmed = false;
+        private const string PLAYER_UPGRADE_READY_KEY = "UpgradeReady";
+
         void Start()
         {
             CardEffects = new List<GameObject>();
@@ -83,14 +99,14 @@ namespace UI
             Initialize();
         }
 
-        void Update()
-        {
-
-        }
+        void Update() { }
 
         private void Initialize()
         {
-            GrossUpgradePanel = transform.Find("GrossUpgradePanel").gameObject;
+            if (isInitialized)
+                return;
+
+            GrossUpgradePanel = transform.Find("GrossUpgradePanel")?.gameObject;
             if (GrossUpgradePanel == null)
             {
                 Debug.LogError("GrossUpgradePanel 未找到");
@@ -98,219 +114,136 @@ namespace UI
             }
 
             #region 寻找卡片
-            //寻找魔法升级面板
-            MagicUpgradePanel = GrossUpgradePanel.transform.Find("MagicUpgradePanel").gameObject;
+            MagicUpgradePanel = GrossUpgradePanel.transform.Find("MagicUpgradePanel")?.gameObject;
             if (MagicUpgradePanel == null)
             {
                 Debug.LogError("MagicUpgradePanel 未找到");
                 return;
             }
 
-            //寻找第一卡片
-            Card_1 = MagicUpgradePanel.transform.Find("Card_1").gameObject;
-            if (Card_1 == null)
+            // 批量查找卡片
+            var card1Transform = MagicUpgradePanel.transform.Find("Card_1");
+            var card2Transform = MagicUpgradePanel.transform.Find("Card_2");
+            var card3Transform = MagicUpgradePanel.transform.Find("Card_3");
+
+            if (card1Transform == null || card2Transform == null || card3Transform == null)
             {
-                Debug.LogError("Card_1 未找到");
+                Debug.LogError("卡片未找到");
                 return;
             }
-            else
-            {
-                Cards.Add(Card_1);
-                //寻找该卡片卡片位置下的所有文字
-                NameText_1 = Card_1.transform.Find("NameText").GetComponent<TextMeshProUGUI>();
-                if (NameText_1 == null)
-                {
-                    Debug.LogError("NameText_1 未找到");
-                    return;
-                }
-                ContentText_1 = Card_1.transform.Find("ContentText").GetComponent<TextMeshProUGUI>();
-                if (ContentText_1 == null)
-                {
-                    Debug.LogError("ContentText_1 未找到");
-                    return;
-                }
-                QualityText_1 = Card_1.transform.Find("QualityText").GetComponent<TextMeshProUGUI>();
-                if (QualityText_1 == null)
-                {
-                    Debug.LogError("QualityText_1 未找到");
-                    return;
-                }
-            }
 
-            //寻找第二卡片
-            Card_2 = MagicUpgradePanel.transform.Find("Card_2").gameObject;
+            Card_1 = card1Transform.gameObject;
+            Card_2 = card2Transform.gameObject;
+            Card_3 = card3Transform.gameObject;
 
-            if (Card_2 == null)
+            Cards.Add(Card_1);
+            Cards.Add(Card_2);
+            Cards.Add(Card_3);
+
+            // 批量获取文字组件
+            NameText_1 = card1Transform.Find("NameText")?.GetComponent<TextMeshProUGUI>();
+            ContentText_1 = card1Transform.Find("ContentText")?.GetComponent<TextMeshProUGUI>();
+            QualityText_1 = card1Transform.Find("QualityText")?.GetComponent<TextMeshProUGUI>();
+
+            NameText_2 = card2Transform.Find("NameText")?.GetComponent<TextMeshProUGUI>();
+            ContentText_2 = card2Transform.Find("ContentText")?.GetComponent<TextMeshProUGUI>();
+            QualityText_2 = card2Transform.Find("QualityText")?.GetComponent<TextMeshProUGUI>();
+
+            NameText_3 = card3Transform.Find("NameText")?.GetComponent<TextMeshProUGUI>();
+            ContentText_3 = card3Transform.Find("ContentText")?.GetComponent<TextMeshProUGUI>();
+            QualityText_3 = card3Transform.Find("QualityText")?.GetComponent<TextMeshProUGUI>();
+
+            if (
+                NameText_1 == null
+                || ContentText_1 == null
+                || QualityText_1 == null
+                || NameText_2 == null
+                || ContentText_2 == null
+                || QualityText_2 == null
+                || NameText_3 == null
+                || ContentText_3 == null
+                || QualityText_3 == null
+            )
             {
-                Debug.LogError("Card_2 未找到");
+                Debug.LogError("文字组件未找到");
                 return;
-            }
-            else
-            {
-                Cards.Add(Card_2);
-                //寻找该卡片卡片位置下的所有文字
-                NameText_2 = Card_2.transform.Find("NameText").GetComponent<TextMeshProUGUI>();
-                if (NameText_2 == null)
-                {
-                    Debug.LogError("NameText_2 未找到");
-                    return;
-                }
-                ContentText_2 = Card_2.transform.Find("ContentText").GetComponent<TextMeshProUGUI>();
-                if (ContentText_2 == null)
-                {
-                    Debug.LogError("ContentText_2 未找到");
-                    return;
-                }
-                QualityText_2 = Card_2.transform.Find("QualityText").GetComponent<TextMeshProUGUI>();
-                if (QualityText_2 == null)
-                {
-                    Debug.LogError("QualityText_2 未找到");
-                    return;
-                }
-            }
-
-            //寻找第三卡片
-            Card_3 = MagicUpgradePanel.transform.Find("Card_3").gameObject;
-            if (Card_3 == null)
-            {
-                Debug.LogError("Card_3 未找到");
-                return;
-            }
-            else
-            {
-                Cards.Add(Card_3);
-                //寻找该卡片卡片位置下的所有文字
-                NameText_3 = Card_3.transform.Find("NameText").GetComponent<TextMeshProUGUI>();
-                if (NameText_3 == null)
-                {
-                    Debug.LogError("NameText_3 未找到");
-                    return;
-                }
-                ContentText_3 = Card_3.transform.Find("ContentText").GetComponent<TextMeshProUGUI>();
-                if (ContentText_3 == null)
-                {
-                    Debug.LogError("ContentText_3 未找到");
-                    return;
-                }
-                QualityText_3 = Card_3.transform.Find("QualityText").GetComponent<TextMeshProUGUI>();
-                if (QualityText_3 == null)
-                {
-                    Debug.LogError("QualityText_3 未找到");
-                    return;
-                }
             }
             #endregion
 
             #region 寻找特效
-            //寻找卡片一位置的特效
-            Card_1Effect = MagicUpgradePanel.transform.Find("OneCardEffect").gameObject;
-            if (Card_1Effect == null)
+            // 批量查找特效
+            var oneCardEffect = MagicUpgradePanel.transform.Find("OneCardEffect");
+            var twoCardEffect = MagicUpgradePanel.transform.Find("TwoCardEffect");
+            var threeCardEffect = MagicUpgradePanel.transform.Find("ThreeCardEffect");
+
+            if (oneCardEffect == null || twoCardEffect == null || threeCardEffect == null)
             {
-                Debug.LogError("OneCardEffect 未找到");
+                Debug.LogError("特效未找到");
                 return;
-            }
-            else
-            {
-                CardEffects.Add(Card_1Effect);
-                //寻找该该卡片位置下的所有特效
-                foreach (Transform child in Card_1Effect.transform)
-                {
-                    if (child.GetComponent<ParticleSystem>() != null)
-                    {
-                        OneCardEffects.Add(child.GetComponent<ParticleSystem>());
-                    }
-                }
             }
 
-            //寻找卡片二位置的特效
-            Card_2Effect = MagicUpgradePanel.transform.Find("TwoCardEffect").gameObject;
-            if (Card_2Effect == null)
-            {
-                Debug.LogError("TwoCardEffect 未找到");
-                return;
-            }
-            else
-            {
-                CardEffects.Add(Card_2Effect);
-                //寻找该该卡片位置下的所有特效
-                foreach (Transform child in Card_2Effect.transform)
-                {
-                    if (child.GetComponent<ParticleSystem>() != null)
-                    {
-                        TwoCardEffects.Add(child.GetComponent<ParticleSystem>());
-                    }
-                }
-            }
+            Card_1Effect = oneCardEffect.gameObject;
+            Card_2Effect = twoCardEffect.gameObject;
+            Card_3Effect = threeCardEffect.gameObject;
 
-            //寻找卡片三位置的特效
-            Card_3Effect = MagicUpgradePanel.transform.Find("ThreeCardEffect").gameObject;
-            if (Card_3Effect == null)
-            {
-                Debug.LogError("ThreeCardEffect 未找到");
-                return;
-            }
-            else
-            {
-                CardEffects.Add(Card_3Effect);
-                //寻找该该卡片位置下的所有特效
-                foreach (Transform child in Card_3Effect.transform)
-                {
-                    if (child.GetComponent<ParticleSystem>() != null)
-                    {
-                        ThreeCardEffects.Add(child.GetComponent<ParticleSystem>());
-                    }
-                }
-            }
+            CardEffects.Add(Card_1Effect);
+            CardEffects.Add(Card_2Effect);
+            CardEffects.Add(Card_3Effect);
+
+            // 缓存特效组件
+            effects_1 = oneCardEffect.GetComponentsInChildren<ParticleSystem>();
+            effects_2 = twoCardEffect.GetComponentsInChildren<ParticleSystem>();
+            effects_3 = threeCardEffect.GetComponentsInChildren<ParticleSystem>();
+
+            foreach (ParticleSystem ps in effects_1)
+                OneCardEffects.Add(ps);
+            foreach (ParticleSystem ps in effects_2)
+                TwoCardEffects.Add(ps);
+            foreach (ParticleSystem ps in effects_3)
+                ThreeCardEffects.Add(ps);
             #endregion
 
             #region 其他元素
-            //寻找背景阴影
-            shadowImage = GrossUpgradePanel.transform.Find("Shadow").GetComponent<Image>();
-            if (shadowImage == null)
+            // 查找阴影
+            var shadowTransform = GrossUpgradePanel.transform.Find("Shadow");
+            if (shadowTransform != null)
             {
-                Debug.LogError("ShadowImage 未找到");
-                return;
+                shadowImage = shadowTransform.GetComponent<Image>();
             }
 
-            //寻找卡片动画相关位置
-            AnimPoints = GrossUpgradePanel.transform.Find("AnimPoints").gameObject;
-            if (AnimPoints == null)
+            // 查找动画点
+            AnimPoints = GrossUpgradePanel.transform.Find("AnimPoints")?.gameObject;
+            if (AnimPoints != null)
             {
-                Debug.LogError("AnimPoints 未找到");
-                return;
-            }
-            EndPoints = AnimPoints.GetComponentsInChildren<Transform>()
-            .Where(x => x.name == "EndPoint").ToArray();
-            if (EndPoints.Length < 3)
-            {
-                Debug.LogError("EndPoints 数量不足");
-                return;
-            }
-            StartPoint = AnimPoints.transform.Find("StartPoint").transform;
-            if (StartPoint == null)
-            {
-                Debug.LogError("StartPoint 未找到");
-                return;
+                StartPoint = AnimPoints.transform.Find("StartPoint");
+                EndPoints = AnimPoints
+                    .GetComponentsInChildren<Transform>()
+                    .Where(x => x.name == "EndPoint")
+                    .ToArray();
             }
             #endregion
 
             //保存所有特效的原始Scale
             SaveOriginalScales();
 
-            //为每张卡片创建事件捕获层，确保鼠标事件不被子对象拦截
+            //为每张卡片创建事件捕获层
             Card_1Catcher = CreateEventCatcher(Card_1);
             Card_2Catcher = CreateEventCatcher(Card_2);
             Card_3Catcher = CreateEventCatcher(Card_3);
+
+            isInitialized = true;
         }
 
-
-
-
-        // 为卡片创建透明的事件捕获层，覆盖在所有子对象之上
-        // 确保鼠标射线始终命中捕获层而非子对象，避免悬停动画被文字等子对象拦截
+        // 为卡片创建透明的事件捕获层
         private GameObject CreateEventCatcher(GameObject card)
         {
-            if (card == null) return null;
+            if (card == null)
+                return null;
+
+            // 检查是否已存在
+            var existingCatcher = card.transform.Find("EventCatcher");
+            if (existingCatcher != null)
+                return existingCatcher.gameObject;
 
             GameObject catcher = new GameObject("EventCatcher");
             catcher.transform.SetParent(card.transform, false);
@@ -332,21 +265,15 @@ namespace UI
         //保存所有特效的原始Scale
         private void SaveOriginalScales()
         {
-            foreach (var effect in OneCardEffects)
-            {
-                if (effect != null && !originalEffectScales.ContainsKey(effect))
-                {
-                    originalEffectScales[effect] = effect.transform.localScale;
-                }
-            }
-            foreach (var effect in TwoCardEffects)
-            {
-                if (effect != null && !originalEffectScales.ContainsKey(effect))
-                {
-                    originalEffectScales[effect] = effect.transform.localScale;
-                }
-            }
-            foreach (var effect in ThreeCardEffects)
+            originalEffectScales.Clear();
+            SaveEffectScales(OneCardEffects);
+            SaveEffectScales(TwoCardEffects);
+            SaveEffectScales(ThreeCardEffects);
+        }
+
+        private void SaveEffectScales(List<ParticleSystem> effects)
+        {
+            foreach (var effect in effects)
             {
                 if (effect != null && !originalEffectScales.ContainsKey(effect))
                 {
@@ -365,22 +292,30 @@ namespace UI
             AddHoverEffect(Card_3Catcher, Card_3, 1.2f, 0.2f, ThreeCardEffects);
         }
 
-        // 为单个卡片的特效列表添加悬停缩放效果
-        // catcher: 事件捕获层，用于接收鼠标事件
-        // card: 实际需要执行动画的卡片对象
-        private void AddHoverEffect(GameObject catcher, GameObject card, float scaleMultiplier, float duration, List<ParticleSystem> effectList)
+        private void AddHoverEffect(
+            GameObject catcher,
+            GameObject card,
+            float scaleMultiplier,
+            float duration,
+            List<ParticleSystem> effectList
+        )
         {
-            if (catcher == null) return;
+            if (catcher == null)
+                return;
 
-            // 获取或添加EventTrigger组件到捕获层
             EventTrigger trigger = catcher.GetComponent<EventTrigger>();
             if (trigger == null)
                 trigger = catcher.AddComponent<EventTrigger>();
 
+            // 清除现有事件
+            trigger.triggers.Clear();
+
             // 鼠标进入事件
             EventTrigger.Entry enterEntry = new EventTrigger.Entry();
             enterEntry.eventID = EventTriggerType.PointerEnter;
-            enterEntry.callback.AddListener((data) => OnCardPointerEnter(card, scaleMultiplier, duration, effectList));
+            enterEntry.callback.AddListener(
+                (data) => OnCardPointerEnter(card, scaleMultiplier, duration, effectList)
+            );
             trigger.triggers.Add(enterEntry);
 
             // 鼠标退出事件
@@ -390,12 +325,19 @@ namespace UI
             trigger.triggers.Add(exitEntry);
         }
 
-        private void OnCardPointerEnter(GameObject card, float scaleMultiplier, float duration, List<ParticleSystem> effectList)
+        private void OnCardPointerEnter(
+            GameObject card,
+            float scaleMultiplier,
+            float duration,
+            List<ParticleSystem> effectList
+        )
         {
+            if (card == null)
+                return;
+
             card.transform.DOKill();
             card.transform.DOScale(scaleMultiplier, duration).SetEase(Ease.OutBack);
 
-            // 基于原始Scale放大列表中每一个特效
             if (effectList != null)
             {
                 foreach (var effect in effectList)
@@ -410,12 +352,18 @@ namespace UI
             }
         }
 
-        private void OnCardPointerExit(GameObject card, float duration, List<ParticleSystem> effectList)
+        private void OnCardPointerExit(
+            GameObject card,
+            float duration,
+            List<ParticleSystem> effectList
+        )
         {
+            if (card == null)
+                return;
+
             card.transform.DOKill();
             card.transform.DOScale(Vector3.one, duration).SetEase(Ease.OutBack);
 
-            // 恢复到原始Scale
             if (effectList != null)
             {
                 foreach (var effect in effectList)
@@ -423,7 +371,9 @@ namespace UI
                     if (effect != null && originalEffectScales.ContainsKey(effect))
                     {
                         effect.transform.DOKill();
-                        effect.transform.DOScale(originalEffectScales[effect], duration).SetEase(Ease.OutBack);
+                        effect
+                            .transform.DOScale(originalEffectScales[effect], duration)
+                            .SetEase(Ease.OutBack);
                     }
                 }
             }
@@ -432,11 +382,10 @@ namespace UI
         #endregion
 
         #region 卡片点击事件
-        // 卡片点击事件
         private void AddOnClickEvent(GameObject catcher, GameObject card)
         {
-            // 为卡片添加点击事件
-            if (catcher == null) return;
+            if (catcher == null)
+                return;
 
             EventTrigger trigger = catcher.GetComponent<EventTrigger>();
             if (trigger == null)
@@ -449,18 +398,16 @@ namespace UI
             trigger.triggers.Add(clickEntry);
         }
 
-        //点击回调处理
         private void OnCardPointerClick(GameObject selectedCard, GameObject catcher)
         {
             Debug.Log("点击了卡片");
             if (selectedCard != null && catcher != null)
             {
-                StartCoroutine(RotateCard(selectedCard, catcher, 1f));
+                StartCoroutine(EndMoveCard(selectedCard, catcher, 1f));
             }
         }
-        
-        //点击卡片后进行一定的动画播放
-        private IEnumerator RotateCard(GameObject card, GameObject catcher, float rotationSpeed)
+
+        private IEnumerator EndMoveCard(GameObject card, GameObject catcher, float rotationSpeed)
         {
             EventTrigger trigger = catcher.GetComponent<EventTrigger>();
             if (trigger == null)
@@ -470,6 +417,7 @@ namespace UI
             trigger.enabled = false;
             Sequence seq = DOTween.Sequence();
             float moveTime = 0.3f;
+
             foreach (GameObject Card in Cards)
             {
                 if (Card != card)
@@ -477,21 +425,31 @@ namespace UI
                     seq.Append(Card.transform.DOMove(StartPoint.position, moveTime));
                     seq.Join(Card.transform.DOScale(Card.transform.localScale * 0.1f, moveTime));
                     GameObject effect = GetEffect(Card);
-                    //特效仅仅在x,y轴移动，不改变z轴位置
                     if (effect != null)
                     {
-                        seq.Join(effect.transform.DOMove(new Vector3(StartPoint.transform.position.x, StartPoint.transform.position.y, effect.transform.position.z), moveTime));
-                        seq.Join(effect.transform.DOScale(effect.transform.localScale * 0.1f, moveTime));
+                        seq.Join(
+                            effect.transform.DOMove(
+                                new Vector3(
+                                    StartPoint.transform.position.x,
+                                    StartPoint.transform.position.y,
+                                    effect.transform.position.z
+                                ),
+                                moveTime
+                            )
+                        );
+                        seq.Join(
+                            effect.transform.DOScale(effect.transform.localScale * 0.1f, moveTime)
+                        );
                     }
                 }
                 else
                 {
-                    StartCoroutine(DelayMoveCard(Card, 0.4f));   
+                    StartCoroutine(DelayMoveCard(Card, 0.4f));
                 }
             }
             yield return seq.WaitForCompletion();
         }
-        
+
         IEnumerator DelayMoveCard(GameObject card, float duration)
         {
             yield return new WaitForSeconds(duration);
@@ -499,47 +457,57 @@ namespace UI
             GameObject effect = GetEffect(card);
             if (effect != null)
             {
-                effect.transform.DOMove(new Vector3(EndPoints[1].transform.position.x, EndPoints[1].transform.position.y, effect.transform.position.z), duration);
+                effect.transform.DOMove(
+                    new Vector3(
+                        EndPoints[1].transform.position.x,
+                        EndPoints[1].transform.position.y,
+                        effect.transform.position.z
+                    ),
+                    duration
+                );
                 effect.transform.DOScale(effect.transform.localScale * 0.1f, duration);
             }
 
             yield return new WaitForSeconds(1f);
             OnCardSelectionComplete();
         }
-        
-        //选择完卡片后的处理
-        
+
         private void OnCardSelectionComplete()
         {
-            GamePlayingManager.instance.OnPlayerUpgradeChoiceConfirmed();
+            if (isConfirmed)
+            {
+                return;
+            }
+            isConfirmed = true;
+            if (GameManager.isTest)
+            {
+                CloseMagicUpgradePanel();
+                return;
+            }
+            ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
+            props.Add(PLAYER_UPGRADE_READY_KEY, true);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(props);
         }
-        
+
         //获取卡牌对应特效
         private GameObject GetEffect(GameObject card)
         {
+            if (card == null)
+                return null;
+
             string cardName = card.name;
-            //获取卡牌对应特效
-            foreach (GameObject effect in CardEffects)
+            switch (cardName)
             {
-                switch (cardName)
-                {
-                    case "Card_1":
+                case "Card_1":
                     return Card_1Effect;
-                    case "Card_2":
+                case "Card_2":
                     return Card_2Effect;
-                    case "Card_3":
+                case "Card_3":
                     return Card_3Effect;
-                }
+                default:
+                    return null;
             }
-
-            return null;
         }
-
-        private void UpdateCardContentAfterRotation(GameObject card)
-        {
-            //更新卡片图片显示背面
-        }
-
 
         #endregion
 
@@ -549,26 +517,49 @@ namespace UI
             StartCoroutine(AnimateShadowAlpha());
         }
 
-        //移动卡片到指定位置
         IEnumerator MoveCardEndToPosition()
         {
             Sequence seq = DOTween.Sequence();
             float moveTime = 0.3f;
+
             // ===== 第1步：发第1张牌 =====
             seq.Append(Card_1.transform.DOMove(EndPoints[0].position, moveTime));
-            //特效移动
-            //特效仅仅在x,y轴移动，不改变z轴位置
-            seq.Join(Card_1Effect.transform.DOMove(new Vector3(EndPoints[0].position.x, EndPoints[0].position.y, EndPoints[0].position.z - 1f), moveTime));
+            seq.Join(
+                Card_1Effect.transform.DOMove(
+                    new Vector3(
+                        EndPoints[0].position.x,
+                        EndPoints[0].position.y,
+                        Card_1Effect.transform.position.z
+                    ),
+                    moveTime
+                )
+            );
 
             // ===== 第2步：发第2张牌 =====
             seq.Append(Card_2.transform.DOMove(EndPoints[1].position, moveTime));
-            //特效移动
-            seq.Join(Card_2Effect.transform.DOMove(new Vector3(EndPoints[1].position.x, EndPoints[1].position.y, EndPoints[1].position.z - 1f), moveTime));
+            seq.Join(
+                Card_2Effect.transform.DOMove(
+                    new Vector3(
+                        EndPoints[1].position.x,
+                        EndPoints[1].position.y,
+                        Card_2Effect.transform.position.z
+                    ),
+                    moveTime
+                )
+            );
 
             // ===== 第3步：发第3张牌 =====
             seq.Append(Card_3.transform.DOMove(EndPoints[2].position, moveTime));
-            //特效移动
-            seq.Join(Card_3Effect.transform.DOMove(new Vector3(EndPoints[2].position.x, EndPoints[2].position.y, EndPoints[2].position.z - 1f), moveTime));
+            seq.Join(
+                Card_3Effect.transform.DOMove(
+                    new Vector3(
+                        EndPoints[2].position.x,
+                        EndPoints[2].position.y,
+                        Card_3Effect.transform.position.z
+                    ),
+                    moveTime
+                )
+            );
 
             yield return seq.WaitForCompletion();
             RegisterCardHoverEvents();
@@ -578,17 +569,43 @@ namespace UI
             OnCardMoveToEndPositionComplete();
         }
 
-        //卡片移动到end位置回调
         private void OnCardMoveToEndPositionComplete()
         {
             Debug.Log("卡片移动到end位置");
         }
 
+        public override void OnPlayerPropertiesUpdate(
+            Photon.Realtime.Player targetPlayer,
+            Hashtable changedProps
+        )
+        {
+            if (
+                !changedProps.ContainsKey(PLAYER_UPGRADE_READY_KEY) || !PhotonNetwork.IsMasterClient
+            )
+            {
+                return;
+            }
 
-        //阴影背景1秒内透明度变化，协程
+            if (CheckAllPlayersReady())
+            {
+                GamePlayingManager.instance.OnPlayerUpgradeChoiceConfirmed();
+            }
+        }
+
+        private bool CheckAllPlayersReady()
+        {
+            foreach (var player in PhotonNetwork.PlayerList)
+            {
+                if (!player.CustomProperties.ContainsKey(PLAYER_UPGRADE_READY_KEY))
+                    return false;
+                if (!(bool)player.CustomProperties[PLAYER_UPGRADE_READY_KEY])
+                    return false;
+            }
+            return true;
+        }
+
         private IEnumerator AnimateShadowAlpha()
         {
-            // 阴影背景1秒内透明度变化，协程
             float alpha = 0;
             while (alpha < 0.7f)
             {
@@ -599,10 +616,8 @@ namespace UI
             StartCoroutine(MoveCardEndToPosition());
         }
 
-        //阴影背景1秒内透明度变化，协程
         private IEnumerator AnimateShadowAlphaBack()
         {
-            // 阴影背景1秒内透明度变化，协程
             float alpha = 0.7f;
             while (alpha > 0)
             {
@@ -613,26 +628,203 @@ namespace UI
         }
         #endregion
 
+        //重置卡片的大小和位置
+        private void ResetCardState()
+        {
+            foreach (var card in Cards)
+            {
+                if (card == null)
+                    continue;
+
+                card.transform.DOKill();
+                card.transform.localScale = Vector3.one;
+                card.transform.position = new Vector3(
+                    StartPoint.position.x,
+                    StartPoint.position.y,
+                    card.transform.position.z
+                );
+                ResetEffectScale(card);
+                ResetEffectPosition(card);
+            }
+            ResetCatchers();
+        }
+
+        private void ResetEffectScale(GameObject card)
+        {
+            if (card == null)
+                return;
+
+            List<ParticleSystem> effectList = null;
+
+            switch (card.name)
+            {
+                case "Card_1":
+                    effectList = OneCardEffects;
+                    break;
+                case "Card_2":
+                    effectList = TwoCardEffects;
+                    break;
+                case "Card_3":
+                    effectList = ThreeCardEffects;
+                    break;
+            }
+
+            if (effectList != null)
+            {
+                foreach (var effect in effectList)
+                {
+                    if (effect != null && originalEffectScales.ContainsKey(effect))
+                    {
+                        effect.transform.DOKill();
+                        effect.transform.localScale = originalEffectScales[effect];
+                    }
+                }
+            }
+        }
+
+        private void ResetEffectPosition(GameObject card)
+        {
+            if (card == null)
+                return;
+
+            GameObject effect = GetEffect(card);
+            if (effect != null)
+            {
+                effect.transform.DOKill();
+                effect.transform.position = new Vector3(
+                    StartPoint.position.x,
+                    StartPoint.position.y,
+                    effect.transform.position.z
+                );
+            }
+        }
+
+        private void ResetCatchers()
+        {
+            ResetCatcher(Card_1Catcher);
+            ResetCatcher(Card_2Catcher);
+            ResetCatcher(Card_3Catcher);
+        }
+
+        private void ResetCatcher(GameObject catcher)
+        {
+            if (catcher == null)
+                return;
+
+            EventTrigger trigger = catcher.GetComponent<EventTrigger>();
+            if (trigger != null)
+            {
+                trigger.enabled = true;
+                trigger.triggers.Clear();
+            }
+        }
+
         //打开魔法升级面板
         public void OpenMagicUpgradePanel()
         {
-            // 打开魔法升级面板时，全局Bloom强度增加
             if (GlobalVolumeManager.instance != null)
-                GlobalVolumeManager.instance.SetBloomIntensity(15f);
+                GlobalVolumeManager.instance.SetBloomIntensity(8f);
+
             Debug.Log("打开魔法升级面板");
+
+            // 确保初始化完成
+            if (!isInitialized)
+            {
+                Initialize();
+                if (!isInitialized)
+                    return;
+            }
+
+            // 先获取数据再重置状态
+            var cardData = GetCardData();
+            ResetCardState();
             GrossUpgradePanel.SetActive(true);
             OpenMagicUpgradePanelAnim();
+            OpenPanelInit(cardData);
+        }
+
+        private void OpenPanelInit(CardConfigBase[] cardData)
+        {
+            isConfirmed = false;
+            ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
+            props.Add(PLAYER_UPGRADE_READY_KEY, false);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+            SetCardData(cardData);
         }
 
         //关闭魔法升级面板
         public void CloseMagicUpgradePanel()
         {
-            // 关闭魔法升级面板时，全局Bloom强度减少
             if (GlobalVolumeManager.instance != null)
                 GlobalVolumeManager.instance.SetBloomIntensity(5f);
+
             Debug.Log("关闭魔法升级面板");
             StartCoroutine(AnimateShadowAlphaBack());
             GrossUpgradePanel.SetActive(false);
         }
+
+        #region 获取卡牌
+
+        private void SetCardData(CardConfigBase[] threeCards)
+        {
+            if (threeCards == null || threeCards.Length < 3)
+                return;
+
+            SetSingleCardData(threeCards[0], NameText_1, ContentText_1, QualityText_1, effects_1);
+            SetSingleCardData(threeCards[1], NameText_2, ContentText_2, QualityText_2, effects_2);
+            SetSingleCardData(threeCards[2], NameText_3, ContentText_3, QualityText_3, effects_3);
+        }
+
+        private void SetSingleCardData(
+            CardConfigBase cardData,
+            TextMeshProUGUI nameText,
+            TextMeshProUGUI contentText,
+            TextMeshProUGUI qualityText,
+            ParticleSystem[] effects
+        )
+        {
+            if (cardData == null)
+                return;
+
+            nameText.text = cardData.Name;
+            string quality = cardData.Quality.ToString();
+
+            switch (quality)
+            {
+                case "普通":
+                    contentText.text = $"{cardData.Content}<color=#CCCCCC>{cardData.Value}</color>";
+                    qualityText.text = $"<color=#CCCCCC>{cardData.Quality}</color>";
+                    SetEffectActive(effects, 0);
+                    break;
+                case "史诗":
+                    contentText.text = $"{cardData.Content}<color=#800080>{cardData.Value}</color>";
+                    qualityText.text = $"<color=#800080>{cardData.Quality}</color>";
+                    SetEffectActive(effects, 1);
+                    break;
+                case "传说":
+                    contentText.text = $"{cardData.Content}<color=#FF4444>{cardData.Value}</color>";
+                    qualityText.text = $"<color=#FF4444>{cardData.Quality}</color>";
+                    SetEffectActive(effects, 2);
+                    break;
+            }
+        }
+
+        private void SetEffectActive(ParticleSystem[] effects, int activeIndex)
+        {
+            for (int i = 0; i < effects.Length; i++)
+            {
+                if (effects[i] != null)
+                {
+                    effects[i].gameObject.SetActive(i == activeIndex);
+                }
+            }
+        }
+
+        private CardConfigBase[] GetCardData()
+        {
+            return MagicUpgradeInfoManager.instance.GetThreeRandomCards();
+        }
+
+        #endregion
     }
 }

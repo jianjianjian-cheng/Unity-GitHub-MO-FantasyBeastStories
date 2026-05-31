@@ -29,21 +29,30 @@ namespace Manager
         // ========== 升级队列系统 ==========
         // 存储待处理的升级等级
         private Queue<int> pendingLevelUps = new Queue<int>();
+
         // 是否正在处理升级（有面板打开）
         private bool isProcessingLevelUp = false;
 
-        [SerializeField] private Slider experienceSlider;
-        [SerializeField] private Text levelText; //等级
+        [SerializeField]
+        private Slider experienceSlider;
+
+        [SerializeField]
+        private Text levelText; //等级
 
         //当前经验值
         private int currentExperience;
+
         //当前等级
         private int currentLevel;
+
         //升级需要的经验值
         private int upgradeExperience;
+
         // 平滑过渡相关
         private Coroutine smoothSliderCoroutine;
-        [SerializeField] private float smoothSpeed = 5f; // 过渡速度，可在Inspector中调整
+
+        [SerializeField]
+        private float smoothSpeed = 5f; // 过渡速度，可在Inspector中调整
 
         void Start()
         {
@@ -56,9 +65,8 @@ namespace Manager
         // 增加当前经验值
         public void AddExperience(int experience)
         {
-
             currentExperience += experience;
-            
+
             // 检查升级并生成队列
             CheckAndQueueUpgrades();
             // 启动平滑过渡
@@ -69,16 +77,19 @@ namespace Manager
                 StartLevelUpSequence();
             }
         }
-        
-        
+
         // 开始处理升级队列
         private void StartLevelUpSequence()
         {
-            //其他玩家并不处理升级
-            if (!PhotonNetwork.IsMasterClient)
+            if (!GameManager.isTest)
             {
-                return;
+                //其他玩家并不处理升级
+                if (!PhotonNetwork.IsMasterClient)
+                {
+                    return;
+                }
             }
+
             isProcessingLevelUp = true;
             // 处理第一个升级
             ProcessNextLevelUp();
@@ -105,9 +116,14 @@ namespace Manager
             // 等待一小段时间让过渡更流畅
             yield return new WaitForSeconds(1f);
             //所有人打开面板
+            if (GameManager.isTest)
+            {
+                OpenMagicUpgradePanel();
+                yield break;
+            }
             photonView.RPC("OpenMagicUpgradePanel", RpcTarget.All);
         }
-        
+
         //打开卡片选择面板
         [PunRPC]
         public void OpenMagicUpgradePanel()
@@ -118,11 +134,15 @@ namespace Manager
         //检查并生成升级队列
         private void CheckAndQueueUpgrades()
         {
-            //保护措施，防止其他玩家增加经验值导致的错误
-            if (!PhotonNetwork.IsMasterClient)
+            if (!GameManager.isTest)
             {
-                return;
+                //保护措施，防止其他玩家增加经验值导致的错误
+                if (!PhotonNetwork.IsMasterClient)
+                {
+                    return;
+                }
             }
+
             while (currentExperience >= upgradeExperience)
             {
                 // 扣除经验，提升等级
@@ -155,9 +175,9 @@ namespace Manager
         public void OnPlayerUpgradeChoiceConfirmed()
         {
             //通知所有人关闭选择面板
-            photonView.RPC("CloseMagicUpgradePanel", RpcTarget.All);    
+            photonView.RPC("CloseMagicUpgradePanel", RpcTarget.All);
         }
-        
+
         //关闭卡片选择面板
         [PunRPC]
         private void CloseMagicUpgradePanel()
@@ -183,7 +203,6 @@ namespace Manager
             ProcessNextLevelUp();
         }
 
-        
         // 平滑更新Slider
         private void UpdateSliderSmooth()
         {

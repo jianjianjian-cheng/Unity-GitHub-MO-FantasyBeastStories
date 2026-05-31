@@ -15,20 +15,34 @@ namespace Charactors
     public class PlayerController : MonoBehaviourPun
     {
         public int spawnPointIndex;
-        [SerializeField] protected bool isOnlyShow = false; // 是否只为显示角色而不用于其他操作
-        [SerializeField] protected GameObject virtualCamera; // 虚拟摄像机组件
+
+        [SerializeField]
+        protected bool isOnlyShow = false; // 是否只为显示角色而不用于其他操作
+
+        [SerializeField]
+        protected GameObject virtualCamera; // 虚拟摄像机组件
+
         [Header("移动设置")]
         protected float moveSpeed = 2.6f; // 移动速度
-        [SerializeField] protected Rigidbody rb; // 物理组件
-        [SerializeField] protected Animator animator;// 动画组件
+
+        [SerializeField]
+        protected Rigidbody rb; // 物理组件
+
+        [SerializeField]
+        protected Animator animator; // 动画组件
 
         [Header("旋转设置")]
-        [SerializeField] protected float rotationSpeed = 6f; // 旋转速度
+        [SerializeField]
+        protected float rotationSpeed = 6f; // 旋转速度
         protected AttributePlayerBase attributePlayerBase; // 玩家属性组件
         protected Vector3 movement; // 移动方向
         protected bool isRun; // 是否正在运行
-        [SerializeField] protected bool isInLobby; // 是否在大厅场景
-        [SerializeField] protected GameObject isReadyPanel; // 准备界面
+
+        [SerializeField]
+        protected bool isInLobby; // 是否在大厅场景
+
+        [SerializeField]
+        protected GameObject isReadyPanel; // 准备界面
         int localActorNumber; // 本地玩家ActorNumber
         int sceneIndex; // 场景索引
 
@@ -37,6 +51,7 @@ namespace Charactors
             isInLobby = GameManager.isStayLobby;
             attributePlayerBase = new AttributePlayerBase(35, 5, 500, moveSpeed, 1.1f, 0.5f);
         }
+
         protected virtual void Start()
         {
             if (!photonView.IsMine)
@@ -98,6 +113,11 @@ namespace Charactors
         protected virtual void OnEnable()
         {
             localActorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
+
+            // 注册玩家GameObject到PlayerManager（供敌人追踪使用，所有客户端都需要注册）
+            if (PlayerManager.instance != null)
+                PlayerManager.instance.RegisterPlayerObject(gameObject);
+
             if (EventManager.instance != null)
             {
                 EventManager.instance.RegisterAttributePlayerBase(
@@ -118,7 +138,8 @@ namespace Charactors
                 eventManager.RegisterAttributePlayerBase(
                     localActorNumber,
                     EventNames.PlayerAttribute_Main,
-                    attributePlayerBase);
+                    attributePlayerBase
+                );
                 eventManager.RegisterEventComplex(
                     EventNames.DamageReceiverPlayer,
                     OnDamageReceived
@@ -129,6 +150,10 @@ namespace Charactors
 
         protected virtual void OnDisable()
         {
+            // 从PlayerManager注销玩家GameObject
+            if (PlayerManager.instance != null)
+                PlayerManager.instance.UnregisterPlayerObject(gameObject);
+
             EventManager.instance.UnRegisterAttributePlayerBase(
                 localActorNumber,
                 EventNames.PlayerAttribute_Main
@@ -169,11 +194,15 @@ namespace Charactors
                 // 如果模型“面朝 +X”，要再转 90 度
                 targetRotation *= Quaternion.Euler(0f, 0f, 0f);
 
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
+                transform.rotation = Quaternion.Slerp(
+                    transform.rotation,
+                    targetRotation,
+                    rotationSpeed * Time.fixedDeltaTime
+                );
             }
         }
 
-        void OnDestroy()
+        protected virtual void OnDestroy()
         {
             // 当玩家对象被销毁时，通知生成点释放
             if (photonView.IsMine)
@@ -191,16 +220,20 @@ namespace Charactors
             }
         }
 
-        private void ClearSpawnPointOccupation()
+        protected virtual void ClearSpawnPointOccupation()
         {
-            if (!PhotonNetwork.IsConnected || PhotonNetwork.NetworkClientState == ClientState.Disconnecting)
+            if (
+                !PhotonNetwork.IsConnected
+                || PhotonNetwork.NetworkClientState == ClientState.Disconnecting
+            )
             {
                 Debug.LogWarning("[PlayerController] Photon 已断开连接，跳过清理生成点属性");
                 return;
             }
             if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("CurrentSpawnPoint"))
             {
-                int spawnPointId = (int)PhotonNetwork.LocalPlayer.CustomProperties["CurrentSpawnPoint"];
+                int spawnPointId = (int)
+                    PhotonNetwork.LocalPlayer.CustomProperties["CurrentSpawnPoint"];
                 SpawnPoint sp = GameManager.instance.GetSpawnPointById(spawnPointId);
                 if (sp != null && sp.GetOccupiedByPlayer() == PhotonNetwork.LocalPlayer.ActorNumber)
                 {
@@ -208,29 +241,37 @@ namespace Charactors
                 }
 
                 // 清除玩家属性
-                ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable() { { "CurrentSpawnPoint", null } };
+                ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable()
+                {
+                    { "CurrentSpawnPoint", null },
+                };
                 PhotonNetwork.LocalPlayer.SetCustomProperties(props);
             }
         }
 
         //触发HP变化事件
-        private void SetAndChangeHPUI()
+        protected virtual void SetAndChangeHPUI()
         {
             if (sceneIndex > 1)
             {
-                EventManager.instance.TriggerFloatEvent(EventNames.HPChanged, attributePlayerBase.GetMaxHealth(), attributePlayerBase.GetCurrentHealth());
+                EventManager.instance.TriggerFloatEvent(
+                    EventNames.HPChanged,
+                    attributePlayerBase.GetMaxHealth(),
+                    attributePlayerBase.GetCurrentHealth()
+                );
             }
         }
 
         //遭受伤害时触发的事件
-        private void OnDamageReceived(EventArgsBase args)
+        protected virtual void OnDamageReceived(EventArgsBase args)
         {
             DamageEventArgs damageEventArgs = args as DamageEventArgs;
             if (damageEventArgs.damgeTarget != gameObject)
             {
                 return;
             }
-            if (!photonView.IsMine) return;
+            if (!photonView.IsMine)
+                return;
             //向上取整
             int damage = Mathf.CeilToInt(damageEventArgs.baseDamageValue);
             int finalDamage = CalculateFinalDamage(damage);
@@ -240,27 +281,37 @@ namespace Charactors
             // 触发HP变化事件
             SetAndChangeHPUI();
             // 通知其他玩家我受到了伤害
-            if (GameManager.isTest) return;
-            photonView.RPC("NoticeOtherPlayerDamage", RpcTarget.Others, PlayerManager.instance.GetLocalPlayer().PlayerId.ToString(), attributePlayerBase.GetMaxHealth(), attributePlayerBase.GetCurrentHealth());
+            if (GameManager.isTest)
+                return;
+            photonView.RPC(
+                "NoticeOtherPlayerDamage",
+                RpcTarget.Others,
+                PlayerManager.instance.GetLocalPlayer().PlayerId.ToString(),
+                attributePlayerBase.GetMaxHealth(),
+                attributePlayerBase.GetCurrentHealth()
+            );
         }
 
         //根据防御伤害计算最终伤害
-        private int CalculateFinalDamage(int damage)
+        protected virtual int CalculateFinalDamage(int damage)
         {
             return damage - (int)attributePlayerBase.GetDefensePower();
         }
+
         //通知其他玩家我受到了伤害，让其更新UI
         [PunRPC]
-        private void NoticeOtherPlayerDamage(string playerId, float MaxHP, float CurrentHP)
+        protected virtual void NoticeOtherPlayerDamage(
+            string playerId,
+            float MaxHP,
+            float CurrentHP
+        )
         {
             // 更新其他玩家的血条数值
             TeamUIManager.instance.SetOtherPlayerSlider_HP(playerId, MaxHP, CurrentHP);
         }
 
-
-
         // 当玩家断开连接时
-        void OnApplicationQuit()
+        protected virtual void OnApplicationQuit()
         {
             ClearSpawnPointOccupation();
         }

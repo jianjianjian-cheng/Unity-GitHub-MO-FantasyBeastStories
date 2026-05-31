@@ -1,0 +1,40 @@
+[
+    {
+        "Name": "流光穿透",
+        "Content": "流光引的穿透提升",
+        "Value": 1,
+        "Quality": "传说",
+        "Stackable": true
+    },
+    {
+        "Name": "流光连射",
+        "Content": "流光引可以实现连射，连射次数提升",
+        "Value": 1,
+        "Quality": "传说",
+        "Stackable": true
+    },
+    {
+        "Name": "光荫强化",
+        "Content": "流光阴每第三次攻击，就释放一次强化攻击",
+        "Value": null,
+        "Quality": "传说",
+        "Stackable": false
+    },
+    {
+        "Name": "流光治愈",
+        "Content": "流光引每命中一个敌人，就有概率治疗生命值",
+        "Value": {
+            "Probability": 5,
+            "HealAmount": 30
+        },
+        "Quality": "传说",
+        "Stackable": true
+    },
+    {
+        "Name": "流光分裂",
+        "Content": "流光引命中敌人时，可以分裂为两个小流光引",
+        "Value": null,
+        "Quality": "传说",
+        "Stackable": false
+    }
+]

@@ -17,7 +17,7 @@ namespace Enemies
 
         void Start()
         {
-            spawnInterval = Random.Range(2f, 5f); // 随机生成间隔
+            spawnInterval = Random.Range(1f, 3f); // 随机生成间隔
         }
 
         void Update()
@@ -64,7 +64,10 @@ namespace Enemies
                 return;
             }
             // 生成敌人
-            NetworkObjectPoolManager.instance.Spawn(NetworkObjectPoolConst.Skeleton, transform.position);
+            NetworkObjectPoolManager.instance.Spawn(
+                NetworkObjectPoolConst.Skeleton,
+                transform.position
+            );
         }
     }
 }

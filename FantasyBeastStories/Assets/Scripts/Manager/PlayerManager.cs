@@ -28,6 +28,10 @@ namespace Manager
         // 存储所有玩家数据
         private Dictionary<string, PlayerData> playerDataDict = new Dictionary<string, PlayerData>();
 
+        // 缓存所有玩家GameObject，供敌人追踪使用，避免每帧 FindGameObjectsWithTag
+        private List<GameObject> activePlayerObjects = new List<GameObject>();
+        public IReadOnlyList<GameObject> ActivePlayerObjects => activePlayerObjects;
+
         // 公开的只读访问
         public IReadOnlyDictionary<string, PlayerData> AllPlayers => playerDataDict;
         public List<PlayerData> PlayerList => playerDataDict.Values.ToList();
@@ -182,6 +186,24 @@ namespace Manager
             Debug.Log("============================================");
         }
 
+
+        /// <summary>
+        /// 注册玩家GameObject（玩家OnEnable时调用）
+        /// </summary>
+        public void RegisterPlayerObject(GameObject playerObj)
+        {
+            if (playerObj != null && !activePlayerObjects.Contains(playerObj))
+                activePlayerObjects.Add(playerObj);
+        }
+
+        /// <summary>
+        /// 注销玩家GameObject（玩家OnDisable时调用）
+        /// </summary>
+        public void UnregisterPlayerObject(GameObject playerObj)
+        {
+            if (playerObj != null)
+                activePlayerObjects.Remove(playerObj);
+        }
 
         //返回除本地玩家外的其他玩家的ID列表
         public List<string> GetOtherPlayersIds()

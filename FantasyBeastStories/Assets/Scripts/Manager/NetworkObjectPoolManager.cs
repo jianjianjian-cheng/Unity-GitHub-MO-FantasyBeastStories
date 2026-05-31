@@ -236,11 +236,16 @@ namespace Manager
             // 池空了则动态创建
             if (prefabs.TryGetValue(poolName, out var prefab))
             {
+                //创建对象并且添加到对象池
                 var newObj = Object.Instantiate(prefab, position, rotation);
                 newObj.name = poolName;
                 newObj.SetActive(false);
+                // ✅ 不要放回池子，直接返回使用
+                // ✅ 尊重 activateOnGet 参数
                 if (activateOnGet)
                     newObj.SetActive(true);
+                else
+                    newObj.SetActive(false);
                 return newObj;
             }
 
