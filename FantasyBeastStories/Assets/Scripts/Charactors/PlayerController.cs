@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Atttibute;
+using CardData;
 using Cinemachine;
 using Events;
 using Manager;
@@ -314,6 +315,24 @@ namespace Charactors
         protected virtual void OnApplicationQuit()
         {
             ClearSpawnPointOccupation();
+        }
+
+        protected virtual void OnApplicationCard(CardConfigBase card)
+        {
+            if (!GameManager.isTest)
+            {
+                if (!photonView.IsMine)
+                {
+                    return;
+                }
+            }
+            Debug.LogWarning("应用了卡牌效果：" + card.Name + ":" + card.Content + card.Value);
+            switch (card.Name)
+            {
+                case "锋利的短剑":
+                    attributePlayerBase.AddAttackPower(8);
+                    break;
+            }
         }
     }
 }

@@ -1,26 +1,29 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using Other;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using UnityEngine.EventSystems;
-using UnityEngine.Rendering;
 using Cinemachine;
 using DG.Tweening;
-using System;
-using Photon.Pun;
 using Events;
 using ExitGames.Client.Photon.StructWrapping;
+using Other;
+using Photon.Pun;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Manager
 {
     public class GameManager : MonoBehaviour
     {
+        public string EventName;
+
         public static bool isOpenUI = false;
+
         //符文部分
-        private GameObject runeButton;//大厅打开符文面板
-        private GameObject RunePanel;//整个符文面板对象
+        private GameObject runeButton; //大厅打开符文面板
+        private GameObject RunePanel; //整个符文面板对象
         private List<GameObject> runeList = new List<GameObject>(); //符文图标按钮数组
         private GameObject EquipButton; //符文装备按钮
         private int[] currentEquippedRuneIds = new int[2]; //当前装备的符文ID数组
@@ -49,14 +52,22 @@ namespace Manager
         private GameObject selectedRuneListItem;
         private Sprite selectedButtonImage;
         private Sprite defaultButtonImage;
-        [SerializeField] public GameObject[] spawnPoints = { }; // 生成点列表
+
+        [SerializeField]
+        public GameObject[] spawnPoints = { }; // 生成点列表
         private Dictionary<int, SpawnPoint> spawnPointDict = new Dictionary<int, SpawnPoint>();
+
         //静态全局变量isTest，控制是否进入测试模式
         public static bool isTest = false; // 是否测试模式
         public static bool isStayLobby = true; // 是否在大厅lobby场景
-        [SerializeField] private bool isStayLobbyInspector; // 在Inspector面板中设置的是否在大厅场景
-        [SerializeField] private bool isTestInspector; // 在Inspector面板中设置的测试模式
+
+        [SerializeField]
+        private bool isStayLobbyInspector; // 在Inspector面板中设置的是否在大厅场景
+
+        [SerializeField]
+        private bool isTestInspector; // 在Inspector面板中设置的测试模式
         public static GameManager instance;
+
         void Awake()
         {
             isStayLobby = isStayLobbyInspector;
@@ -71,6 +82,7 @@ namespace Manager
                 Destroy(gameObject);
             }
         }
+
         void Start()
         {
             Intilize();
@@ -88,7 +100,8 @@ namespace Manager
 
         private void Intilize()
         {
-            if (isTest) return;
+            if (isTest)
+                return;
             EquipButton = Launcher.instance.GetInactiveObjectByName("EquipButton");
             MassionButton = GameObject.Find("MassionButton");
             runeButton = GameObject.Find("RuneButton");
@@ -107,7 +120,9 @@ namespace Manager
             //角色选择面板
             CharactorIll = Launcher.instance.GetInactiveObjectByName("CharactorIll");
             nextCharacterButton = Launcher.instance.GetInactiveObjectByName("nextCharacterButton");
-            previousCharacterButton = Launcher.instance.GetInactiveObjectByName("previousCharacterButton");
+            previousCharacterButton = Launcher.instance.GetInactiveObjectByName(
+                "previousCharacterButton"
+            );
             SwitchButton = Launcher.instance.GetInactiveObjectByName("SwitchButton");
             CharactorShowPosition = GameObject.Find("CharactorShowPosition");
 
@@ -118,32 +133,35 @@ namespace Manager
             previousCharacterButtonImage.transform.localScale = scale;
             SwitchCharactor(0); //默认角色为第一个角色
             //添加角色选择按钮的点击事件
-            previousCharacterButton.GetComponent<Button>().onClick.AddListener(() =>
-            {
-                int newIndex = currentCharactorIndex - 1;
-                if (newIndex < 0)
-                    newIndex = 0;
-                SwitchCharactor(newIndex);
-            });
+            previousCharacterButton
+                .GetComponent<Button>()
+                .onClick.AddListener(() =>
+                {
+                    int newIndex = currentCharactorIndex - 1;
+                    if (newIndex < 0)
+                        newIndex = 0;
+                    SwitchCharactor(newIndex);
+                });
 
-            nextCharacterButton.GetComponent<Button>().onClick.AddListener(() =>
-            {
-                int newIndex = currentCharactorIndex + 1;
-                if (newIndex >= 2)
-                    newIndex = 1;
-                SwitchCharactor(newIndex);
-            });
+            nextCharacterButton
+                .GetComponent<Button>()
+                .onClick.AddListener(() =>
+                {
+                    int newIndex = currentCharactorIndex + 1;
+                    if (newIndex >= 2)
+                        newIndex = 1;
+                    SwitchCharactor(newIndex);
+                });
             //添加切换按钮的点击事件
-            SwitchButton.GetComponent<Button>().onClick.AddListener(() =>
-            {
-                SwitchCharactorButtonClicked();
-            });
-
-
+            SwitchButton
+                .GetComponent<Button>()
+                .onClick.AddListener(() =>
+                {
+                    SwitchCharactorButtonClicked();
+                });
 
             //寻找符文插槽
             FindRuneIcons();
-
 
             //设置默认选中大厅按钮
             SetButtonSelected(lobbyButton);
@@ -162,7 +180,9 @@ namespace Manager
                     continue;
 
                 int index = i;
-                runeIcon.GetComponent<Button>().onClick.AddListener(() => OnRuneListItemClicked(runeList[index]));
+                runeIcon
+                    .GetComponent<Button>()
+                    .onClick.AddListener(() => OnRuneListItemClicked(runeList[index]));
             }
 
             if (runeList.Count > 0)
@@ -186,7 +206,12 @@ namespace Manager
                 HideRunePanel();
             }
 
-            if (Input.GetMouseButtonDown(0) && selectedRuneIcon != null && CanDeselectRuneIcons() && !IsPointerOverRuneIcon())
+            if (
+                Input.GetMouseButtonDown(0)
+                && selectedRuneIcon != null
+                && CanDeselectRuneIcons()
+                && !IsPointerOverRuneIcon()
+            )
             {
                 DeselectRuneIcons();
             }
@@ -223,10 +248,15 @@ namespace Manager
                 return;
             }
             Debug.Log($"装备符文: {runeSlot.RuneName}");
-            if (RuneIcon_1.transform.Find("Icon").GetComponent<Image>().sprite != selectedRuneListItem.transform.Find("Icon").GetComponent<Image>().sprite &&
-               RuneIcon_2.transform.Find("Icon").GetComponent<Image>().sprite != selectedRuneListItem.transform.Find("Icon").GetComponent<Image>().sprite)
+            if (
+                RuneIcon_1.transform.Find("Icon").GetComponent<Image>().sprite
+                    != selectedRuneListItem.transform.Find("Icon").GetComponent<Image>().sprite
+                && RuneIcon_2.transform.Find("Icon").GetComponent<Image>().sprite
+                    != selectedRuneListItem.transform.Find("Icon").GetComponent<Image>().sprite
+            )
             {
-                selectedRuneIcon.transform.Find("Icon").GetComponent<Image>().sprite = selectedRuneListItem.transform.Find("Icon").GetComponent<Image>().sprite;
+                selectedRuneIcon.transform.Find("Icon").GetComponent<Image>().sprite =
+                    selectedRuneListItem.transform.Find("Icon").GetComponent<Image>().sprite;
                 //记录当前符文id
                 if (selectedRuneIcon == RuneIcon_1)
                 {
@@ -341,7 +371,10 @@ namespace Manager
             isOpenUI = false;
             PostProcessVolume.weight = 0f;
             panelRect.DOKill();
-            panelRect.DOAnchorPosY(Screen.height, 0.3f).SetEase(Ease.InBack).OnComplete(() => RunePanel.SetActive(false));
+            panelRect
+                .DOAnchorPosY(Screen.height, 0.3f)
+                .SetEase(Ease.InBack)
+                .OnComplete(() => RunePanel.SetActive(false));
         }
 
         private void ShowCharactorPanel()
@@ -375,7 +408,10 @@ namespace Manager
             isOpenUI = false;
             PostProcessVolume.weight = 0f;
             panelRect.DOKill();
-            panelRect.DOAnchorPosY(-Screen.height, 0.3f).SetEase(Ease.InBack).OnComplete(() => CharactorPanel.SetActive(false));
+            panelRect
+                .DOAnchorPosY(-Screen.height, 0.3f)
+                .SetEase(Ease.InBack)
+                .OnComplete(() => CharactorPanel.SetActive(false));
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -407,10 +443,12 @@ namespace Manager
         {
             foreach (GameObject spawnPoint in spawnPoints)
             {
-                if (spawnPoint == null) continue;
+                if (spawnPoint == null)
+                    continue;
 
                 SpawnPoint sp = spawnPoint.GetComponent<SpawnPoint>();
-                if (sp == null) continue;
+                if (sp == null)
+                    continue;
 
                 if (sp.IsEmpty())
                 {
@@ -459,18 +497,24 @@ namespace Manager
             runeButton.GetComponent<Button>().interactable = button != runeButton;
             MassionButton.GetComponent<Button>().interactable = button != MassionButton;
             //设置图片
-            lobbyButton.GetComponent<Image>().sprite = button == lobbyButton ? selectedButtonImage : defaultButtonImage;
-            characterButton.GetComponent<Image>().sprite = button == characterButton ? selectedButtonImage : defaultButtonImage;
-            runeButton.GetComponent<Image>().sprite = button == runeButton ? selectedButtonImage : defaultButtonImage;
-            MassionButton.GetComponent<Image>().sprite = button == MassionButton ? selectedButtonImage : defaultButtonImage;
+            lobbyButton.GetComponent<Image>().sprite =
+                button == lobbyButton ? selectedButtonImage : defaultButtonImage;
+            characterButton.GetComponent<Image>().sprite =
+                button == characterButton ? selectedButtonImage : defaultButtonImage;
+            runeButton.GetComponent<Image>().sprite =
+                button == runeButton ? selectedButtonImage : defaultButtonImage;
+            MassionButton.GetComponent<Image>().sprite =
+                button == MassionButton ? selectedButtonImage : defaultButtonImage;
         }
 
         //设置RuneIcon为选中状态
         private void SetRuneIconSelected(GameObject button)
         {
             selectedRuneIcon = button;
-            RuneIcon_1.GetComponent<Image>().sprite = (button == RuneIcon_1) ? selectedButtonImage : defaultButtonImage;
-            RuneIcon_2.GetComponent<Image>().sprite = (button == RuneIcon_2) ? selectedButtonImage : defaultButtonImage;
+            RuneIcon_1.GetComponent<Image>().sprite =
+                (button == RuneIcon_1) ? selectedButtonImage : defaultButtonImage;
+            RuneIcon_2.GetComponent<Image>().sprite =
+                (button == RuneIcon_2) ? selectedButtonImage : defaultButtonImage;
 
             RuneIcon_1.transform.DOScale(button == RuneIcon_1 ? 1.1f : 1f, 0.2f);
             RuneIcon_2.transform.DOScale(button == RuneIcon_2 ? 1.1f : 1f, 0.2f);
@@ -504,14 +548,22 @@ namespace Manager
                     continue;
                 }
                 bool selected = runeIcon == button;
-                Debug.Log($"设置符文图标 '{runeIcon.name}' 的选中状态: {(selected ? "选中" : "未选中")}");
+                Debug.Log(
+                    $"设置符文图标 '{runeIcon.name}' 的选中状态: {(selected ? "选中" : "未选中")}"
+                );
                 runeIcon.transform.DOScale(selected ? 1.1f : 1f, 0.2f);
             }
             //添加点击符文图标后的逻辑显示符文详情
             RuneSlot runeSlot = button.GetComponent<RuneSlot>();
             if (runeSlot != null)
             {
-                EventArgsBase eventArgs = new RuneEquipArgs(runeSlot.slotId, runeSlot.RuneName, runeSlot.runePowers, runeSlot.specialPowerName, runeSlot.specialPowerDescription);
+                EventArgsBase eventArgs = new RuneEquipArgs(
+                    runeSlot.slotId,
+                    runeSlot.RuneName,
+                    runeSlot.runePowers,
+                    runeSlot.specialPowerName,
+                    runeSlot.specialPowerDescription
+                );
                 EventManager.instance.TriggerEventComplex(EventNames.RuneInfo, eventArgs);
             }
         }
@@ -539,15 +591,19 @@ namespace Manager
 
             PointerEventData pointerData = new PointerEventData(EventSystem.current)
             {
-                position = Input.mousePosition
+                position = Input.mousePosition,
             };
 
             List<RaycastResult> results = new List<RaycastResult>();
             EventSystem.current.RaycastAll(pointerData, results);
             foreach (RaycastResult result in results)
             {
-                if (result.gameObject == RuneIcon_1.gameObject || result.gameObject == RuneIcon_2.gameObject ||
-                    result.gameObject.transform.IsChildOf(RuneIcon_1.transform) || result.gameObject.transform.IsChildOf(RuneIcon_2.transform))
+                if (
+                    result.gameObject == RuneIcon_1.gameObject
+                    || result.gameObject == RuneIcon_2.gameObject
+                    || result.gameObject.transform.IsChildOf(RuneIcon_1.transform)
+                    || result.gameObject.transform.IsChildOf(RuneIcon_2.transform)
+                )
                 {
                     return true;
                 }
@@ -564,19 +620,27 @@ namespace Manager
             // PointerEnter 事件：变大
             EventTrigger.Entry entryEnter = new EventTrigger.Entry();
             entryEnter.eventID = EventTriggerType.PointerEnter;
-            entryEnter.callback.AddListener((data) => { button.transform.DOScale(1.1f, 0.2f); });
+            entryEnter.callback.AddListener(
+                (data) =>
+                {
+                    button.transform.DOScale(1.1f, 0.2f);
+                }
+            );
             trigger.triggers.Add(entryEnter);
 
             // PointerExit 事件：如果未选中，则变回原样
             EventTrigger.Entry entryExit = new EventTrigger.Entry();
             entryExit.eventID = EventTriggerType.PointerExit;
-            entryExit.callback.AddListener((data) =>
-            {
-                if (selectedRuneIcon != button)
-                    button.transform.DOScale(1f, 0.2f);
-            });
+            entryExit.callback.AddListener(
+                (data) =>
+                {
+                    if (selectedRuneIcon != button)
+                        button.transform.DOScale(1f, 0.2f);
+                }
+            );
             trigger.triggers.Add(entryExit);
         }
+
         #region  UI切换角色相关方法区域
         //切换角色
         private void SwitchCharactor(int charactorIndex)
@@ -603,6 +667,7 @@ namespace Manager
             {
                 case CharactorIndex.WiZardBoy:
                     Launcher.instance.SwitchCharacter(CharactorName.WiZardBoy);
+                    EventName = EventNames.OnReceiveCard_WizardBoy;
                     break;
                 case CharactorIndex.LittleRedGirl:
                     Launcher.instance.SwitchCharacter(CharactorName.LittleRedGirl);
@@ -612,7 +677,6 @@ namespace Manager
             }
         }
         #endregion
-
     }
 
     public class CharactorIndex

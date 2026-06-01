@@ -7,12 +7,12 @@ namespace Atttibute
     public class AttributePlayerBase
     {
         private float attackPower;
-        private float defensePower = 0;//防御伤害,默认0
-        private float criticalMultiplier = 1;//暴击倍率,默认1倍
-        private float criticalChance = 0.2f;//暴击概率,默认20%
-        private float maxHealth = 100f;//最大生命值,默认100
-        private float currentHealth;//当前生命值
-        private float moveSpeed = 2f;//移动速度,默认2f
+        private float defensePower = 0; //防御伤害,默认0
+        private float criticalMultiplier = 1; //暴击倍率,默认1倍
+        private float criticalChance = 0.2f; //暴击概率,默认20%
+        private float maxHealth = 100f; //最大生命值,默认100
+        private float currentHealth; //当前生命值
+        private float moveSpeed = 2f; //移动速度,默认2f
 
         public AttributePlayerBase(
             float attackPower,
@@ -20,7 +20,8 @@ namespace Atttibute
             float maxHealth,
             float moveSpeed,
             float criticalMultiplier,
-            float criticalChance)
+            float criticalChance
+        )
         {
             //初始化最大生命值为默认值
             this.maxHealth = maxHealth;
@@ -37,6 +38,7 @@ namespace Atttibute
             //初始化暴击概率为默认值
             this.criticalChance = criticalChance;
         }
+
         public void SetMaxHealth(float maxHealth)
         {
             this.maxHealth = maxHealth;
@@ -57,9 +59,19 @@ namespace Atttibute
             this.moveSpeed = moveSpeed;
         }
 
+        public void AddMoveSpeed(float moveSpeed)
+        {
+            this.moveSpeed += moveSpeed;
+        }
+
         public void SetCriticalMultiplier(float criticalMultiplier)
         {
             this.criticalMultiplier = criticalMultiplier;
+        }
+
+        public void AddCrtticalMultiplier(float crtticalMultiplier)
+        {
+            this.criticalMultiplier += crtticalMultiplier;
         }
 
         public void SetCriticalChance(float criticalChance)
@@ -67,14 +79,29 @@ namespace Atttibute
             this.criticalChance = criticalChance;
         }
 
+        public void AddCriticalChance(float criticalChance)
+        {
+            this.criticalChance += criticalChance;
+        }
+
         public void SetAttackPower(float attackPower)
         {
             this.attackPower = attackPower;
         }
 
+        public void AddAttackPower(float attackPower)
+        {
+            //按百分比增加
+        }
+
         public void SetDefensePower(float defensePower)
         {
             this.defensePower = defensePower;
+        }
+
+        public void AddDefensePower(float defensePower)
+        {
+            this.defensePower += defensePower;
         }
 
         public float GetCurrentHealth()
@@ -111,9 +138,6 @@ namespace Atttibute
         {
             return criticalChance;
         }
-
-
-
 
         public void Damage(float damage)
         {

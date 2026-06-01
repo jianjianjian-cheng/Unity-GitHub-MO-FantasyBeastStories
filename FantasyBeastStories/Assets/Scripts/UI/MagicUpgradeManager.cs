@@ -32,6 +32,7 @@ namespace UI
             {
                 Destroy(gameObject);
             }
+            SetCurrentEventName(GameManager.instance.EventName);
         }
         #endregion
 
@@ -88,6 +89,10 @@ namespace UI
         // 是否已确认
         private bool isConfirmed = false;
         private const string PLAYER_UPGRADE_READY_KEY = "UpgradeReady";
+
+        //当前选择的角色事件名，用于触发事件
+        private string currentEventName;
+        private CardConfigBase[] cardData;
 
         void Start()
         {
@@ -401,12 +406,31 @@ namespace UI
         private void OnCardPointerClick(GameObject selectedCard, GameObject catcher)
         {
             Debug.Log("点击了卡片");
+
+            string cardName = selectedCard.gameObject.name;
+            int index = 0;
+            switch (cardName)
+            {
+                case "Card_1":
+                    index = 0;
+                    break;
+                case "Card_2":
+                    index = 1;
+                    break;
+                case "Card_3":
+                    index = 2;
+                    break;
+            }
+            Debug.LogWarning("开始准备触发卡牌事件");
+            EventManager.instance.TriggerCardConEvent(currentEventName, cardData[index]);
+
             if (selectedCard != null && catcher != null)
             {
                 StartCoroutine(EndMoveCard(selectedCard, catcher, 1f));
             }
         }
 
+        //点击结束的时候移动卡片
         private IEnumerator EndMoveCard(GameObject card, GameObject catcher, float rotationSpeed)
         {
             EventTrigger trigger = catcher.GetComponent<EventTrigger>();
@@ -735,8 +759,9 @@ namespace UI
                     return;
             }
 
+            cardData = null;
             // 先获取数据再重置状态
-            var cardData = GetCardData();
+            cardData = GetCardData();
             ResetCardState();
             GrossUpgradePanel.SetActive(true);
             OpenMagicUpgradePanelAnim();
@@ -826,5 +851,10 @@ namespace UI
         }
 
         #endregion
+
+        public void SetCurrentEventName(string eventName)
+        {
+            currentEventName = eventName;
+        }
     }
 }

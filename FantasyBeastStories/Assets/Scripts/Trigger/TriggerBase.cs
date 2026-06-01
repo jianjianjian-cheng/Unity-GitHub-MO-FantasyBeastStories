@@ -45,6 +45,5 @@ namespace Trigger
                 return;
             }
         }
-
     }
 }

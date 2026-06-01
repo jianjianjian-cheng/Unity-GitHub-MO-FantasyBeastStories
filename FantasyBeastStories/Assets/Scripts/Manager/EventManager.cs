@@ -341,16 +341,20 @@ namespace Manager
         }
 
         //注册CardConfigBase参数字典的方法
-        public void RegisterIntEvent(string eventName, Action<CardConfigBase> action)
+        public void RegisterCardEvent(string eventName, Action<CardConfigBase> action)
         {
             if (cardConfigDictionary.ContainsKey(eventName))
             {
                 cardConfigDictionary[eventName] += action;
             }
+            else
+            {
+                cardConfigDictionary.Add(eventName, action);
+            }
         }
 
         //注销事件
-        public void UnRegisterIntEvent(string eventName)
+        public void UnRegisterCardEvent(string eventName)
         {
             if (cardConfigDictionary.ContainsKey(eventName))
             {
@@ -359,7 +363,7 @@ namespace Manager
         }
 
         //触发
-        public void TriggerCardConfigEvent(string eventName, CardConfigBase cardConfig)
+        public void TriggerCardConEvent(string eventName, CardConfigBase cardConfig)
         {
             if (cardConfigDictionary.ContainsKey(eventName))
             {
@@ -381,5 +385,8 @@ namespace Manager
         public const string PlayerAttribute_Current = "CurrentPlayer";
         public const string HPChanged = "HPChanged";
         public const string DamageReceiverPlayer = "DamageReceiverPlayer";
+
+        //卡牌相关事件
+        public const string OnReceiveCard_WizardBoy = "OnReceiveCard_WizardBoy";
     }
 }
