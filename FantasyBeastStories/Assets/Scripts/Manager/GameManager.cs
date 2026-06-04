@@ -21,6 +21,9 @@ namespace Manager
 
         public static bool isOpenUI = false;
 
+        //退出房间按钮
+        private GameObject exitRoomButton;
+
         //符文部分
         private GameObject runeButton; //大厅打开符文面板
         private GameObject RunePanel; //整个符文面板对象
@@ -41,7 +44,7 @@ namespace Manager
         private Text nameUIText;
         public int sceneIndex = 2;
         private GameObject startButton;
-        private bool isReady = false;
+        public bool isReady = false;
         private GameObject CharactorPanel;
         private Volume PostProcessVolume;
         public GameObject lobbyButton;
@@ -72,6 +75,9 @@ namespace Manager
         {
             isStayLobby = isStayLobbyInspector;
             isTest = isTestInspector;
+            //默认事件为OnReceiveCard_WizardBoy
+            //后续根据存档设置EventName
+            EventName = EventNames.OnReceiveCard_WizardBoy;
             if (instance == null)
             {
                 instance = this;
@@ -98,7 +104,7 @@ namespace Manager
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
-        private void Intilize()
+        public void Intilize()
         {
             if (isTest)
                 return;
@@ -106,8 +112,8 @@ namespace Manager
             MassionButton = GameObject.Find("MassionButton");
             runeButton = GameObject.Find("RuneButton");
             RunePanel = Launcher.instance.GetInactiveObjectByName("RunePanel");
-            nameUIText = GameObject.Find("NameUIText").GetComponent<Text>();
-            PostProcessVolume = GameObject.Find("PostProcessVolume").GetComponent<Volume>();
+            nameUIText = GameObject.Find("NameUIText")?.GetComponent<Text>();
+            PostProcessVolume = GameObject.Find("PostProcessVolume")?.GetComponent<Volume>();
             CharactorPanel = Launcher.instance.GetInactiveObjectByName("CharactorPanel");
             selectedButtonImage = Resources.Load<Sprite>("UI/SelectedButton");
             defaultButtonImage = Resources.Load<Sprite>("UI/DefaultButton");
@@ -116,6 +122,7 @@ namespace Manager
             RuneIcon_1 = GameObject.Find("RuneIcon_1");
             RuneIcon_2 = GameObject.Find("RuneIcon_2");
             startButton = GameObject.Find("StartButton");
+            exitRoomButton = GameObject.Find("ExitRoomButton");
 
             //角色选择面板
             CharactorIll = Launcher.instance.GetInactiveObjectByName("CharactorIll");
@@ -131,6 +138,7 @@ namespace Manager
             Vector3 scale = previousCharacterButtonImage.transform.localScale;
             scale.x *= -1;
             previousCharacterButtonImage.transform.localScale = scale;
+
             SwitchCharactor(0); //默认角色为第一个角色
             //添加角色选择按钮的点击事件
             previousCharacterButton
@@ -158,6 +166,14 @@ namespace Manager
                 .onClick.AddListener(() =>
                 {
                     SwitchCharactorButtonClicked();
+                });
+
+            //添加退出房间按钮的点击事件
+            exitRoomButton
+                .GetComponent<Button>()
+                .onClick.AddListener(() =>
+                {
+                    Launcher.instance.QuitToMainMenu();
                 });
 
             //寻找符文插槽
@@ -219,6 +235,7 @@ namespace Manager
 
         private void FindRuneIcons()
         {
+            runeList.Clear();
             for (int i = 1; i <= 2; i++)
             {
                 GameObject runeIcon = Launcher.instance.GetInactiveObjectByName($"RuneSlot_{i}");

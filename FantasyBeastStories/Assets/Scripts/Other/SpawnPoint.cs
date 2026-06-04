@@ -32,7 +32,7 @@ namespace Other
             {
                 isEmpty = true;
                 occupiedByPlayer = -1;
-                photonView.RPC("RPC_UpdateSpawnPointState", RpcTarget.AllBuffered, true, -1);
+                photonView.RPC("RPC_UpdateSpawnPointState", RpcTarget.All, true, -1);
             }
             InitializeSpawnPoint();
             transform.LookAt(new Vector3(0.182999998f, transform.position.y, -0.219999999f));
@@ -132,12 +132,7 @@ namespace Other
             );
 
             // 通过 RPC 同步状态
-            photonView.RPC(
-                "RPC_UpdateSpawnPointState",
-                RpcTarget.AllBuffered,
-                isEmpty,
-                occupiedByPlayer
-            );
+            photonView.RPC("RPC_UpdateSpawnPointState", RpcTarget.All, isEmpty, occupiedByPlayer);
 
             // 更新玩家属性
             if (occupied)
@@ -200,7 +195,7 @@ namespace Other
             if (!isEmpty)
             {
                 Debug.Log($"[SpawnPoint {Id}] 强制释放生成点");
-                photonView.RPC("RPC_UpdateSpawnPointState", RpcTarget.AllBuffered, true, -1);
+                photonView.RPC("RPC_UpdateSpawnPointState", RpcTarget.All, true, -1);
             }
         }
 

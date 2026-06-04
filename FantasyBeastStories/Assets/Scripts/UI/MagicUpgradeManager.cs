@@ -26,7 +26,6 @@ namespace UI
             if (instance == null)
             {
                 instance = this;
-                DontDestroyOnLoad(gameObject);
             }
             else
             {
@@ -421,7 +420,7 @@ namespace UI
                     index = 2;
                     break;
             }
-            Debug.LogWarning("开始准备触发卡牌事件");
+            Debug.LogWarning("开始准备触发卡牌事件,当前事件为：" + currentEventName);
             EventManager.instance.TriggerCardConEvent(currentEventName, cardData[index]);
 
             if (selectedCard != null && catcher != null)

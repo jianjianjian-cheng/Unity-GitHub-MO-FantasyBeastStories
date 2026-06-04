@@ -21,7 +21,6 @@ namespace Photon.CastSciprt
             photonView.RPC("RPC_OnFireballCast", RpcTarget.Others, spawnPos, direction, speed);
         }
 
-
         /// <summary>
         /// RPC：其他玩家收到后，在本地生成火发射物
         /// </summary>
@@ -43,7 +42,9 @@ namespace Photon.CastSciprt
         {
             // 1. 生成视觉特效
             GameObject visualObj = ObjectPoolManager.instance.GetFromPoolAndActivate(
-                ObjectPoolConst.ImpactCannonCommonPool, spawnPos);
+                ObjectPoolConst.ImpactCannonCommonPool,
+                spawnPos
+            );
             if (visualObj != null)
             {
                 visualObj.GetComponentInChildren<ParticleSystem>()?.Play();
@@ -52,7 +53,9 @@ namespace Photon.CastSciprt
 
             // 2. 生成碰撞触发器（关键：isMine = false）
             GameObject triggerObj = ObjectPoolManager.instance.GetFromPoolAndActivate(
-                ObjectPoolConst.ImpactCannonTriggerPool, spawnPos);
+                ObjectPoolConst.ImpactCannonTriggerPool,
+                spawnPos
+            );
             if (triggerObj != null)
             {
                 ImpactCannon cannon = triggerObj.GetComponent<ImpactCannon>();
@@ -70,40 +73,74 @@ namespace Photon.CastSciprt
         /// <summary>
         /// 广播伤害给所有客户端（由 ImpactCannon 调用）
         /// </summary>
-        public void BroadcastDamage(GameObject enemyObj, float damage, bool isCritical,
-            float criticalMultiplier, Vector3 hitPoint)
+        public void BroadcastDamage(
+            GameObject enemyObj,
+            float damage,
+            bool isCritical,
+            float criticalMultiplier,
+            Vector3 hitPoint
+        )
         {
+            // 添加防御性检查
+            if (this == null || gameObject == null)
+            {
+                Debug.LogWarning("[CastNetwork] 对象已销毁");
+                return;
+            }
             PhotonView enemyView = enemyObj.GetComponent<PhotonView>();
-            if (enemyView == null) return;
+            if (enemyView == null)
+                return;
+
+            // 确保 photonView 有效
+            if (photonView == null)
+            {
+                Debug.LogWarning("[CastNetwork] photonView 为空");
+                return;
+            }
 
             // 发给其他玩家（RpcTarget.Others）
-            photonView.RPC("RPC_DealDamage", RpcTarget.All,
+            photonView.RPC(
+                "RPC_DealDamage",
+                RpcTarget.All,
                 enemyView.ViewID,
                 damage,
                 isCritical,
                 criticalMultiplier,
-                hitPoint);
-            photonView.RPC("RPC_ShowDamageNum", RpcTarget.All,
+                hitPoint
+            );
+            photonView.RPC(
+                "RPC_ShowDamageNum",
+                RpcTarget.All,
                 damage,
                 hitPoint,
                 isCritical,
-                criticalMultiplier);
+                criticalMultiplier
+            );
         }
 
         /// <summary>
         /// RPC：所有客户端执行扣血和特效
         /// </summary>
         [PunRPC]
-        void RPC_DealDamage(int enemyViewID, float damage, bool isCritical,
-            float criticalMultiplier, Vector3 hitPoint)
+        void RPC_DealDamage(
+            int enemyViewID,
+            float damage,
+            bool isCritical,
+            float criticalMultiplier,
+            Vector3 hitPoint
+        )
         {
             // 1. 通过 ViewID 找到敌人对象
             PhotonView enemyView = PhotonView.Find(enemyViewID);
-            if (enemyView == null) return;
+            if (enemyView == null)
+                return;
 
             // 2. 播放命中特效（所有客户端都看到）
             string poolKey = ObjectPoolConst.ImpactCannonHitCommonPool;
-            GameObject hitEffect = ObjectPoolManager.instance.GetFromPoolAndActivate(poolKey, hitPoint);
+            GameObject hitEffect = ObjectPoolManager.instance.GetFromPoolAndActivate(
+                poolKey,
+                hitPoint
+            );
             if (hitEffect != null)
             {
                 hitEffect.GetComponentInChildren<ParticleSystem>()?.Play();
@@ -124,12 +161,17 @@ namespace Photon.CastSciprt
 
         /// <summary>
         /// RPC：所有客户端显示伤害数字
-        /// 用于在敌人被攻击时，显示伤害数字    
+        /// 用于在敌人被攻击时，显示伤害数字
         /// </summary>
         /// <param name="damageValue"></param>
         /// <param name="position"></param>
         [PunRPC]
-        void RPC_ShowDamageNum(float damageValue, Vector3 position, bool isCritical, float criticalMultiplier)
+        void RPC_ShowDamageNum(
+            float damageValue,
+            Vector3 position,
+            bool isCritical,
+            float criticalMultiplier
+        )
         {
             if (isCritical)
             {
@@ -139,7 +181,9 @@ namespace Photon.CastSciprt
             Vector3 spawnPos = position + Vector3.up * 0f;
             // 1. 从对象池获取伤害数字对象
             GameObject damageNumObj = ObjectPoolManager.instance.GetFromPoolAndActivate(
-                ObjectPoolConst.DamageNumPool, spawnPos);
+                ObjectPoolConst.DamageNumPool,
+                spawnPos
+            );
             if (damageNumObj != null)
             {
                 DamageNum damageNum = damageNumObj.GetComponent<DamageNum>();
@@ -150,7 +194,9 @@ namespace Photon.CastSciprt
             }
             else
             {
-                Debug.LogError($"DamageNumPool 为空，无法显示伤害数字：{damageValue}, {position}, {isCritical}");
+                Debug.LogError(
+                    $"DamageNumPool 为空，无法显示伤害数字：{damageValue}, {position}, {isCritical}"
+                );
             }
         }
     }

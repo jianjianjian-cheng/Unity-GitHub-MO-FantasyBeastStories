@@ -26,7 +26,6 @@ namespace Manager
             if (instance == null)
             {
                 instance = this;
-                DontDestroyOnLoad(gameObject);
             }
             else
                 Destroy(gameObject);

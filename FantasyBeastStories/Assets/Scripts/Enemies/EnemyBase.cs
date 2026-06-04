@@ -108,9 +108,8 @@ namespace Enemies
             }
 
             // 从 PlayerManager 获取缓存的玩家列表，避免每帧 FindGameObjectsWithTag
-            IReadOnlyList<GameObject> players = PlayerManager.instance != null
-                ? PlayerManager.instance.ActivePlayerObjects
-                : null;
+            IReadOnlyList<GameObject> players =
+                PlayerManager.instance != null ? PlayerManager.instance.ActivePlayerObjects : null;
 
             if (players == null || players.Count == 0)
             {
@@ -121,10 +120,13 @@ namespace Enemies
             PlayerTarget = players[0];
             for (int i = 1; i < players.Count; i++)
             {
-                if (players[i] == null) continue;
-                if (PlayerTarget == null ||
-                    Vector3.Distance(transform.position, players[i].transform.position)
-                    < Vector3.Distance(transform.position, PlayerTarget.transform.position))
+                if (players[i] == null)
+                    continue;
+                if (
+                    PlayerTarget == null
+                    || Vector3.Distance(transform.position, players[i].transform.position)
+                        < Vector3.Distance(transform.position, PlayerTarget.transform.position)
+                )
                 {
                     PlayerTarget = players[i];
                 }
@@ -308,6 +310,7 @@ namespace Enemies
             {
                 InitializeEnemy();
             }
+            RegisterDamageEvent();
         }
 
         protected virtual void OnDisable()

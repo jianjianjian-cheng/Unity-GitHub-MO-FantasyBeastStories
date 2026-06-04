@@ -5,6 +5,7 @@ using Atttibute;
 using CardData;
 using Events;
 using Photon.Pun;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Manager
@@ -370,6 +371,7 @@ namespace Manager
                 cardConfigDictionary[eventName]?.Invoke(cardConfig);
             }
         }
+
         #endregion
     }
 

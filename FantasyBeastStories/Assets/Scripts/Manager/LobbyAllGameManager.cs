@@ -1,24 +1,32 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Playables;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System;
+using UnityEngine.UI;
 
 namespace Manager
 {
     public class LobbyAllGameManager : MonoBehaviour
     {
-        [SerializeField] private PlayableDirector vcTimeLine;
+        [SerializeField]
+        private PlayableDirector vcTimeLine;
         private GameObject startButton;
         private GameObject exitButton;
         private GameObject optionButton;
         private GameObject gameNameModel;
 
-
         private void Start()
+        {
+            Initilize();
+        }
+
+        /// <summary>
+        /// 初始化LobbyAllGameManager
+        /// </summary>
+        public void Initilize()
         {
             vcTimeLine = GameObject.Find("Director").GetComponent<PlayableDirector>();
             startButton = GameObject.Find("StartButton");
@@ -29,6 +37,7 @@ namespace Manager
             optionButton.GetComponent<Button>().onClick.AddListener(Optionsbutton);
             gameNameModel = GameObject.Find("GameNameModel");
         }
+
         public void Startbutton()
         {
             vcTimeLine.Play();

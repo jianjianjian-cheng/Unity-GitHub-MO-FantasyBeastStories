@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using Enemies;
 using Photon.Pun;
 using UI;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace Manager
 {
@@ -18,10 +21,10 @@ namespace Manager
             if (instance == null)
             {
                 instance = this;
-                DontDestroyOnLoad(gameObject);
             }
             else
             {
+                // 如果已有实例，销毁当前重复实例
                 Destroy(gameObject);
             }
         }
@@ -54,8 +57,41 @@ namespace Manager
         [SerializeField]
         private float smoothSpeed = 5f; // 过渡速度，可在Inspector中调整
 
-        void Start()
+        void Start() { }
+
+        void OnEnable()
         {
+            if (GameManager.isTest)
+            {
+                Initlize();
+            }
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        void OnDisable()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (scene.buildIndex > 1)
+            {
+                Initlize();
+            }
+        }
+
+        private void Initlize()
+        {
+            if (levelText == null)
+            {
+                levelText = GameObject.Find("LevelText").GetComponent<Text>();
+            }
+
+            if (experienceSlider == null)
+            {
+                experienceSlider = GameObject.Find("ExperienceSlider").GetComponent<Slider>();
+            }
             experienceSlider.maxValue = 1;
             experienceSlider.value = 0;
             levelText.text = "0";
@@ -70,7 +106,7 @@ namespace Manager
             // 检查升级并生成队列
             CheckAndQueueUpgrades();
             // 启动平滑过渡
-            UpdateSliderSmooth();
+            photonView.RPC("UpdateSliderSmooth", RpcTarget.All, currentExperience);
             // 如果有待处理的升级且当前没有面板打开，开始处理队列
             if (pendingLevelUps.Count > 0 && !isProcessingLevelUp)
             {
@@ -145,12 +181,7 @@ namespace Manager
 
             while (currentExperience >= upgradeExperience)
             {
-                // 扣除经验，提升等级
-                currentExperience -= upgradeExperience;
-                currentLevel++;
-
-                // 更新升级所需经验
-                upgradeExperience = (int)(upgradeExperience * 1.5);
+                photonView.RPC("IncreaseLevel", RpcTarget.All);
 
                 // 将升级事件加入队列
                 pendingLevelUps.Enqueue(currentLevel);
@@ -204,9 +235,10 @@ namespace Manager
         }
 
         // 平滑更新Slider
-        private void UpdateSliderSmooth()
+        [PunRPC]
+        private void UpdateSliderSmooth(int curExp)
         {
-            float targetValue = (float)currentExperience / upgradeExperience;
+            float targetValue = (float)curExp / upgradeExperience;
 
             // 如果已有协程在运行，先停止
             if (smoothSliderCoroutine != null)
@@ -248,6 +280,18 @@ namespace Manager
             {
                 StartLevelUpSequence();
             }
+        }
+
+        //增加等级
+        [PunRPC]
+        private void IncreaseLevel()
+        {
+            // 扣除经验，提升等级
+            currentExperience -= upgradeExperience;
+            currentLevel++;
+            levelText.text = currentLevel.ToString();
+            // 更新升级所需经验
+            upgradeExperience = (int)(upgradeExperience * 1.5);
         }
 
         // 获取当前等级（外部查询用）

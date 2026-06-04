@@ -205,8 +205,12 @@ namespace Charactors
 
         protected virtual void OnDestroy()
         {
-            // 当玩家对象被销毁时，通知生成点释放
-            if (photonView.IsMine)
+            // 只有在正常游戏中（非退出流程）才清理生成点
+            if (
+                photonView.IsMine
+                && PhotonNetwork.InRoom
+                && PhotonNetwork.NetworkClientState == ClientState.Joined
+            )
             {
                 ClearSpawnPointOccupation();
             }
@@ -327,6 +331,7 @@ namespace Charactors
                 }
             }
             Debug.LogWarning("应用了卡牌效果：" + card.Name + ":" + card.Content + card.Value);
+
             switch (card.Name)
             {
                 case "锋利的短剑":

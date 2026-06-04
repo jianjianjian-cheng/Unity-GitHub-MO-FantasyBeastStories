@@ -14,7 +14,6 @@ namespace Manager
             if (instance == null)
             {
                 instance = this;
-                DontDestroyOnLoad(gameObject);
             }
             else
             {
@@ -269,6 +268,23 @@ namespace Manager
                 return count;
             }
             return 0;
+        }
+
+        //在OnDestroy中调用，销毁所有对象池中的对象
+        public void DestroyAllPools()
+        {
+            foreach (var pool in objectPools.Values)
+            {
+                foreach (var obj in pool)
+                {
+                    Destroy(obj);
+                }
+            }
+        }
+
+        void OnDestroy()
+        {
+            DestroyAllPools();
         }
     }
 
