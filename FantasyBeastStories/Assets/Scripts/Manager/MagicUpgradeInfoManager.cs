@@ -26,6 +26,7 @@ namespace Manager
         #endregion
 
         public CardDatabasePublic cardDatabasePublic;
+        public CardDatabaseEX cardDatabaseEX;
         public CardConfigPublicNormal[] cardsPublicNormal;
         public CardConfigPublicEpic[] cardsPublicEpic;
         public CardConfigPublicLegend[] cardsPublicLegend;
@@ -167,6 +168,94 @@ namespace Manager
                 return "史诗";
             else
                 return "传说";
+        }
+
+        //-------以下是专属卡牌效果抽取---------
+        // 在类的顶部添加一个私有字段来记录已选中的卡牌
+        private HashSet<string> selectedEXCardNames = new HashSet<string>();
+
+        /// <summary>
+        /// 从 CardDatabaseEX 中根据传入的类型参数随机抽取一张卡牌（等概率）
+        /// 会自动记录已选卡牌，根据 Stackable 属性判断是否可重复选取
+        /// </summary>
+        /// <param name="cardType">卡牌类型：0-WizardBoy, 1-预留, 2-预留</param>
+        /// <returns>随机抽取的卡牌</returns>
+        public CardConfigBase GetRandomEXCard(int cardType)
+        {
+            if (cardDatabaseEX == null)
+            {
+                Debug.LogWarning("CardDatabaseEX 未赋值！");
+                return null;
+            }
+
+            CardConfigBase card = null;
+
+            switch (cardType)
+            {
+                case 0:
+                    card = GetRandomFromArrayWithStackable(cardDatabaseEX.cardsEX_WizardBoy);
+                    break;
+                case 1:
+                    // TODO: 后续扩展
+                    Debug.LogWarning("CardType 1 尚未实现");
+                    return null;
+                case 2:
+                    // TODO: 后续扩展
+                    Debug.LogWarning("CardType 2 尚未实现");
+                    return null;
+                default:
+                    Debug.LogWarning($"无效的 CardType: {cardType}");
+                    return null;
+            }
+
+            // 抽到卡牌后自动记录
+            if (card != null)
+            {
+                selectedEXCardNames.Add(card.Name);
+            }
+
+            return card;
+        }
+
+        /// <summary>
+        /// 从指定数组中随机取一张卡牌（支持 Stackable 逻辑）
+        /// Stackable为true的卡牌可以被重复选取，Stackable为false的卡牌如果已被选中则排除
+        /// </summary>
+        private CardConfigBase GetRandomFromArrayWithStackable(CardConfigEX[] array)
+        {
+            if (array == null || array.Length == 0)
+            {
+                Debug.LogWarning("卡牌数组为空！");
+                return null;
+            }
+
+            // 构建可用列表
+            List<CardConfigEX> available = new List<CardConfigEX>();
+
+            foreach (var card in array)
+            {
+                // 如果该卡牌不可堆叠且已被选过，则跳过
+                if (!card.Stackable && selectedEXCardNames.Contains(card.Name))
+                    continue;
+
+                available.Add(card);
+            }
+
+            if (available.Count == 0)
+            {
+                Debug.LogWarning("没有可用的卡牌！");
+                return null;
+            }
+
+            return available[Random.Range(0, available.Count)];
+        }
+
+        /// <summary>
+        /// 重置已选卡牌记录（比如开始新一局游戏时调用）
+        /// </summary>
+        public void ResetEXCardSelection()
+        {
+            selectedEXCardNames.Clear();
         }
     }
 }

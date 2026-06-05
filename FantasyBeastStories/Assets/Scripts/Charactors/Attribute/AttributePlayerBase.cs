@@ -6,13 +6,17 @@ namespace Atttibute
 {
     public class AttributePlayerBase
     {
+        private bool isDead = false; //是否死亡,默认false
         private float attackPower;
         private float defensePower = 0; //防御伤害,默认0
-        private float criticalMultiplier = 1; //暴击倍率,默认1倍
+        private float criticalMultiplier = 1.2f; //暴击倍率,默认1倍
         private float criticalChance = 0.2f; //暴击概率,默认20%
         private float maxHealth = 100f; //最大生命值,默认100
         private float currentHealth; //当前生命值
         private float moveSpeed = 2f; //移动速度,默认2f
+        private float attackInterval = 2; //攻击间隔
+        private float healthRecover = 0f; //生命值恢复,默认0f
+        private float attackspeed = 100f;
 
         public AttributePlayerBase(
             float attackPower,
@@ -39,19 +43,67 @@ namespace Atttibute
             this.criticalChance = criticalChance;
         }
 
+        public void SetAttackInterval(int attackInterval)
+        {
+            this.attackInterval = attackInterval;
+        }
+
+        //减少攻击间隔
+        public void ReduceAttackInterval(int ratio)
+        {
+            //计算新的攻击速度
+            attackspeed += ratio;
+            float newRatio = ratio / 100f;
+            //按百分比减少攻击间隔
+            attackInterval -= (attackInterval * newRatio);
+            //向下取整,保留2位小数
+            attackInterval = Mathf.Round(attackInterval * 100) / 100;
+            //如果攻击间隔小于0,则设置为0
+            if (attackInterval < 0.5f)
+            {
+                attackInterval = 0.5f;
+            }
+        }
+
+        //获取攻击间隔
+        public float GetAttackInterval()
+        {
+            return attackInterval;
+        }
+
+        public float GetAttackSpeed()
+        {
+            return attackspeed;
+        }
+
+        public float GetHealthRecover()
+        {
+            return healthRecover;
+        }
+
+        public void SetIsDead(bool isDead)
+        {
+            this.isDead = isDead;
+        }
+
+        public bool GetIsDead()
+        {
+            return isDead;
+        }
+
         public void SetMaxHealth(float maxHealth)
         {
             this.maxHealth = maxHealth;
-            //进行换算,根据当前生命值与最大生命值比例,更新当前生命值
-            float currentHealthRatio = currentHealth / maxHealth;
-            currentHealth = maxHealth * currentHealthRatio;
-            //换算为整数
-            currentHealth = Mathf.RoundToInt(currentHealth);
         }
 
         public void AddCurrentHealth(float currentHealth)
         {
             this.currentHealth += currentHealth;
+            //如果当前生命值大于最大生命值,则设置为最大生命值
+            if (this.currentHealth > maxHealth)
+            {
+                this.currentHealth = maxHealth;
+            }
         }
 
         public void SetMoveSpeed(float moveSpeed)
@@ -69,9 +121,12 @@ namespace Atttibute
             this.criticalMultiplier = criticalMultiplier;
         }
 
-        public void AddCrtticalMultiplier(float crtticalMultiplier)
+        public void AddCriticalMultiplier(float ratio)
         {
-            this.criticalMultiplier += crtticalMultiplier;
+            float newRatio = ratio / 100f;
+            criticalMultiplier += newRatio;
+            //向下取整,保留2位小数
+            criticalMultiplier = Mathf.Round(criticalMultiplier * 100) / 100;
         }
 
         public void SetCriticalChance(float criticalChance)
@@ -79,9 +134,18 @@ namespace Atttibute
             this.criticalChance = criticalChance;
         }
 
-        public void AddCriticalChance(float criticalChance)
+        public void AddCriticalChance(float ratio)
         {
-            this.criticalChance += criticalChance;
+            float newRatio = ratio / 100f;
+            //按百分比增加暴击概率
+            criticalChance += newRatio;
+            //向下取整,保留2位小数
+            criticalChance = Mathf.Round(criticalChance * 100) / 100;
+            //如果暴击概率大于0.8,则设置为0.8
+            if (criticalChance > 0.8f)
+            {
+                criticalChance = 0.8f;
+            }
         }
 
         public void SetAttackPower(float attackPower)
@@ -89,9 +153,13 @@ namespace Atttibute
             this.attackPower = attackPower;
         }
 
-        public void AddAttackPower(float attackPower)
+        public void AddAttackPower(float ratio)
         {
-            //按百分比增加
+            float newRatio = ratio / 100f;
+            //按百分比增加攻击伤害
+            attackPower += (attackPower * newRatio);
+            //向下取整,没有小数位
+            attackPower = Mathf.Round(attackPower * 1) / 1;
         }
 
         public void SetDefensePower(float defensePower)
@@ -99,9 +167,13 @@ namespace Atttibute
             this.defensePower = defensePower;
         }
 
-        public void AddDefensePower(float defensePower)
+        public void AddDefensePower(float ratio)
         {
-            this.defensePower += defensePower;
+            float newRatio = ratio / 100f;
+            //按百分比增加防御伤害
+            defensePower += (defensePower * newRatio);
+            //向下取整,没有小数位
+            defensePower = Mathf.Round(defensePower * 1) / 1;
         }
 
         public float GetCurrentHealth()
@@ -112,6 +184,11 @@ namespace Atttibute
         public float GetMaxHealth()
         {
             return maxHealth;
+        }
+
+        public void AddMaxHealth(float maxHealth)
+        {
+            this.maxHealth += maxHealth;
         }
 
         public float GetMoveSpeed()
@@ -137,6 +214,11 @@ namespace Atttibute
         public float GetCriticalChance()
         {
             return criticalChance;
+        }
+
+        public void SetHealthRecover(float healthRecover)
+        {
+            this.healthRecover = healthRecover;
         }
 
         public void Damage(float damage)

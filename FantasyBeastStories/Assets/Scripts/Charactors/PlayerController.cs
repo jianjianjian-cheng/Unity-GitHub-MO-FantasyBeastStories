@@ -17,6 +17,8 @@ namespace Charactors
     {
         public int spawnPointIndex;
 
+        protected float healthRecover = 0; //每秒回复生命值
+
         [SerializeField]
         protected bool isOnlyShow = false; // 是否只为显示角色而不用于其他操作
 
@@ -50,7 +52,7 @@ namespace Charactors
         protected virtual void Awake()
         {
             isInLobby = GameManager.isStayLobby;
-            attributePlayerBase = new AttributePlayerBase(35, 5, 500, moveSpeed, 1.1f, 0.5f);
+            attributePlayerBase = new AttributePlayerBase(35, 5, 500, moveSpeed, 1.2f, 0.1f);
         }
 
         protected virtual void Start()
@@ -98,6 +100,7 @@ namespace Charactors
             {
                 return; // 如果在大厅场景，不处理输入
             }
+            HealthRecover();
             HandleInput();
         }
 
@@ -265,6 +268,9 @@ namespace Charactors
                     attributePlayerBase.GetCurrentHealth()
                 );
             }
+            Debug.Log(
+                $"[PlayerController] SetAndChangeHPUI - {attributePlayerBase.GetCurrentHealth()}/{attributePlayerBase.GetMaxHealth()}"
+            );
         }
 
         //遭受伤害时触发的事件
@@ -321,6 +327,29 @@ namespace Charactors
             ClearSpawnPointOccupation();
         }
 
+        protected float recoverInterval = 1f;
+        private float recoverTimer = 0f; // 计时器
+
+        //每秒回复生命值
+        protected virtual void HealthRecover()
+        {
+            if (
+                attributePlayerBase.GetIsDead()
+                || attributePlayerBase.GetCurrentHealth() >= attributePlayerBase.GetMaxHealth()
+            )
+            {
+                return;
+            }
+            recoverTimer += Time.deltaTime;
+            if (recoverTimer >= recoverInterval)
+            {
+                recoverTimer = 0f;
+                //回复生命值
+                attributePlayerBase.AddCurrentHealth(healthRecover);
+                SetAndChangeHPUI();
+            }
+        }
+
         protected virtual void OnApplicationCard(CardConfigBase card)
         {
             if (!GameManager.isTest)
@@ -334,8 +363,78 @@ namespace Charactors
 
             switch (card.Name)
             {
+                //以下是所有角色公用的卡牌效果
+                //------普通品质-------
                 case "锋利的短剑":
                     attributePlayerBase.AddAttackPower(8);
+                    break;
+                case "饱满的生命":
+                    attributePlayerBase.AddMaxHealth(30);
+                    SetAndChangeHPUI();
+                    break;
+                case "温暖的篝火":
+                    healthRecover += 2;
+                    attributePlayerBase.SetHealthRecover(healthRecover);
+                    break;
+                case "敏锐的直觉":
+                    attributePlayerBase.AddCriticalChance(6);
+                    break;
+                case "坚韧的意志":
+                    attributePlayerBase.AddDefensePower(8);
+                    break;
+                case "涌动的暗劲":
+                    attributePlayerBase.AddCriticalMultiplier(10);
+                    break;
+                case "迅捷的手腕":
+                    attributePlayerBase.ReduceAttackInterval(10);
+                    break;
+                //------史诗品质-------
+                case "锐利的狼牙":
+                    attributePlayerBase.AddAttackPower(20);
+                    break;
+                case "不朽的壁垒":
+                    attributePlayerBase.AddDefensePower(18);
+                    break;
+                case "巨人的血脉":
+                    attributePlayerBase.AddMaxHealth(80);
+                    SetAndChangeHPUI();
+                    break;
+                case "涌动的生机":
+                    healthRecover += 3;
+                    attributePlayerBase.SetHealthRecover(healthRecover);
+                    break;
+                case "鹰眼的凝视":
+                    attributePlayerBase.AddCriticalChance(15);
+                    break;
+                case "断罪的裁决":
+                    attributePlayerBase.AddCriticalMultiplier(20);
+                    break;
+                case "狂乱的舞步":
+                    attributePlayerBase.ReduceAttackInterval(20);
+                    break;
+                //------传说品质-------
+                case "弑神的魔剑":
+                    attributePlayerBase.AddAttackPower(40);
+                    break;
+                case "圣光的庇护":
+                    attributePlayerBase.AddDefensePower(25);
+                    break;
+                case "永恒的生命":
+                    attributePlayerBase.AddMaxHealth(150);
+                    SetAndChangeHPUI();
+                    break;
+                case "神愈的圣光":
+                    healthRecover += 5;
+                    attributePlayerBase.SetHealthRecover(healthRecover);
+                    break;
+                case "必然的邂逅":
+                    attributePlayerBase.AddCriticalChance(25);
+                    break;
+                case "终末的号角":
+                    attributePlayerBase.AddCriticalMultiplier(50);
+                    break;
+                case "极限的超越":
+                    attributePlayerBase.ReduceAttackInterval(30);
                     break;
             }
         }

@@ -56,6 +56,7 @@ namespace Trigger
             if (targetEnemy == null)
                 return;
 
+            attackInterval = attributePlayerBase.GetAttackInterval();
             // 攻击间隔控制
             if (attackTimer > 0)
             {

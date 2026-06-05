@@ -10,6 +10,7 @@ public enum DamageType
     Ice,
     Lightning,
 }
+
 namespace Events
 {
     public class DamageEventArgs : EventArgsBase
@@ -19,13 +20,19 @@ namespace Events
         public GameObject damgeTarget;
         public float baseDamageValue;
         public float finalDamageValue;
-        public bool isCritical;//是否暴击
-        public float criticalMultiplier;//暴击倍率
+        public bool isCritical; //是否暴击
+        public float criticalMultiplier; //暴击倍率
 
-        public DamageEventArgs(DamageType damageType, GameObject damgeSource, GameObject damgeTarget, float baseDamageValue, bool isCritical, float criticalMultiplier)
-        : base()
+        public DamageEventArgs(
+            DamageType damageType,
+            GameObject damgeSource,
+            GameObject damgeTarget,
+            float baseDamageValue,
+            bool isCritical,
+            float criticalMultiplier
+        )
+            : base()
         {
-
             this.damageType = damageType;
             this.damgeSource = damgeSource;
             this.damgeTarget = damgeTarget;

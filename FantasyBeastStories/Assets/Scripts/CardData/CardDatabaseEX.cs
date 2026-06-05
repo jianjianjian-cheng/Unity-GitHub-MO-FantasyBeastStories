@@ -5,8 +5,8 @@ using UnityEngine;
 namespace CardData
 {
     [CreateAssetMenu(fileName = "CardDatabase", menuName = "小法师卡牌数据库")]
-    public class CardDatabaseWizardBoy : ScriptableObject
+    public class CardDatabaseEX : ScriptableObject
     {
-        public CardConfigEX[] cardsEX;
+        public CardConfigEX[] cardsEX_WizardBoy;
     }
 }

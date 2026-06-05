@@ -18,6 +18,8 @@ namespace Enemies
             Die,
         }
 
+        protected Collider[] colliders;
+
         [SerializeField]
         protected Animator animator;
 
@@ -41,6 +43,7 @@ namespace Enemies
         protected virtual void Awake()
         {
             attribute = new AttributeEnemyBase(30, 30, 50, 2);
+            colliders = GetComponentsInChildren<Collider>();
         }
 
         protected virtual void Start()
@@ -263,6 +266,12 @@ namespace Enemies
             {
                 rb.velocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
+                rb.isKinematic = true;
+            }
+
+            foreach (Collider collider in colliders)
+            {
+                collider.enabled = false;
             }
 
             if (animator != null)
@@ -426,6 +435,17 @@ namespace Enemies
         // 重置状态（对象池回收时调用）
         public virtual void ResetState()
         {
+            // 恢复刚体状态
+            if (rb != null)
+            {
+                rb.isKinematic = false;
+            }
+
+            foreach (Collider collider in colliders)
+            {
+                collider.enabled = true;
+            }
+
             // 1. 取消所有Invoke和协程
             CancelInvoke();
             StopAllCoroutines();

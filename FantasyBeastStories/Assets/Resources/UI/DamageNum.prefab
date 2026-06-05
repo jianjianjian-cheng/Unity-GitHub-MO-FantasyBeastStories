@@ -66,7 +66,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: d85f7bdc672520f41a7629bbfdd83981, type: 3}
+    m_Font: {fileID: 12800000, guid: 21d9908a78be52c469f87a57f54712f4, type: 3}
     m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
@@ -196,12 +196,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageText: {fileID: 2806642196940352926}
-  floatDistance: 0.8
-  duration: 1
+  floatDistance: 1
+  duration: 1.2
   startScale: {x: 0.005, y: 0.005, z: 0.005}
-  peakScale: {x: 0.008, y: 0.008, z: 0.008}
+  peakScale: {x: 0.01, y: 0.01, z: 0.01}
   scaleUpDuration: 0.2
-  scaleHoldDuration: 0.3
+  scaleHoldDuration: 0.4
   scaleUpEase: 27
   fadeOutDelay: 0.6
   fadeOutDuration: 0.4

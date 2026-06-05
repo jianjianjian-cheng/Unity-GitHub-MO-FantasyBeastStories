@@ -19,12 +19,14 @@ namespace UI
         private TextMeshProUGUI CriticalChance;
         private TextMeshProUGUI maxHealthText;
         private TextMeshProUGUI moveSpeed;
+        private TextMeshProUGUI healthRecover;
+        private TextMeshProUGUI attackSpeed;
 
         [SerializeField]
         private RectTransform panel;
 
         private bool isShow = false;
-        private float holdDuration = 0.3f; // 长按判定时间
+        private float holdDuration = 0.1f; // 长按判定时间
         private float animationDuration = 0.2f; //动画持续时间
 
         [Header("面板位置")]
@@ -57,6 +59,12 @@ namespace UI
                 .GetComponent<TextMeshProUGUI>();
             moveSpeed = transform
                 .Find("AttributeInfoPanel/InfoAera/MoveSpeed")
+                .GetComponent<TextMeshProUGUI>();
+            healthRecover = transform
+                .Find("AttributeInfoPanel/InfoAera/HealthRecover")
+                .GetComponent<TextMeshProUGUI>();
+            attackSpeed = transform
+                .Find("AttributeInfoPanel/InfoAera/AttackSpeed")
                 .GetComponent<TextMeshProUGUI>();
         }
 
@@ -131,10 +139,13 @@ namespace UI
 
             attackPowerText.text = attributePlayerBase.GetAttackPower().ToString();
             defencePowerText.text = attributePlayerBase.GetDefensePower().ToString();
-            CriticalMultiplier.text = attributePlayerBase.GetCriticalMultiplier().ToString() + "%";
-            CriticalChance.text = attributePlayerBase.GetCriticalChance().ToString() + "%";
+            CriticalMultiplier.text =
+                (attributePlayerBase.GetCriticalMultiplier() * 100).ToString() + "%";
+            CriticalChance.text = (attributePlayerBase.GetCriticalChance() * 100).ToString() + "%";
             maxHealthText.text = attributePlayerBase.GetMaxHealth().ToString();
             moveSpeed.text = attributePlayerBase.GetMoveSpeed().ToString();
+            healthRecover.text = attributePlayerBase.GetHealthRecover().ToString();
+            attackSpeed.text = attributePlayerBase.GetAttackSpeed().ToString() + "%";
         }
     }
 }

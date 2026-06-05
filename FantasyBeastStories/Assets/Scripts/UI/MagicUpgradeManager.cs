@@ -783,6 +783,15 @@ namespace UI
                 GlobalVolumeManager.instance.SetBloomIntensity(5f);
 
             Debug.Log("关闭魔法升级面板");
+
+            // 重置确认状态
+            isConfirmed = false;
+
+            // 重置Photon属性
+            ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
+            props.Add(PLAYER_UPGRADE_READY_KEY, false);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+
             StartCoroutine(AnimateShadowAlphaBack());
             GrossUpgradePanel.SetActive(false);
         }
@@ -816,17 +825,30 @@ namespace UI
             switch (quality)
             {
                 case "普通":
-                    contentText.text = $"{cardData.Content}<color=#CCCCCC>{cardData.Value}</color>";
+                    contentText.text = cardData.Content.Contains("生命")
+                        ? contentText.text =
+                            $"{cardData.Content}<color=#CCCCCC>{cardData.Value}</color>"
+                        : contentText.text =
+                            $"{cardData.Content}<color=#CCCCCC>{cardData.Value}</color>%";
+
                     qualityText.text = $"<color=#CCCCCC>{cardData.Quality}</color>";
                     SetEffectActive(effects, 0);
                     break;
                 case "史诗":
-                    contentText.text = $"{cardData.Content}<color=#800080>{cardData.Value}</color>";
+                    contentText.text = cardData.Content.Contains("生命")
+                        ? contentText.text =
+                            $"{cardData.Content}<color=#800080>{cardData.Value}</color>"
+                        : contentText.text =
+                            $"{cardData.Content}<color=#800080>{cardData.Value}</color>%";
                     qualityText.text = $"<color=#800080>{cardData.Quality}</color>";
                     SetEffectActive(effects, 1);
                     break;
                 case "传说":
-                    contentText.text = $"{cardData.Content}<color=#FF4444>{cardData.Value}</color>";
+                    contentText.text = cardData.Content.Contains("生命")
+                        ? contentText.text =
+                            $"{cardData.Content}<color=#FF4444>{cardData.Value}</color>"
+                        : contentText.text =
+                            $"{cardData.Content}<color=#FF4444>{cardData.Value}</color>%";
                     qualityText.text = $"<color=#FF4444>{cardData.Quality}</color>";
                     SetEffectActive(effects, 2);
                     break;
