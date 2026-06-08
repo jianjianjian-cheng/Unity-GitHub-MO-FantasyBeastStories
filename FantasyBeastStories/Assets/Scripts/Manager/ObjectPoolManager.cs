@@ -28,11 +28,34 @@ namespace Manager
         [SerializeField]
         private GameObject testPrefab;
 
+        [Header("ImpactCannon")]
         [SerializeField]
+        //无元素
         private GameObject ImpactCannonCommonPrefab;
 
         [SerializeField]
         private GameObject ImpactCannonHitCommonPrefab;
+
+        //电元素
+        [SerializeField]
+        public GameObject IImpactCannonHitLightenPrefab;
+
+        [SerializeField]
+        public GameObject ImpactCannonLightenPrefab;
+
+        //冰元素
+        [SerializeField]
+        public GameObject ImpactCannonWinterPrefab;
+
+        [SerializeField]
+        public GameObject ImpactCannonHitWinterPrefab;
+
+        //草元素
+        [SerializeField]
+        public GameObject ImpactCannonGrassPrefab;
+
+        [SerializeField]
+        public GameObject ImpactCannonHitGrassPrefab;
 
         [SerializeField]
         private GameObject ImpactCannonTriggerPrefab;
@@ -40,6 +63,7 @@ namespace Manager
         [SerializeField]
         private GameObject FireFirePrefab;
 
+        [Header("伤害数字")]
         [SerializeField]
         private GameObject DamageNumPrefab;
 
@@ -291,10 +315,22 @@ namespace Manager
     public class ObjectPoolConst
     {
         public const string ImpactCannonCommonPool = "ImpactCannonCommonPool";
+        public const string ImpactCannonLightenPool = "ImpactCannonLightenPool";
         public const string ImpactCannonHitCommonPool = "ImpactCannonHitCommonPool";
+        public const string ImpactCannonHitLightenPool = "ImpactCannonHitLightenPool";
+        public const string ImpactCannonWinterPool = "ImpactCannonWinterPool";
+        public const string ImpactCannonHitWinterPool = "ImpactCannonHitWinterPool";
+        public const string ImpactCannonGrassPool = "ImpactCannonGrassPool";
+        public const string ImpactCannonHitGrassPool = "ImpactCannonHitGrassPool";
         public const string TestPool = "TestPool";
         public const string ImpactCannonTriggerPool = "ImpactCannonTriggerPool";
         public const string FireFirePool = "FireFirePool";
         public const string DamageNumPool = "DamageNumPool";
+    }
+
+    public class ObjectImpactCannonPrefabName
+    {
+        public const string ImpactCannonCommon = "ImpactCannonCommon";
+        public const string ImpactCannonLighten = "ImpactCannonLighten";
     }
 }

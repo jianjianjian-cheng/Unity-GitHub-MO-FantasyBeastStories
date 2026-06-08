@@ -16,6 +16,9 @@ namespace Manager
         #region 单例模式
         public static GamePlayingManager instance;
 
+        //测试用
+        private Button testCardEffect;
+
         void Awake()
         {
             if (instance == null)

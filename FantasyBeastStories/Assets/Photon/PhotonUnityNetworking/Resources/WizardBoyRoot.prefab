@@ -1645,6 +1645,7 @@ MonoBehaviour:
   rotationSpeed: 6
   isInLobby: 0
   isReadyPanel: {fileID: 605483236507991687}
+  testCardEffect: {fileID: 0}
 --- !u!1 &6827718404249638607
 GameObject:
   m_ObjectHideFlags: 0

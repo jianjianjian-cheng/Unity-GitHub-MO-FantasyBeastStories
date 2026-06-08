@@ -67,19 +67,21 @@ namespace Charactors.Attribute
         }
 
         //受到特殊伤害的方法
-        public virtual void TakeDamageSpecial(DamageType damageType)
+        public virtual void TakeDamageSpecial(Element element)
         {
             //待写
-            switch (damageType)
+            switch (element)
             {
-                case DamageType.Fire:
+                case Element.Grass:
 
                     break;
-                case DamageType.Ice:
+                case Element.Winter:
 
                     break;
-                case DamageType.Lightning:
+                case Element.Lightning:
 
+                    break;
+                default:
                     break;
             }
         }

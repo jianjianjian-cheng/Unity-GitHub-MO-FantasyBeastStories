@@ -15,7 +15,7 @@ namespace Events
 {
     public class DamageEventArgs : EventArgsBase
     {
-        public DamageType damageType;
+        public Element element;
         public GameObject damgeSource;
         public GameObject damgeTarget;
         public float baseDamageValue;
@@ -24,7 +24,7 @@ namespace Events
         public float criticalMultiplier; //暴击倍率
 
         public DamageEventArgs(
-            DamageType damageType,
+            Element element,
             GameObject damgeSource,
             GameObject damgeTarget,
             float baseDamageValue,
@@ -33,7 +33,7 @@ namespace Events
         )
             : base()
         {
-            this.damageType = damageType;
+            this.element = element;
             this.damgeSource = damgeSource;
             this.damgeTarget = damgeTarget;
             this.baseDamageValue = baseDamageValue;

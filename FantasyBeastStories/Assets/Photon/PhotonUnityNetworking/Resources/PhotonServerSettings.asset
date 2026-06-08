@@ -47,6 +47,8 @@ MonoBehaviour:
   - CloseMagicUpgradePanel
   - OpenPanelInit
   - IncreaseLevel
+  - RPC_OnSplitBulletCast
+  - RPC_SetPauseState
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

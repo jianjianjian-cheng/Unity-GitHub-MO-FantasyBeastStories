@@ -42,7 +42,7 @@ namespace Enemies
 
         protected virtual void Awake()
         {
-            attribute = new AttributeEnemyBase(30, 30, 50, 2);
+            attribute = new AttributeEnemyBase(500, 500, 50, 2);
             colliders = GetComponentsInChildren<Collider>();
         }
 
@@ -65,6 +65,8 @@ namespace Enemies
 
         protected virtual void Update()
         {
+            if (GamePauseManager.isPaused)
+                return;
             // 如果已死亡，不执行更新逻辑
             if (currentState == EnemyState.Die)
             {
@@ -419,7 +421,7 @@ namespace Enemies
                         damageEventArgs.isCritical
                     );
             }
-            attribute.TakeDamageSpecial(damageEventArgs.damageType);
+            attribute.TakeDamageSpecial(damageEventArgs.element);
             if (attribute.GetIsDie())
             {
                 TransitionToState(EnemyState.Die);

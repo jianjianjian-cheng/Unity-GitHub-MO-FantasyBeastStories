@@ -27,6 +27,11 @@ namespace Trigger
 
         private float attackTimer;
 
+        private int comboCounter = 1;
+
+        private int empowerChargeCounter = 1;
+        protected bool isCharged = false;
+
         public override void Start()
         {
             base.Start();
@@ -38,6 +43,8 @@ namespace Trigger
 
         public override void Update()
         {
+            if (GamePauseManager.isPaused)
+                return;
             if (!photonView.IsMine)
             {
                 return;
@@ -66,7 +73,25 @@ namespace Trigger
             attackTimer = attackInterval;
 
             // 调用子类实现的攻击方法
-            PerformAttack();
+            StartCoroutine(AttackCoroutine());
+        }
+
+        //协程，用于短时间内连续攻击,限定攻击次数
+        private IEnumerator AttackCoroutine()
+        {
+            while (comboCounter <= attributePlayerBase.GetComboCount())
+            {
+                isCharged = (empowerChargeCounter >= attributePlayerBase.GetEmpowerCharge());
+
+                PerformAttack();
+
+                comboCounter++;
+                empowerChargeCounter = isCharged ? 1 : empowerChargeCounter + 1;
+
+                yield return new WaitForSeconds(0.3f);
+            }
+            isCharged = false;
+            comboCounter = 1;
         }
 
         /// <summary>

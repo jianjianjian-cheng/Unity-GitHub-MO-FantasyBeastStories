@@ -37,7 +37,7 @@ namespace Charactors
         [Header("旋转设置")]
         [SerializeField]
         protected float rotationSpeed = 6f; // 旋转速度
-        protected AttributePlayerBase attributePlayerBase; // 玩家属性组件
+        protected AttributePlayerBase attributePlayer; // 玩家属性组件
         protected Vector3 movement; // 移动方向
         protected bool isRun; // 是否正在运行
 
@@ -52,7 +52,7 @@ namespace Charactors
         protected virtual void Awake()
         {
             isInLobby = GameManager.isStayLobby;
-            attributePlayerBase = new AttributePlayerBase(35, 5, 500, moveSpeed, 1.2f, 0.1f);
+            attributePlayer = new AttributePlayerBase(300f, 0f, 300f, moveSpeed, 1.2f, 0.1f);
         }
 
         protected virtual void Start()
@@ -69,7 +69,7 @@ namespace Charactors
             {
                 isReadyPanel.SetActive(false); // 隐藏准备界面
             }
-            moveSpeed = attributePlayerBase.GetMoveSpeed();
+            moveSpeed = attributePlayer.GetMoveSpeed();
             // 获取或添加Rigidbody组件
             if (rb == null)
             {
@@ -88,6 +88,8 @@ namespace Charactors
         // Update is called once per frame
         protected virtual void Update()
         {
+            if (GamePauseManager.isPaused)
+                return;
             if (isOnlyShow)
             {
                 return; // 如果只显示角色，不处理输入
@@ -106,6 +108,8 @@ namespace Charactors
 
         protected virtual void FixedUpdate()
         {
+            if (GamePauseManager.isPaused)
+                return;
             if (!photonView.IsMine && photonView != null)
             {
                 return; // 只处理本地玩家的输入和动画
@@ -127,7 +131,7 @@ namespace Charactors
                 EventManager.instance.RegisterAttributePlayerBase(
                     localActorNumber,
                     EventNames.PlayerAttribute_Main,
-                    attributePlayerBase
+                    attributePlayer
                 );
                 EventManager.instance.RegisterEventComplex(
                     EventNames.DamageReceiverPlayer,
@@ -142,7 +146,7 @@ namespace Charactors
                 eventManager.RegisterAttributePlayerBase(
                     localActorNumber,
                     EventNames.PlayerAttribute_Main,
-                    attributePlayerBase
+                    attributePlayer
                 );
                 eventManager.RegisterEventComplex(
                     EventNames.DamageReceiverPlayer,
@@ -260,16 +264,27 @@ namespace Charactors
         //触发HP变化事件
         protected virtual void SetAndChangeHPUI()
         {
+            if (GameManager.isTest)
+            {
+                return;
+            }
             if (sceneIndex > 1)
             {
                 EventManager.instance.TriggerFloatEvent(
                     EventNames.HPChanged,
-                    attributePlayerBase.GetMaxHealth(),
-                    attributePlayerBase.GetCurrentHealth()
+                    attributePlayer.GetMaxHealth(),
+                    attributePlayer.GetCurrentHealth()
+                );
+                photonView.RPC(
+                    "NoticeOtherPlayerDamage",
+                    RpcTarget.Others,
+                    PlayerManager.instance.GetLocalPlayer().PlayerId.ToString(),
+                    attributePlayer.GetMaxHealth(),
+                    attributePlayer.GetCurrentHealth()
                 );
             }
             Debug.Log(
-                $"[PlayerController] SetAndChangeHPUI - {attributePlayerBase.GetCurrentHealth()}/{attributePlayerBase.GetMaxHealth()}"
+                $"[PlayerController] SetAndChangeHPUI - {attributePlayer.GetCurrentHealth()}/{attributePlayer.GetMaxHealth()}"
             );
         }
 
@@ -288,25 +303,18 @@ namespace Charactors
             int finalDamage = CalculateFinalDamage(damage);
             Debug.LogWarning($"受到伤害：{finalDamage}");
             // 应用最终伤害
-            attributePlayerBase.Damage(finalDamage);
+            attributePlayer.Damage(finalDamage);
             // 触发HP变化事件
             SetAndChangeHPUI();
             // 通知其他玩家我受到了伤害
             if (GameManager.isTest)
                 return;
-            photonView.RPC(
-                "NoticeOtherPlayerDamage",
-                RpcTarget.Others,
-                PlayerManager.instance.GetLocalPlayer().PlayerId.ToString(),
-                attributePlayerBase.GetMaxHealth(),
-                attributePlayerBase.GetCurrentHealth()
-            );
         }
 
         //根据防御伤害计算最终伤害
         protected virtual int CalculateFinalDamage(int damage)
         {
-            return damage - (int)attributePlayerBase.GetDefensePower();
+            return damage - (int)attributePlayer.GetDefensePower();
         }
 
         //通知其他玩家我受到了伤害，让其更新UI
@@ -334,8 +342,8 @@ namespace Charactors
         protected virtual void HealthRecover()
         {
             if (
-                attributePlayerBase.GetIsDead()
-                || attributePlayerBase.GetCurrentHealth() >= attributePlayerBase.GetMaxHealth()
+                attributePlayer.GetIsDead()
+                || attributePlayer.GetCurrentHealth() >= attributePlayer.GetMaxHealth()
             )
             {
                 return;
@@ -345,9 +353,15 @@ namespace Charactors
             {
                 recoverTimer = 0f;
                 //回复生命值
-                attributePlayerBase.AddCurrentHealth(healthRecover);
+                attributePlayer.AddCurrentHealth(healthRecover);
+
                 SetAndChangeHPUI();
             }
+        }
+
+        protected virtual void SwitchElement(Element element)
+        {
+            attributePlayer.SetCurrentElement(element);
         }
 
         protected virtual void OnApplicationCard(CardConfigBase card)
@@ -366,75 +380,84 @@ namespace Charactors
                 //以下是所有角色公用的卡牌效果
                 //------普通品质-------
                 case "锋利的短剑":
-                    attributePlayerBase.AddAttackPower(8);
+                    attributePlayer.AddAttackPower(8);
                     break;
                 case "饱满的生命":
-                    attributePlayerBase.AddMaxHealth(30);
+                    attributePlayer.AddMaxHealth(30);
                     SetAndChangeHPUI();
                     break;
                 case "温暖的篝火":
                     healthRecover += 2;
-                    attributePlayerBase.SetHealthRecover(healthRecover);
+                    attributePlayer.SetHealthRecover(healthRecover);
                     break;
                 case "敏锐的直觉":
-                    attributePlayerBase.AddCriticalChance(6);
+                    attributePlayer.AddCriticalChance(6);
                     break;
                 case "坚韧的意志":
-                    attributePlayerBase.AddDefensePower(8);
+                    attributePlayer.AddDefensePower(8);
                     break;
                 case "涌动的暗劲":
-                    attributePlayerBase.AddCriticalMultiplier(10);
+                    attributePlayer.AddCriticalMultiplier(10);
                     break;
                 case "迅捷的手腕":
-                    attributePlayerBase.ReduceAttackInterval(10);
+                    attributePlayer.ReduceAttackInterval(10);
+                    break;
+                case "稚嫩四叶草":
+                    MagicUpgradeInfoManager.instance.AddLuckRate(5);
                     break;
                 //------史诗品质-------
                 case "锐利的狼牙":
-                    attributePlayerBase.AddAttackPower(20);
+                    attributePlayer.AddAttackPower(20);
                     break;
                 case "不朽的壁垒":
-                    attributePlayerBase.AddDefensePower(18);
+                    attributePlayer.AddDefensePower(18);
                     break;
                 case "巨人的血脉":
-                    attributePlayerBase.AddMaxHealth(80);
+                    attributePlayer.AddMaxHealth(80);
                     SetAndChangeHPUI();
                     break;
                 case "涌动的生机":
                     healthRecover += 3;
-                    attributePlayerBase.SetHealthRecover(healthRecover);
+                    attributePlayer.SetHealthRecover(healthRecover);
                     break;
                 case "鹰眼的凝视":
-                    attributePlayerBase.AddCriticalChance(15);
+                    attributePlayer.AddCriticalChance(15);
                     break;
                 case "断罪的裁决":
-                    attributePlayerBase.AddCriticalMultiplier(20);
+                    attributePlayer.AddCriticalMultiplier(20);
                     break;
                 case "狂乱的舞步":
-                    attributePlayerBase.ReduceAttackInterval(20);
+                    attributePlayer.ReduceAttackInterval(20);
+                    break;
+                case "青年四叶草":
+                    MagicUpgradeInfoManager.instance.AddLuckRate(10);
                     break;
                 //------传说品质-------
                 case "弑神的魔剑":
-                    attributePlayerBase.AddAttackPower(40);
+                    attributePlayer.AddAttackPower(40);
                     break;
                 case "圣光的庇护":
-                    attributePlayerBase.AddDefensePower(25);
+                    attributePlayer.AddDefensePower(25);
                     break;
                 case "永恒的生命":
-                    attributePlayerBase.AddMaxHealth(150);
+                    attributePlayer.AddMaxHealth(150);
                     SetAndChangeHPUI();
                     break;
                 case "神愈的圣光":
                     healthRecover += 5;
-                    attributePlayerBase.SetHealthRecover(healthRecover);
+                    attributePlayer.SetHealthRecover(healthRecover);
                     break;
                 case "必然的邂逅":
-                    attributePlayerBase.AddCriticalChance(25);
+                    attributePlayer.AddCriticalChance(25);
                     break;
                 case "终末的号角":
-                    attributePlayerBase.AddCriticalMultiplier(50);
+                    attributePlayer.AddCriticalMultiplier(50);
                     break;
                 case "极限的超越":
-                    attributePlayerBase.ReduceAttackInterval(30);
+                    attributePlayer.ReduceAttackInterval(30);
+                    break;
+                case "幸运四叶草":
+                    MagicUpgradeInfoManager.instance.AddLuckRate(20);
                     break;
             }
         }

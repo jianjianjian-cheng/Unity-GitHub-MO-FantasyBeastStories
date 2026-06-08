@@ -2,21 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//枚举，记录当前元素
+
+public enum Element
+{
+    Common,
+    Lightning,
+    Winter,
+    Grass,
+}
+
 namespace Atttibute
 {
     public class AttributePlayerBase
     {
-        private bool isDead = false; //是否死亡,默认false
-        private float attackPower;
-        private float defensePower = 0; //防御伤害,默认0
-        private float criticalMultiplier = 1.2f; //暴击倍率,默认1倍
-        private float criticalChance = 0.2f; //暴击概率,默认20%
-        private float maxHealth = 100f; //最大生命值,默认100
-        private float currentHealth; //当前生命值
-        private float moveSpeed = 2f; //移动速度,默认2f
-        private float attackInterval = 2; //攻击间隔
-        private float healthRecover = 0f; //生命值恢复,默认0f
-        private float attackspeed = 100f;
+        protected bool isDead = false; //是否死亡,默认false
+        protected float attackPower;
+        protected float defensePower = 0; //防御伤害,默认0
+        protected float criticalMultiplier = 1.2f; //暴击倍率,默认1倍
+        protected float criticalChance = 0.2f; //暴击概率,默认20%
+        protected float maxHealth = 100f; //最大生命值,默认100
+        protected float currentHealth; //当前生命值
+        protected float moveSpeed = 2f; //移动速度,默认2f
+        protected float attackInterval = 2; //攻击间隔
+        protected float healthRecover = 0f; //生命值恢复,默认0f
+        protected float attackspeed = 100f;
+        protected int maxAttackCount = 1;
+        protected int comboCount = 1;
+        protected int empowerCharge;
+        protected Element currentElement = Element.Common;
+
+        protected bool isSplit = false;
+        protected int splitCount = 0;
 
         public AttributePlayerBase(
             float attackPower,
@@ -41,6 +58,17 @@ namespace Atttibute
             this.criticalMultiplier = criticalMultiplier;
             //初始化暴击概率为默认值
             this.criticalChance = criticalChance;
+            //初始化最大攻击次数为默认值
+            maxAttackCount = 1;
+            //初始化连击次数为默认值
+            comboCount = 1;
+            empowerCharge = 1;
+            //初始化当前元素为默认值
+            currentElement = Element.Common;
+
+            //初始化是否分割为默认值
+            isSplit = false;
+            splitCount = 0;
         }
 
         public void SetAttackInterval(int attackInterval)
@@ -228,6 +256,63 @@ namespace Atttibute
             {
                 currentHealth = 0;
             }
+        }
+
+        public int GetMaxAttackCount()
+        {
+            return maxAttackCount;
+        }
+
+        public void AddMaxAttackCount(int attackCount)
+        {
+            this.maxAttackCount += attackCount;
+            Debug.Log($"最大攻击次数增加{attackCount}次,当前最大攻击次数为{maxAttackCount}");
+        }
+
+        public int GetComboCount()
+        {
+            return comboCount;
+        }
+
+        public void AddComboCount(int comboCount)
+        {
+            this.comboCount += comboCount;
+            Debug.Log($"连击次数增加{comboCount}次,当前连击次数为{comboCount}");
+        }
+
+        public int GetEmpowerCharge()
+        {
+            return empowerCharge;
+        }
+
+        public Element GetCurrentElement()
+        {
+            return currentElement;
+        }
+
+        public void SetCurrentElement(Element element)
+        {
+            currentElement = element;
+        }
+
+        public bool GetSplit()
+        {
+            return isSplit;
+        }
+
+        public void SetSplit(bool isSplit)
+        {
+            this.isSplit = isSplit;
+        }
+
+        public int GetSplitCount()
+        {
+            return splitCount;
+        }
+
+        public void AddSplitCount(int splitCount)
+        {
+            this.splitCount += splitCount;
         }
     }
 }

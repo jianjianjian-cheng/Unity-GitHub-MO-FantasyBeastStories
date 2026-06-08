@@ -41,6 +41,10 @@ MonoBehaviour:
     Content: "\u653B\u51FB\u901F\u5EA6\u589E\u52A0"
     Value: 10
     Quality: "\u666E\u901A"
+  - Name: "\u7A1A\u5AE9\u56DB\u53F6\u8349"
+    Content: "\u5E78\u8FD0\u503C\u589E\u52A0"
+    Value: 5
+    Quality: "\u666E\u901A"
   cardsPublicEpic:
   - Name: "\u9510\u5229\u7684\u72FC\u7259"
     Content: "\u653B\u51FB\u529B\u63D0\u5347"
@@ -70,6 +74,10 @@ MonoBehaviour:
     Content: "\u653B\u51FB\u901F\u5EA6\u4E2D\u5E45\u589E\u52A0"
     Value: 20
     Quality: "\u53F2\u8BD7"
+  - Name: "\u9752\u5E74\u56DB\u53F6\u8349"
+    Content: "\u5E78\u8FD0\u503C\u589E\u52A0"
+    Value: 10
+    Quality: "\u53F2\u8BD7"
   cardsPublicLegend:
   - Name: "\u5F11\u795E\u7684\u9B54\u5251"
     Content: "\u653B\u51FB\u529B\u6781\u5927\u63D0\u5347"
@@ -98,4 +106,8 @@ MonoBehaviour:
   - Name: "\u6781\u9650\u7684\u8D85\u8D8A"
     Content: "\u653B\u51FB\u901F\u5EA6\u5927\u5E45\u589E\u52A0"
     Value: 30
+    Quality: "\u4F20\u8BF4"
+  - Name: "\u5E78\u8FD0\u56DB\u53F6\u8349"
+    Content: "\u5E78\u8FD0\u503C\u5927\u5E45\u589E\u52A0"
+    Value: 20
     Quality: "\u4F20\u8BF4"

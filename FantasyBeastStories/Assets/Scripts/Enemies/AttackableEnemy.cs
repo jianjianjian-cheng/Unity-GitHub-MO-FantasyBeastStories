@@ -79,7 +79,7 @@ namespace Enemies
                         continue; // 安全检查
 
                     DamageEventArgs damageEventArgs = new DamageEventArgs(
-                        DamageType.normal,
+                        Element.Common,
                         gameObject,
                         player,
                         attribute.attackPower,

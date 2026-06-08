@@ -8,6 +8,9 @@ namespace FX
 {
     public class ImpactCannonHit : MonoBehaviourPun
     {
+        [SerializeField]
+        private string poolName;
+
         void OnEnable()
         {
             Invoke(nameof(ReturnPool), 2f);
@@ -15,7 +18,7 @@ namespace FX
 
         protected virtual void ReturnPool()
         {
-            ObjectPoolManager.instance.ReturnToPool("ImpactCannonHitCommonPool", gameObject);
+            ObjectPoolManager.instance.ReturnToPool(poolName, gameObject);
         }
     }
 }

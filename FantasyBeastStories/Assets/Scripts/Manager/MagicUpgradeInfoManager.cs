@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using CardData;
 using MyNamespace;
+using Photon.Pun;
 using UnityEngine;
 
 namespace Manager
@@ -30,11 +31,21 @@ namespace Manager
         public CardConfigPublicNormal[] cardsPublicNormal;
         public CardConfigPublicEpic[] cardsPublicEpic;
         public CardConfigPublicLegend[] cardsPublicLegend;
-        public int luckRate = 10;
+        private int luckRate = 100;
 
         private void Start()
         {
             LocalCard();
+        }
+
+        public void AddLuckRate(int luckRate)
+        {
+            this.luckRate += luckRate;
+        }
+
+        public int GetLuckRate()
+        {
+            return this.luckRate;
         }
 
         private void LocalCard()
@@ -180,7 +191,7 @@ namespace Manager
         /// </summary>
         /// <param name="cardType">卡牌类型：0-WizardBoy, 1-预留, 2-预留</param>
         /// <returns>随机抽取的卡牌</returns>
-        public CardConfigBase GetRandomEXCard(int cardType)
+        public CardConfigBase GetRandomEXCard(string cardType)
         {
             if (cardDatabaseEX == null)
             {
@@ -192,14 +203,14 @@ namespace Manager
 
             switch (cardType)
             {
-                case 0:
+                case EventNames.OnReceiveCard_WizardBoy:
                     card = GetRandomFromArrayWithStackable(cardDatabaseEX.cardsEX_WizardBoy);
                     break;
-                case 1:
+                case "待定":
                     // TODO: 后续扩展
                     Debug.LogWarning("CardType 1 尚未实现");
                     return null;
-                case 2:
+                case "待定2":
                     // TODO: 后续扩展
                     Debug.LogWarning("CardType 2 尚未实现");
                     return null;

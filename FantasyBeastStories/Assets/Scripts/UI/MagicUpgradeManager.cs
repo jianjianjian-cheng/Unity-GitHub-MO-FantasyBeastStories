@@ -761,10 +761,35 @@ namespace UI
             cardData = null;
             // 先获取数据再重置状态
             cardData = GetCardData();
+
+            //根据幸运值抽取角色专属卡牌，若抽到则随机替换一张公用卡牌，未抽到则无变化
+            int luckRate = MagicUpgradeInfoManager.instance.GetLuckRate();
+
+            // 根据幸运值判断是否触发专属卡牌抽取
+            float exCardChance = luckRate * 0.8f; // 幸运值越高，触发概率越大
+            if (Random.Range(0f, 100f) < exCardChance)
+            {
+                CardConfigBase exCard = MagicUpgradeInfoManager.instance.GetRandomEXCard(
+                    currentEventName
+                ); // 0代表WizardBoy类型
+                if (exCard != null && cardData != null)
+                {
+                    // 随机替换一张公用卡牌
+                    int replaceIndex = Random.Range(0, cardData.Length);
+                    cardData[replaceIndex] = exCard;
+                    Debug.Log($"触发专属卡牌！替换了第{replaceIndex}张卡牌为: {exCard.Name}");
+                }
+                else
+                {
+                    Debug.LogWarning("没有可用的专属卡牌！");
+                }
+            }
+
             ResetCardState();
             GrossUpgradePanel.SetActive(true);
             OpenMagicUpgradePanelAnim();
             OpenPanelInit(cardData);
+            GamePauseManager.instance.SetPause(true);
         }
 
         private void OpenPanelInit(CardConfigBase[] cardData)
@@ -794,6 +819,7 @@ namespace UI
 
             StartCoroutine(AnimateShadowAlphaBack());
             GrossUpgradePanel.SetActive(false);
+            GamePauseManager.instance.SetPause(false);
         }
 
         #region 获取卡牌

@@ -17,11 +17,13 @@ namespace Enemies
 
         void Start()
         {
-            spawnInterval = Random.Range(1f, 3f); // 随机生成间隔
+            spawnInterval = Random.Range(4f, 4f); // 随机生成间隔
         }
 
         void Update()
         {
+            if (GamePauseManager.isPaused)
+                return;
             if (!PhotonNetwork.IsMasterClient)
                 return; // 只有房主执行生成逻辑
             if (!isPhotonReady)
@@ -59,6 +61,8 @@ namespace Enemies
 
         private void SpawnEnemy()
         {
+            if (GamePauseManager.isPaused)
+                return;
             if (!PhotonNetwork.IsMasterClient)
             {
                 return;

@@ -15,7 +15,8 @@ namespace Trigger
         private bool isTest = false;
 
         [Header("WizardBoy Settings")]
-        [SerializeField] private float projectileSpeed = 10f;
+        [SerializeField]
+        private float projectileSpeed = 10f;
 
         public override void Start()
         {
@@ -47,7 +48,12 @@ namespace Trigger
             {
                 // 联机模式：本地先行 + 网络广播
                 SpawnFireballLocal(pos, direction, isMine: true);
-                _networkCaster?.RequestFireball(pos, direction, projectileSpeed);
+                _networkCaster?.RequestFireball(
+                    pos,
+                    direction,
+                    projectileSpeed,
+                    attributePlayerBase.GetCurrentElement()
+                );
             }
         }
 
@@ -56,18 +62,49 @@ namespace Trigger
         /// </summary>
         private void SpawnFireballLocal(Vector3 spawnPos, Vector3 direction, bool isMine = true)
         {
-            string visualPool = ObjectPoolConst.ImpactCannonCommonPool;
+            string visualPool = null;
             string triggerPool = ObjectPoolConst.ImpactCannonTriggerPool;
 
             // 1. 生成视觉特效
-            GameObject visualObj = ObjectPoolManager.instance.GetFromPoolAndActivate(visualPool, spawnPos);
+            switch (attributePlayerBase.GetCurrentElement())
+            {
+                case Element.Common:
+                    visualPool = ObjectPoolConst.ImpactCannonCommonPool;
+                    break;
+                case Element.Lightning:
+                    visualPool = ObjectPoolConst.ImpactCannonLightenPool;
+                    break;
+                case Element.Winter:
+                    visualPool = ObjectPoolConst.ImpactCannonWinterPool;
+                    break;
+                case Element.Grass:
+                    visualPool = ObjectPoolConst.ImpactCannonGrassPool;
+                    break;
+            }
+            GameObject visualObj = ObjectPoolManager.instance.GetFromPoolAndActivate(
+                visualPool,
+                spawnPos
+            );
+
             // 2. 生成碰撞触发器
-            GameObject triggerObj = ObjectPoolManager.instance.GetFromPoolAndActivate(triggerPool, spawnPos);
+            GameObject triggerObj = ObjectPoolManager.instance.GetFromPoolAndActivate(
+                triggerPool,
+                spawnPos
+            );
+
+            // Vector3 baseScale = visualObj.transform.localScale;
+            // Vector3 triggerScale = triggerObj.transform.localScale;
+            // if (isCharged)
+            // {
+            //     visualObj.transform.localScale = baseScale * 1.5f;
+            //     triggerObj.transform.localScale = triggerScale * 1.5f;
+            // }
             // 创建令牌并绑定
             AttackToken token = new AttackToken
             {
                 hitCollider = triggerObj,
-                vfxEffect = visualObj
+                vfxEffect = visualObj,
+                vfxPoolName = visualPool,
             };
 
             if (visualObj != null)
@@ -87,7 +124,7 @@ namespace Trigger
                 // 绑定令牌
                 cannon.SetToken(token);
                 cannon.StartShoot(direction, isMine);
-                cannon.GetAttributeFromPlayer(attributePlayerBase);
+                cannon.SetAttributeFromPlayer(attributePlayerBase);
             }
         }
 

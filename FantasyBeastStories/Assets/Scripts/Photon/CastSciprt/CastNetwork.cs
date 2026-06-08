@@ -15,34 +15,43 @@ namespace Photon.CastSciprt
         /// 请求发射火球（由 AttackRangeBase 调用）
         /// 功能：向其他玩家广播发射指令
         /// </summary>
-        public void RequestFireball(Vector3 spawnPos, Vector3 direction, float speed)
+        public void RequestFireball(
+            Vector3 spawnPos,
+            Vector3 direction,
+            float speed,
+            Element element
+        )
         {
             // 只发给其他玩家（RpcTarget.Others），本地玩家已经在 AttackRangeBase 中生成了
-            photonView.RPC("RPC_OnFireballCast", RpcTarget.Others, spawnPos, direction, speed);
+            photonView.RPC(
+                "RPC_OnFireballCast",
+                RpcTarget.Others,
+                spawnPos,
+                direction,
+                speed,
+                (int)element
+            );
         }
 
         /// <summary>
         /// RPC：其他玩家收到后，在本地生成火发射物
         /// </summary>
         [PunRPC]
-        void RPC_OnFireballCast(Vector3 spawnPos, Vector3 direction, float speed)
+        void RPC_OnFireballCast(Vector3 spawnPos, Vector3 direction, float speed, int elementInt)
         {
-            // 获取炮塔的 AttackRangeBase 组件来生成本地发射物
-            AttackRangeBase attackRange = GetComponent<AttackRangeBase>();
-            if (attackRange != null)
-            {
-                SpawnFireballForOthers(spawnPos, direction);
-            }
+            Element element = (Element)elementInt;
+            SpawnFireballForOthers(spawnPos, direction, element);
         }
 
         /// <summary>
         /// 为其他玩家生成本地火球（isMine = false，不负责伤害判定）
         /// </summary>
-        private void SpawnFireballForOthers(Vector3 spawnPos, Vector3 direction)
+        private void SpawnFireballForOthers(Vector3 spawnPos, Vector3 direction, Element element)
         {
-            // 1. 生成视觉特效
+            // 1. 根据元素类型选择视觉特效池
+            string visualPool = GetVisualPoolByElement(element);
             GameObject visualObj = ObjectPoolManager.instance.GetFromPoolAndActivate(
-                ObjectPoolConst.ImpactCannonCommonPool,
+                visualPool,
                 spawnPos
             );
             if (visualObj != null)
@@ -68,6 +77,42 @@ namespace Photon.CastSciprt
             }
         }
 
+        // ==================== 辅助方法 ====================
+
+        /// <summary>
+        /// 根据元素类型获取视觉特效池名
+        /// </summary>
+        private string GetVisualPoolByElement(Element element)
+        {
+            switch (element)
+            {
+                case Element.Lightning:
+                    return ObjectPoolConst.ImpactCannonLightenPool;
+                case Element.Winter:
+                    return ObjectPoolConst.ImpactCannonWinterPool;
+                default:
+                    return ObjectPoolConst.ImpactCannonCommonPool;
+            }
+        }
+
+        /// <summary>
+        /// 根据元素类型获取击中特效池名
+        /// </summary>
+        private string GetHitPoolByElement(Element element)
+        {
+            switch (element)
+            {
+                case Element.Lightning:
+                    return ObjectPoolConst.ImpactCannonHitLightenPool;
+                case Element.Winter:
+                    return ObjectPoolConst.ImpactCannonHitWinterPool;
+                case Element.Grass:
+                    return ObjectPoolConst.ImpactCannonHitGrassPool;
+                default:
+                    return ObjectPoolConst.ImpactCannonHitCommonPool;
+            }
+        }
+
         // ==================== 伤害相关 ====================
 
         /// <summary>
@@ -78,7 +123,8 @@ namespace Photon.CastSciprt
             float damage,
             bool isCritical,
             float criticalMultiplier,
-            Vector3 hitPoint
+            Vector3 hitPoint,
+            Element element
         )
         {
             // 添加防御性检查
@@ -98,7 +144,7 @@ namespace Photon.CastSciprt
                 return;
             }
 
-            // 发给其他玩家（RpcTarget.Others）
+            // 发给所有玩家（RpcTarget.All）
             photonView.RPC(
                 "RPC_DealDamage",
                 RpcTarget.All,
@@ -106,7 +152,8 @@ namespace Photon.CastSciprt
                 damage,
                 isCritical,
                 criticalMultiplier,
-                hitPoint
+                hitPoint,
+                (int)element
             );
             photonView.RPC(
                 "RPC_ShowDamageNum",
@@ -127,7 +174,8 @@ namespace Photon.CastSciprt
             float damage,
             bool isCritical,
             float criticalMultiplier,
-            Vector3 hitPoint
+            Vector3 hitPoint,
+            int elementInt
         )
         {
             // 1. 通过 ViewID 找到敌人对象
@@ -135,8 +183,9 @@ namespace Photon.CastSciprt
             if (enemyView == null)
                 return;
 
-            // 2. 播放命中特效（所有客户端都看到）
-            string poolKey = ObjectPoolConst.ImpactCannonHitCommonPool;
+            // 2. 根据元素类型选择击中特效池
+            Element element = (Element)elementInt;
+            string poolKey = GetHitPoolByElement(element);
             GameObject hitEffect = ObjectPoolManager.instance.GetFromPoolAndActivate(
                 poolKey,
                 hitPoint
@@ -148,7 +197,7 @@ namespace Photon.CastSciprt
 
             // 3. 触发伤害事件（扣血）
             DamageEventArgs damageEventArgs = new DamageEventArgs(
-                DamageType.Fire,
+                element,
                 gameObject,
                 enemyView.gameObject,
                 damage,
@@ -197,6 +246,56 @@ namespace Photon.CastSciprt
                 Debug.LogError(
                     $"DamageNumPool 为空，无法显示伤害数字：{damageValue}, {position}, {isCritical}"
                 );
+            }
+        }
+
+        // 在 CastNetwork.cs 中添加
+        public void RequestSplitBullet(Vector3 spawnPos, Vector3 direction, int elementInt)
+        {
+            photonView.RPC(
+                "RPC_OnSplitBulletCast",
+                RpcTarget.Others,
+                spawnPos,
+                direction,
+                elementInt
+            );
+        }
+
+        [PunRPC]
+        void RPC_OnSplitBulletCast(Vector3 spawnPos, Vector3 direction, int elementInt)
+        {
+            Element element = (Element)elementInt;
+            SpawnSplitBulletForOthers(spawnPos, direction, element);
+        }
+
+        private void SpawnSplitBulletForOthers(Vector3 spawnPos, Vector3 direction, Element element)
+        {
+            // 为其他玩家生成分裂弹（只负责视觉表现）
+            string visualPool = GetVisualPoolByElement(element);
+            GameObject visualObj = ObjectPoolManager.instance.GetFromPoolAndActivate(
+                visualPool,
+                spawnPos
+            );
+
+            if (visualObj != null)
+            {
+                visualObj.GetComponentInChildren<ParticleSystem>()?.Play();
+                visualObj.transform.rotation = Quaternion.LookRotation(direction);
+            }
+
+            GameObject triggerObj = ObjectPoolManager.instance.GetFromPoolAndActivate(
+                ObjectPoolConst.ImpactCannonTriggerPool,
+                spawnPos
+            );
+
+            if (triggerObj != null)
+            {
+                ImpactCannon cannon = triggerObj.GetComponent<ImpactCannon>();
+                if (cannon != null)
+                {
+                    cannon.StartShoot(direction, isMine: false);
+                    cannon.canSplit = false;
+                }
             }
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Atttibute;
 using CardData;
 using Events;
@@ -44,6 +45,8 @@ namespace Manager
         /// </summary>
         /// <remarks> 无参数事件字典
         private Dictionary<string, Action> eventDictionary = new Dictionary<string, Action>();
+        private Dictionary<string, System.Func<int>> intReturnCallbackDictionary =
+            new Dictionary<string, System.Func<int>>();
 
         /// </remarks> 复杂参数事件字典
         private Dictionary<string, Action<EventArgsBase>> eventDictionaryComplex =
@@ -70,6 +73,13 @@ namespace Manager
         //CardConfigBase参数字典
         private Dictionary<string, Action<CardConfigBase>> cardConfigDictionary =
             new Dictionary<string, Action<CardConfigBase>>();
+
+        //int参数字典
+        private Dictionary<string, Action<int>> intEventDictionary =
+            new Dictionary<string, Action<int>>();
+
+        //返回int参数字典
+        private Dictionary<string, int> intReturnDictionary = new Dictionary<string, int>();
 
         #region  事件相关的方法
 
@@ -143,9 +153,32 @@ namespace Manager
         /// </summary>
         public void TriggerEventComplex(string eventName, EventArgsBase args)
         {
-            if (eventDictionaryComplex.ContainsKey(eventName))
+            if (eventDictionaryComplex.TryGetValue(eventName, out var actions))
             {
-                eventDictionaryComplex[eventName]?.Invoke(args);
+                // 创建副本，防止在迭代过程中字典被修改
+                var actionsCopy = new List<Action<EventArgsBase>>(
+                    actions.GetInvocationList().Cast<Action<EventArgsBase>>()
+                );
+
+                foreach (var action in actionsCopy)
+                {
+                    try
+                    {
+                        action?.Invoke(args);
+                    }
+                    catch (MissingReferenceException e)
+                    {
+                        Debug.LogWarning(
+                            $"[EventManager] 事件 {eventName} 触发时检测到已销毁对象: {e.Message}"
+                        );
+                        // 自动移除无效的事件处理器
+                        eventDictionaryComplex[eventName] -= action;
+                    }
+                    catch (System.Exception e)
+                    {
+                        Debug.LogError($"[EventManager] 事件 {eventName} 触发失败: {e.Message}");
+                    }
+                }
             }
         }
 
@@ -372,6 +405,69 @@ namespace Manager
             }
         }
 
+        //注册int参数字典的方法
+        public void RegisterIntEvent(string eventName, Action<int> action)
+        {
+            if (intEventDictionary.ContainsKey(eventName))
+            {
+                intEventDictionary[eventName] += action;
+            }
+            else
+            {
+                intEventDictionary.Add(eventName, action);
+            }
+        }
+
+        //注销int参数字典的方法
+        public void UnRegisterIntEvent(string eventName)
+        {
+            if (intEventDictionary.ContainsKey(eventName))
+            {
+                intEventDictionary.Remove(eventName);
+            }
+        }
+
+        //触发int参数字典的方法
+        public void TriggerIntEvent(string eventName, int intValue)
+        {
+            if (intEventDictionary.ContainsKey(eventName))
+            {
+                intEventDictionary[eventName]?.Invoke(intValue);
+            }
+        }
+
+        // 使用委托注册，支持动态获取值
+        public void RegisterIntReturnEvent(string eventName, System.Func<int> getter)
+        {
+            if (intReturnCallbackDictionary.ContainsKey(eventName))
+            {
+                intReturnCallbackDictionary[eventName] = getter;
+            }
+            else
+            {
+                intReturnCallbackDictionary.Add(eventName, getter);
+            }
+        }
+
+        // 触发委托类型的事件
+        public int TriggerIntReturnCallbackEvent(string eventName)
+        {
+            if (intReturnCallbackDictionary.ContainsKey(eventName))
+            {
+                return intReturnCallbackDictionary[eventName].Invoke();
+            }
+            return 0;
+        }
+
+        //注销返回int参数字典的方法
+        public void UnRegisterIntReturnEvent(string eventName)
+        {
+            if (intReturnDictionary.ContainsKey(eventName))
+            {
+                intReturnDictionary.Remove(eventName);
+            }
+        }
+
         #endregion
     }
 
@@ -390,5 +486,6 @@ namespace Manager
 
         //卡牌相关事件
         public const string OnReceiveCard_WizardBoy = "OnReceiveCard_WizardBoy";
+        public const string OnGetMaxAttackCount_WizardBoy = "OnGetMaxAttackCount_WizardBoy";
     }
 }

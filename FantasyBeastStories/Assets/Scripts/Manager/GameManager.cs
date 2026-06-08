@@ -94,6 +94,17 @@ namespace Manager
             Intilize();
         }
 
+        private IEnumerator DelayedRuneInitialization()
+        {
+            // 等待一帧确保所有UI组件都已初始化
+            yield return null;
+
+            if (runeList.Count > 0)
+            {
+                SetRuneListSelected(runeList[0]);
+            }
+        }
+
         void OnEnable()
         {
             SceneManager.sceneLoaded += OnSceneLoaded;
@@ -201,10 +212,7 @@ namespace Manager
                     .onClick.AddListener(() => OnRuneListItemClicked(runeList[index]));
             }
 
-            if (runeList.Count > 0)
-            {
-                SetRuneListSelected(runeList[0]);
-            }
+            StartCoroutine(DelayedRuneInitialization());
 
             FindSpawnPoints();
 

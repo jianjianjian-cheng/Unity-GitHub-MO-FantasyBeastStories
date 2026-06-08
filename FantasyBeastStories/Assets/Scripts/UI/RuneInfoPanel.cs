@@ -17,69 +17,127 @@ namespace UI
 
         void Awake()
         {
-            EventManager.instance.RegisterEventComplex(EventNames.RuneInfo, RuneEventTran);
             Intilize();
         }
 
         private void Intilize()
         {
-            runeNameText = transform.Find("RuneName").GetComponent<Text>();
-            specialPowerNameText = transform.Find("SpecialPower/SpecialName").GetComponent<Text>();
-            specialPowerDescriptionText = transform.Find("SpecialPower/SpecialDescription").GetComponent<Text>();
-            runePowers_1Text = transform.Find("PowerPanel/PowerInfo_1").GetComponent<Text>();
-            runePowers_2Text = transform.Find("PowerPanel/PowerInfo_2").GetComponent<Text>();
+            // 使用安全的组件获取方式
+            runeNameText = SafeGetComponent<Text>(transform.Find("RuneName"));
+            specialPowerNameText = SafeGetComponent<Text>(
+                transform.Find("SpecialPower/SpecialName")
+            );
+            specialPowerDescriptionText = SafeGetComponent<Text>(
+                transform.Find("SpecialPower/SpecialDescription")
+            );
+            runePowers_1Text = SafeGetComponent<Text>(transform.Find("PowerPanel/PowerInfo_1"));
+            runePowers_2Text = SafeGetComponent<Text>(transform.Find("PowerPanel/PowerInfo_2"));
+        }
+
+        private T SafeGetComponent<T>(Transform parent)
+            where T : Component
+        {
+            if (parent == null)
+            {
+                Debug.LogWarning($"[RuneInfoPanel] 找不到父对象");
+                return null;
+            }
+
+            T component = parent.GetComponent<T>();
+            if (component == null)
+            {
+                Debug.LogWarning($"[RuneInfoPanel] 找不到 {typeof(T).Name} 组件");
+            }
+            return component;
         }
 
         private void OnEnable()
         {
-            EventManager.instance.RegisterEventComplex(EventNames.RuneInfo, RuneEventTran);
+            // 确保只注册一次
+            try
+            {
+                EventManager.instance?.UnRegisterEventComplex(EventNames.RuneInfo, RuneEventTran);
+            }
+            catch { }
+
+            EventManager.instance?.RegisterEventComplex(EventNames.RuneInfo, RuneEventTran);
         }
 
         private void OnDisable()
         {
-            EventManager.instance.UnRegisterEventComplex(EventNames.RuneInfo, RuneEventTran);
+            UnregisterEvents();
+        }
+
+        private void OnDestroy()
+        {
+            UnregisterEvents();
+        }
+
+        private void UnregisterEvents()
+        {
+            try
+            {
+                EventManager.instance?.UnRegisterEventComplex(EventNames.RuneInfo, RuneEventTran);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning($"[RuneInfoPanel] 取消注册事件失败: {e.Message}");
+            }
         }
 
         private void RuneEventTran(EventArgsBase args)
         {
-            RuneEquipArgs runeEquipArgs = args as RuneEquipArgs;
-            if (runeEquipArgs == null) return;
+            // 防御性检查：对象可能已销毁
+            if (this == null)
+                return;
 
-            UpdateRuneInfo(runeEquipArgs.runeName, runeEquipArgs.runePowers,
-                           runeEquipArgs.specialPowerName, runeEquipArgs.specialPowerDescription);
+            RuneEquipArgs runeEquipArgs = args as RuneEquipArgs;
+            if (runeEquipArgs == null)
+                return;
+
+            UpdateRuneInfo(
+                runeEquipArgs.runeName,
+                runeEquipArgs.runePowers,
+                runeEquipArgs.specialPowerName,
+                runeEquipArgs.specialPowerDescription
+            );
         }
 
-        private void UpdateRuneInfo(string runeName, Dictionary<int, string> runePowers, string specialPowerName, string specialPowerDescription)
+        private void UpdateRuneInfo(
+            string runeName,
+            Dictionary<int, string> runePowers,
+            string specialPowerName,
+            string specialPowerDescription
+        )
         {
             Debug.Log("UpdateRuneInfo");
-            runeNameText.text = runeName;
+
+            // 逐一检查每个Text组件是否有效
+            if (runeNameText != null)
+                runeNameText.text = runeName;
+
+            if (specialPowerNameText != null)
+                specialPowerNameText.text = specialPowerName;
+
+            if (specialPowerDescriptionText != null)
+                specialPowerDescriptionText.text = specialPowerDescription;
+
+            if (runePowers == null)
+                return;
+
             int index = 1;
-            specialPowerNameText.text = specialPowerName;
-            specialPowerDescriptionText.text = specialPowerDescription;
-            if (runePowers == null) return;
             foreach (var power in runePowers)
             {
-                if (index == 1)
+                string text =
+                    power.Key > 0 ? $"+{power.Key}{power.Value}" : $"-{power.Key}{power.Value}";
+
+                if (index == 1 && runePowers_1Text != null)
                 {
-                    if (power.Key > 0)
-                    {
-                        runePowers_1Text.text = "+" + power.Key + power.Value;
-                    }
-                    else
-                    {
-                        runePowers_1Text.text = "-" + power.Key + power.Value;
-                    }
+                    runePowers_1Text.text = text;
                 }
-                else if (index == 2)
+                else if (index == 2 && runePowers_2Text != null)
                 {
-                    if (power.Key > 0)
-                    {
-                        runePowers_2Text.text = "+" + power.Key + power.Value;
-                    }
-                    else
-                    {
-                        runePowers_2Text.text = "-" + power.Key + power.Value;
-                    }
+                    runePowers_2Text.text = text;
                 }
                 index++;
             }
