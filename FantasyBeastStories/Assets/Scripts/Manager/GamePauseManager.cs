@@ -34,10 +34,10 @@ public class GamePauseManager : MonoBehaviourPunCallbacks
 
     void Update()
     {
-        if (PhotonNetwork.IsMasterClient && Input.GetKeyDown(KeyCode.Escape))
-        {
-            TogglePause();
-        }
+        // if (PhotonNetwork.IsMasterClient && Input.GetKeyDown(KeyCode.Escape))
+        // {
+        //     TogglePause();
+        // }
     }
 
     public void TogglePause()

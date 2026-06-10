@@ -43,6 +43,15 @@ namespace Enemies
         protected override void Update()
         {
             base.Update();
+            if (GamePauseManager.isPaused || currentState == EnemyState.Die)
+            {
+                navMeshAgent.isStopped = true;
+                return;
+            }
+            else
+            {
+                navMeshAgent.isStopped = false;
+            }
             DealDamageToPlayers();
         }
 
@@ -118,6 +127,13 @@ namespace Enemies
                 return;
             if (navMeshAgent == null)
                 return;
+
+            // 暂停时停止移动
+            if (GamePauseManager.isPaused)
+            {
+                navMeshAgent.isStopped = true;
+                return;
+            }
 
             navMeshAgent.isStopped = false;
 

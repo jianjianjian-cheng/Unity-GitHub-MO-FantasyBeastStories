@@ -49,6 +49,21 @@ MonoBehaviour:
   - IncreaseLevel
   - RPC_OnSplitBulletCast
   - RPC_SetPauseState
+  - RPC_DespawnItem
+  - RPC_SyncPlayerElement
+  - RPC_InitElementPool
+  - RPC_GameTimeFinished
+  - RPC_OnTimeEventTriggered
+  - RPC_SyncPauseTime
+  - RPC_SyncResetTime
+  - RPC_SyncSetTime
+  - RPC_SyncStartTime
+  - RPC_ActivateTask
+  - RPC_ReportKill
+  - RPC_UpdateProgress
+  - RPC_TaskCompleted
+  - RPC_SetNotice
+  - Notice_Data
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

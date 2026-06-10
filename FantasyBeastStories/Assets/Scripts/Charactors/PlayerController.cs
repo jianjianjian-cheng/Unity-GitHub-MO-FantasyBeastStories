@@ -362,6 +362,35 @@ namespace Charactors
         protected virtual void SwitchElement(Element element)
         {
             attributePlayer.SetCurrentElement(element);
+            SyncElementToAll(element);
+        }
+
+        // 添加元素同步 RPC
+        [PunRPC]
+        protected virtual void RPC_SyncPlayerElement(int actorNumber, int elementInt)
+        {
+            AttributePlayerBase playerAttr = EventManager.instance.GetAttributePlayerBase(
+                actorNumber,
+                EventNames.PlayerAttribute_Main
+            );
+            if (playerAttr != null)
+            {
+                playerAttr.SetCurrentElement((Element)elementInt);
+            }
+        }
+
+        // 同步元素到所有客户端
+        protected virtual void SyncElementToAll(Element element)
+        {
+            if (GameManager.isTest)
+                return;
+
+            photonView.RPC(
+                "RPC_SyncPlayerElement",
+                RpcTarget.All,
+                PhotonNetwork.LocalPlayer.ActorNumber,
+                (int)element
+            );
         }
 
         protected virtual void OnApplicationCard(CardConfigBase card)

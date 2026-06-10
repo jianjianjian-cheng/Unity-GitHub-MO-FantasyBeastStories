@@ -5,6 +5,7 @@ using Events;
 using Manager;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Enemies
 {
@@ -263,6 +264,7 @@ namespace Enemies
         // ========== Die状态 ==========
         protected virtual void EnterDie()
         {
+            TaskManager.instance.ReportKill(transform.position, GetComponent<PhotonView>());
             // 停止物理移动
             if (rb != null)
             {
@@ -295,6 +297,11 @@ namespace Enemies
         // 返回对象池（子类可重写以指定池名）
         protected virtual void ReturnToPool()
         {
+            // 网络模式下，只有 MasterClient 才能销毁怪物
+            if (!GameManager.isTest && !PhotonNetwork.IsMasterClient)
+            {
+                return;
+            }
             NetworkObjectPoolManager.instance.Despawn(GetPoolName(), gameObject);
         }
 
@@ -320,6 +327,10 @@ namespace Enemies
             if (isInitialized)
             {
                 InitializeEnemy();
+                if (attribute == null)
+                {
+                    attribute = new AttributeEnemyBase(500, 500, 50, 2);
+                }
             }
             RegisterDamageEvent();
         }
@@ -375,6 +386,15 @@ namespace Enemies
 
         protected virtual void OnDamageReceived(EventArgsBase args)
         {
+            // 空引用检查：确保 attribute 不为 null
+            if (attribute == null)
+            {
+                Debug.LogWarning(
+                    $"[EnemyBase] OnDamageReceived: attribute 为空，敌人对象: {gameObject.name}"
+                );
+                return;
+            }
+
             if (attribute.GetIsDie())
             {
                 return;

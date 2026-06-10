@@ -89,6 +89,8 @@ namespace UI
         private bool isConfirmed = false;
         private const string PLAYER_UPGRADE_READY_KEY = "UpgradeReady";
 
+        public bool isAllExCard = false;
+
         //当前选择的角色事件名，用于触发事件
         private string currentEventName;
         private CardConfigBase[] cardData;
@@ -767,23 +769,27 @@ namespace UI
 
             // 根据幸运值判断是否触发专属卡牌抽取
             float exCardChance = luckRate * 0.8f; // 幸运值越高，触发概率越大
-            if (Random.Range(0f, 100f) < exCardChance)
+            if (!isAllExCard)
             {
-                CardConfigBase exCard = MagicUpgradeInfoManager.instance.GetRandomEXCard(
-                    currentEventName
-                ); // 0代表WizardBoy类型
-                if (exCard != null && cardData != null)
+                if (Random.Range(0f, 100f) < exCardChance)
                 {
-                    // 随机替换一张公用卡牌
-                    int replaceIndex = Random.Range(0, cardData.Length);
-                    cardData[replaceIndex] = exCard;
-                    Debug.Log($"触发专属卡牌！替换了第{replaceIndex}张卡牌为: {exCard.Name}");
-                }
-                else
-                {
-                    Debug.LogWarning("没有可用的专属卡牌！");
+                    CardConfigBase exCard = MagicUpgradeInfoManager.instance.GetRandomEXCard(
+                        currentEventName
+                    ); // 0代表WizardBoy类型
+                    if (exCard != null && cardData != null)
+                    {
+                        // 随机替换一张公用卡牌
+                        int replaceIndex = Random.Range(0, cardData.Length);
+                        cardData[replaceIndex] = exCard;
+                        Debug.Log($"触发专属卡牌！替换了第{replaceIndex}张卡牌为: {exCard.Name}");
+                    }
+                    else
+                    {
+                        Debug.LogWarning("没有可用的专属卡牌！");
+                    }
                 }
             }
+            isAllExCard = false;
 
             ResetCardState();
             GrossUpgradePanel.SetActive(true);
@@ -894,6 +900,10 @@ namespace UI
 
         private CardConfigBase[] GetCardData()
         {
+            if (isAllExCard)
+            {
+                return MagicUpgradeInfoManager.instance.GetThreeRandomEXCards(currentEventName);
+            }
             return MagicUpgradeInfoManager.instance.GetThreeRandomCards();
         }
 

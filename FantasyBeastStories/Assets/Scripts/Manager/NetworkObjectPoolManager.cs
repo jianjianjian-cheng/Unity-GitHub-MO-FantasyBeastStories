@@ -201,9 +201,24 @@ namespace Manager
 
         private void DespawnNow(string poolName, GameObject obj)
         {
-            // 无论测试模式还是网络模式，都直接本地回池
-            // 网络模式下不使用 PhotonNetwork.Destroy，因为它会先销毁子对象的网络组件
-            ReturnToPool(poolName, obj);
+            if (GameManager.isTest)
+            {
+                // 测试模式：直接本地回池
+                ReturnToPool(poolName, obj);
+            }
+            else
+            {
+                // 网络模式：使用 PhotonNetwork.Destroy 同步销毁到所有客户端
+                // Destroy 会触发 IPunPrefabPool.Destroy() 回调，在那里执行回池
+                if (PhotonNetwork.IsConnectedAndReady)
+                {
+                    PhotonNetwork.Destroy(obj);
+                }
+                else
+                {
+                    ReturnToPool(poolName, obj);
+                }
+            }
         }
 
         private GameObject GetFromPool(

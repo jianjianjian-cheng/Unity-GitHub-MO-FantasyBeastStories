@@ -5,6 +5,7 @@ using System.Linq;
 using Atttibute;
 using CardData;
 using Events;
+using Manager.TimeSystem;
 using Photon.Pun;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -155,29 +156,33 @@ namespace Manager
         {
             if (eventDictionaryComplex.TryGetValue(eventName, out var actions))
             {
-                // 创建副本，防止在迭代过程中字典被修改
                 var actionsCopy = new List<Action<EventArgsBase>>(
                     actions.GetInvocationList().Cast<Action<EventArgsBase>>()
                 );
 
                 foreach (var action in actionsCopy)
                 {
-                    try
+                    // 【诊断代码】打印每个 action 的信息
+                    if (action != null && action.Target != null)
                     {
-                        action?.Invoke(args);
+                        Debug.Log(
+                            $"[EventManager] 执行 {eventName} 的处理器: Target={action.Target}, Method={action.Method.Name}"
+                        );
                     }
-                    catch (MissingReferenceException e)
+                    else if (action != null && action.Target == null)
                     {
                         Debug.LogWarning(
-                            $"[EventManager] 事件 {eventName} 触发时检测到已销毁对象: {e.Message}"
+                            $"[EventManager] {eventName} 有一个静态方法的处理器: {action.Method.Name}"
                         );
-                        // 自动移除无效的事件处理器
-                        eventDictionaryComplex[eventName] -= action;
                     }
-                    catch (System.Exception e)
+                    else
                     {
-                        Debug.LogError($"[EventManager] 事件 {eventName} 触发失败: {e.Message}");
+                        Debug.LogWarning($"[EventManager] {eventName} 有一个 null 的 action，跳过");
+                        eventDictionaryComplex[eventName] -= action;
+                        continue;
                     }
+
+                    action?.Invoke(args);
                 }
             }
         }
@@ -468,6 +473,59 @@ namespace Manager
             }
         }
 
+        // 将这些方法添加到您现有的 EventManager 类中
+
+        /// <summary>
+        /// 注册时间事件监听（便捷方法）
+        /// </summary>
+        public void RegisterTimeEvent(string eventId, Action<TimeEventData> callback)
+        {
+            RegisterEventComplex(
+                EventNames.TimeEventTriggered,
+                (args) =>
+                {
+                    if (args is TimeEventArgs timeArgs && timeArgs.eventData.eventId == eventId)
+                    {
+                        callback?.Invoke(timeArgs.eventData);
+                    }
+                }
+            );
+        }
+
+        /// <summary>
+        /// 注册所有时间事件监听
+        /// </summary>
+        public void RegisterAllTimeEvents(Action<TimeEventData> callback)
+        {
+            RegisterEventComplex(
+                EventNames.TimeEventTriggered,
+                (args) =>
+                {
+                    if (args is TimeEventArgs timeArgs)
+                    {
+                        callback?.Invoke(timeArgs.eventData);
+                    }
+                }
+            );
+        }
+
+        /// <summary>
+        /// 获取时间管理器实例
+        /// </summary>
+        public SyncedGameTimeManager GetTimeManager()
+        {
+            return SyncedGameTimeManager.Instance;
+        }
+
+        /// <summary>
+        /// 注销时间事件监听
+        /// </summary>
+        public void UnregisterTimeEvent(Action<TimeEventData> callback)
+        {
+            // 由于委托包装在复杂事件中，取消注册需要保持引用
+            // 建议使用 RegisterEventComplex 和 UnRegisterEventComplex 直接操作
+        }
+
         #endregion
     }
 
@@ -487,5 +545,15 @@ namespace Manager
         //卡牌相关事件
         public const string OnReceiveCard_WizardBoy = "OnReceiveCard_WizardBoy";
         public const string OnGetMaxAttackCount_WizardBoy = "OnGetMaxAttackCount_WizardBoy";
+
+        // 时间系统相关事件
+        public const string TimeEventTriggered = "TimeEventTriggered";
+        public const string GameTimeUpdated = "GameTimeUpdated";
+        public const string GameTimeFinished = "GameTimeFinished";
+        public const string TimeSyncReceived = "TimeSyncReceived";
+        public const string TimeStarted = "TimeStarted";
+        public const string TimePaused = "TimePaused";
+        public const string TimeResumed = "TimeResumed";
+        public const string TimeReset = "TimeReset";
     }
 }

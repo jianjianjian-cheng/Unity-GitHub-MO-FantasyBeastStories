@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using Enemies;
+using Events;
+using Manager.TimeSystem;
 using Photon.Pun;
 using UI;
 using Unity.VisualScripting;
@@ -69,11 +71,23 @@ namespace Manager
                 Initlize();
             }
             SceneManager.sceneLoaded += OnSceneLoaded;
+            EventManager.instance?.RegisterEventComplex(
+                EventNames.TimeEventTriggered,
+                OnTimeEventReceived
+            );
+            // 2. 监听游戏结束事件（时间走完了）
+            EventManager.instance?.RegisterEvent(EventNames.GameTimeFinished, OnGameFinished);
         }
 
         void OnDisable()
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
+            EventManager.instance?.UnRegisterEventComplex(
+                EventNames.TimeEventTriggered,
+                OnTimeEventReceived
+            );
+            // 2. 取消监听游戏结束事件（时间走完了）
+            EventManager.instance?.UnRegisterEvent(EventNames.GameTimeFinished, OnGameFinished);
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -99,6 +113,13 @@ namespace Manager
             experienceSlider.value = 0;
             levelText.text = "0";
             upgradeExperience = 100;
+        }
+
+        #region  经验条相关
+
+        public int GetUpgradeExperience()
+        {
+            return upgradeExperience;
         }
 
         // 增加当前经验值
@@ -308,5 +329,72 @@ namespace Manager
         {
             return currentExperience;
         }
+        #endregion
+
+        #region 时间管理相关
+
+        void OnTimeEventTriggered(TimeEventData eventData)
+        {
+            Debug.Log($"事件触发: {eventData.eventName} at {eventData.triggerTime}秒");
+
+            switch (eventData.eventId)
+            {
+                case "KillSacrifice":
+                    KillSacrifice(eventData);
+                    break;
+                case "powerup_spawn":
+                    break;
+            }
+        }
+
+        private void KillSacrifice(TimeEventData eventData)
+        {
+            Debug.Log($"任务激活: {eventData.eventName}" + eventData.description);
+            if (!PhotonNetwork.IsMasterClient)
+            {
+                return;
+            }
+            //获取一个随机玩家的位置
+            IReadOnlyList<GameObject> players =
+                PlayerManager.instance != null ? PlayerManager.instance.ActivePlayerObjects : null;
+            if (players == null || players.Count == 0)
+            {
+                Debug.LogError("没有玩家在线，无法激活任务");
+                return;
+            }
+
+            TaskManager.instance.SetNotice(eventData.eventName, eventData.description);
+            // 随机选择一个玩家
+            GameObject randomPlayer = players[Random.Range(0, players.Count)];
+            //根据玩家位置100-300范围内随机生成任务
+            Vector3 randomPosition = randomPlayer.transform.position + Random.insideUnitSphere * 20;
+            //只取xz平面
+            randomPosition.y = 0.5f;
+            //激活任务
+            TaskManager.instance.ActivateTask(TaskConst.KillSacrifice, randomPosition, 7f, 10);
+        }
+
+        void OnTimeEventReceived(EventArgsBase args)
+        {
+            var timeArgs = args as TimeEventArgs;
+            if (timeArgs != null)
+            {
+                Debug.Log($"收到事件: {timeArgs.eventData.eventName}");
+                // 执行游戏逻辑
+                OnTimeEventTriggered(timeArgs.eventData);
+            }
+        }
+
+        void OnGameFinished()
+        {
+            Debug.Log("游戏时间结束！");
+            // 显示结算界面等
+        }
+
+        void OnTimeUpdated(float currentTime)
+        {
+            // 每秒更新一次显示
+        }
+        #endregion
     }
 }

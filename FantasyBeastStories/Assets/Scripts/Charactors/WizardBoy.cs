@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CardData;
 using Charactors;
 using Manager;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -47,6 +48,7 @@ public class WizardBoy : PlayerController
 
     protected override void SwitchElement(Element element)
     {
+        // 本地初始化对象池
         switch (element)
         {
             case Element.Lightning:
@@ -87,6 +89,12 @@ public class WizardBoy : PlayerController
                 break;
         }
 
+        // 发送 RPC 通知其他客户端初始化对象池
+        if (!GameManager.isTest && photonView != null)
+        {
+            photonView.RPC("RPC_InitElementPool", RpcTarget.Others, (int)element);
+        }
+
         base.SwitchElement(element);
     }
 
@@ -107,7 +115,8 @@ public class WizardBoy : PlayerController
                 SwitchElement(Element.Lightning);
                 attributePlayer.AddAttackPower(20);
                 break;
-            case "流光治愈":
+            case "森芒初露":
+                attributePlayer.SetCurrentElement(Element.Grass);
                 SwitchElement(Element.Grass);
                 healthRecover += 2;
                 break;
@@ -126,6 +135,93 @@ public class WizardBoy : PlayerController
     private int GetMaxAttackCount()
     {
         return attributePlayer.GetMaxAttackCount();
+    }
+
+    // 在 SwitchElement 方法后添加 RPC 方法
+    [PunRPC]
+    public void RPC_InitElementPool(int elementInt)
+    {
+        Element element = (Element)elementInt;
+
+        switch (element)
+        {
+            case Element.Lightning:
+                // 检查池是否已存在且有对象
+                if (
+                    ObjectPoolManager.instance.GetPoolCount(ObjectPoolConst.ImpactCannonLightenPool)
+                    == 0
+                )
+                {
+                    ObjectPoolManager.instance.AddMultipleToPool(
+                        ObjectPoolConst.ImpactCannonLightenPool,
+                        ObjectPoolManager.instance.ImpactCannonLightenPrefab,
+                        10
+                    );
+                }
+                if (
+                    ObjectPoolManager.instance.GetPoolCount(
+                        ObjectPoolConst.ImpactCannonHitLightenPool
+                    ) == 0
+                )
+                {
+                    ObjectPoolManager.instance.AddMultipleToPool(
+                        ObjectPoolConst.ImpactCannonHitLightenPool,
+                        ObjectPoolManager.instance.IImpactCannonHitLightenPrefab,
+                        20
+                    );
+                }
+                break;
+            case Element.Winter:
+                if (
+                    ObjectPoolManager.instance.GetPoolCount(ObjectPoolConst.ImpactCannonWinterPool)
+                    == 0
+                )
+                {
+                    ObjectPoolManager.instance.AddMultipleToPool(
+                        ObjectPoolConst.ImpactCannonWinterPool,
+                        ObjectPoolManager.instance.ImpactCannonWinterPrefab,
+                        10
+                    );
+                }
+                if (
+                    ObjectPoolManager.instance.GetPoolCount(
+                        ObjectPoolConst.ImpactCannonHitWinterPool
+                    ) == 0
+                )
+                {
+                    ObjectPoolManager.instance.AddMultipleToPool(
+                        ObjectPoolConst.ImpactCannonHitWinterPool,
+                        ObjectPoolManager.instance.ImpactCannonHitWinterPrefab,
+                        20
+                    );
+                }
+                break;
+            case Element.Grass:
+                if (
+                    ObjectPoolManager.instance.GetPoolCount(ObjectPoolConst.ImpactCannonGrassPool)
+                    == 0
+                )
+                {
+                    ObjectPoolManager.instance.AddMultipleToPool(
+                        ObjectPoolConst.ImpactCannonGrassPool,
+                        ObjectPoolManager.instance.ImpactCannonGrassPrefab,
+                        10
+                    );
+                }
+                if (
+                    ObjectPoolManager.instance.GetPoolCount(
+                        ObjectPoolConst.ImpactCannonHitGrassPool
+                    ) == 0
+                )
+                {
+                    ObjectPoolManager.instance.AddMultipleToPool(
+                        ObjectPoolConst.ImpactCannonHitGrassPool,
+                        ObjectPoolManager.instance.ImpactCannonHitGrassPrefab,
+                        20
+                    );
+                }
+                break;
+        }
     }
 
     private void OnSceneLoad(Scene scene, LoadSceneMode mode) { }

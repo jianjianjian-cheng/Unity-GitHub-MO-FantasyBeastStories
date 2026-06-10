@@ -1,10 +1,11 @@
 using System.Collections;
 using Manager;
+using Photon.Pun;
 using UnityEngine;
 
 namespace Items
 {
-    public class DropItemBase : MonoBehaviour
+    public class DropItemBase : MonoBehaviourPun
     {
         [Header("掉落参数")]
         [SerializeField]
@@ -143,6 +144,32 @@ namespace Items
 
         protected virtual void OnReachPlayer()
         {
+            // 如果是测试模式，直接销毁
+            if (GameManager.isTest)
+            {
+                NetworkObjectPoolManager.instance.Despawn(
+                    NetworkObjectPoolConst.ExperienceBall_Blue,
+                    gameObject
+                );
+                return;
+            }
+            // 如果是 MasterClient，直接销毁
+            if (PhotonNetwork.IsMasterClient)
+            {
+                NetworkObjectPoolManager.instance.Despawn(
+                    NetworkObjectPoolConst.ExperienceBall_Blue,
+                    gameObject
+                );
+                return;
+            }
+            // 如果不是 MasterClient，发送 RPC 让 MasterClient 销毁
+            photonView.RPC("RPC_DespawnItem", RpcTarget.MasterClient);
+        }
+
+        [PunRPC]
+        public void RPC_DespawnItem()
+        {
+            // 只有 MasterClient 会执行此 RPC
             NetworkObjectPoolManager.instance.Despawn(
                 NetworkObjectPoolConst.ExperienceBall_Blue,
                 gameObject
