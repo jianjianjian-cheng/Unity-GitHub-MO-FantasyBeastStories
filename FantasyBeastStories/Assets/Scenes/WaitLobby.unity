@@ -7968,6 +7968,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EventName: 
   sceneIndex: 2
+  isReady: 0
   lobbyButton: {fileID: 0}
   spawnPoints: []
   isStayLobbyInspector: 0
@@ -20607,7 +20608,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a71157e95d3e03942a25398d6915bdd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentlySelectedCharacter: {fileID: 1730347233849070163, guid: 73e94c4fb2665764cbf3589e09791fe1, type: 3}
+  currentlySelectedCharacter: {fileID: 705579002151168019, guid: 73e94c4fb2665764cbf3589e09791fe1, type: 3}
 --- !u!4 &2043892764
 Transform:
   m_ObjectHideFlags: 0

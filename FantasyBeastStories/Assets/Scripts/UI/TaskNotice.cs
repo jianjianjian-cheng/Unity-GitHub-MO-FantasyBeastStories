@@ -92,12 +92,12 @@ public class TaskNotice : MonoBehaviour
         // 设置初始状态
         if (slideIn)
         {
-            // 滑入：从右边开始，透明
-            rectTransform.anchoredPosition = originalPosition + new Vector2(moveDistance, 0);
+            // 滑入：从左边开始，透明
+            rectTransform.anchoredPosition = originalPosition - new Vector2(moveDistance, 0);
             canvasGroup.alpha = 0f;
             gameObject.SetActive(true);
 
-            // 向左移动到原位 + 逐渐显示
+            // 向右移动到原位 + 逐渐显示
             Sequence sequence = DOTween.Sequence();
             sequence.Join(
                 rectTransform.DOAnchorPos(originalPosition, animationDuration).SetEase(easeType)
@@ -107,11 +107,11 @@ public class TaskNotice : MonoBehaviour
         }
         else
         {
-            // 滑出：从原位向右移动 + 逐渐隐藏
+            // 滑出：从原位向左移动 + 逐渐隐藏
             Sequence sequence = DOTween.Sequence();
             sequence.Join(
                 rectTransform
-                    .DOAnchorPos(originalPosition + new Vector2(moveDistance, 0), animationDuration)
+                    .DOAnchorPos(originalPosition - new Vector2(moveDistance, 0), animationDuration)
                     .SetEase(easeType)
             );
             sequence.Join(canvasGroup.DOFade(0f, animationDuration).SetEase(easeType));

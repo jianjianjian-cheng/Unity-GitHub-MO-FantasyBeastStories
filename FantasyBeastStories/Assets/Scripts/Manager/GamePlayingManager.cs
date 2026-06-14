@@ -366,9 +366,16 @@ namespace Manager
             TaskManager.instance.SetNotice(eventData.eventName, eventData.description);
             // 随机选择一个玩家
             GameObject randomPlayer = players[Random.Range(0, players.Count)];
-            //根据玩家位置100-300范围内随机生成任务
-            Vector3 randomPosition = randomPlayer.transform.position + Random.insideUnitSphere * 20;
-            //只取xz平面
+            // 在玩家位置250-300范围内随机生成任务
+            Vector3 randomDirection = Random.insideUnitSphere;
+            randomDirection.y = 0; // 去掉y轴分量，只在xz平面生成方向
+            randomDirection.Normalize(); // 归一化为单位向量
+
+            float randomDistance = Random.Range(20f, 30f);
+            Vector3 randomPosition =
+                randomPlayer.transform.position + randomDirection * randomDistance;
+
+            // 只取xz平面，固定y轴高度
             randomPosition.y = 0.5f;
             //激活任务
             TaskManager.instance.ActivateTask(TaskConst.KillSacrifice, randomPosition, 7f, 10);

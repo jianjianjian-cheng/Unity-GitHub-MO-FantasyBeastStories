@@ -433,8 +433,8 @@ namespace Manager
         private IEnumerator ShowTaskPreface(string taskName)
         {
             taskPreface.gameObject.SetActive(true);
-            taskPreface.GetComponent<TextMeshProUGUI>().text = taskName + " 任务即将开始了......";
-            yield return new WaitForSeconds(20f);
+            taskPreface.GetComponent<TextMeshProUGUI>().text = taskName + " 任务即将开始......";
+            yield return new WaitForSeconds(5f);
             taskPreface.GetComponent<TaskPreface>().PlayTextAnimation(false);
             yield return new WaitForSeconds(1f);
             taskPreface.gameObject.SetActive(false);

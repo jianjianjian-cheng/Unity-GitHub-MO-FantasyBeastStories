@@ -36,8 +36,13 @@ public class TaskManager : MonoBehaviourPun
     [SerializeField]
     private TaskNotice taskNotice;
 
+    [SerializeField]
+    private DirectionIndicator _indicator;
+
     // 任务字典
     private Dictionary<string, KillTask> tasks = new Dictionary<string, KillTask>();
+
+    private HashSet<int> reportedEnemies = new HashSet<int>();
 
     // UI更新事件（本地客户端）
     public event System.Action<KillTask> OnTaskUpdated;
@@ -55,8 +60,6 @@ public class TaskManager : MonoBehaviourPun
 
     public void SetNotice(string name, string description)
     {
-        taskNotice.gameObject.SetActive(true);
-        taskNotice.SetInfo(name, description, $"");
         photonView.RPC("RPC_SetNotice", RpcTarget.All, name, description);
     }
 
@@ -69,6 +72,7 @@ public class TaskManager : MonoBehaviourPun
     [PunRPC]
     void RPC_SetNotice(string name, string description)
     {
+        taskNotice.gameObject.SetActive(true);
         taskNotice.SetInfo(name, description, "");
     }
 
@@ -107,6 +111,7 @@ public class TaskManager : MonoBehaviourPun
             Quaternion.identity
         );
         Debug.Log($"任务{taskId}已激活，中心位置：{center}" + taskZone.name);
+        _indicator.SetTargetAndImage(center, taskId);
     }
 
     // 任何客户端杀死敌人时调用
@@ -122,6 +127,11 @@ public class TaskManager : MonoBehaviourPun
         if (!PhotonNetwork.IsMasterClient)
             return;
 
+        if (reportedEnemies.Contains(enemyViewID))
+        {
+            return;
+        }
+
         foreach (var task in tasks.Values)
         {
             if (task.IsCompleted)
@@ -130,6 +140,7 @@ public class TaskManager : MonoBehaviourPun
             if (Vector3.Distance(killPosition, task.ZoneCenter) <= task.ZoneRadius)
             {
                 task.CurrentKills++;
+                reportedEnemies.Add(enemyViewID);
                 Debug.LogWarning(
                     $"任务{task.TaskId}击 增加1," + $"当前击杀次数：{task.CurrentKills}"
                 );
@@ -172,6 +183,7 @@ public class TaskManager : MonoBehaviourPun
         Debug.LogWarning(
             $"任务{task.TaskId}已完成，击杀目标：{task.RequiredKills}，击杀次数：{task.CurrentKills}"
         );
+        _indicator.SetTargetAndImage(task.ZoneCenter, null);
         StartCoroutine(HideTaskNotice());
         Destroy(taskZone.gameObject);
         taskZone = null;

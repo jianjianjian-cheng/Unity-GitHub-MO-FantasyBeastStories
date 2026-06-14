@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Events;
 using FX;
 using Manager;
+using Other;
 using Photon.Pun;
 using Trigger;
 using UnityEngine;
@@ -74,6 +75,14 @@ namespace Photon.CastSciprt
                 }
                 // 重要：传入 isMine = false，这个火球不会判定伤害
                 cannon.StartShoot(direction, isMine: false);
+                //绑定token
+                AttackToken token = new AttackToken
+                {
+                    hitCollider = triggerObj,
+                    vfxEffect = visualObj,
+                    vfxPoolName = visualPool,
+                };
+                cannon.SetToken(token);
             }
         }
 
@@ -295,6 +304,13 @@ namespace Photon.CastSciprt
                 {
                     cannon.StartShoot(direction, isMine: false);
                     cannon.canSplit = false;
+
+                    AttackToken token = new AttackToken
+                    {
+                        hitCollider = triggerObj,
+                        vfxEffect = visualObj,
+                        vfxPoolName = visualPool,
+                    };
                 }
             }
         }
