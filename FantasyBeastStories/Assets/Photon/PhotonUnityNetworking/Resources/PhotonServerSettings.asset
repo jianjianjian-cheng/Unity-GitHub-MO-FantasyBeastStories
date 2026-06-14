@@ -64,6 +64,10 @@ MonoBehaviour:
   - RPC_TaskCompleted
   - RPC_SetNotice
   - Notice_Data
+  - RPC_SyncStartCaTime
+  - RPC_UpdateAllPlayerTimeUI
+  - TaskFailed
+  - RPC_TaskFailed
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

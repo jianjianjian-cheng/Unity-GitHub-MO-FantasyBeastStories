@@ -18,6 +18,9 @@ public class TaskNotice : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI data;
 
+    [SerializeField]
+    private TextMeshProUGUI limitTime;
+
     [Header("动画设置")]
     [SerializeField]
     private float animationDuration = 0.5f; // 动画持续时间
@@ -57,11 +60,12 @@ public class TaskNotice : MonoBehaviour
 
     void Update() { }
 
-    public void SetInfo(string name, string description, string data)
+    public void SetInfo(string name, string description, string data, int limitTime)
     {
         this.name.text = name;
         this.description.text = description;
         this.data.text = data;
+        this.limitTime.text = "剩余时间：" + limitTime.ToString();
     }
 
     public void Notice_Data(string data)
@@ -78,6 +82,11 @@ public class TaskNotice : MonoBehaviour
     {
         // 停止动画防止报错
         KillTween();
+    }
+
+    public void UpDateTime(string time)
+    {
+        limitTime.text = time;
     }
 
     /// <summary>

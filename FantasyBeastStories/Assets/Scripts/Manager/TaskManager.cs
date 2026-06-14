@@ -44,6 +44,11 @@ public class TaskManager : MonoBehaviourPun
 
     private HashSet<int> reportedEnemies = new HashSet<int>();
 
+    //倒计时相关变量
+    private int countdownTime = 0;
+    private int taskDuration;
+    private Coroutine taskRoutine;
+
     // UI更新事件（本地客户端）
     public event System.Action<KillTask> OnTaskUpdated;
     public event System.Action<KillTask> OnTaskCompleted;
@@ -58,23 +63,83 @@ public class TaskManager : MonoBehaviourPun
         OnTaskCompleted -= OnTaskCompletedFun;
     }
 
-    public void SetNotice(string name, string description)
+    public void SetNotice(string name, string description, int limitTime)
     {
-        photonView.RPC("RPC_SetNotice", RpcTarget.All, name, description);
+        photonView.RPC("RPC_SetNotice", RpcTarget.All, name, description, limitTime);
+    }
+
+    /// <summary>
+    /// 开始任务倒计时,房主启用这个方法
+    /// </summary>
+    /// <returns></returns>
+    private void StartCountdownTime(int time)
+    {
+        countdownTime = time;
+
+        if (taskRoutine != null)
+        {
+            StopCoroutine(taskRoutine);
+        }
+
+        StartCoroutine(TaskRoutine());
+    }
+
+    IEnumerator TaskRoutine()
+    {
+        string time = "";
+        while (countdownTime > 0)
+        {
+            yield return new WaitForSeconds(1f);
+            countdownTime--;
+            //这里更新UI显示
+            int min = Mathf.FloorToInt(countdownTime / 60);
+            int sec = Mathf.FloorToInt(countdownTime % 60);
+            time = "剩余时间：" + $"{min:D2}:{sec:D2}";
+            photonView.RPC("RPC_UpdateAllPlayerTimeUI", RpcTarget.All, time);
+        }
+        //时间结束，任务失败
+        Debug.LogWarning("任务失败");
+        photonView.RPC("RPC_TaskFailed", RpcTarget.All);
+        //执行UI相关逻辑
+        yield break;
+    }
+
+    /// <summary>
+    /// 更新剩余时间UI
+    /// </summary>
+    /// <param name="time">剩余时间</param>
+    [PunRPC]
+    private void RPC_UpdateAllPlayerTimeUI(string time)
+    {
+        taskNotice.UpDateTime(time);
+    }
+
+    /// <summary>
+    /// 任务失败同步
+    /// </summary>
+    [PunRPC]
+    private void RPC_TaskFailed()
+    {
+        Destroy(taskZone.gameObject);
+        _indicator.SetTargetName(null);
+        StartCoroutine(HideTaskNotice());
     }
 
     public IEnumerator HideTaskNotice()
     {
+        taskNotice.PlaySlideAnimation(false);
         yield return new WaitForSeconds(1f);
         taskNotice.gameObject.SetActive(false);
     }
 
     [PunRPC]
-    void RPC_SetNotice(string name, string description)
+    void RPC_SetNotice(string name, string description, int limitTime)
     {
         taskNotice.gameObject.SetActive(true);
-        taskNotice.SetInfo(name, description, "");
+        taskNotice.SetInfo(name, description, "", limitTime);
     }
+
+    //任务倒计时函数
 
     void Notice_Data(string data)
     {
@@ -82,7 +147,13 @@ public class TaskManager : MonoBehaviourPun
     }
 
     // 主机激活任务
-    public void ActivateTask(string taskId, Vector3 center, float radius, int requiredKills)
+    public void ActivateTask(
+        string taskId,
+        Vector3 center,
+        float radius,
+        int requiredKills,
+        int limitTime
+    )
     {
         if (!PhotonNetwork.IsMasterClient)
             return;
@@ -91,7 +162,11 @@ public class TaskManager : MonoBehaviourPun
         );
         var task = new KillTask(taskId, center, radius, requiredKills);
         tasks[taskId] = task;
-
+        if (PhotonNetwork.IsMasterClient)
+        {
+            //开始任务倒计时
+            StartCountdownTime(limitTime);
+        }
         // 同步到所有客户端
         photonView.RPC("RPC_ActivateTask", RpcTarget.All, taskId, center, radius, requiredKills);
     }
@@ -106,7 +181,7 @@ public class TaskManager : MonoBehaviourPun
 
         // 在相应位置生成任务区域
         taskZone = Instantiate(
-            Resources.Load<GameObject>("TaskPrefab/" + TaskConst.KillSacrifice),
+            Resources.Load<GameObject>("TaskPrefab/" + taskId),
             center,
             Quaternion.identity
         );
@@ -186,6 +261,10 @@ public class TaskManager : MonoBehaviourPun
         _indicator.SetTargetAndImage(task.ZoneCenter, null);
         StartCoroutine(HideTaskNotice());
         Destroy(taskZone.gameObject);
+        if (taskRoutine != null)
+        {
+            StopCoroutine(taskRoutine);
+        }
         taskZone = null;
         //奖励玩家
         MagicUpgradeManager.instance.isAllExCard = true;

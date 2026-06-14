@@ -18,6 +18,9 @@ namespace Manager.TimeSystem
         [Tooltip("触发时间（秒）")]
         public float triggerTime;
 
+        [Tooltip("限制时间")]
+        public int limittime;
+
         [Tooltip("图标（本地加载，不同步）")]
         public Sprite eventIcon;
 
@@ -47,6 +50,7 @@ namespace Manager.TimeSystem
                 eventId = this.eventId,
                 eventName = this.eventName,
                 triggerTime = this.triggerTime,
+                limittime = this.limittime,
                 eventIcon = this.eventIcon,
                 iconResourcePath = this.iconResourcePath,
                 iconColor = this.iconColor,

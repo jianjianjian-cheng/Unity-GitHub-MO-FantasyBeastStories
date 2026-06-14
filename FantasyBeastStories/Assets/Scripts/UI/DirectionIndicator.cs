@@ -1,7 +1,8 @@
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DirectionIndicator : MonoBehaviour
+public class DirectionIndicator : MonoBehaviourPun
 {
     [Header("目标设置")]
     public Vector3 targetPosition;
@@ -13,6 +14,8 @@ public class DirectionIndicator : MonoBehaviour
     private RectTransform indicatorRect;
     private Image indicatorImage;
     private CanvasGroup canvasGroup; // 添加CanvasGroup控制可见性
+
+    [SerializeField]
     private string currentName;
 
     void Start()
@@ -33,10 +36,15 @@ public class DirectionIndicator : MonoBehaviour
             canvasGroup = gameObject.AddComponent<CanvasGroup>();
     }
 
+    public void SetTargetName(string name)
+    {
+        currentName = name;
+    }
+
     public void SetTargetAndImage(Vector3 position, string imageName)
     {
         this.targetPosition = position;
-
+        currentName = imageName;
         if (indicatorImage == null)
             indicatorImage = GetComponent<Image>();
 
@@ -57,7 +65,7 @@ public class DirectionIndicator : MonoBehaviour
 
     void Update()
     {
-        if (mainCamera == null)
+        if (mainCamera == null || photonView.IsMine == false)
             return;
 
         Vector3 screenPos = mainCamera.WorldToScreenPoint(targetPosition);
@@ -76,6 +84,13 @@ public class DirectionIndicator : MonoBehaviour
             canvasGroup.alpha = 0f;
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;
+            return;
+        }
+        else
+        {
+            canvasGroup.alpha = 1f;
+            canvasGroup.interactable = true;
+            canvasGroup.blocksRaycasts = true;
         }
 
         if (isOnScreen && !isBehindCamera)
@@ -94,7 +109,7 @@ public class DirectionIndicator : MonoBehaviour
 
             Vector2 clampedScreenPos = ClampToScreenEdge(screenPos);
             indicatorRect.position = clampedScreenPos;
-            RotateTowardsTarget(clampedScreenPos, screenPos);
+            // RotateTowardsTarget(clampedScreenPos, screenPos);
         }
     }
 

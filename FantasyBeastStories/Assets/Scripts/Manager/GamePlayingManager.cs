@@ -363,7 +363,11 @@ namespace Manager
                 return;
             }
 
-            TaskManager.instance.SetNotice(eventData.eventName, eventData.description);
+            TaskManager.instance.SetNotice(
+                eventData.eventName,
+                eventData.description,
+                eventData.limittime
+            );
             // 随机选择一个玩家
             GameObject randomPlayer = players[Random.Range(0, players.Count)];
             // 在玩家位置250-300范围内随机生成任务
@@ -378,7 +382,13 @@ namespace Manager
             // 只取xz平面，固定y轴高度
             randomPosition.y = 0.5f;
             //激活任务
-            TaskManager.instance.ActivateTask(TaskConst.KillSacrifice, randomPosition, 7f, 10);
+            TaskManager.instance.ActivateTask(
+                TaskConst.KillSacrifice,
+                randomPosition,
+                7f,
+                10,
+                eventData.limittime
+            );
         }
 
         void OnTimeEventReceived(EventArgsBase args)

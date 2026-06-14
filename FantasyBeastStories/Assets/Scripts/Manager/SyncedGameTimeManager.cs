@@ -101,13 +101,20 @@ namespace Manager
                 timeSlider.wholeNumbers = false;
             }
 
-            if (autoStart)
+            if (autoStart && PhotonNetwork.IsMasterClient)
             {
-                StartGameTime();
+                photonView.RPC("RPC_SyncStartCaTime", RpcTarget.All);
             }
 
             // 【修复】延迟初始化UI，等待布局完成
             StartCoroutine(DelayedInitializeUI());
+        }
+
+        //通知其他玩家游戏开始计时
+        [PunRPC]
+        private void RPC_SyncStartCaTime()
+        {
+            StartGameTime();
         }
 
         /// <summary>
@@ -421,7 +428,7 @@ namespace Manager
 
             foreach (var timeEvent in timeEvents)
             {
-                // 【核心修改】当前时间 >= (触发时间 - 提前量) 时就显示图标
+                //当前时间 >= (触发时间 - 提前量) 时就显示图标
                 if (currentTime >= timeEvent.triggerTime - markerAdvanceTime)
                 {
                     ShowEventMarker(timeEvent.eventId);
