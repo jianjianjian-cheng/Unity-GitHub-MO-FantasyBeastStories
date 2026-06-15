@@ -342,11 +342,16 @@ namespace Manager
                 case "KillSacrifice":
                     KillSacrifice(eventData);
                     break;
-                case "powerup_spawn":
+                case "EscortRobot":
+                    EscortRobot(eventData);
                     break;
             }
         }
 
+        /// <summary>
+        /// 灵魂献祭任务
+        /// </summary>
+        /// <param name="eventData"></param>
         private void KillSacrifice(TimeEventData eventData)
         {
             Debug.Log($"任务激活: {eventData.eventName}" + eventData.description);
@@ -354,20 +359,71 @@ namespace Manager
             {
                 return;
             }
-            //获取一个随机玩家的位置
-            IReadOnlyList<GameObject> players =
-                PlayerManager.instance != null ? PlayerManager.instance.ActivePlayerObjects : null;
-            if (players == null || players.Count == 0)
-            {
-                Debug.LogError("没有玩家在线，无法激活任务");
-                return;
-            }
+
+            Vector3 randomPosition = GetRandomPlayerPosition();
 
             TaskManager.instance.SetNotice(
                 eventData.eventName,
                 eventData.description,
                 eventData.limittime
             );
+
+            KillTask killTask = new KillTask(
+                TaskConst.KillSacrifice,
+                randomPosition,
+                7f,
+                10,
+                eventData.limittime
+            );
+
+            //激活任务
+            TaskManager.instance.ActivateTask(killTask);
+        }
+
+        /// <summary>
+        /// 机器人护送
+        /// </summary>
+        /// <param name="eventData"></param>
+        private void EscortRobot(TimeEventData eventData)
+        {
+            if (!PhotonNetwork.IsMasterClient)
+            {
+                return;
+            }
+            Debug.Log($"任务激活: {eventData.eventName}" + eventData.description);
+
+            Vector3 randomPosition = GetRandomPlayerPosition();
+
+            TaskManager.instance.SetNotice(
+                eventData.eventName,
+                eventData.description,
+                eventData.limittime
+            );
+
+            EscortTask escortTask = new EscortTask(
+                eventData.eventId,
+                randomPosition,
+                3,
+                6,
+                eventData.limittime
+            );
+
+            TaskManager.instance.ActivateTask(escortTask);
+        }
+
+        /// <summary>
+        /// 获取随机一位玩家附近位置
+        /// </summary>
+        private Vector3 GetRandomPlayerPosition()
+        {
+            //获取一个随机玩家的位置
+            IReadOnlyList<GameObject> players =
+                PlayerManager.instance != null ? PlayerManager.instance.ActivePlayerObjects : null;
+            if (players == null || players.Count == 0)
+            {
+                Debug.LogError("没有玩家在线，无法激活任务");
+            }
+
             // 随机选择一个玩家
             GameObject randomPlayer = players[Random.Range(0, players.Count)];
             // 在玩家位置250-300范围内随机生成任务
@@ -381,14 +437,7 @@ namespace Manager
 
             // 只取xz平面，固定y轴高度
             randomPosition.y = 0.5f;
-            //激活任务
-            TaskManager.instance.ActivateTask(
-                TaskConst.KillSacrifice,
-                randomPosition,
-                7f,
-                10,
-                eventData.limittime
-            );
+            return randomPosition;
         }
 
         void OnTimeEventReceived(EventArgsBase args)

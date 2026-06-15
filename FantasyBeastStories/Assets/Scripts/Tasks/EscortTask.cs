@@ -2,20 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// 任务数据类
 [System.Serializable]
-public class KillTask : TaskBase
+public class EscortTask : TaskBase
 {
-    public int RequiredKills;
-    public int CurrentKills;
+    public int requiredEscorts;
+    public int currentEscorts;
 
-    public KillTask(string id, Vector3 center, float radius, int required, int limitTime)
+    public EscortTask(string id, Vector3 center, float radius, int required, int limitTime)
     {
         TaskId = id;
         ZoneCenter = center;
         ZoneRadius = radius;
-        RequiredKills = required;
-        CurrentKills = 0;
+        requiredEscorts = required;
+        currentEscorts = 0;
         IsCompleted = false;
         this.limitTime = limitTime;
     }

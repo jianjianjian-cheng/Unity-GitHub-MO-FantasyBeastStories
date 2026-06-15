@@ -9,18 +9,21 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Flow_blue
   m_Shader: {fileID: 4800000, guid: b387440eda495a14c9be1ffe9873b2e5, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _FLOWLIGHT_ON
   m_InvalidKeywords:
   - _EMISSION
   - _NORMALMAP
   - _SPECGLOSSMAP
-  m_LightmapFlags: 1
+  m_LightmapFlags: 5
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -107,7 +110,7 @@ Material:
     - _DstBlend: 0
     - _Flow: 0
     - _FlowLight: 1
-    - _FlowSpeed: 0.3
+    - _FlowSpeed: 1.2
     - _GlossLevel: 0
     - _GlossMapScale: 1
     - _GlossMapScale1: 0

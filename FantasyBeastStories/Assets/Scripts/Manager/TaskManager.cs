@@ -40,7 +40,7 @@ public class TaskManager : MonoBehaviourPun
     private DirectionIndicator _indicator;
 
     // 任务字典
-    private Dictionary<string, KillTask> tasks = new Dictionary<string, KillTask>();
+    private Dictionary<string, TaskBase> tasks = new Dictionary<string, TaskBase>();
 
     private HashSet<int> reportedEnemies = new HashSet<int>();
 
@@ -50,8 +50,8 @@ public class TaskManager : MonoBehaviourPun
     private Coroutine taskRoutine;
 
     // UI更新事件（本地客户端）
-    public event System.Action<KillTask> OnTaskUpdated;
-    public event System.Action<KillTask> OnTaskCompleted;
+    public event System.Action<TaskBase> OnTaskUpdated;
+    public event System.Action<TaskBase> OnTaskCompleted;
 
     private void OnEnable()
     {
@@ -81,7 +81,7 @@ public class TaskManager : MonoBehaviourPun
             StopCoroutine(taskRoutine);
         }
 
-        StartCoroutine(TaskRoutine());
+        taskRoutine = StartCoroutine(TaskRoutine());
     }
 
     IEnumerator TaskRoutine()
@@ -120,6 +120,10 @@ public class TaskManager : MonoBehaviourPun
     [PunRPC]
     private void RPC_TaskFailed()
     {
+        if ((taskZone == null))
+        {
+            return;
+        }
         Destroy(taskZone.gameObject);
         _indicator.SetTargetName(null);
         StartCoroutine(HideTaskNotice());
@@ -147,57 +151,113 @@ public class TaskManager : MonoBehaviourPun
     }
 
     // 主机激活任务
-    public void ActivateTask(
-        string taskId,
-        Vector3 center,
-        float radius,
-        int requiredKills,
-        int limitTime
-    )
+    public void ActivateTask(TaskBase taskBase)
     {
         if (!PhotonNetwork.IsMasterClient)
             return;
-        Debug.LogWarning(
-            $"激活任务{taskId}，中心位置：{center}，半径：{radius}，击杀目标：{requiredKills}"
-        );
-        var task = new KillTask(taskId, center, radius, requiredKills);
-        tasks[taskId] = task;
+        switch (taskBase)
+        {
+            case KillTask killTask:
+                // 同步到所有客户端
+                photonView.RPC(
+                    "RPC_ActivateKillTask",
+                    RpcTarget.All,
+                    killTask.TaskId,
+                    killTask.limitTime,
+                    killTask.ZoneCenter,
+                    killTask.RequiredKills
+                );
+                break;
+            case EscortTask escortTask:
+                // 同步到所有客户端
+                photonView.RPC(
+                    "RPC_ActivateEscortTask",
+                    RpcTarget.All,
+                    escortTask.TaskId,
+                    escortTask.limitTime,
+                    escortTask.ZoneCenter,
+                    escortTask.requiredEscorts
+                );
+                break;
+            default:
+                break;
+        }
+    }
+
+    /// <summary>
+    /// 击杀类型任务
+    /// </summary>
+    /// <param name="taskId"></param>
+    /// <param name="limitTime"></param>
+    /// <param name="ZoneCenter"></param>
+    /// <param name="requiredKills"></param>
+    [PunRPC]
+    void RPC_ActivateKillTask(string taskId, int limitTime, Vector3 ZoneCenter, int requiredKills)
+    {
         if (PhotonNetwork.IsMasterClient)
         {
             //开始任务倒计时
             StartCountdownTime(limitTime);
         }
-        // 同步到所有客户端
-        photonView.RPC("RPC_ActivateTask", RpcTarget.All, taskId, center, radius, requiredKills);
-    }
-
-    [PunRPC]
-    void RPC_ActivateTask(string taskId, Vector3 center, float radius, int requiredKills)
-    {
-        if (!tasks.ContainsKey(taskId))
-        {
-            tasks[taskId] = new KillTask(taskId, center, radius, requiredKills);
-        }
-
         // 在相应位置生成任务区域
         taskZone = Instantiate(
             Resources.Load<GameObject>("TaskPrefab/" + taskId),
-            center,
+            ZoneCenter,
             Quaternion.identity
         );
-        Debug.Log($"任务{taskId}已激活，中心位置：{center}" + taskZone.name);
-        _indicator.SetTargetAndImage(center, taskId);
+        //使用字典是因为后续可能实现同时存在多个任务，暂时使用字典
+        tasks.Clear();
+
+        KillTask killTask = new KillTask(taskId, ZoneCenter, 7, requiredKills, limitTime);
+        tasks[taskId] = killTask;
+
+        Debug.Log($"任务{taskId}已激活，中心位置：{ZoneCenter}" + taskZone.name);
+        _indicator.SetTargetAndImage(ZoneCenter, taskId);
     }
 
-    // 任何客户端杀死敌人时调用
-    public void ReportKill(Vector3 killPosition, PhotonView enemyView)
+    /// <summary>
+    /// 护送类型任务
+    /// </summary>
+    /// <param name="taskId"></param>
+    /// <param name="limitTime"></param>
+    /// <param name="ZoneCenter"></param>
+    /// <param name="requiredEscorts"></param>
+    [PunRPC]
+    void RPC_ActivateEscortTask(
+        string taskId,
+        int limitTime,
+        Vector3 ZoneCenter,
+        int requiredEscorts
+    )
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            //开始任务倒计时
+            StartCountdownTime(limitTime);
+        }
+        // 在相应位置生成任务区域
+        taskZone = Instantiate(
+            Resources.Load<GameObject>("TaskPrefab/" + taskId),
+            ZoneCenter,
+            Quaternion.identity
+        );
+        //使用字典是因为后续可能实现同时存在多个任务，暂时使用字典
+        tasks.Clear();
+        EscortTask escortTask = new EscortTask(taskId, ZoneCenter, 4, requiredEscorts, limitTime);
+        tasks[escortTask.TaskId] = escortTask;
+        Debug.Log($"任务{taskId}已激活，中心位置：{ZoneCenter}" + taskZone.name);
+        _indicator.SetTargetAndImage(ZoneCenter, taskId);
+    }
+
+    // 任何客户端完成击杀/运送时调用
+    public void ReportCount(Vector3 killPosition, PhotonView enemyView)
     {
         // 只由 Master Client 处理
-        photonView.RPC("RPC_ReportKill", RpcTarget.MasterClient, killPosition, enemyView.ViewID);
+        photonView.RPC("RPC_ReportCount", RpcTarget.MasterClient, killPosition, enemyView.ViewID);
     }
 
     [PunRPC]
-    void RPC_ReportKill(Vector3 killPosition, int enemyViewID)
+    void RPC_ReportCount(Vector3 killPosition, int enemyViewID)
     {
         if (!PhotonNetwork.IsMasterClient)
             return;
@@ -212,52 +272,92 @@ public class TaskManager : MonoBehaviourPun
             if (task.IsCompleted)
                 continue;
 
-            if (Vector3.Distance(killPosition, task.ZoneCenter) <= task.ZoneRadius)
+            if (task is KillTask killTask)
             {
-                task.CurrentKills++;
-                reportedEnemies.Add(enemyViewID);
-                Debug.LogWarning(
-                    $"任务{task.TaskId}击 增加1," + $"当前击杀次数：{task.CurrentKills}"
-                );
-                if (task.CurrentKills >= task.RequiredKills)
+                //强转为KillTask
+                KillTask kt = task as KillTask;
+                if (Vector3.Distance(killPosition, task.ZoneCenter) <= task.ZoneRadius)
                 {
-                    task.IsCompleted = true;
-                }
-                // 同步进度到所有客户端
-                photonView.RPC(
-                    "RPC_UpdateProgress",
-                    RpcTarget.All,
-                    task.TaskId,
-                    task.CurrentKills,
-                    task.IsCompleted
-                );
+                    kt.CurrentKills++;
+                    reportedEnemies.Add(enemyViewID);
+                    Debug.LogWarning(
+                        $"任务{task.TaskId}击 增加1," + $"当前击杀次数：{kt.CurrentKills}"
+                    );
+                    if (kt.CurrentKills >= kt.RequiredKills)
+                    {
+                        task.IsCompleted = true;
+                    }
+                    // 同步进度到所有客户端
+                    photonView.RPC(
+                        "RPC_UpdateProgress",
+                        RpcTarget.All,
+                        task.TaskId,
+                        kt.CurrentKills,
+                        task.IsCompleted
+                    );
 
-                break; // 一个击杀只算一个任务，根据需求调整
+                    break; // 一个击杀只算一个任务，根据需求调整
+                }
+            }
+
+            if (task is EscortTask escortTask)
+            {
+                if (Vector3.Distance(killPosition, task.ZoneCenter) <= task.ZoneRadius)
+                {
+                    escortTask.currentEscorts++;
+                    reportedEnemies.Add(enemyViewID);
+                    Debug.LogWarning(
+                        $"任务{task.TaskId}击 增加1,"
+                            + $"当前运输机器人：{escortTask.currentEscorts}"
+                    );
+                    if (escortTask.currentEscorts >= escortTask.requiredEscorts)
+                    {
+                        escortTask.IsCompleted = true;
+                    }
+                    // 同步进度到所有客户端
+                    photonView.RPC(
+                        "RPC_UpdateProgress",
+                        RpcTarget.All,
+                        task.TaskId,
+                        escortTask.currentEscorts,
+                        task.IsCompleted
+                    );
+
+                    break; // 一个运送只算一个任务，根据需求调整
+                }
             }
         }
     }
 
     [PunRPC]
-    void RPC_UpdateProgress(string taskId, int kills, bool completed)
+    void RPC_UpdateProgress(string taskId, int count, bool completed)
     {
         if (tasks.TryGetValue(taskId, out var task))
         {
-            task.CurrentKills = kills;
-            task.IsCompleted = completed;
-            OnTaskUpdated?.Invoke(task);
-            Notice_Data($"{kills}/{task.RequiredKills}");
+            switch (task)
+            {
+                case KillTask killTask:
+                    killTask.CurrentKills = count;
+                    killTask.IsCompleted = completed;
+                    OnTaskUpdated?.Invoke(task);
+                    Notice_Data($"{count}/{killTask.RequiredKills}");
+                    break;
+                case EscortTask escortTask:
+                    escortTask.currentEscorts = count;
+                    escortTask.IsCompleted = completed;
+                    OnTaskUpdated?.Invoke(task);
+                    Notice_Data($"{count}/{escortTask.requiredEscorts}");
+                    break;
+            }
 
             if (completed)
                 OnTaskCompleted?.Invoke(task);
         }
     }
 
-    void OnTaskCompletedFun(KillTask task)
+    void OnTaskCompletedFun(TaskBase task)
     {
         // 任务完成后的处理
-        Debug.LogWarning(
-            $"任务{task.TaskId}已完成，击杀目标：{task.RequiredKills}，击杀次数：{task.CurrentKills}"
-        );
         _indicator.SetTargetAndImage(task.ZoneCenter, null);
         StartCoroutine(HideTaskNotice());
         Destroy(taskZone.gameObject);
@@ -272,21 +372,6 @@ public class TaskManager : MonoBehaviourPun
             GamePlayingManager.instance.GetUpgradeExperience()
         );
     }
-
-    // private void RPC_TaskCompleted(KillTask task)
-    // {
-    //     // 任务完成后的处理
-    //     Debug.LogWarning(
-    //         $"任务{task.TaskId}已完成，击杀目标：{task.RequiredKills}，击杀次数：{task.CurrentKills}"
-    //     );
-    //     Destroy(taskZone.gameObject);
-    //     taskZone = null;
-    //     //奖励玩家
-    //     MagicUpgradeManager.instance.isAllExCard = true;
-    //     GamePlayingManager.instance.AddExperience(
-    //         GamePlayingManager.instance.GetUpgradeExperience()
-    //     );
-    // }
 
     // 在Scene视图中绘制任务区域
     void OnDrawGizmos()
@@ -306,6 +391,12 @@ public class TaskManager : MonoBehaviourPun
             Gizmos.DrawSphere(task.ZoneCenter, 0.3f); // 中心点
         }
     }
+}
+
+public enum TaskType
+{
+    Kill,
+    Escort,
 }
 
 public class TaskConst

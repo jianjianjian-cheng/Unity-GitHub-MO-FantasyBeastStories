@@ -75,6 +75,12 @@ namespace Charactors
             {
                 rb = gameObject.GetComponent<Rigidbody>();
             }
+
+            if (rb != null)
+            {
+                rb.constraints = RigidbodyConstraints.FreezeRotation;
+                rb.useGravity = !isOnlyShow;
+            }
             if (!isOnlyShow)
                 rb.useGravity = true; // 启用重力
             if (animator == null)
@@ -109,7 +115,19 @@ namespace Charactors
         protected virtual void FixedUpdate()
         {
             if (GamePauseManager.isPaused)
+            {
+                // 暂停时停止移动和旋转
+                if (rb != null)
+                {
+                    rb.velocity = Vector3.zero;
+                }
+                // 重置动画状态
+                if (animator != null)
+                {
+                    animator.SetBool("isRun", false);
+                }
                 return;
+            }
             if (!photonView.IsMine && photonView != null)
             {
                 return; // 只处理本地玩家的输入和动画
@@ -184,24 +202,25 @@ namespace Charactors
 
         protected virtual void MoveCharacter()
         {
+            // 🔧 确保不受外力旋转影响
+            rb.angularVelocity = Vector3.zero;
+
             // 计算移动向量
             Vector3 moveVelocity = movement * moveSpeed;
             isRun = movement != Vector3.zero;
             animator.SetBool("isRun", isRun);
+
             // 保持Y轴速度不变（重力影响）
             moveVelocity.y = rb.velocity.y;
 
             // 应用速度
             rb.velocity = moveVelocity;
 
-            // ===== 新增：角色朝向逻辑 =====
-            // 只有在移动时才改变朝向
+            // 旋转逻辑
             if (movement != Vector3.zero)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(movement);
-                // 如果模型“面朝 +X”，要再转 90 度
-                targetRotation *= Quaternion.Euler(0f, 0f, 0f);
-
+                // 移除了无效的 targetRotation *= Quaternion.Euler(0f, 0f, 0f);
                 transform.rotation = Quaternion.Slerp(
                     transform.rotation,
                     targetRotation,

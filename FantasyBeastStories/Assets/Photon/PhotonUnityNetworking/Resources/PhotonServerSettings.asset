@@ -68,6 +68,9 @@ MonoBehaviour:
   - RPC_UpdateAllPlayerTimeUI
   - TaskFailed
   - RPC_TaskFailed
+  - RPC_ActivateKillTask
+  - RPC_ActivateEscortTask
+  - RPC_ReportCount
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -264,7 +264,7 @@ namespace Enemies
         // ========== Die状态 ==========
         protected virtual void EnterDie()
         {
-            TaskManager.instance.ReportKill(transform.position, GetComponent<PhotonView>());
+            TaskManager.instance.ReportCount(transform.position, GetComponent<PhotonView>());
             // 停止物理移动
             if (rb != null)
             {
