@@ -21,6 +21,9 @@ namespace Manager.TimeSystem
         [Tooltip("限制时间")]
         public int limittime;
 
+        [Tooltip("任务要求数量")]
+        public int requireCount;
+
         [Tooltip("图标（本地加载，不同步）")]
         public Sprite eventIcon;
 
@@ -57,6 +60,7 @@ namespace Manager.TimeSystem
                 once = this.once,
                 isTriggered = this.isTriggered,
                 description = this.description,
+                requireCount = this.requireCount,
             };
         }
     }

@@ -63,9 +63,9 @@ public class TaskManager : MonoBehaviourPun
         OnTaskCompleted -= OnTaskCompletedFun;
     }
 
-    public void SetNotice(string name, string description, int limitTime)
+    public void SetNotice(string name, string description, int limitTime , int requeredCount = 1)
     {
-        photonView.RPC("RPC_SetNotice", RpcTarget.All, name, description, limitTime);
+        photonView.RPC("RPC_SetNotice", RpcTarget.All, name, description, limitTime, requeredCount);
     }
 
     /// <summary>
@@ -137,10 +137,10 @@ public class TaskManager : MonoBehaviourPun
     }
 
     [PunRPC]
-    void RPC_SetNotice(string name, string description, int limitTime)
+    void RPC_SetNotice(string name, string description, int limitTime, int requeredCount)
     {
         taskNotice.gameObject.SetActive(true);
-        taskNotice.SetInfo(name, description, "", limitTime);
+        taskNotice.SetInfo(name, description, limitTime, requeredCount);
     }
 
     //任务倒计时函数
@@ -359,6 +359,23 @@ public class TaskManager : MonoBehaviourPun
     {
         // 任务完成后的处理
         _indicator.SetTargetAndImage(task.ZoneCenter, null);
+        switch (task)
+        {
+            case KillTask killTask:
+                Notice_Data($"击杀任务完成！");
+                StartCoroutine(DelayReward(0.5f));
+                break;
+            case EscortTask escortTask:
+                Notice_Data($"护送任务完成！");
+                StartCoroutine(DelayReward(12f));
+                break;
+        }
+    }
+
+    IEnumerator DelayReward(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        // 奖励逻辑        
         StartCoroutine(HideTaskNotice());
         Destroy(taskZone.gameObject);
         if (taskRoutine != null)

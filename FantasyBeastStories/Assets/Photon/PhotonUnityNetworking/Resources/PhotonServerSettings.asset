@@ -71,6 +71,9 @@ MonoBehaviour:
   - RPC_ActivateKillTask
   - RPC_ActivateEscortTask
   - RPC_ReportCount
+  - RPC_OnPushed
+  - RPC_StartTransfer
+  - PlayTriggerAnimation
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

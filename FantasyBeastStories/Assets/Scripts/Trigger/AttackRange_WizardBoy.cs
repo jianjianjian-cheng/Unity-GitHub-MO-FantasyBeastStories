@@ -46,14 +46,14 @@ namespace Trigger
             }
             else
             {
-                // 联机模式：本地先行 + 网络广播
-                SpawnFireballLocal(pos, direction, isMine: true);
-                _networkCaster?.RequestFireball(
-                    pos,
-                    direction,
-                    projectileSpeed,
-                    attributePlayerBase.GetCurrentElement()
-                );
+            // 联机模式：本地先行 + 网络广播
+            SpawnFireballLocal(pos, direction, isMine: true);
+            _networkCaster?.RequestFireball(
+                pos,
+                direction,
+                projectileSpeed,
+                attributePlayerBase.GetCurrentElement()
+            );
             }
         }
 
@@ -123,8 +123,8 @@ namespace Trigger
                 }
                 // 绑定令牌
                 cannon.SetToken(token);
-                cannon.StartShoot(direction, isMine);
                 cannon.SetAttributeFromPlayer(attributePlayerBase);
+                cannon.StartShoot(direction, isMine);
             }
         }
 

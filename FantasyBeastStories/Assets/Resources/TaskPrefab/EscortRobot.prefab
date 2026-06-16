@@ -33417,6 +33417,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3145617232131135309}
+  - component: {fileID: 1878285454392334748}
+  - component: {fileID: 1230547271735322920}
   m_Layer: 0
   m_Name: EscortRobot
   m_TagString: Untagged
@@ -33441,6 +33443,44 @@ Transform:
   - {fileID: 2858077352093211249}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1878285454392334748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4044458681569347461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 735ce058ae391c14382726b1e1601e8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transferParticle: {fileID: 2340080824721002421}
+  portalParticle: {fileID: 9185520670581827902}
+  delayBeforeTransfer: 3
+--- !u!136 &1230547271735322920
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4044458681569347461}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 2.6
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4052131065684959337
 GameObject:
   m_ObjectHideFlags: 0

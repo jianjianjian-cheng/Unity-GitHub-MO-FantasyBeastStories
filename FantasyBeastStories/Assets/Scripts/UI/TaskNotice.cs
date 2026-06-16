@@ -60,12 +60,12 @@ public class TaskNotice : MonoBehaviour
 
     void Update() { }
 
-    public void SetInfo(string name, string description, string data, int limitTime)
+    public void SetInfo(string name, string description, int limitTime , int requireCount)
     {
         this.name.text = name;
         this.description.text = description;
-        this.data.text = data;
         this.limitTime.text = "剩余时间：" + limitTime.ToString();
+        this.data.text = $"{0}/{requireCount}";
     }
 
     public void Notice_Data(string data)

@@ -90,13 +90,14 @@ namespace FX
         /// </summary>
         /// <param name="direction">发射方向</param>
         /// <param name="isMine">是否由本地炮塔发射</param>
+        // 修改后
         public void StartShoot(Vector3 direction, bool isMine = true)
         {
             if (!GameManager.isTest)
             {
                 _isMyCast = isMine;
             }
-            direction.y = 0; // 只在 XZ 平面移动
+            direction.y = 0;
             rb.velocity = direction.normalized * Speed;
         }
 
@@ -176,10 +177,16 @@ namespace FX
                     RecycleWithEffect();
                 }
             }
-            // ===== 其他玩家的火球：只播放视觉效果 =====
             else
             {
+                // 其他玩家的火球：只播放视觉效果
                 PlayHitEffect(hitPoint);
+                attackCount++;  // 也需要计数
+            }
+
+            // ===== 所有客户端都检查穿透次数 =====
+            if (attackCount >= maxAttackCount)
+            {
                 RecycleWithEffect();
             }
         }

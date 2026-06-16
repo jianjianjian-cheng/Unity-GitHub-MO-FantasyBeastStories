@@ -125,11 +125,17 @@ namespace Manager
         // 增加当前经验值
         public void AddExperience(int experience)
         {
+            // 非测试模式下，只有MasterClient处理经验值增加
+            if (!GameManager.isTest && !PhotonNetwork.IsMasterClient)
+            {
+                return;
+            }
+
             currentExperience += experience;
 
             // 检查升级并生成队列
             CheckAndQueueUpgrades();
-            // 启动平滑过渡
+            // 启动平滑过渡（所有客户端同步Slider显示）
             photonView.RPC("UpdateSliderSmooth", RpcTarget.All, currentExperience);
             // 如果有待处理的升级且当前没有面板打开，开始处理队列
             if (pendingLevelUps.Count > 0 && !isProcessingLevelUp)
@@ -205,7 +211,18 @@ namespace Manager
 
             while (currentExperience >= upgradeExperience)
             {
-                photonView.RPC("IncreaseLevel", RpcTarget.All);
+                // 先记录当前升级所需经验（因为IncreaseLevel会修改upgradeExperience）
+                int requiredExp = upgradeExperience;
+                
+                // 扣除经验并增加等级（只在MasterClient执行）
+                if (GameManager.isTest)
+                {
+                    IncreaseLevel(requiredExp);
+                }
+                else
+                {
+                    photonView.RPC("IncreaseLevel", RpcTarget.All, requiredExp);
+                }
 
                 // 将升级事件加入队列
                 pendingLevelUps.Enqueue(currentLevel);
@@ -295,6 +312,12 @@ namespace Manager
         // 可选：直接设置经验值（用于初始化等场景，不需要平滑过渡）
         public void SetExperience(int experience)
         {
+            // 非测试模式下，只有MasterClient处理经验值设置
+            if (!GameManager.isTest && !PhotonNetwork.IsMasterClient)
+            {
+                return;
+            }
+
             currentExperience = experience;
             experienceSlider.value = (float)currentExperience / upgradeExperience;
             // 检查是否升级
@@ -308,10 +331,10 @@ namespace Manager
 
         //增加等级
         [PunRPC]
-        private void IncreaseLevel()
+        private void IncreaseLevel(int requiredExp)
         {
-            // 扣除经验，提升等级
-            currentExperience -= upgradeExperience;
+            // 扣除固定经验，提升等级
+            currentExperience -= requiredExp;
             currentLevel++;
             levelText.text = currentLevel.ToString();
             // 更新升级所需经验
@@ -336,7 +359,7 @@ namespace Manager
         void OnTimeEventTriggered(TimeEventData eventData)
         {
             Debug.Log($"事件触发: {eventData.eventName} at {eventData.triggerTime}秒");
-
+            SetNotice(eventData.eventName, eventData.description, eventData.limittime , eventData.requireCount);
             switch (eventData.eventId)
             {
                 case "KillSacrifice":
@@ -362,17 +385,11 @@ namespace Manager
 
             Vector3 randomPosition = GetRandomPlayerPosition();
 
-            TaskManager.instance.SetNotice(
-                eventData.eventName,
-                eventData.description,
-                eventData.limittime
-            );
-
             KillTask killTask = new KillTask(
                 TaskConst.KillSacrifice,
                 randomPosition,
                 7f,
-                10,
+                eventData.requireCount,
                 eventData.limittime
             );
 
@@ -394,21 +411,21 @@ namespace Manager
 
             Vector3 randomPosition = GetRandomPlayerPosition();
 
-            TaskManager.instance.SetNotice(
-                eventData.eventName,
-                eventData.description,
-                eventData.limittime
-            );
-
             EscortTask escortTask = new EscortTask(
                 eventData.eventId,
                 randomPosition,
                 3,
-                6,
+                eventData.requireCount,
                 eventData.limittime
             );
 
             TaskManager.instance.ActivateTask(escortTask);
+        }
+
+
+        private void SetNotice(string name, string description, int limitTime , int requireCount)
+        {
+            TaskManager.instance.SetNotice(name, description, limitTime , requireCount);
         }
 
         /// <summary>
@@ -436,7 +453,7 @@ namespace Manager
                 randomPlayer.transform.position + randomDirection * randomDistance;
 
             // 只取xz平面，固定y轴高度
-            randomPosition.y = 0.5f;
+            randomPosition.y = 1f;
             return randomPosition;
         }
 

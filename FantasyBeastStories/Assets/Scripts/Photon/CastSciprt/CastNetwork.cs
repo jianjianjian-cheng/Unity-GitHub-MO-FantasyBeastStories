@@ -23,7 +23,6 @@ namespace Photon.CastSciprt
             Element element
         )
         {
-            // 只发给其他玩家（RpcTarget.Others），本地玩家已经在 AttackRangeBase 中生成了
             photonView.RPC(
                 "RPC_OnFireballCast",
                 RpcTarget.Others,
@@ -74,7 +73,6 @@ namespace Photon.CastSciprt
                     cannon = triggerObj.AddComponent<ImpactCannon>();
                 }
                 // 重要：传入 isMine = false，这个火球不会判定伤害
-                cannon.StartShoot(direction, isMine: false);
                 //绑定token
                 AttackToken token = new AttackToken
                 {
@@ -83,6 +81,7 @@ namespace Photon.CastSciprt
                     vfxPoolName = visualPool,
                 };
                 cannon.SetToken(token);
+                cannon.StartShoot(direction, isMine: false);
             }
         }
 

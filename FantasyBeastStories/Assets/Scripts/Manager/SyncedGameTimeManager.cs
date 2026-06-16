@@ -60,11 +60,6 @@ namespace Manager
         // 存储每个图标的原始颜色
         private Dictionary<string, Color> originalIconColors = new Dictionary<string, Color>();
 
-        // 同步相关
-        private float lastSyncTime = 0f;
-        private float syncInterval = 0.5f;
-        private double lastServerTime = 0;
-        private float lastSyncedCurrentTime = 0;
 
         // 事件触发委托
         public Action<TimeEventData> OnTimeEventTriggered;

@@ -65,7 +65,7 @@ public class DirectionIndicator : MonoBehaviourPun
 
     void Update()
     {
-        if (mainCamera == null || photonView.IsMine == false)
+        if (mainCamera == null)
             return;
 
         Vector3 screenPos = mainCamera.WorldToScreenPoint(targetPosition);

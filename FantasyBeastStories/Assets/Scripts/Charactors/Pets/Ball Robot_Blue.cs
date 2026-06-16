@@ -22,6 +22,7 @@ public class BallRobot_Blue : MonoBehaviourPun
     private float pushForceThreshold = 0.5f; // 推动力阈值
 
     [Header("行为设置")]
+    private bool isTransfering = false; // 是否正在传送
     [SerializeField]
     private float turnDelay = 0.3f; // 转向前的延迟
 
@@ -39,6 +40,19 @@ public class BallRobot_Blue : MonoBehaviourPun
     private bool isMovingToDestination = false;
     private bool isTurning = false;
     private float originalMoveDistance; // 保存原始移动距离
+
+
+
+    [Header("传送设置")]
+    [SerializeField]
+    private float transferDuration = 2f;//传送持续时间
+    [SerializeField]
+    private float maxRaiseSpeed = 3f;
+    [SerializeField]
+    private float rotateSpeed = 90f;//旋转速度
+    [SerializeField]
+    private AnimationCurve raiseCurve;
+
 
     // 网络同步变量
     private Vector3 networkPosition;
@@ -84,6 +98,8 @@ public class BallRobot_Blue : MonoBehaviourPun
 
     private void Update()
     {
+        if (isTransfering) return;
+
         if (isPushed && !isTurning && !isMovingToDestination && rb.velocity.magnitude < 0.1f)
         {
             StartCoroutine(TurnToDirection());
@@ -97,7 +113,7 @@ public class BallRobot_Blue : MonoBehaviourPun
             // 如果已经在移动中，忽略新的碰撞
             if (isPushed || isMovingToDestination)
                 return;
-            animator.SetTrigger("EnterAera");
+            PlayTriggerAnimation("EnterAera"); 
             //计算推动方向
             pushDirection = (
                 transform.position - collision.gameObject.transform.position
@@ -117,13 +133,30 @@ public class BallRobot_Blue : MonoBehaviourPun
 
                 // 将计算结果存到 moveDistance
                 moveDistance = currentMoveDistance;
-                isPushed = true;
 
-                Debug.Log(
-                    $"BallRobot_Blue pushed with force: {pushForce}, move distance: {moveDistance}"
-                );
+                // 通过 RPC 广播推动事件到所有客户端
+            photonView.RPC("RPC_OnPushed", RpcTarget.All, pushDirection, moveDistance);
             }
         }
+    }
+
+    [PunRPC]
+    private void PlayTriggerAnimation(string triggerName)
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger(triggerName);
+        }
+    }
+
+    [PunRPC]
+    void RPC_OnPushed(Vector3 pushDir, float moveDist)
+    {
+        this.pushDirection = pushDir;
+        this.moveDistance = moveDist;
+        this.isPushed = true;
+        
+        Debug.Log($"BallRobot_Blue pushed with force, move distance: {moveDistance}");
     }
 
     IEnumerator TurnToDirection()
@@ -275,5 +308,48 @@ public class BallRobot_Blue : MonoBehaviourPun
             Gizmos.color = Color.blue;
             Gizmos.DrawRay(transform.position, pushDirection * 2f);
         }
+    }
+
+    public void StartTransfer()
+    {
+        // 通过RPC同步到所有客户端
+        photonView.RPC("RPC_StartTransfer", RpcTarget.All);
+    }
+
+    [PunRPC]
+    void RPC_StartTransfer()
+    {
+        isTransfering = true;
+        StopAllCoroutines();
+        StartCoroutine(Transfer());
+    }
+
+    private IEnumerator Transfer()
+    {
+        // 停止原有移动行为
+        isPushed = false;
+        isMovingToDestination = false;
+
+        // 传送动画和效果
+        float elapsedTime = 0f;
+        while (elapsedTime < transferDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float linearProgress = elapsedTime/transferDuration;
+            float curvedProgress = raiseCurve.Evaluate(linearProgress);
+
+            transform.position += Vector3.up * curvedProgress * maxRaiseSpeed * Time.deltaTime;
+            yield return null;
+        }
+
+        // 传送完成处理
+        isTransfering = false;
+        OnTeleportComplete();
+        yield break;
+    }
+
+    private void OnTeleportComplete()
+    {
+        Destroy(gameObject);
     }
 }
