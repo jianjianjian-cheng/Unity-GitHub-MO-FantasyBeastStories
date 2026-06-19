@@ -74,6 +74,14 @@ MonoBehaviour:
   - RPC_OnPushed
   - RPC_StartTransfer
   - PlayTriggerAnimation
+  - RPC_SyncTriggerAnim
+  - RPC_SyncPlayerTarget
+  - RPC_SyncAnimBool
+  - RPC_SyncCurrentAction
+  - RPC_SyncFireballBurstTracking
+  - RPC_SyncNavMeshStop
+  - RPC_SyncRollActive
+  - RPC_SyncBossUI
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

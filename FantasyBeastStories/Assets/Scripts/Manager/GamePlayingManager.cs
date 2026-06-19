@@ -368,6 +368,9 @@ namespace Manager
                 case "EscortRobot":
                     EscortRobot(eventData);
                     break;
+                case "TestBoss":
+                    TestBoss(eventData);
+                    break;
             }
         }
 
@@ -422,6 +425,10 @@ namespace Manager
             TaskManager.instance.ActivateTask(escortTask);
         }
 
+        private void TestBoss(TimeEventData eventData)
+        {
+
+        }
 
         private void SetNotice(string name, string description, int limitTime , int requireCount)
         {

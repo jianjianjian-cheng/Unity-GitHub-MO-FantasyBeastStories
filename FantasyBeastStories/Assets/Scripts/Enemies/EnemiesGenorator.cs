@@ -12,12 +12,15 @@ namespace Enemies
         GameObject testPrefab;
         private bool isPhotonReady = false; // Photon是否准备就绪
         private float spawnInterval; // 生成间隔
+        private float updateSpawnInterval = 30f; // 更新生成间隔的时间
+        private float updateSpawnIntervalCounter = 0f; // 
         private float timer = 0f; // 计时器
         bool canGenorate = false;
 
         void Start()
         {
-            spawnInterval = Random.Range(4f, 4f); // 随机生成间隔
+            float dc = DifficultyCoefficientManager.instance.GetDifficultyCoefficient();
+            spawnInterval = 10/dc;
         }
 
         void Update()
@@ -56,6 +59,35 @@ namespace Enemies
                 {
                     timer += Time.deltaTime;
                 }
+            }
+        }
+
+        private void UpdateSpawnInterval()
+        {
+            updateSpawnIntervalCounter += Time.deltaTime;
+            if(updateSpawnIntervalCounter >= updateSpawnInterval)
+            {
+                float dc = 1;
+                if (SyncedGameTimeManager.Instance.GetTotalGameTime() > 600f && SyncedGameTimeManager.Instance.GetTotalGameTime() < 1200f)
+                {
+                    dc = DifficultyCoefficientManager.instance.GetDifficultyCoefficient() * 1;
+                }else if (SyncedGameTimeManager.Instance.GetTotalGameTime() > 900f)
+                {
+                    dc = DifficultyCoefficientManager.instance.GetDifficultyCoefficient() * 2f;
+                }else if (SyncedGameTimeManager.Instance.GetTotalGameTime() > 1200f)
+                {
+                    dc = DifficultyCoefficientManager.instance.GetDifficultyCoefficient() * 3f;
+                }
+                else
+                {
+                    dc = DifficultyCoefficientManager.instance.GetDifficultyCoefficient();
+                }
+                    spawnInterval = 8/dc;
+                if (SyncedGameTimeManager.Instance.GetIsGenerated())
+                {
+                    spawnInterval = 6f;
+                }
+            updateSpawnIntervalCounter = 0f;
             }
         }
 
