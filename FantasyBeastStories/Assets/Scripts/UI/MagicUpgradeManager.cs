@@ -407,7 +407,7 @@ namespace UI
         private void OnCardPointerClick(GameObject selectedCard, GameObject catcher)
         {
             Debug.Log("点击了卡片");
-            PlayClickFeedback(selectedCard);
+
             string cardName = selectedCard.gameObject.name;
             int index = 0;
             switch (cardName)
@@ -428,64 +428,6 @@ namespace UI
             if (selectedCard != null && catcher != null)
             {
                 StartCoroutine(EndMoveCard(selectedCard, catcher, 1f));
-            }
-        }
-
-        /// <summary>
-        /// 播放卡片点击反馈动画：先缩小再放大（含特效同步变化）
-        /// </summary>
-        private void PlayClickFeedback(GameObject card)
-        {
-            if (card == null) return;
-
-            List<ParticleSystem> effectList = GetCardEffectList(card);
-            card.transform.DOKill();
-            if (effectList != null)
-                foreach (var effect in effectList)
-                    if (effect != null) effect.transform.DOKill();
-
-            Sequence clickSeq = DOTween.Sequence();
-            
-            // 快速缩小
-            clickSeq.Append(card.transform.DOScale(1f, 0.1f).SetEase(Ease.InOutQuad));
-            
-            // 恢复原始缩放
-            clickSeq.Append(card.transform.DOScale(1.2f, 0.1f));
-            
-            // 同步特效振动
-            if (effectList != null)
-            {
-                foreach (var effect in effectList)
-                {
-                    if (effect != null && originalEffectScales.ContainsKey(effect))
-                    {
-                        Vector3 originalScale = originalEffectScales[effect];
-                        Sequence effectSeq = DOTween.Sequence();
-                        effectSeq.Append(effect.transform.DOScale(originalScale * 0.9f, 0.1f).SetEase(Ease.InOutQuad));
-                        effectSeq.Append(effect.transform.DOScale(originalScale * 1.2f, 0.1f));
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// 获取卡片对应的特效列表
-        /// </summary>
-        private List<ParticleSystem> GetCardEffectList(GameObject card)
-        {
-            if (card == null)
-                return null;
-
-            switch (card.name)
-            {
-                case "Card_1":
-                    return OneCardEffects;
-                case "Card_2":
-                    return TwoCardEffects;
-                case "Card_3":
-                    return ThreeCardEffects;
-                default:
-                    return null;
             }
         }
 
@@ -536,20 +478,20 @@ namespace UI
         IEnumerator DelayMoveCard(GameObject card, float duration)
         {
             yield return new WaitForSeconds(duration);
-            // card.transform.DOMove(EndPoints[1].position, duration);
-            // GameObject effect = GetEffect(card);
-            // if (effect != null)
-            // {
-            //     effect.transform.DOMove(
-            //         new Vector3(
-            //             EndPoints[1].transform.position.x,
-            //             EndPoints[1].transform.position.y,
-            //             effect.transform.position.z
-            //         ),
-            //         duration
-            //     );
-            //     effect.transform.DOScale(effect.transform.localScale * 0.1f, duration);
-            // }
+            card.transform.DOMove(EndPoints[1].position, duration);
+            GameObject effect = GetEffect(card);
+            if (effect != null)
+            {
+                effect.transform.DOMove(
+                    new Vector3(
+                        EndPoints[1].transform.position.x,
+                        EndPoints[1].transform.position.y,
+                        effect.transform.position.z
+                    ),
+                    duration
+                );
+                effect.transform.DOScale(effect.transform.localScale * 0.1f, duration);
+            }
 
             yield return new WaitForSeconds(1f);
             OnCardSelectionComplete();
@@ -809,7 +751,7 @@ namespace UI
                 GlobalVolumeManager.instance.SetBloomIntensity(8f);
 
             Debug.Log("打开魔法升级面板");
-            HideOrShowGrossUpgradePanel(false);
+
             // 确保初始化完成
             if (!isInitialized)
             {
@@ -882,39 +824,8 @@ namespace UI
             PhotonNetwork.LocalPlayer.SetCustomProperties(props);
 
             StartCoroutine(AnimateShadowAlphaBack());
-            HideOrShowGrossUpgradePanel(true);
+            GrossUpgradePanel.SetActive(false);
             GamePauseManager.instance.SetPause(false);
-        }
-
-
-        /// <summary>
-        /// 隐藏升级面板
-        /// </summary>
-        /// <param name="duration">淡出时长，默认1.5秒</param>
-        public void HideOrShowGrossUpgradePanel(bool isHide)
-        {
-            // 获取或添加 CanvasGroup 组件
-            CanvasGroup canvasGroup = GrossUpgradePanel.GetComponent<CanvasGroup>();
-            if (canvasGroup == null)
-                canvasGroup = GrossUpgradePanel.AddComponent<CanvasGroup>();
-            
-            // 隐藏或显示面板
-
-            if (!isHide)
-            {
-                GrossUpgradePanel.SetActive(true);
-                canvasGroup.alpha = 0f;
-                canvasGroup.DOFade(1f, 0.6f).SetEase(Ease.InOutQuad);
-                return;
-            }
-
-            // 缓慢透明消失
-            canvasGroup.DOFade(0f, 0.6f)
-                .SetEase(Ease.InOutQuad)
-                .OnComplete(() => 
-                {
-                    GrossUpgradePanel.SetActive(false);
-                });
         }
 
         #region 获取卡牌

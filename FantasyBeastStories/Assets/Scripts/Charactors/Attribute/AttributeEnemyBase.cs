@@ -9,10 +9,10 @@ namespace Charactors.Attribute
     public class AttributeEnemyBase
     {
         //基本属性
-        public float maxHealth;
-        public float currentHealth;
-        public float attackPower;
-        public float moveSpeed;
+        public float maxHealth = 100f;
+        public float currentHealth = 100f;
+        public float attackPower = 50f;
+        public float moveSpeed = 2f;
         public bool isDead = false;
 
         public AttributeEnemyBase(

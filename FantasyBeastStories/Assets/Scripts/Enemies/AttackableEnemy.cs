@@ -105,7 +105,6 @@ namespace Enemies
 
         protected override void OnEnable()
         {
-            base.OnEnable();
             RegisterDamageEvent();
             if (PlayerTarget == null)
                 return;
@@ -114,26 +113,6 @@ namespace Enemies
                 navMeshAgent.speed = attribute.moveSpeed;
                 navMeshAgent.updatePosition = true;
             }
-            //根据游戏难度更新最大生命值
-            if (SyncedGameTimeManager.Instance.GetCurrentTime() > 600f && SyncedGameTimeManager.Instance.GetCurrentTime() < 900f)
-            {
-                attribute.maxHealth = attribute.maxHealth * (DifficultyCoefficientManager.instance.GetDifficultyCoefficient() + 2.5f);
-            }else if (SyncedGameTimeManager.Instance.GetCurrentTime() > 900f && SyncedGameTimeManager.Instance.GetCurrentTime()<1200f)
-            {
-                attribute.maxHealth = attribute.maxHealth * (DifficultyCoefficientManager.instance.GetDifficultyCoefficient() + 3.5f);
-            }else if (SyncedGameTimeManager.Instance.GetCurrentTime() > 1200f)
-            {
-                attribute.maxHealth = attribute.maxHealth * (DifficultyCoefficientManager.instance.GetDifficultyCoefficient() + 4.5f);
-            }
-            else if (SyncedGameTimeManager.Instance.GetCurrentTime() > 300f && SyncedGameTimeManager.Instance.GetCurrentTime() < 600f)
-            {
-                attribute.maxHealth = attribute.maxHealth * DifficultyCoefficientManager.instance.GetDifficultyCoefficient();
-            }else
-            {
-                attribute.maxHealth = attribute.maxHealth * 1;
-            }
-            attribute.currentHealth = attribute.maxHealth;
-            Debug.Log($"最大生命值: {attribute.maxHealth}");
         }
 
         protected override void OnDisable()

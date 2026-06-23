@@ -9,7 +9,7 @@ namespace Items
     {
         protected override void Start()
         {
-            ExperienceValue = Random.Range(50, 71);
+            ExperienceValue = Random.Range(20, 31);
         }
     }
 }

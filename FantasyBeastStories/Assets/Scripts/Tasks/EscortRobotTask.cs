@@ -48,7 +48,7 @@ public class EscortRobotTask : MonoBehaviour
         float innerRadius = 10f;  // 内圈半径
         float outerRadius = 20f;  // 外圈半径
 
-        for (int i = 0; i < requiredCount + 3; i++)
+        for (int i = 0; i < requiredCount; i++)
         {
             // 随机角度
             float angle = UnityEngine.Random.Range(0f, 360f) * Mathf.Deg2Rad;
@@ -114,17 +114,6 @@ public class EscortRobotTask : MonoBehaviour
             {
                 yield return new WaitForSeconds(1f); // 每个机器人之间的延迟
                 obj.GetComponent<BallRobot_Blue>().StartTransfer();
-            }
-        }
-    }
-
-    void OnDestroy()
-    {
-        foreach (var obj in currentObjects)
-        {
-            if (obj != null)
-            {
-                Destroy(obj);
             }
         }
     }

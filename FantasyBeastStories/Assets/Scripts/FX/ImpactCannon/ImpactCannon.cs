@@ -64,16 +64,10 @@ namespace FX
             ignoreEnemy = null;
             canSplit = true;
             damageFalloff = 1f;
-            // 初始化分裂属性：只有玩家装备了分裂技能时，才能分裂
             if (attributePlayer?.GetSplit() != null && attributePlayer?.GetSplitCount() != null)
             {
                 isSplit = attributePlayer.GetSplit();
                 splitCount = attributePlayer.GetSplitCount();
-                canSplit = isSplit; // 根据玩家技能决定是否允许分裂
-            }
-            else
-            {
-                canSplit = false; // 没有分裂技能时，不允许分裂
             }
             Invoke("DelayDestorySelf", 0.5f);
         }

@@ -67,10 +67,6 @@ namespace Manager
         //用于回收触发器和特效分开处理的攻击
         private Dictionary<string, Action> attackEventDictionary = new Dictionary<string, Action>();
 
-        //单浮点数参数字典
-        private Dictionary<string, Action<float>> SingleFloatEventDictionary =
-            new Dictionary<string, Action<float>>();
-
         //双浮点数参数字典
         private Dictionary<string, Action<float, float>> floatEventDictionary =
             new Dictionary<string, Action<float, float>>();
@@ -341,38 +337,6 @@ namespace Manager
             }
         }
 
-
-        //单浮点数参数字典
-        public void RegisterSingleFloatEvent(string eventName, Action<float> action)
-        {
-            if (SingleFloatEventDictionary.ContainsKey(eventName))
-            {
-                SingleFloatEventDictionary[eventName] += action;
-            }
-            else
-            {
-                SingleFloatEventDictionary.Add(eventName, action);
-            }
-        }
-
-        public void UnRegisterSingleFloatEvent(string eventName)
-        {
-            if (SingleFloatEventDictionary.ContainsKey(eventName))
-            {
-                SingleFloatEventDictionary.Remove(eventName);
-            }
-        }
-
-        public void TriggerSingleFloatEvent(string eventName, float floatValue)
-        {
-            if (SingleFloatEventDictionary.ContainsKey(eventName))
-            {
-                SingleFloatEventDictionary[eventName]?.Invoke(floatValue);
-            }
-        }
-
-
-
         /// <summary>
         /// 注册攻击事件
         /// 双浮点数参数事件注册方法
@@ -591,7 +555,5 @@ namespace Manager
         public const string TimePaused = "TimePaused";
         public const string TimeResumed = "TimeResumed";
         public const string TimeReset = "TimeReset";
-
-        public const string TimeChangeEnemyAttribute = "TimeChangeEnemyAttribute";//游戏进行到一定时长后，敌人属性开始发生改变
     }
 }

@@ -30,7 +30,6 @@ namespace Enemies
         [SerializeField]
         protected AttributeEnemyBase attribute;
 
-        [SerializeField]
         protected GameObject PlayerTarget;
 
         [SerializeField]
@@ -44,7 +43,7 @@ namespace Enemies
 
         protected virtual void Awake()
         {
-            attribute = new AttributeEnemyBase(500 , 500 , 50 , 2);
+            attribute = new AttributeEnemyBase(500, 500, 50, 2);
             colliders = GetComponentsInChildren<Collider>();
         }
 
@@ -330,7 +329,7 @@ namespace Enemies
                 InitializeEnemy();
                 if (attribute == null)
                 {
-                    attribute = new AttributeEnemyBase(500 , 500 , 50 , 2);
+                    attribute = new AttributeEnemyBase(500, 500, 50, 2);
                 }
             }
             RegisterDamageEvent();

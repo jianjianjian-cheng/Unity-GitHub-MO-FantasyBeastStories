@@ -8,7 +8,6 @@ using Photon.Pun;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
 
 namespace Manager
 {
@@ -52,32 +51,8 @@ namespace Manager
         [SerializeField]
         private GameObject taskPreface;
 
-
-        [Header("最终Boss设置")]
-        [SerializeField]
-        private Transform finalPosition;
-        private string bossName = "Boss_Horror";
-        private bool isBossGenerated = false;
-
-        [Header("BossUI")]
-        [SerializeField]
-        private GameObject bossUIPanel;
-        [SerializeField]
-        [Tooltip("Boss生命值条Slider")]
-        private Slider bossHPSlider;
-        [SerializeField]
-        [Tooltip("Boss生命值文本")]
-        private TextMeshProUGUI bossHPText;
-        [SerializeField]
-        [Tooltip("Boss名字")]
-        private TextMeshProUGUI bossNameText;
-        private float bossCurrentHp = 0f;
-        private float bossMaxHp = 0f;
-        
-
         // 运行时数据
         private float currentTime = 0f;
-        private float lastTriggerTime = 0f;
         private bool isRunning = false;
         private HashSet<string> triggeredEventIds = new HashSet<string>();
         private Dictionary<string, GameObject> eventMarkers = new Dictionary<string, GameObject>();
@@ -95,14 +70,11 @@ namespace Manager
         // 单例
         public static SyncedGameTimeManager Instance { get; private set; }
 
-        // 标记是否已初始化UI
+        // 【修复】标记是否已初始化UI
         private bool uiInitialized = false;
 
-        // 延迟初始化帧计数器
+        // 【修复】延迟初始化帧计数器
         private int waitFramesBeforeInit = 2;
-
-
-        private float originDifficultyCoefficient = 1f;
 
         void Awake()
         {
@@ -228,20 +200,6 @@ namespace Manager
             if (!PhotonNetwork.IsConnected || PhotonNetwork.IsMasterClient || !isSynced)
             {
                 CheckAndTriggerEvents();
-            }
-
-            
-            // ✅ 每隔60秒触发一次
-            if (currentTime - lastTriggerTime >= 60f)
-            {
-                lastTriggerTime = currentTime;
-                EventManager.instance.TriggerSingleFloatEvent(EventNames.TimeChangeEnemyAttribute, currentTime);
-            }
-
-            // 生成最终Boss
-            if (currentTime >= totalGameTime - 480f)
-            {
-                GenerateFinalBoss(bossName);
             }
 
             // 触发时间更新事件
@@ -744,11 +702,6 @@ namespace Manager
             }
         }
 
-        [PunRPC]
-        void RPC_SyncBossUI(float bossHealth)
-        {
-            
-        }
         #endregion
 
         #region 公共控制方法
@@ -867,7 +820,6 @@ namespace Manager
                 return string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
         }
 
-        public float GetTotalGameTime() => totalGameTime;
         #endregion
 
         #region 调试方法
@@ -905,56 +857,5 @@ namespace Manager
         }
 
         #endregion
-    
-        #region 有关于与时间相关的游戏机制
-        private void GenerateFinalBoss(string name)
-        {
-            if (isBossGenerated) return;
-            if (bossUIPanel != null)
-            {
-                bossUIPanel.SetActive(true);
-            }
-            if (!PhotonNetwork.IsMasterClient) return;
-            Vector3 randomPosition = finalPosition.position;
-            GameObject boss 
-             = PhotonNetwork.InstantiateRoomObject(
-                "Enemies/" + name,
-                randomPosition,
-                Quaternion.identity
-             );
-             isBossGenerated = true;
-             //生成UI提示
-        }
-
-        public void InitializeBossUI(float bossMaxHp , string bossName)
-        {
-            this.bossMaxHp = bossMaxHp;
-            bossHPSlider.maxValue = bossMaxHp;
-            bossNameText.text = bossName;
-            bossCurrentHp = bossMaxHp;
-            bossHPText.text =  $"{bossCurrentHp}/{bossMaxHp}";
-            //时间Slider可以隐藏了
-            RectTransform timeSliderRect = timeSlider.GetComponent<RectTransform>();
-            timeSliderRect.DOAnchorPosY(169f, 0.5f).OnComplete(() =>
-            {
-                timeSlider.gameObject.SetActive(false);
-                timeText.gameObject.SetActive(false);
-            });
-            //从原位置移动到y轴-138.4，dotween
-            // 保持X轴不变，只移动Y轴（推荐）
-            RectTransform panelRect = bossUIPanel.GetComponent<RectTransform>();
-            panelRect.DOAnchorPosY(-138.4f, 0.5f);
-        }
-
-        public void UpdateHPUI(float hp)
-        {
-            bossCurrentHp = hp;
-            bossHPSlider.value = hp;
-            bossHPText.text =  $"{hp}/{bossMaxHp}";
-        }
-
-        public bool GetIsGenerated() => isBossGenerated;
-        #endregion
-    
     }
 }
