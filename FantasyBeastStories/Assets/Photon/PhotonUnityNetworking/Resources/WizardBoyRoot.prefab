@@ -463,7 +463,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1547902573985025242}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4aca652bc37a7541b1863c162a0d1aa, type: 3}
+  m_Script: {fileID: 11500000, guid: f22cc8aa75a848d49b545dfa0df9ceba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   virtualCamera: {fileID: 611914295489222022}
@@ -594,9 +594,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4715905254602358297}
   - component: {fileID: 4187122166225685960}
-  - component: {fileID: 6249961937722357756}
   - component: {fileID: 2517744089765392115}
   - component: {fileID: 5610470274412098157}
+  - component: {fileID: 818041369873296124}
   m_Layer: 0
   m_Name: AttackRange
   m_TagString: AttackTrigger
@@ -640,18 +640,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 10, y: 0.9153899, z: 10}
   m_Center: {x: 0, y: 0.44416732, z: 0}
---- !u!114 &6249961937722357756
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1855102777801203766}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4993b433f3f4f1247beb4b441aa834fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2517744089765392115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -683,13 +671,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 1855102777801203766}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f300be027306f42438e8619d4badc94f, type: 3}
+  m_Script: {fileID: 11500000, guid: 58554cfd483b0db4cba9bb3cfe2d2559, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   offsetY: 0.5
   attackInterval: 2
   searchRadius: 5
   projectileSpeed: 10
+--- !u!114 &818041369873296124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855102777801203766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06528250e4cd5494a9e8249b8239f92a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2574463279488348108
 GameObject:
   m_ObjectHideFlags: 0
@@ -868,7 +868,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2768187980737792915}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e193ffc53770ec448d7d4010dc1644a, type: 3}
+  m_Script: {fileID: 11500000, guid: fbf6b372903c4f2438c4d3ff488f8133, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isMineIcon: {fileID: 6988000292511498372}
@@ -2023,7 +2023,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7557579576971884266}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72764ce4f5641124181f87990d0420c2, type: 3}
+  m_Script: {fileID: 11500000, guid: 19262c0f6aea50d458c6db5f8fe39a0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPointIndex: 0
@@ -2035,6 +2035,12 @@ MonoBehaviour:
   isInLobby: 0
   isReadyPanel: {fileID: 2768187980737792915}
   testCardEffect: {fileID: 0}
+  impactCannonLightenPrefab: {fileID: 0}
+  impactCannonHitLightenPrefab: {fileID: 0}
+  impactCannonWinterPrefab: {fileID: 0}
+  impactCannonHitWinterPrefab: {fileID: 0}
+  impactCannonGrassPrefab: {fileID: 0}
+  impactCannonHitGrassPrefab: {fileID: 0}
 --- !u!114 &5871110717533689807
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -64,10 +64,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 2367065165679467529}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e3464fc03f684e429610482361cf0ae, type: 3}
+  m_Script: {fileID: 11500000, guid: 438740aa55504b44aaaace7b3b8222c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageEventChannel: {fileID: 0}
   isTest: 0
+  isSplit: 1
+  splitRange: 20
+  canSplit: 1
+  splitAngle: 30
+  splitDamageMultiplier: 0.5
 --- !u!54 &1862058638585877505
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -2424,10 +2424,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8762175025758328672}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1eca7707d09b4cd4c8ca5a08faf44397, type: 3}
+  m_Script: {fileID: 11500000, guid: 2c7cc49553707444694b92036ed19f03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDistance: 6
+  moveDistance: 3
   moveSpeed: 2
   turnSpeed: 5
   pushForceThreshold: 0.5
@@ -2457,30 +2457,12 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  transferDuration: 4
-  maxRaiseSpeed: 5
+  transferDuration: 2
+  maxRaiseSpeed: 3
   rotateSpeed: 90
   raiseCurve:
     serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
+    m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4

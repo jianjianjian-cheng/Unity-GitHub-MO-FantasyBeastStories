@@ -3387,12 +3387,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 342491451}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de69c2b3e0c04164b940ff0b3615b923, type: 3}
+  m_Script: {fileID: 11500000, guid: bd4fea7b7e470974c82cd9299ecd4fa7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lookAt: {fileID: 2075705174}
-  distance: 3.6
-  rotationSpeed: 5
+  lookAt: {fileID: 1381270530}
+  distance: 5
+  rotationSpeed: 30
   requireMouseButton: 1
 --- !u!1 &343169683
 GameObject:
@@ -6701,7 +6701,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 630458790}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7797b2bfb81d94d4d918fb87c2f79b7f, type: 3}
+  m_Script: {fileID: 11500000, guid: 2e56581e1d2ada144ad79a2fbaf1aaba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &630458792
@@ -7963,7 +7963,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 762411070}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50a0ded286b397d4a8f6428037951a22, type: 3}
+  m_Script: {fileID: 11500000, guid: 9704e49c1b49e8d4bb6f7e142d7b21df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   EventName: 
@@ -10872,11 +10872,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1104526004}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf43d14b052b8f249a86bf5554538bdd, type: 3}
+  m_Script: {fileID: 11500000, guid: e92e543a0be13664fa790d8b12277ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   modelTransform: {fileID: 1104526005}
-  rotationScale: 0.2
+  rotationScale: 1
 --- !u!1 &1122843128
 GameObject:
   m_ObjectHideFlags: 0
@@ -11012,10 +11012,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91b33fb6ae41ef34abb4093de0ee50b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slotId: 1
-  RuneName: 
-  specialPowerName: 
-  specialPowerDescription: 
 --- !u!1001 &1124937606
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13605,6 +13601,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bd1386d4ee3726342be61ab90aefa917, type: 3}
+--- !u!4 &1381270530 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3806039598199004521, guid: bd1386d4ee3726342be61ab90aefa917, type: 3}
+  m_PrefabInstance: {fileID: 1381270529}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1400909984
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14210,7 +14211,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1444982380}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b31c3db5094bb434db47b9f7bb5d2a84, type: 3}
+  m_Script: {fileID: 11500000, guid: 716b9ed618ba2564daf9f0be9ec36ea5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Id: 3
@@ -18374,7 +18375,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1822684965}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b31c3db5094bb434db47b9f7bb5d2a84, type: 3}
+  m_Script: {fileID: 11500000, guid: 716b9ed618ba2564daf9f0be9ec36ea5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Id: 1
@@ -18469,7 +18470,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1823661735}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b31c3db5094bb434db47b9f7bb5d2a84, type: 3}
+  m_Script: {fileID: 11500000, guid: 716b9ed618ba2564daf9f0be9ec36ea5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Id: 0
@@ -19827,7 +19828,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1962218859
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19840,7 +19841,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 511b2b432ee689340a0e1f28fe04d8e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isTest: 0
 --- !u!4 &1962218860
 Transform:
   m_ObjectHideFlags: 0
@@ -20605,7 +20605,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2043892762}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a71157e95d3e03942a25398d6915bdd6, type: 3}
+  m_Script: {fileID: 11500000, guid: 450ac1f53c9a987418a504610dfb7674, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   currentlySelectedCharacter: {fileID: 705579002151168019, guid: 73e94c4fb2665764cbf3589e09791fe1, type: 3}
@@ -21209,11 +21209,6 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
---- !u!4 &2075705174 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 461626, guid: 46fe41a0b7cea5646a41433143a65d41, type: 3}
-  m_PrefabInstance: {fileID: 2075705171}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2087309309
 GameObject:
   m_ObjectHideFlags: 0
@@ -21410,7 +21405,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2101048668}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b31c3db5094bb434db47b9f7bb5d2a84, type: 3}
+  m_Script: {fileID: 11500000, guid: 716b9ed618ba2564daf9f0be9ec36ea5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Id: 2
@@ -21486,7 +21481,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2103417153}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb495195044179145a1830e2405c83bd, type: 3}
+  m_Script: {fileID: 11500000, guid: faa562f07c0d23243960d1eb8b6039e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &2103417155
@@ -22091,10 +22086,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91b33fb6ae41ef34abb4093de0ee50b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slotId: 0
-  RuneName: 
-  specialPowerName: 
-  specialPowerDescription: 
 --- !u!4 &406969358140148547
 Transform:
   m_ObjectHideFlags: 0
