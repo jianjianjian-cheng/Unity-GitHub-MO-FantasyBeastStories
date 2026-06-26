@@ -9,6 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e38c82e778f74f842b18f55ebfaf3e23, type: 3}
+  m_Script: {fileID: 11500000, guid: b5a8d5722f8685346aab00abdaffcc3d, type: 3}
   m_Name: BloomEventChannelSO
   m_EditorClassIdentifier: 

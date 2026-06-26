@@ -12,7 +12,7 @@ public class ForgeWindow : EditorWindow
 
   int selectedWorkspace = 0;
   int selectedStyle = 0;
-  
+
 
   List<Asset> assets = new List<Asset>();
 
@@ -40,7 +40,7 @@ public class ForgeWindow : EditorWindow
       GUILayout.EndVertical();
       return;
     }
-    
+
     // Show a small question icon button that links to the documentation on the right
     GUILayout.BeginHorizontal();
     GUILayout.FlexibleSpace();
@@ -53,7 +53,7 @@ public class ForgeWindow : EditorWindow
 
     if (GUILayout.Button("Help", GUILayout.Width(50)))
     {
-      Application.OpenURL(Constants.DocumentationUrl);
+      UnityEngine.Application.OpenURL(Constants.DocumentationUrl);
     }
 
 
@@ -62,7 +62,7 @@ public class ForgeWindow : EditorWindow
     string selectedWorkspaceName = workspaces[selectedWorkspace].name;
     string selectedStyleName = styles[selectedWorkspaceName][selectedStyle].name;
 
-    showPosition = EditorGUILayout.Foldout(showPosition, showPosition ? "Workspace Settings" : selectedWorkspaceName + " - "+ selectedStyleName );
+    showPosition = EditorGUILayout.Foldout(showPosition, showPosition ? "Workspace Settings" : selectedWorkspaceName + " - " + selectedStyleName);
     if (showPosition)
     {
       GUILayout.BeginHorizontal();
@@ -108,7 +108,7 @@ public class ForgeWindow : EditorWindow
           // Show image as texture and a button below the image to save the image
           GUILayout.BeginVertical();
           // Get existing window width
-          float windowWidth = EditorGUIUtility.currentViewWidth-40;
+          float windowWidth = EditorGUIUtility.currentViewWidth - 40;
           // Calculate thumbnail width: window width divided by number of columns minus space for spacing between the images
           float thumbnailWidth = (windowWidth / columns);
           // Draw image, when clicked, show preview
@@ -138,7 +138,7 @@ public class ForgeWindow : EditorWindow
               AssetDatabase.Refresh();
 
               //Get relative path to the project
-              string path = "Assets" + lastAssetSavedPath.Substring(Application.dataPath.Length);
+              string path = "Assets" + lastAssetSavedPath.Substring(UnityEngine.Application.dataPath.Length);
 
               //Pick that image in the Project window
               Object obj = AssetDatabase.LoadAssetAtPath(path, typeof(Texture2D));
@@ -179,7 +179,8 @@ public class ForgeWindow : EditorWindow
 
       string workspaceName = (string)workspace.name;
 
-      if (workspaceStyles.Count > 0) {
+      if (workspaceStyles.Count > 0)
+      {
         workspaces.Add(new Workspace(workspace));
       }
 
@@ -190,7 +191,8 @@ public class ForgeWindow : EditorWindow
         styleList.Add(new Style(style));
       }
 
-      if (styleList.Count > 0) {
+      if (styleList.Count > 0)
+      {
         this.styles.Add(workspaceName, styleList);
       }
     }

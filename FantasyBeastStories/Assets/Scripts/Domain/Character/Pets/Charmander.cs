@@ -122,7 +122,7 @@ namespace Domain.Character.Pets
                     Vector3.Distance(transform.position, hostPlayer.transform.position) : float.MaxValue;
 
                 // 如果敌人在攻击范围内，或者敌人比玩家更近，优先处理敌人
-                if (distanceToEnemy <= attackDistance || distanceToEnemy < distanceToPlayer)
+                if (distanceToEnemy <= petData.attackDistance || distanceToEnemy < distanceToPlayer)
                 {
                     // 如果在追踪玩家，中断追踪
                     if (isTrackingPlayer && CanChangeState())
@@ -154,12 +154,12 @@ namespace Domain.Character.Pets
                         isTrackingPlayer = true;
                         ChangeState(PetState.Run);
                     }
-                    else if (currentState != PetState.Idle && currentState != PetState.Attack && CanChangeState())
+                    else if (petData.currentState != PetState.Idle && petData.currentState != PetState.Attack && CanChangeState())
                     {
                         ChangeState(PetState.Idle);
                     }
                 }
-                else if (currentState != PetState.Idle && CanChangeState())
+                else if (petData.currentState != PetState.Idle && CanChangeState())
                 {
                     ChangeState(PetState.Idle);
                 }
@@ -175,11 +175,11 @@ namespace Domain.Character.Pets
         // 切换状态时记录时间
         protected new void ChangeState(PetState newState)
         {
-            if (currentState == newState) return;
+            if (petData.currentState == newState) return;
 
             base.ChangeState(newState);
             lastStateChangeTime = UnityEngine.Time.time;
-            Debug.Log($"状态切换: {currentState} -> {newState}");
+            Debug.Log($"状态切换: {petData.currentState} -> {newState}");
         }
 
         #region 状态机
@@ -223,11 +223,11 @@ namespace Domain.Character.Pets
             if (targetEnemy != null)
             {
                 float distance = Vector3.Distance(transform.position, targetEnemy.transform.position);
-                if (distance > attackDistance + buffer)
+                if (distance > petData.attackDistance + buffer)
                 {
                     ChangeState(PetState.Run);
                 }
-                else if (distance <= attackDistance - buffer)
+                else if (distance <= petData.attackDistance - buffer)
                 {
                     ChangeState(PetState.Attack);
                 }
@@ -308,7 +308,7 @@ namespace Domain.Character.Pets
 
                 // 检查敌人是否超出攻击范围
                 float distanceToEnemy = Vector3.Distance(transform.position, targetEnemy.transform.position);
-                if (distanceToEnemy > attackDistance + buffer && CanChangeState())
+                if (distanceToEnemy > petData.attackDistance + buffer && CanChangeState())
                 {
                     ChangeState(PetState.Run);
                 }
@@ -410,7 +410,7 @@ namespace Domain.Character.Pets
                 float distanceToEnemy = Vector3.Distance(transform.position, targetEnemy.transform.position);
 
                 // 如果敌人在攻击范围内，立即切换到攻击
-                if (distanceToEnemy <= attackDistance - buffer)
+                if (distanceToEnemy <= petData.attackDistance - buffer)
                 {
                     // 如果在追踪玩家，中断追踪
                     if (isTrackingPlayer)
@@ -481,7 +481,7 @@ namespace Domain.Character.Pets
             else if (targetEnemy != null && !isTrackingPlayer && canAttackEnemy && CanChangeState())
             {
                 float distance = Vector3.Distance(transform.position, targetEnemy.transform.position);
-                if (distance <= attackDistance - buffer)
+                if (distance <= petData.attackDistance - buffer)
                 {
                     ChangeState(PetState.Attack);
                 }
@@ -553,7 +553,7 @@ namespace Domain.Character.Pets
             // 设置速度
             if (direction != Vector3.zero)
             {
-                rb.velocity = direction * moveSpeed;
+                rb.velocity = direction * petData.moveSpeed;
             }
             else
             {
@@ -582,16 +582,16 @@ namespace Domain.Character.Pets
             float distance = Vector3.Distance(transform.position, targetEnemy.transform.position);
 
             // 根据距离决定状态切换
-            if (distance > attackDistance + buffer)
+            if (distance > petData.attackDistance + buffer)
             {
-                if (currentState != PetState.Run && CanChangeState())
+                if (petData.currentState != PetState.Run && CanChangeState())
                 {
                     ChangeState(PetState.Run);
                 }
             }
-            else if (distance <= attackDistance - buffer)
+            else if (distance <= petData.attackDistance - buffer)
             {
-                if (currentState != PetState.Attack && CanChangeState())
+                if (petData.currentState != PetState.Attack && CanChangeState())
                 {
                     ChangeState(PetState.Attack);
                 }
@@ -676,7 +676,7 @@ namespace Domain.Character.Pets
                             // 已在允许区域内，停止追踪
                             isTrackingPlayer = false;
                             hasPlayerFollowPosition = false;
-                            if (currentState != PetState.Attack && CanChangeState())
+                            if (petData.currentState != PetState.Attack && CanChangeState())
                             {
                                 ChangeState(PetState.Idle);
                             }
@@ -687,7 +687,7 @@ namespace Domain.Character.Pets
                 {
                     // 有追踪标志但没有目标位置，重置状态
                     isTrackingPlayer = false;
-                    if (currentState != PetState.Attack && CanChangeState())
+                    if (petData.currentState != PetState.Attack && CanChangeState())
                     {
                         ChangeState(PetState.Idle);
                     }
@@ -706,7 +706,7 @@ namespace Domain.Character.Pets
             {
                 // 有敌人但敌人距离较远，且玩家距离也较远
                 float distanceToEnemy = Vector3.Distance(transform.position, targetEnemy.transform.position);
-                shouldTrackPlayer = distance > minPlayerDistance + buffer && distanceToEnemy > attackDistance + buffer;
+                shouldTrackPlayer = distance > minPlayerDistance + buffer && distanceToEnemy > petData.attackDistance + buffer;
             }
 
             if (shouldTrackPlayer && CanChangeState())
@@ -774,7 +774,7 @@ namespace Domain.Character.Pets
             {
                 // 绘制攻击距离
                 Gizmos.color = Color.magenta;
-                Gizmos.DrawWireSphere(transform.position, attackDistance);
+                Gizmos.DrawWireSphere(transform.position, petData.attackDistance);
             }
         }
 #endif

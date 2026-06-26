@@ -484,6 +484,7 @@ GameObject:
   - component: {fileID: 4024597144815189423}
   - component: {fileID: 7161046551835424150}
   - component: {fileID: 1208310356638053117}
+  - component: {fileID: 6823781936261374293}
   m_Layer: 7
   m_Name: mini simple skeleton demo
   m_TagString: Enemy
@@ -597,6 +598,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageEventChannel: {fileID: 11400000, guid: 9d6c4e0be67ba6c42a5c60e91040904e, type: 2}
+  _network: {fileID: 6823781936261374293}
   animator: {fileID: 3202466513927889513}
   rb: {fileID: 2424846866186777879}
   PlayerTarget: {fileID: 0}
@@ -696,6 +698,18 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &6823781936261374293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3511282440840379930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fd834580877fd343a090f570563013d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3743625664174147662
 GameObject:
   m_ObjectHideFlags: 0

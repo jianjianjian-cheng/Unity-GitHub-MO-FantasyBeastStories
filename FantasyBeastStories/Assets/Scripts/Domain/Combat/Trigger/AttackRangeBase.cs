@@ -6,6 +6,7 @@ using Domain.Event.Channels.Player;
 using Domain.Player;
 using Domain.Enemy;
 using Domain.Manager;
+using Domain.Network;
 using UnityEngine;
 
 namespace Domain.Combat.Trigger
@@ -15,28 +16,24 @@ namespace Domain.Combat.Trigger
     /// </summary>
     public abstract class AttackRangeBase : TriggerBase
     {
+        [SerializeField] protected NetworkIdentityBase _network;
+
+        [Header("纯数据")]
+        [SerializeField] private AttackRangeData attackRangeData;
+
         protected AttributePlayerBase attributePlayerBase;
         protected List<GameObject> gameObjects = new List<GameObject>();
         protected GameObject targetEnemy;
 
-        [SerializeField]
-        protected float offsetY = 0.5f;
-
-        [SerializeField]
-        protected float attackInterval = 2f;
-
-        [SerializeField]
-        protected float searchRadius = 5f; // 搜索半径（可用于可视化）
-
-        private float attackTimer;
-
-        private int comboCounter = 1;
-
-        private int empowerChargeCounter = 1;
-        protected bool isCharged = false;
-
         public override void Start()
         {
+            attackRangeData = new AttackRangeData();
+
+            if (_network == null)
+                _network = GetComponent<NetworkIdentityBase>();
+            if (_network == null)
+                Debug.LogError("[AttackRangeBase] NetworkIdentityBase 未赋值，请在预制体 Inspector 中绑定或确保组件存在", this);
+
             base.Start();
             attributePlayerBase = GetLocalPlayerAttribute();
         }
@@ -46,13 +43,13 @@ namespace Domain.Combat.Trigger
             if (EventChannelLocator.MainContainer != null)
             {
                 var query = new PlayerAttributeData(PlayerAttributeQueryType.GetLocalPlayerAttribute)
-                { attributeName = EventNames.PlayerAttribute_Main };
+                { attributeName = AttributeKeyConst.Main };
                 EventChannelLocator.MainContainer.playerAttributeChannel.Raise(query);
                 if (query.attribute != null)
                     return query.attribute;
             }
             if (PlayerManager.instance != null)
-                return PlayerManager.instance.GetLocalPlayerAttribute(EventNames.PlayerAttribute_Main);
+                return PlayerManager.instance.GetLocalPlayerAttribute(AttributeKeyConst.Main);
             return null;
         }
 
@@ -60,7 +57,7 @@ namespace Domain.Combat.Trigger
         {
             if (EventChannelLocator.MainContainer.gameSettings.IsPaused)
                 return;
-            if (!photonView.IsMine)
+            if (!_network.IsMine)
             {
                 return;
             }
@@ -82,14 +79,14 @@ namespace Domain.Combat.Trigger
             if (targetEnemy == null)
                 return;
 
-            attackInterval = attributePlayerBase.GetAttackInterval();
+            attackRangeData.attackInterval = attributePlayerBase.GetAttackInterval();
             // 攻击间隔控制
-            if (attackTimer > 0)
+            if (attackRangeData.attackTimer > 0)
             {
-                attackTimer -= UnityEngine.Time.deltaTime;
+                attackRangeData.attackTimer -= UnityEngine.Time.deltaTime;
                 return;
             }
-            attackTimer = attackInterval;
+            attackRangeData.attackTimer = attackRangeData.attackInterval;
 
             // 调用子类实现的攻击方法
             StartCoroutine(AttackCoroutine());
@@ -98,19 +95,19 @@ namespace Domain.Combat.Trigger
         //协程，用于短时间内连续攻击,限定攻击次数
         private IEnumerator AttackCoroutine()
         {
-            while (comboCounter <= attributePlayerBase.GetComboCount())
+            while (attackRangeData.comboCounter <= attributePlayerBase.GetComboCount())
             {
-                isCharged = (empowerChargeCounter >= attributePlayerBase.GetEmpowerCharge());
+                attackRangeData.isCharged = (attackRangeData.empowerChargeCounter >= attributePlayerBase.GetEmpowerCharge());
 
                 PerformAttack();
 
-                comboCounter++;
-                empowerChargeCounter = isCharged ? 1 : empowerChargeCounter + 1;
+                attackRangeData.comboCounter++;
+                attackRangeData.empowerChargeCounter = attackRangeData.isCharged ? 1 : attackRangeData.empowerChargeCounter + 1;
 
                 yield return new WaitForSeconds(0.3f);
             }
-            isCharged = false;
-            comboCounter = 1;
+            attackRangeData.isCharged = false;
+            attackRangeData.comboCounter = 1;
         }
 
         /// <summary>
@@ -178,7 +175,7 @@ namespace Domain.Combat.Trigger
         {
             return new Vector3(
                 transform.position.x,
-                transform.position.y + offsetY,
+                transform.position.y + attackRangeData.offsetY,
                 transform.position.z
             );
         }
@@ -227,10 +224,10 @@ namespace Domain.Combat.Trigger
         /// </summary>
         protected virtual void OnDrawGizmosSelected()
         {
-            if (searchRadius > 0)
+            if (attackRangeData.searchRadius > 0)
             {
                 Gizmos.color = Color.yellow;
-                Gizmos.DrawWireSphere(transform.position, searchRadius);
+                Gizmos.DrawWireSphere(transform.position, attackRangeData.searchRadius);
 
                 if (targetEnemy != null)
                 {

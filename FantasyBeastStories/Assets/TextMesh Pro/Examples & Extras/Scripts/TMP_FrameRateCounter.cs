@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace TMPro.Examples
 {
-    
+
     public class TMP_FrameRateCounter : MonoBehaviour
     {
         public float UpdateInterval = 5.0f;
@@ -30,7 +30,7 @@ namespace TMPro.Examples
                 return;
 
             m_camera = Camera.main;
-            Application.targetFrameRate = 9999;
+            UnityEngine.Application.targetFrameRate = 9999;
 
             GameObject frameCounter = new GameObject("Frame Counter");
 

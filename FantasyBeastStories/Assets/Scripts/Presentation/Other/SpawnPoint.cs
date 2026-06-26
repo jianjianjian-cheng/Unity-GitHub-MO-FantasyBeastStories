@@ -6,6 +6,7 @@ using Infrastructure.Network;
 using Domain.Manager;
 using Photon.Pun;
 using UnityEngine;
+using Application;
 
 namespace Presentation.Other
 {

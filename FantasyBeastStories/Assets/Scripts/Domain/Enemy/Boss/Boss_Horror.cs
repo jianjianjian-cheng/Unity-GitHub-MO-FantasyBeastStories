@@ -7,7 +7,7 @@ using Domain.Player;
 using Domain.Manager;
 using Domain.Combat.Trigger;
 using Photon.Pun;
-using Infrastructure.FX.FireBallBoss;
+using Domain.Combat.FX;
 using Domain.Time;
 
 namespace Domain.Enemy.Boss
@@ -158,7 +158,7 @@ namespace Domain.Enemy.Boss
         {
             base.Update();
 
-            if (EventChannelLocator.MainContainer.gameSettings.IsPaused || currentState == EnemyState.Die)
+            if (EventChannelLocator.MainContainer.gameSettings.IsPaused || enemyData.currentState == EnemyState.Die)
             {
                 if (navMeshAgent != null && navMeshAgent.enabled)
                     navMeshAgent.isStopped = true;
@@ -289,7 +289,7 @@ namespace Domain.Enemy.Boss
         private void UpdatePlayerTargetInterval()
         {
             playerTargetUpdateTimer += UnityEngine.Time.deltaTime;
-            if (playerTargetUpdateTimer >= playerTargetUpdateInterval || PhotonNetwork.IsMasterClient)
+            if (playerTargetUpdateTimer >= playerTargetUpdateInterval || _network.IsMasterClient)
             {
                 UpdatePlayerTarget();
             }
@@ -297,7 +297,7 @@ namespace Domain.Enemy.Boss
 
         private void CheckPhaseTransition()
         {
-            float hpPercent = attribute.currentHealth / attribute.maxHealth;
+            float hpPercent = enemyData.attribute.currentHealth / enemyData.attribute.maxHealth;
 
             if (hpPercent <= 0)
             {
@@ -540,7 +540,7 @@ namespace Domain.Enemy.Boss
 
             if (closestPlayer != null)
             {
-                photonView.RPC("RPC_SyncPlayerTarget", RpcTarget.All, closestPlayer.GetPhotonView().ViewID);
+                _network.RPC("RPC_SyncPlayerTarget", Domain.Network.NetworkTarget.All, closestPlayer.GetPhotonView().ViewID);
             }
         }
 
@@ -574,7 +574,7 @@ namespace Domain.Enemy.Boss
                 navMeshAgent.isStopped = true;
 
             yield return new WaitForSeconds(0.1f);
-            photonView.RPC("RPC_SyncTriggerAnim", RpcTarget.All, "Bite");
+            _network.RPC("RPC_SyncTriggerAnim", Domain.Network.NetworkTarget.All, "Bite");
 
             // 前摇
             yield return new WaitForSeconds(biteWindUp);
@@ -594,7 +594,7 @@ namespace Domain.Enemy.Boss
                         Element.Common,
                         gameObject,
                         col.gameObject,
-                        biteDamage * attribute.attackPower,
+                        biteDamage * enemyData.attribute.attackPower,
                         false,
                         1f
                     );
@@ -622,7 +622,7 @@ namespace Domain.Enemy.Boss
                 navMeshAgent.isStopped = true;
 
             yield return new WaitForSeconds(0.1f);
-            photonView.RPC("RPC_SyncTriggerAnim", RpcTarget.All, "Fireball");
+            _network.RPC("RPC_SyncTriggerAnim", Domain.Network.NetworkTarget.All, "Fireball");
 
             // 前摇
             yield return new WaitForSeconds(rayBeamWindUp);
@@ -772,15 +772,15 @@ namespace Domain.Enemy.Boss
         {
             GameObject rayBeam = Instantiate(rayBeamPrefab, rayBeamPoint.position, rayBeamPoint.rotation);
             RayBeam rayBeamScript = rayBeam.GetComponentInChildren<RayBeam>();
-            float FinalRayBeamDamage = attribute.GetAttackPower() * rayBeamDamage;
+            float FinalRayBeamDamage = enemyData.attribute.GetAttackPower() * rayBeamDamage;
             rayBeamScript.SetOwnerAndAttribute(gameObject, FinalRayBeamDamage);
             StartCoroutine(DelayDestoryRayBeam(rayBeam));
         }
         public void StartfireBallBurst()
         {
             GameObject fireballBurst = Instantiate(fireballPrefab, fireballBurstPoint.transform.position, Quaternion.identity);
-            FIreBallProjectile fireBallProjectile = fireballBurst.GetComponent<FIreBallProjectile>();
-            fireBallProjectile.SetTargetAndDamage(PlayerTarget.transform, attribute.GetAttackPower() * 6);
+            IFIreBallProjectile fireBallProjectile = fireballBurst.GetComponent<IFIreBallProjectile>();
+            fireBallProjectile.SetTargetAndDamage(PlayerTarget.transform, enemyData.attribute.GetAttackPower() * 6);
         }
 
 
@@ -804,9 +804,9 @@ namespace Domain.Enemy.Boss
             if (navMeshAgent != null)
                 navMeshAgent.isStopped = true;
 
-            photonView.RPC("RPC_SyncTriggerAnim", RpcTarget.All, "Spawn");
-            attribute.SetAttackPower(30);
-            attribute.SetMaxHealth(100000);
+            _network.RPC("RPC_SyncTriggerAnim", Domain.Network.NetworkTarget.All, "Spawn");
+            enemyData.attribute.SetAttackPower(30);
+            enemyData.attribute.SetMaxHealth(100000);
             SyncedGameTimeManager.Instance.InitializeBossUI(100000, "蛛王菲力甫斯");
             // 登场演出
             yield return new WaitForSeconds(2f);
@@ -839,7 +839,7 @@ namespace Domain.Enemy.Boss
                 navMeshAgent.isStopped = true;
 
             // 转场演出
-            photonView.RPC("RPC_SyncTriggerAnim", RpcTarget.All, "PhaseTransition");  // 可以在动画中添加转场效果
+            _network.RPC("RPC_SyncTriggerAnim", Domain.Network.NetworkTarget.All, "PhaseTransition");  // 可以在动画中添加转场效果
             yield return new WaitForSeconds(1.5f);
 
             currentMoveSpeed = phase2MoveSpeed;
@@ -876,7 +876,7 @@ namespace Domain.Enemy.Boss
                 navMeshAgent.isStopped = true;
 
             // 死亡动画
-            photonView.RPC("RPC_SyncTriggerAnim", RpcTarget.All, "Die");
+            _network.RPC("RPC_SyncTriggerAnim", Domain.Network.NetworkTarget.All, "Die");
 
             // 死亡演出时间（等待动画播放）
             yield return new WaitForSeconds(2f);
@@ -896,7 +896,7 @@ namespace Domain.Enemy.Boss
         protected override void OnDamageReceived(EventArgsBase args)
         {
             base.OnDamageReceived(args);
-            SyncedGameTimeManager.Instance.UpdateHPUI(attribute.currentHealth);
+            SyncedGameTimeManager.Instance.UpdateHPUI(enemyData.attribute.currentHealth);
         }
         #endregion
 

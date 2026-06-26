@@ -31,12 +31,17 @@ MonoBehaviour:
   timeChangeEnemyAttributeChannel: {fileID: 11400000, guid: da59b3e956a37924381a6bd0c12f3500, type: 2}
   gameActionChannel: {fileID: 11400000, guid: a5be10cd507ab314b954528051903564, type: 2}
   difficultyCoefficientQueryChannel: {fileID: 11400000, guid: ca8d268a46f17eb4989b6d5df9dd31f3, type: 2}
+  pauseStateChannel: {fileID: 11400000, guid: 9c612b7dced2d90499374cb491e068c7, type: 2}
+  roomJoinedChannel: {fileID: 11400000, guid: 3090f8e9c7bd87e47b9cd9c614b707d8, type: 2}
   changeCanRotateChannel: {fileID: 11400000, guid: 999af596c4f701541b208f3ed1ad4e1e, type: 2}
   pauseChannel: {fileID: 11400000, guid: 41a46bb46f73f5e47847ceae63acb9be, type: 2}
   runeInfoChannel: {fileID: 11400000, guid: 476c1d79d3453044d90190d611390033, type: 2}
   magicUpgradeChannel: {fileID: 11400000, guid: 77dd1f4fe75dfa74793321ce3f28849b, type: 2}
   loadingChannel: {fileID: 11400000, guid: 393427de508f05940b29cebf0e5405e8, type: 2}
   bloomChannel: {fileID: 11400000, guid: 48c6d2bd6ea599142a66d89be05af21f, type: 2}
+  experienceUpdateChannel: {fileID: 11400000, guid: e9f09f132124ae845b138bd99d964271, type: 2}
+  taskUIChannel: {fileID: 11400000, guid: 92594c51cecf87047ba3c7bcfb7bf86d, type: 2}
+  healthUpdateChannel: {fileID: 11400000, guid: b0b4077ca70dc484c8f487840edc1b70, type: 2}
   taskActivationChannel: {fileID: 11400000, guid: a877e6b7ad546204787f6bda98a06a0a, type: 2}
   taskNoticeChannel: {fileID: 11400000, guid: 5fda20fc9cb6bf54eab384b86d1323c8, type: 2}
   poolOperationChannel: {fileID: 11400000, guid: 746f611f37ad41f488bf109ea17c8ec5, type: 2}

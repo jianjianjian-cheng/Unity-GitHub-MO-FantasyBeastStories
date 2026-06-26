@@ -41,7 +41,7 @@ namespace Presentation.UI
 
     [Header("事件名称配置")]
     [SerializeField]
-    private string eventName = EventNames.OnReceiveCard_WizardBoy;
+    private string eventName = CharacterCardType.WizardBoy;
     #region UI对象
     List<GameObject> CardEffects;
     GameObject GrossUpgradePanel;

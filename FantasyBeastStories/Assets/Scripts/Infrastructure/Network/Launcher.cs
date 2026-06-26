@@ -7,14 +7,15 @@ using Domain.Player;
 using ExitGames.Client.Photon;
 using ExitGames.Client.Photon.StructWrapping;
 using Domain.Manager;
-using Presentation.Other;
 using Photon.Pun;
-using Presentation.UI;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using Application;
+using Presentation.Other;
+using Presentation.UI;
 
 namespace Infrastructure.Network
 {
@@ -68,7 +69,7 @@ namespace Infrastructure.Network
       if (isTest)
         return;
       PhotonNetwork.AutomaticallySyncScene = true;
-      Application.runInBackground = true;
+      UnityEngine.Application.runInBackground = true;
       PhotonNetwork.ConnectUsingSettings();
     }
 
@@ -350,7 +351,10 @@ namespace Infrastructure.Network
       //初始化UI，避免切换场景时丢失UI
       if (scene.buildIndex == 1)
       {
-        GameManager.instance.Intilize();
+        // LobbyUIManager 负责大厅 UI 初始化 — 通过事件通道通知
+        var roomJoinedChannel = EventChannelLocator.MainContainer.roomJoinedChannel;
+        if (roomJoinedChannel != null)
+          roomJoinedChannel.Raise(new RoomJoinedEventData());
       }
 
       if (EventChannelLocator.MainContainer.gameSettings.IsTest)

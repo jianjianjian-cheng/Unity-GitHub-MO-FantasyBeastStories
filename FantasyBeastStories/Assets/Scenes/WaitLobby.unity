@@ -7932,6 +7932,7 @@ GameObject:
   m_Component:
   - component: {fileID: 762411072}
   - component: {fileID: 762411073}
+  - component: {fileID: 762411074}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -7966,13 +7967,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9704e49c1b49e8d4bb6f7e142d7b21df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EventName: 
+  EventName: OnReceiveCard_WizardBoy
   sceneIndex: 2
   isReady: 0
-  lobbyButton: {fileID: 0}
   spawnPoints: []
-  isStayLobbyInspector: 0
+  isStayLobbyInspector: 1
   isTestInspector: 0
+--- !u!114 &762411074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 762411070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2c3d4e5f678901234567890123456, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lobbyButton: {fileID: 0}
+  characterButton: {fileID: 0}
+  runeButton: {fileID: 0}
+  MassionButton: {fileID: 0}
+  startButton: {fileID: 0}
+  exitRoomButton: {fileID: 0}
+  nameUIText: {fileID: 0}
+  PostProcessVolume: {fileID: 0}
+  CharactorPanel: {fileID: 0}
+  CharactorIll: {fileID: 0}
+  CharactorShowPosition: {fileID: 0}
+  nextCharacterButton: {fileID: 0}
+  previousCharacterButton: {fileID: 0}
+  SwitchButton: {fileID: 0}
+  RunePanel: {fileID: 0}
+  EquipButton: {fileID: 0}
+  RuneIcon_1: {fileID: 0}
+  RuneIcon_2: {fileID: 0}
 --- !u!1 &791935803
 GameObject:
   m_ObjectHideFlags: 0
@@ -11009,9 +11039,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1122843128}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91b33fb6ae41ef34abb4093de0ee50b3, type: 3}
+  m_Script: {fileID: 11500000, guid: e696bb517a2fbcd468f872d8c3bb3634, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotId: 0
+  RuneName: 
+  specialPowerName: 
+  specialPowerDescription: 
 --- !u!1001 &1124937606
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12030,7 +12064,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1210886870}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c54c9a741570ded4fbe51c53474a44b4, type: 3}
+  m_Script: {fileID: 11500000, guid: 57e9b9167d3adb34fb2945130d3f6043, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &1226375920
@@ -22083,9 +22117,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2144434433}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91b33fb6ae41ef34abb4093de0ee50b3, type: 3}
+  m_Script: {fileID: 11500000, guid: e696bb517a2fbcd468f872d8c3bb3634, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotId: 0
+  RuneName: 
+  specialPowerName: 
+  specialPowerDescription: 
 --- !u!4 &406969358140148547
 Transform:
   m_ObjectHideFlags: 0

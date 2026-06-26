@@ -45,14 +45,14 @@ namespace Domain.Enemy
             navMeshAgent = GetComponent<NavMeshAgent>();
             if (navMeshAgent != null)
             {
-                navMeshAgent.speed = attribute.moveSpeed;
+                navMeshAgent.speed = enemyData.attribute.moveSpeed;
             }
         }
 
         protected override void Update()
         {
             base.Update();
-            if (EventChannelLocator.MainContainer.gameSettings.IsPaused || currentState == EnemyState.Die)
+            if (EventChannelLocator.MainContainer.gameSettings.IsPaused || enemyData.currentState == EnemyState.Die)
             {
                 navMeshAgent.isStopped = true;
                 return;
@@ -79,7 +79,7 @@ namespace Domain.Enemy
 
         private void DealDamageToPlayers()
         {
-            if (currentState == EnemyState.Die)
+            if (enemyData.currentState == EnemyState.Die)
                 return;
             // 累加时间
             attackCooldownTimer += UnityEngine.Time.deltaTime;
@@ -100,7 +100,7 @@ namespace Domain.Enemy
                         Element.Common,
                         gameObject,
                         player,
-                        attribute.attackPower,
+                        enemyData.attribute.attackPower,
                         false,
                         0f
                     );
@@ -116,32 +116,32 @@ namespace Domain.Enemy
                 return;
             if (navMeshAgent != null)
             {
-                navMeshAgent.speed = attribute.moveSpeed;
+                navMeshAgent.speed = enemyData.attribute.moveSpeed;
                 navMeshAgent.updatePosition = true;
             }
             //根据游戏难度更新最大生命值
             if (SyncedGameTimeManager.Instance != null && SyncedGameTimeManager.Instance.GetCurrentTime() > 600f && SyncedGameTimeManager.Instance.GetCurrentTime() < 900f)
             {
-                attribute.maxHealth = attribute.maxHealth * (QueryDifficultyCoefficient() + 2.5f);
+                enemyData.attribute.maxHealth = enemyData.attribute.maxHealth * (QueryDifficultyCoefficient() + 2.5f);
             }
             else if (SyncedGameTimeManager.Instance != null && SyncedGameTimeManager.Instance.GetCurrentTime() > 900f && SyncedGameTimeManager.Instance.GetCurrentTime() < 1200f)
             {
-                attribute.maxHealth = attribute.maxHealth * (QueryDifficultyCoefficient() + 3.5f);
+                enemyData.attribute.maxHealth = enemyData.attribute.maxHealth * (QueryDifficultyCoefficient() + 3.5f);
             }
             else if (SyncedGameTimeManager.Instance != null && SyncedGameTimeManager.Instance.GetCurrentTime() > 1200f)
             {
-                attribute.maxHealth = attribute.maxHealth * (QueryDifficultyCoefficient() + 4.5f);
+                enemyData.attribute.maxHealth = enemyData.attribute.maxHealth * (QueryDifficultyCoefficient() + 4.5f);
             }
             else if (SyncedGameTimeManager.Instance != null && SyncedGameTimeManager.Instance.GetCurrentTime() > 300f && SyncedGameTimeManager.Instance.GetCurrentTime() < 600f)
             {
-                attribute.maxHealth = attribute.maxHealth * QueryDifficultyCoefficient();
+                enemyData.attribute.maxHealth = enemyData.attribute.maxHealth * QueryDifficultyCoefficient();
             }
             else
             {
-                attribute.maxHealth = attribute.maxHealth * 1;
+                enemyData.attribute.maxHealth = enemyData.attribute.maxHealth * 1;
             }
-            attribute.currentHealth = attribute.maxHealth;
-            Debug.Log($"最大生命值: {attribute.maxHealth}");
+            enemyData.attribute.currentHealth = enemyData.attribute.maxHealth;
+            Debug.Log($"最大生命值: {enemyData.attribute.maxHealth}");
         }
 
         protected override void OnDisable()

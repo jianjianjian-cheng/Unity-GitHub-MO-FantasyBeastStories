@@ -674,9 +674,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58554cfd483b0db4cba9bb3cfe2d2559, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offsetY: 0.5
-  attackInterval: 2
-  searchRadius: 5
+  _network: {fileID: 6805688692269431946}
+  attackRangeData:
+    offsetY: 0.5
+    attackInterval: 2
+    searchRadius: 5
+    attackTimer: 0
+    comboCounter: 1
+    empowerChargeCounter: 1
+    isCharged: 0
   projectileSpeed: 10
 --- !u!114 &818041369873296124
 MonoBehaviour:
@@ -1872,6 +1878,7 @@ GameObject:
   - component: {fileID: 7097122324707424375}
   - component: {fileID: 3285774985444942947}
   - component: {fileID: 5871110717533689807}
+  - component: {fileID: 6805688692269431946}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -2026,12 +2033,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19262c0f6aea50d458c6db5f8fe39a0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnPointIndex: 0
+  movementData:
+    moveSpeed: 2.6
+    rotationSpeed: 6
+    movementDirection: {x: 0, y: 0, z: 0}
+    isRun: 0
+    spawnPointIndex: 0
+    healthRecover: 0
+    recoverInterval: 1
   isOnlyShow: 0
   virtualCamera: {fileID: 1547902573985025242}
   rb: {fileID: 6404800926616539602}
   animator: {fileID: 8692948142478180452}
-  rotationSpeed: 6
   isInLobby: 0
   isReadyPanel: {fileID: 2768187980737792915}
   testCardEffect: {fileID: 0}
@@ -2057,6 +2070,18 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &6805688692269431946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7557579576971884266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fd834580877fd343a090f570563013d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8064835023674873072
 GameObject:
   m_ObjectHideFlags: 0

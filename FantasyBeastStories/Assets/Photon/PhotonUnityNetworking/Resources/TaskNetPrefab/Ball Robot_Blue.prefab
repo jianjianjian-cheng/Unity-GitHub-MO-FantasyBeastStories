@@ -2349,6 +2349,7 @@ GameObject:
   - component: {fileID: 6918053620872258638}
   - component: {fileID: 464951667256474307}
   - component: {fileID: 1876866874393472801}
+  - component: {fileID: 5611741840487045725}
   m_Layer: 15
   m_Name: Ball Robot_Blue
   m_TagString: TaskNetObject
@@ -2427,6 +2428,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c7cc49553707444694b92036ed19f03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _network: {fileID: 5611741840487045725}
   moveDistance: 3
   moveSpeed: 2
   turnSpeed: 5
@@ -2581,6 +2583,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!114 &5611741840487045725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8762175025758328672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fd834580877fd343a090f570563013d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9194707433612097806
 GameObject:
   m_ObjectHideFlags: 0

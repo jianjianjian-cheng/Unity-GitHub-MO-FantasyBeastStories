@@ -10,7 +10,7 @@ namespace Domain.Enemy
             base.Start();
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
-            currentState = EnemyState.Idle;
+            enemyData.currentState = EnemyState.Idle;
         }
 
         protected override void OnEnable()

@@ -6316,11 +6316,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce7d6fb25f1126543be1b74c323b3cc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyData:
+    currentState: 0
+    isInitialized: 0
   damageEventChannel: {fileID: 0}
+  _network: {fileID: 236445081}
   animator: {fileID: 236445080}
   rb: {fileID: 236445078}
   PlayerTarget: {fileID: 0}
-  currentState: 0
 --- !u!1 &81687884
 GameObject:
   m_ObjectHideFlags: 0
@@ -9028,6 +9031,7 @@ GameObject:
   - component: {fileID: 236445076}
   - component: {fileID: 236445075}
   - component: {fileID: 236445074}
+  - component: {fileID: 236445081}
   m_Layer: 7
   m_Name: mini simple skeleton demo
   m_TagString: Enemy
@@ -9068,11 +9072,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce7d6fb25f1126543be1b74c323b3cc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyData:
+    currentState: 0
+    isInitialized: 0
   damageEventChannel: {fileID: 0}
+  _network: {fileID: 236445081}
   animator: {fileID: 236445080}
   rb: {fileID: 236445078}
   PlayerTarget: {fileID: 0}
-  currentState: 0
 --- !u!114 &236445075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9208,6 +9215,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &236445081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 236445072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fd834580877fd343a090f570563013d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &237259548
 GameObject:
   m_ObjectHideFlags: 0
@@ -11327,6 +11346,73 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 366456654}
   m_CullTransparentMesh: 1
+--- !u!1 &366540920
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 366540922}
+  - component: {fileID: 366540921}
+  - component: {fileID: 366540923}
+  m_Layer: 0
+  m_Name: ExperienceManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &366540921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 366540920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19f0aa59cfb526842b6e70a987e0f147, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &366540922
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 366540920}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 66.2296, y: 3.0527756, z: 89.5742}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &366540923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 366540920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 11
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1001 &369784343
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19029,6 +19115,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 885abcb802fce2f4c9468a6564fabea1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  expSlider: {fileID: 2546343530324888095}
+  levelText: {fileID: 861993119}
+  expText: {fileID: 0}
 --- !u!114 &495419038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24979,10 +25068,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9704e49c1b49e8d4bb6f7e142d7b21df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EventName: 
   sceneIndex: 2
   isReady: 0
-  lobbyButton: {fileID: 0}
   spawnPoints: []
   isStayLobbyInspector: 0
   isTestInspector: 0
@@ -36082,6 +36169,7 @@ GameObject:
   - component: {fileID: 634833502}
   - component: {fileID: 634833501}
   - component: {fileID: 634833500}
+  - component: {fileID: 634833507}
   m_Layer: 7
   m_Name: mini simple skeleton demo
   m_TagString: Enemy
@@ -36122,11 +36210,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce7d6fb25f1126543be1b74c323b3cc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyData:
+    currentState: 0
+    isInitialized: 0
   damageEventChannel: {fileID: 0}
+  _network: {fileID: 236445081}
   animator: {fileID: 236445080}
   rb: {fileID: 236445078}
   PlayerTarget: {fileID: 0}
-  currentState: 0
 --- !u!114 &634833501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36262,6 +36353,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &634833507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 634833498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fd834580877fd343a090f570563013d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &637508532
 GameObject:
   m_ObjectHideFlags: 0
@@ -36589,11 +36692,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 659007497}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b560b14d346ce849aefcae1e5444589, type: 3}
+  m_Script: {fileID: 11500000, guid: 96d092bca9fd995499d6f69d2d20ebe6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testCardEffect: {fileID: 427836768}
-  testobject: {fileID: 1017980023557520396}
+  testCardEffect: {fileID: 0}
+  testobject: {fileID: 0}
 --- !u!4 &659007499
 Transform:
   m_ObjectHideFlags: 0
@@ -37222,16 +37325,38 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7564026402141683405, guid: f9ce21cdd3921b6429df963bed50f615, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8527114623600375112, guid: f9ce21cdd3921b6429df963bed50f615, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 687430393}
   m_SourcePrefab: {fileID: 100100000, guid: f9ce21cdd3921b6429df963bed50f615, type: 3}
 --- !u!4 &687430391 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4353288436481215264, guid: f9ce21cdd3921b6429df963bed50f615, type: 3}
   m_PrefabInstance: {fileID: 687430390}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &687430392 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8527114623600375112, guid: f9ce21cdd3921b6429df963bed50f615, type: 3}
+  m_PrefabInstance: {fileID: 687430390}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &687430393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 687430392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fc2806f9ce5ee64c8dd53a699dee363, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  testPrefab: {fileID: 0}
 --- !u!1 &694361299
 GameObject:
   m_ObjectHideFlags: 0
@@ -43621,8 +43746,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showZoneGizmos: 1
   gizmoColor: {r: 0, g: 1, b: 0, a: 0.3}
-  taskNotice: {fileID: 507471519}
-  _indicator: {fileID: 1305683760}
 --- !u!4 &772549383
 Transform:
   m_ObjectHideFlags: 0
@@ -43742,6 +43865,7 @@ GameObject:
   - component: {fileID: 786915992}
   - component: {fileID: 786915991}
   - component: {fileID: 786915990}
+  - component: {fileID: 786915997}
   m_Layer: 7
   m_Name: mini simple skeleton demo
   m_TagString: Enemy
@@ -43782,11 +43906,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce7d6fb25f1126543be1b74c323b3cc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyData:
+    currentState: 0
+    isInitialized: 0
   damageEventChannel: {fileID: 0}
+  _network: {fileID: 236445081}
   animator: {fileID: 236445080}
   rb: {fileID: 236445078}
   PlayerTarget: {fileID: 0}
-  currentState: 0
 --- !u!114 &786915991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43922,6 +44049,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &786915997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786915988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fd834580877fd343a090f570563013d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &796025919
 GameObject:
   m_ObjectHideFlags: 0
@@ -43948,7 +44087,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 796025919}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 382c23965695a8f4bb98ea49391f1285, type: 3}
+  m_Script: {fileID: 11500000, guid: be1990694b45fbe4dbb4c869f8829c35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &796025921
@@ -47036,6 +47175,50 @@ Transform:
   m_Children:
   - {fileID: 1335223755}
   m_Father: {fileID: 246793102}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &988799986
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 988799988}
+  - component: {fileID: 988799987}
+  m_Layer: 0
+  m_Name: TimeEventCoordinator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &988799987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 988799986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a30f684da14389142861efe52fb28306, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &988799988
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 988799986}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 66.2296, y: 3.0527756, z: 89.5742}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &989047874
 GameObject:
@@ -58468,6 +58651,7 @@ GameObject:
   - component: {fileID: 1099904098}
   - component: {fileID: 1099904097}
   - component: {fileID: 1099904096}
+  - component: {fileID: 1099904103}
   m_Layer: 7
   m_Name: mini simple skeleton demo
   m_TagString: Enemy
@@ -58508,11 +58692,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce7d6fb25f1126543be1b74c323b3cc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyData:
+    currentState: 0
+    isInitialized: 0
   damageEventChannel: {fileID: 0}
+  _network: {fileID: 236445081}
   animator: {fileID: 236445080}
   rb: {fileID: 236445078}
   PlayerTarget: {fileID: 0}
-  currentState: 0
 --- !u!114 &1099904097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58648,6 +58835,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1099904103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1099904094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fd834580877fd343a090f570563013d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1106983161
 GameObject:
   m_ObjectHideFlags: 0
@@ -64628,6 +64827,7 @@ GameObject:
   - component: {fileID: 1152044383}
   - component: {fileID: 1152044382}
   - component: {fileID: 1152044381}
+  - component: {fileID: 1152044388}
   m_Layer: 7
   m_Name: mini simple skeleton demo
   m_TagString: Enemy
@@ -64668,11 +64868,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce7d6fb25f1126543be1b74c323b3cc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyData:
+    currentState: 0
+    isInitialized: 0
   damageEventChannel: {fileID: 0}
+  _network: {fileID: 236445081}
   animator: {fileID: 236445080}
   rb: {fileID: 236445078}
   PlayerTarget: {fileID: 0}
-  currentState: 0
 --- !u!114 &1152044382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64808,6 +65011,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1152044388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1152044379}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fd834580877fd343a090f570563013d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1155666708
 GameObject:
   m_ObjectHideFlags: 0
@@ -80239,7 +80454,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8011b549a614fd9479a782aee06d1a40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isTest: 0
 --- !u!1 &1433576489
 GameObject:
   m_ObjectHideFlags: 0
@@ -102627,7 +102841,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1858373374
 Transform:
   m_ObjectHideFlags: 0
@@ -102652,12 +102866,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1858373373}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bda76bd8414cbd444ad1111834b8e658, type: 3}
+  m_Script: {fileID: 11500000, guid: e38683153c2511348a8d5ceec531b854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  experienceSlider: {fileID: 2546343530324888095}
-  levelText: {fileID: 861993119}
-  smoothSpeed: 5
 --- !u!114 &1858373376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151908,11 +152119,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75d0ff6556e2ae94e9feeeb73b342435, type: 3}
---- !u!1 &1017980023557520396 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8762175025758328672, guid: 75d0ff6556e2ae94e9feeeb73b342435, type: 3}
-  m_PrefabInstance: {fileID: 1017980023557520394}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1148689259707838262
 Transform:
   m_ObjectHideFlags: 0
@@ -153575,6 +153781,7 @@ GameObject:
   - component: {fileID: 4024597144736233209}
   - component: {fileID: 7161046551779933888}
   - component: {fileID: 80694104}
+  - component: {fileID: 7181698845817346151}
   m_Layer: 7
   m_Name: mini simple skeleton demo
   m_TagString: Enemy
@@ -160619,6 +160826,18 @@ Transform:
   - {fileID: 715912919343000542}
   m_Father: {fileID: 6764355703803461965}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7181698845817346151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3511282440911205708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fd834580877fd343a090f570563013d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7213876348679068508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161519,3 +161738,5 @@ SceneRoots:
   - {fileID: 4087476695061420100}
   - {fileID: 420097633}
   - {fileID: 464730120}
+  - {fileID: 366540922}
+  - {fileID: 988799988}

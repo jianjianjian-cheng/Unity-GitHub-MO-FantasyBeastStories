@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using Photon.Pun;
 using UnityEngine;
 
 namespace Domain.Manager
 {
-    public class ManagerBase : MonoBehaviourPun
+    public class ManagerBase : MonoBehaviour
     {
         //单例
         public static ManagerBase instance;

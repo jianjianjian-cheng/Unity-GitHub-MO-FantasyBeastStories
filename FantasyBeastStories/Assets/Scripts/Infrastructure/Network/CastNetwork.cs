@@ -4,15 +4,16 @@ using Domain.Event;
 using Domain.Pool;
 using Infrastructure.FX.ImpactCannon;
 using Domain.Manager;
-using Presentation.Other;
 using Photon.Pun;
-using Presentation.UI;
 using Domain.Combat.Trigger;
 using UnityEngine;
+using Domain.Data;
+using Domain.Network;
+using Presentation.UI;
 
 namespace Infrastructure.Network
 {
-  public class CastNetwork : MonoBehaviourPun
+  public class CastNetwork : MonoBehaviourPun, INetworkFireballCaster
   {
     /// <summary>
     /// 请求发射火球（由 AttackRangeBase 调用）

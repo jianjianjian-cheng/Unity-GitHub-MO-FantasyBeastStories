@@ -4916,6 +4916,7 @@ GameObject:
   - component: {fileID: 583299340916570493}
   - component: {fileID: 6559634436210817799}
   - component: {fileID: 2327420910750841689}
+  - component: {fileID: 8589736074187795098}
   m_Layer: 14
   m_Name: ExperienceBall_Blue
   m_TagString: Untagged
@@ -9908,15 +9909,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 2943166597812424074}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fddb62c3dfab6234ea8b68f57ecf3b00, type: 3}
+  m_Script: {fileID: 11500000, guid: 3ebf06ff6e7908c4fa4ed23cb1344ab9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosionForce: 5
-  upwardForce: 3
+  _network: {fileID: 8589736074187795098}
+  explosionForce: 3
+  upwardForce: 4
   lifeTime: 2
   flyToPlayerSpeed: 5
   pushBackForce: 3
   pushBackDelay: 0.2
+--- !u!114 &8589736074187795098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2943166597812424074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fd834580877fd343a090f570563013d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3138792894268302900
 GameObject:
   m_ObjectHideFlags: 0
@@ -19727,7 +19741,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5475772310004844367}
   - component: {fileID: 5777598763838664355}
-  - component: {fileID: 6912334584024027696}
+  - component: {fileID: 6101593381466800100}
   m_Layer: 0
   m_Name: PickUpRange
   m_TagString: Untagged
@@ -19771,7 +19785,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 10, y: 1, z: 10}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6912334584024027696
+--- !u!114 &6101593381466800100
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -19780,7 +19794,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4727717494980050526}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2447194ef5d3580429916018633410f1, type: 3}
+  m_Script: {fileID: 11500000, guid: 190c88c310afb9d49b952dc6ea17c392, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemParent: {fileID: 2327420910750841689}

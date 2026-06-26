@@ -26,7 +26,7 @@ namespace IndieImpulseAssets
                 if (runCount == maxRuns)
                 {
                     // Schedule the script deletion after a short delay, but only if running in the editor
-                    if (Application.isEditor)
+                    if (UnityEngine.Application.isEditor)
                     {
                         EditorApplication.delayCall += () => DeleteScript(scriptPath);
                     }

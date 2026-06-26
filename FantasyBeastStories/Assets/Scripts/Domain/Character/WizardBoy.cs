@@ -111,7 +111,7 @@ namespace Domain.Character
         case "森芒初露":
           attributePlayer.SetCurrentElement(Element.Grass);
           SwitchElement(Element.Grass);
-          healthRecover += 2;
+          movementData.healthRecover += 2;
           break;
         case "流光分裂":
           attributePlayer.SetSplit(true);

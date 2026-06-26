@@ -11,69 +11,69 @@ using UnityEngine.UI;
 
 namespace Presentation.Lobby
 {
-  public class LobbyAllGameManager : MonoBehaviour
-  {
-    [SerializeField]
-    private PlayableDirector vcTimeLine;
-    private GameObject startButton;
-    private GameObject exitButton;
-    private GameObject optionButton;
-    private GameObject gameNameModel;
-
-    private void Start()
+    public class LobbyAllGameManager : MonoBehaviour
     {
-      Initilize();
-    }
+        [SerializeField]
+        private PlayableDirector vcTimeLine;
+        private GameObject startButton;
+        private GameObject exitButton;
+        private GameObject optionButton;
+        private GameObject gameNameModel;
 
-    /// <summary>
-    /// 初始化LobbyAllGameManager
-    /// </summary>
-    public void Initilize()
-    {
-      vcTimeLine = GameObject.Find("Director").GetComponent<PlayableDirector>();
-      startButton = GameObject.Find("StartButton");
-      exitButton = GameObject.Find("ExitButton");
-      optionButton = GameObject.Find("OptionsButton");
-      startButton.GetComponent<Button>().onClick.AddListener(Startbutton);
-      exitButton.GetComponent<Button>().onClick.AddListener(Exitbutton);
-      optionButton.GetComponent<Button>().onClick.AddListener(Optionsbutton);
-      gameNameModel = GameObject.Find("GameNameModel");
-    }
+        private void Start()
+        {
+            Initilize();
+        }
 
-    public void Startbutton()
-    {
-      vcTimeLine.Play();
-      sceneChange();
-    }
+        /// <summary>
+        /// 初始化LobbyAllGameManager
+        /// </summary>
+        public void Initilize()
+        {
+            vcTimeLine = GameObject.Find("Director").GetComponent<PlayableDirector>();
+            startButton = GameObject.Find("StartButton");
+            exitButton = GameObject.Find("ExitButton");
+            optionButton = GameObject.Find("OptionsButton");
+            startButton.GetComponent<Button>().onClick.AddListener(Startbutton);
+            exitButton.GetComponent<Button>().onClick.AddListener(Exitbutton);
+            optionButton.GetComponent<Button>().onClick.AddListener(Optionsbutton);
+            gameNameModel = GameObject.Find("GameNameModel");
+        }
 
-    public void Exitbutton()
-    {
-      Application.Quit();
-    }
+        public void Startbutton()
+        {
+            vcTimeLine.Play();
+            sceneChange();
+        }
 
-    public void Optionsbutton()
-    {
-      Debug.Log("Optionsbutton");
-    }
+        public void Exitbutton()
+        {
+            UnityEngine.Application.Quit();
+        }
 
-    private void sceneChange()
-    {
-      StartCoroutine(loadScene(1));
-    }
+        public void Optionsbutton()
+        {
+            Debug.Log("Optionsbutton");
+        }
 
-    IEnumerator loadScene(int index)
-    {
-      yield return new WaitForSeconds(2f);
-      EventChannelLocator.MainContainer.loadingChannel.Raise(true);
-      yield return new WaitForSeconds(2f);
-      AsyncOperation asyn = SceneManager.LoadSceneAsync(index);
-      asyn.completed += OnSceneLoaded;
-    }
+        private void sceneChange()
+        {
+            StartCoroutine(loadScene(1));
+        }
 
-    private void OnSceneLoaded(AsyncOperation operation)
-    {
-      // LoadingCanvas.instance.HideLoading();
-      // loadingAnimator.SetBool("FadeIn", false);
+        IEnumerator loadScene(int index)
+        {
+            yield return new WaitForSeconds(2f);
+            EventChannelLocator.MainContainer.loadingChannel.Raise(true);
+            yield return new WaitForSeconds(2f);
+            AsyncOperation asyn = SceneManager.LoadSceneAsync(index);
+            asyn.completed += OnSceneLoaded;
+        }
+
+        private void OnSceneLoaded(AsyncOperation operation)
+        {
+            // LoadingCanvas.instance.HideLoading();
+            // loadingAnimator.SetBool("FadeIn", false);
+        }
     }
-  }
 }

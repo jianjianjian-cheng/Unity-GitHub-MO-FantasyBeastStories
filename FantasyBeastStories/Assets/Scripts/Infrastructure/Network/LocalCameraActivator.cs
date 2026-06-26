@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Cinemachine;
-using Player;
 using Domain.Character;
 
 namespace Infrastructure.Network

@@ -3,13 +3,21 @@ using UnityEngine;
 
 namespace Domain.Event.Channels.Game
 {
-    public class DifficultyCoefficientQueryData : EventArgsBase
-    {
-        public float result;
-    }
+  public enum DifficultyQueryType
+  {
+    GetDifficultyCoefficient,
+    GetPlayerCount
+  }
 
-    [CreateAssetMenu(menuName = "Events/Game/Difficulty Coefficient Query Event Channel")]
-    public class DifficultyCoefficientQueryEventChannelSO : BaseEventChannelSO<DifficultyCoefficientQueryData>
-    {
-    }
+  public class DifficultyCoefficientQueryData : EventArgsBase
+  {
+    public DifficultyQueryType queryType;
+    public float result;
+    public int playerCount;
+  }
+
+  [CreateAssetMenu(menuName = "Events/Game/Difficulty Coefficient Query Event Channel")]
+  public class DifficultyCoefficientQueryEventChannelSO : BaseEventChannelSO<DifficultyCoefficientQueryData>
+  {
+  }
 }

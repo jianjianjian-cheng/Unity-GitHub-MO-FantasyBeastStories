@@ -28,14 +28,14 @@ public class PT_PackageWelcomeWindow : EditorWindow
     private bool demosExpanded;
     private bool gamesExpanded;
 
-    private const float WindowWidth       = 500f;
-    private const float BannerHeight      = 160f;
-    private const float SocialIconSize    = 24f;
+    private const float WindowWidth = 500f;
+    private const float BannerHeight = 160f;
+    private const float SocialIconSize = 24f;
     private const float SocialIconSpacing = 6f;
-    private const float CardSpacing       = 8f * 1.21f;
-    private const float CardScale         = 0.7f;
-    private const float CaptionHeight     = 65f;
-    private const float LinkButtonWidth   = (WindowWidth - 56f) / 4f * 1.05f;
+    private const float CardSpacing = 8f * 1.21f;
+    private const float CardScale = 0.7f;
+    private const float CaptionHeight = 65f;
+    private const float LinkButtonWidth = (WindowWidth - 56f) / 4f * 1.05f;
 
     // ─── Detect package import (custom package or Package Manager) ────────────
     private class PT_ImportDetector : AssetPostprocessor
@@ -114,12 +114,12 @@ public class PT_PackageWelcomeWindow : EditorWindow
             ? "Assets/Polytope Studio/Welcome_Screen/Editor/Textures/banner_dark.png"
             : "Assets/Polytope Studio/Welcome_Screen/Editor/Textures/banner_light.png";
 
-        banner         = AssetDatabase.LoadAssetAtPath<Texture2D>(bannerPath);
-        iconTwitter    = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Polytope Studio/Welcome_Screen/Editor/Textures/icon_twitter.png");
-        iconYouTube    = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Polytope Studio/Welcome_Screen/Editor/Textures/icon_youtube.png");
-        iconFacebook   = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Polytope Studio/Welcome_Screen/Editor/Textures/icon_facebook.png");
-        iconInstagram  = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Polytope Studio/Welcome_Screen/Editor/Textures/icon_instagram.png");
-        iconTikTok     = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Polytope Studio/Welcome_Screen/Editor/Textures/icon_tiktok.png");
+        banner = AssetDatabase.LoadAssetAtPath<Texture2D>(bannerPath);
+        iconTwitter = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Polytope Studio/Welcome_Screen/Editor/Textures/icon_twitter.png");
+        iconYouTube = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Polytope Studio/Welcome_Screen/Editor/Textures/icon_youtube.png");
+        iconFacebook = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Polytope Studio/Welcome_Screen/Editor/Textures/icon_facebook.png");
+        iconInstagram = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Polytope Studio/Welcome_Screen/Editor/Textures/icon_instagram.png");
+        iconTikTok = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Polytope Studio/Welcome_Screen/Editor/Textures/icon_tiktok.png");
         iconArtStation = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Polytope Studio/Welcome_Screen/Editor/Textures/icon_artstation.png");
 
         demoIcon1 = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Polytope Studio/Welcome_Screen/Editor/Textures/demo1.png");
@@ -139,16 +139,16 @@ public class PT_PackageWelcomeWindow : EditorWindow
     private static GUIStyle SectionDescStyle() =>
         new GUIStyle(EditorStyles.wordWrappedMiniLabel)
         {
-            normal   = { textColor = EditorStyles.wordWrappedMiniLabel.normal.textColor },
+            normal = { textColor = EditorStyles.wordWrappedMiniLabel.normal.textColor },
             wordWrap = true,
             fontSize = 11
         };
 
     private void DrawSectionDesc(string text)
     {
-        GUIStyle style  = SectionDescStyle();
-        float    width  = WindowWidth - 24f;
-        float    height = Mathf.Max(style.CalcHeight(new GUIContent(text), width), 36f);
+        GUIStyle style = SectionDescStyle();
+        float width = WindowWidth - 24f;
+        float height = Mathf.Max(style.CalcHeight(new GUIContent(text), width), 36f);
         GUILayout.Label(text, style, GUILayout.Height(height));
     }
 
@@ -163,23 +163,23 @@ public class PT_PackageWelcomeWindow : EditorWindow
             GUIStyle titleStyle = new GUIStyle(EditorStyles.boldLabel)
             {
                 alignment = TextAnchor.MiddleCenter,
-                fontSize  = 18,
-                normal    = { textColor = Color.white },
-                hover     = { textColor = Color.white }
+                fontSize = 18,
+                normal = { textColor = Color.white },
+                hover = { textColor = Color.white }
             };
             GUIStyle descStyle = new GUIStyle(EditorStyles.wordWrappedLabel)
             {
                 alignment = TextAnchor.MiddleCenter,
-                normal    = { textColor = Color.white },
-                hover     = { textColor = Color.white }
+                normal = { textColor = Color.white },
+                hover = { textColor = Color.white }
             };
 
             float titleH = 28f;
-            float descH  = 20f;
+            float descH = 20f;
             float startY = bannerRect.yMax - titleH - descH - 5f;
 
-            GUI.Label(new Rect(bannerRect.x, startY,          bannerRect.width, titleH), "Thank you for trusting our assets!", titleStyle);
-            GUI.Label(new Rect(bannerRect.x, startY + titleH, bannerRect.width, descH),  "Below are some useful resources to help you get started.", descStyle);
+            GUI.Label(new Rect(bannerRect.x, startY, bannerRect.width, titleH), "Thank you for trusting our assets!", titleStyle);
+            GUI.Label(new Rect(bannerRect.x, startY + titleH, bannerRect.width, descH), "Below are some useful resources to help you get started.", descStyle);
         }
 
         GUILayout.Space(10);
@@ -245,11 +245,11 @@ public class PT_PackageWelcomeWindow : EditorWindow
             GUILayout.Space(8);
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            DrawSocial(iconTwitter,    "https://x.com/PolytopeStudio");
-            DrawSocial(iconYouTube,    "https://www.youtube.com/@polytopestudio");
-            DrawSocial(iconFacebook,   "https://www.facebook.com/PolytopeStudio");
-            DrawSocial(iconInstagram,  "https://www.instagram.com/polytopestudio/");
-            DrawSocial(iconTikTok,     "https://www.tiktok.com/@polytopestudio");
+            DrawSocial(iconTwitter, "https://x.com/PolytopeStudio");
+            DrawSocial(iconYouTube, "https://www.youtube.com/@polytopestudio");
+            DrawSocial(iconFacebook, "https://www.facebook.com/PolytopeStudio");
+            DrawSocial(iconInstagram, "https://www.instagram.com/polytopestudio/");
+            DrawSocial(iconTikTok, "https://www.tiktok.com/@polytopestudio");
             DrawSocial(iconArtStation, "https://www.artstation.com/polytope/store");
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
@@ -302,13 +302,13 @@ public class PT_PackageWelcomeWindow : EditorWindow
 
     private void DrawGamesGallery()
     {
-        float available      = WindowWidth - 12f;
-        float cardWidth      = (available - CardSpacing * 2f) / 3f * CardScale * 1.2f;
-        float cardHeight     = cardWidth * (9f / 16f);
-        float demoCardWidth  = available * 0.4f * CardScale;
+        float available = WindowWidth - 12f;
+        float cardWidth = (available - CardSpacing * 2f) / 3f * CardScale * 1.2f;
+        float cardHeight = cardWidth * (9f / 16f);
+        float demoCardWidth = available * 0.4f * CardScale;
         float demoCardHeight = demoCardWidth * (9f / 16f);
-        float rowH           = cardHeight     + CaptionHeight * 1.1f;
-        float demoRowH       = demoCardHeight + CaptionHeight;
+        float rowH = cardHeight + CaptionHeight * 1.1f;
+        float demoRowH = demoCardHeight + CaptionHeight;
 
         DrawCollapsibleSeparator("Polytope Demos", ref demosExpanded);
         if (demosExpanded)
@@ -336,22 +336,22 @@ public class PT_PackageWelcomeWindow : EditorWindow
             DrawCardRow(rowH, () =>
             {
                 GUILayout.FlexibleSpace();
-                DrawCardCentered(gameIcon1, "https://store.steampowered.com/app/3722910/Legends_of_Azamar_Demo/",      cardWidth, cardHeight, "Step into the world of Avendor and brave the ruins of Bar-Ulduun, the fabled lost city of the dwarves",         CaptionHeight * 1.1f);
+                DrawCardCentered(gameIcon1, "https://store.steampowered.com/app/3722910/Legends_of_Azamar_Demo/", cardWidth, cardHeight, "Step into the world of Avendor and brave the ruins of Bar-Ulduun, the fabled lost city of the dwarves", CaptionHeight * 1.1f);
                 HGap();
-                DrawCardCentered(gameIcon2, "https://store.steampowered.com/app/2932960/A_Merchants_Promise/",         cardWidth, cardHeight, "Medieval Trading & Transport with Physics-Based Items",                                                            CaptionHeight * 1.1f);
+                DrawCardCentered(gameIcon2, "https://store.steampowered.com/app/2932960/A_Merchants_Promise/", cardWidth, cardHeight, "Medieval Trading & Transport with Physics-Based Items", CaptionHeight * 1.1f);
                 HGap();
-                DrawCardCentered(gameIcon3, "https://store.steampowered.com/app/1434840/Dungeons__Kingdoms_Prologue/", cardWidth, cardHeight, "A medieval fantasy kingdom builder, management sim and dungeon delver RPG hybrid",                                  CaptionHeight * 1.1f);
+                DrawCardCentered(gameIcon3, "https://store.steampowered.com/app/1434840/Dungeons__Kingdoms_Prologue/", cardWidth, cardHeight, "A medieval fantasy kingdom builder, management sim and dungeon delver RPG hybrid", CaptionHeight * 1.1f);
                 GUILayout.FlexibleSpace();
             });
             GUILayout.Space(5f);
             DrawCardRow(rowH, () =>
             {
                 GUILayout.FlexibleSpace();
-                DrawCardCentered(gameIcon4, "https://store.steampowered.com/app/2369850/Dolven/",                    cardWidth, cardHeight, "A narrative-driven tactical RPG where combat blends party-based skills with poker-style card combos", CaptionHeight * 1.1f);
+                DrawCardCentered(gameIcon4, "https://store.steampowered.com/app/2369850/Dolven/", cardWidth, cardHeight, "A narrative-driven tactical RPG where combat blends party-based skills with poker-style card combos", CaptionHeight * 1.1f);
                 HGap();
-                DrawCardCentered(gameIcon5, "https://store.steampowered.com/app/1228500/1428_Shadows_over_Silesia/", cardWidth, cardHeight, "Immerse yourself in a dark fantasy story with true historical events",                              CaptionHeight * 1.1f);
+                DrawCardCentered(gameIcon5, "https://store.steampowered.com/app/1228500/1428_Shadows_over_Silesia/", cardWidth, cardHeight, "Immerse yourself in a dark fantasy story with true historical events", CaptionHeight * 1.1f);
                 HGap();
-                DrawCardCentered(gameIcon6, "https://store.steampowered.com/app/3516100/Tenebyss/",                  cardWidth, cardHeight, "A brutal souls-like extraction adventure game set in massive dystopian worlds",                      CaptionHeight * 1.1f);
+                DrawCardCentered(gameIcon6, "https://store.steampowered.com/app/3516100/Tenebyss/", cardWidth, cardHeight, "A brutal souls-like extraction adventure game set in massive dystopian worlds", CaptionHeight * 1.1f);
                 GUILayout.FlexibleSpace();
             });
             GUILayout.Space(4f);
@@ -367,14 +367,14 @@ public class PT_PackageWelcomeWindow : EditorWindow
         GUIStyle arrowStyle = new GUIStyle(EditorStyles.boldLabel)
         {
             alignment = TextAnchor.MiddleRight,
-            normal    = { textColor = new Color(0.6f, 0.6f, 0.6f, 1f) },
-            hover     = { textColor = new Color(0.9f, 0.9f, 0.9f, 1f) },
-            fontSize  = 10
+            normal = { textColor = new Color(0.6f, 0.6f, 0.6f, 1f) },
+            hover = { textColor = new Color(0.9f, 0.9f, 0.9f, 1f) },
+            fontSize = 10
         };
 
-        Vector2 labelSize   = labelStyle.CalcSize(new GUIContent(label));
-        float   rowHeight   = Mathf.Max(labelSize.y, 18f);
-        Rect    rowRect     = GUILayoutUtility.GetRect(0f, rowHeight, GUILayout.ExpandWidth(true), GUILayout.Height(rowHeight));
+        Vector2 labelSize = labelStyle.CalcSize(new GUIContent(label));
+        float rowHeight = Mathf.Max(labelSize.y, 18f);
+        Rect rowRect = GUILayoutUtility.GetRect(0f, rowHeight, GUILayout.ExpandWidth(true), GUILayout.Height(rowHeight));
 
         if (rowRect.Contains(Event.current.mousePosition))
         {
@@ -382,11 +382,11 @@ public class PT_PackageWelcomeWindow : EditorWindow
             EditorGUIUtility.AddCursorRect(rowRect, MouseCursor.Link);
         }
 
-        float arrowW        = 20f;
-        float labelW        = labelSize.x + 12f;
+        float arrowW = 20f;
+        float labelW = labelSize.x + 12f;
         float halfRemainder = (rowRect.width - labelW - arrowW) * 0.5f;
-        float lineY         = rowRect.y + rowRect.height * 0.5f;
-        float lineMargin    = 4f;
+        float lineY = rowRect.y + rowRect.height * 0.5f;
+        float lineMargin = 4f;
 
         EditorGUI.DrawRect(new Rect(rowRect.x, lineY, halfRemainder - lineMargin, 1f), new Color(1f, 1f, 1f, 0.15f));
         GUI.Label(new Rect(rowRect.x + halfRemainder, rowRect.y, labelW, rowHeight), label, labelStyle);
@@ -418,9 +418,9 @@ public class PT_PackageWelcomeWindow : EditorWindow
         GUIStyle captionStyle = new GUIStyle(EditorStyles.wordWrappedMiniLabel)
         {
             alignment = TextAnchor.UpperCenter,
-            normal    = { textColor = EditorStyles.wordWrappedMiniLabel.normal.textColor },
-            wordWrap  = true,
-            fontSize  = 11
+            normal = { textColor = EditorStyles.wordWrappedMiniLabel.normal.textColor },
+            wordWrap = true,
+            fontSize = 11
         };
 
         float totalH = cardHeight + (caption != null ? 3f + captionHeight : 0f);
@@ -444,10 +444,10 @@ public class PT_PackageWelcomeWindow : EditorWindow
             GUI.DrawTexture(cardRect, icon, ScaleMode.ScaleToFit);
 
         float bw = 2f;
-        EditorGUI.DrawRect(new Rect(cardRect.x,         cardRect.y,         cardRect.width, bw),              new Color(0.8f, 0.8f, 0.8f, 0.8f));
-        EditorGUI.DrawRect(new Rect(cardRect.x,         cardRect.yMax - bw, cardRect.width, bw),              new Color(0.8f, 0.8f, 0.8f, 0.8f));
-        EditorGUI.DrawRect(new Rect(cardRect.x,         cardRect.y,         bw,             cardRect.height), new Color(0.8f, 0.8f, 0.8f, 0.8f));
-        EditorGUI.DrawRect(new Rect(cardRect.xMax - bw, cardRect.y,         bw,             cardRect.height), new Color(0.8f, 0.8f, 0.8f, 0.8f));
+        EditorGUI.DrawRect(new Rect(cardRect.x, cardRect.y, cardRect.width, bw), new Color(0.8f, 0.8f, 0.8f, 0.8f));
+        EditorGUI.DrawRect(new Rect(cardRect.x, cardRect.yMax - bw, cardRect.width, bw), new Color(0.8f, 0.8f, 0.8f, 0.8f));
+        EditorGUI.DrawRect(new Rect(cardRect.x, cardRect.y, bw, cardRect.height), new Color(0.8f, 0.8f, 0.8f, 0.8f));
+        EditorGUI.DrawRect(new Rect(cardRect.xMax - bw, cardRect.y, bw, cardRect.height), new Color(0.8f, 0.8f, 0.8f, 0.8f));
 
         if (cardRect.Contains(Event.current.mousePosition))
         {
@@ -456,7 +456,7 @@ public class PT_PackageWelcomeWindow : EditorWindow
         }
 
         if (GUI.Button(cardRect, GUIContent.none, GUIStyle.none))
-            Application.OpenURL(url);
+            UnityEngine.Application.OpenURL(url);
     }
 
     private void DrawPanel(System.Action content)
@@ -471,7 +471,7 @@ public class PT_PackageWelcomeWindow : EditorWindow
     private void DrawLink(string title, string description, string url)
     {
         if (GUILayout.Button(title, GUILayout.Height(26)))
-            Application.OpenURL(url);
+            UnityEngine.Application.OpenURL(url);
         GUILayout.Label(description, EditorStyles.wordWrappedMiniLabel);
         GUILayout.Space(6);
     }
@@ -485,7 +485,7 @@ public class PT_PackageWelcomeWindow : EditorWindow
 
         Rect r = GUILayoutUtility.GetRect(SocialIconSize, SocialIconSize, GUILayout.Width(SocialIconSize), GUILayout.Height(SocialIconSize));
         if (GUI.Button(r, icon, GUIStyle.none))
-            Application.OpenURL(url);
+            UnityEngine.Application.OpenURL(url);
 
         GUILayout.FlexibleSpace();
         GUILayout.EndVertical();

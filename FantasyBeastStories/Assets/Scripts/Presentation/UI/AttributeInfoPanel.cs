@@ -95,7 +95,7 @@ namespace Presentation.UI
         {
             // 通过事件通道查询本地玩家属性
             var query = new PlayerAttributeData(PlayerAttributeQueryType.GetLocalPlayerAttribute)
-            { attributeName = EventNames.PlayerAttribute_Main };
+            { attributeName = AttributeKeyConst.Main };
             EventChannelLocator.MainContainer.playerAttributeChannel.Raise(query);
 
             AttributePlayerBase attr = query.attribute;

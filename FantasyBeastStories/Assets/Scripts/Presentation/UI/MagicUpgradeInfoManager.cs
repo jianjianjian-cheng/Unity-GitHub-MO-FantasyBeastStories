@@ -226,7 +226,7 @@ namespace Presentation.UI
 
             switch (cardType)
             {
-                case EventNames.OnReceiveCard_WizardBoy:
+                case CharacterCardType.WizardBoy:
                     card = GetRandomFromArrayWithStackable(cardDatabaseEX.cardsEX_WizardBoy);
                     break;
                 case "待定":
@@ -336,7 +336,7 @@ namespace Presentation.UI
 
             switch (cardType)
             {
-                case EventNames.OnReceiveCard_WizardBoy:
+                case CharacterCardType.WizardBoy:
                     targetArray = cardDatabaseEX.cardsEX_WizardBoy;
                     break;
                 case "待定":
