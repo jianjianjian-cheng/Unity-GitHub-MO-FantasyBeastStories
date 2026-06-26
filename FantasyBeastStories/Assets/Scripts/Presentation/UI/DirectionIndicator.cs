@@ -1,10 +1,9 @@
-using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Presentation.UI
 {
-    public class DirectionIndicator : MonoBehaviourPun
+    public class DirectionIndicator : MonoBehaviour
     {
         [Header("目标设置")]
         public Vector3 targetPosition;

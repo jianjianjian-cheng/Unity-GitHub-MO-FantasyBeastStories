@@ -4,6 +4,7 @@ using Domain.CardData;
 using Domain.Event;
 using Domain.Event.Channels.Player;
 using Domain.Pool;
+using Domain.Services;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -84,9 +85,14 @@ namespace Domain.Character
           break;
       }
 
-      if (!EventChannelLocator.MainContainer.gameSettings.IsTest && photonView != null)
+      if (!EventChannelLocator.MainContainer.gameSettings.IsTest)
       {
-        photonView.RPC("RPC_InitElementPool", RpcTarget.Others, (int)element);
+        NetworkServiceLocator.ObjectService.InvokeRPC(
+            this,
+            "RPC_InitElementPool",
+            NetworkTarget.Others,
+            (int)element
+        );
       }
 
       base.SwitchElement(element);

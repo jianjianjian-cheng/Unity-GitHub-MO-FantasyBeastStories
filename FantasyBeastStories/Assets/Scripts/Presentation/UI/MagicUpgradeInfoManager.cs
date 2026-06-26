@@ -3,7 +3,6 @@ using Domain.CardData;
 using Domain.Event;
 using Domain.Event.Channels.Player;
 using Domain.Manager;
-using Photon.Pun;
 using UnityEngine;
 
 namespace Presentation.UI

@@ -1,20 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
-using Photon.Pun;
+using Domain.Services;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 namespace Presentation.UI
 {
-    public class WordlSpaceUI : MonoBehaviourPunCallbacks
+    public class WordlSpaceUI : MonoBehaviour
     {
         [SerializeField] public Image isMineIcon;
         [SerializeField] public Text playerName;
         [SerializeField] public Text isReadyIcon;
+
+        private int _ownerActorNumber = -1;
+
+        void Start()
+        {
+            _ownerActorNumber = NetworkServiceLocator.ObjectService.GetOwnerActorNumber(this);
+        }
+
         void Update()
         {
-            if (photonView.IsMine)
+            if (NetworkServiceLocator.PlayerService.IsOwnerOf(gameObject))
             {
                 isMineIcon.gameObject.SetActive(true);
                 playerName.text = " ";
@@ -22,23 +30,25 @@ namespace Presentation.UI
             else
             {
                 isMineIcon.gameObject.SetActive(false);
-                playerName.text = photonView.Owner.NickName;
+                playerName.text = NetworkServiceLocator.ObjectService.GetOwnerNickname(this);
             }
             //名称一直朝向摄像机
             Vector3 direction = transform.position - Camera.main.transform.position;
             transform.rotation = Quaternion.LookRotation(direction);
         }
 
-        public override void OnEnable()
+        void OnEnable()
         {
-            base.OnEnable();
             SceneManager.sceneLoaded += OnSceneLoaded;
+            if (NetworkServiceLocator.IsInitialized)
+                NetworkServiceLocator.PlayerService.OnPlayerPropertyChanged += OnPlayerPropertyChanged;
         }
 
-        public override void OnDisable()
+        void OnDisable()
         {
-            base.OnDisable();
             SceneManager.sceneLoaded -= OnSceneLoaded;
+            if (NetworkServiceLocator.IsInitialized)
+                NetworkServiceLocator.PlayerService.OnPlayerPropertyChanged -= OnPlayerPropertyChanged;
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -50,11 +60,10 @@ namespace Presentation.UI
             }
         }
 
-
         public void UpDatePlayerName(string name)
         {
             if (playerName == null) return;
-            if (photonView.IsMine)
+            if (NetworkServiceLocator.PlayerService.IsOwnerOf(gameObject))
             {
                 playerName.text = " ";
             }
@@ -64,20 +73,20 @@ namespace Presentation.UI
             }
         }
 
-        public override void OnPlayerPropertiesUpdate(Photon.Realtime.Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
+        private void OnPlayerPropertyChanged(int actorNumber, string key, object value)
         {
-            if (targetPlayer == photonView.Owner)
+            if (actorNumber != _ownerActorNumber)
+                return;
+
+            if (key == "PlayerName")
             {
-                if (changedProps.ContainsKey("PlayerName"))
-                {
-                    string newName = (string)changedProps["PlayerName"];
-                    UpDatePlayerName(newName);
-                }
-                if (changedProps.ContainsKey("PlayerReady"))
-                {
-                    bool isReady = (bool)changedProps["PlayerReady"];
-                    isReadyIcon.text = isReady ? "已就绪" : "未就绪";
-                }
+                string newName = value as string ?? "";
+                UpDatePlayerName(newName);
+            }
+            else if (key == "PlayerReady")
+            {
+                bool isReady = value is bool b && b;
+                isReadyIcon.text = isReady ? "已就绪" : "未就绪";
             }
         }
     }

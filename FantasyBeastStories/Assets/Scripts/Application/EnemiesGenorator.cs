@@ -1,15 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using Infrastructure.Network;
-using Photon.Pun;
 using UnityEngine;
 using Domain.Event.Channels.Game;
 using Domain.Event;
+using Domain.Services;
 using Domain.Time;
 
 namespace Application
 {
-    public class EnemiesGenorator : MonoBehaviourPun
+    public class EnemiesGenorator : MonoBehaviour
     {
         [SerializeField]
         GameObject testPrefab;
@@ -37,7 +37,7 @@ namespace Application
         {
             if (EventChannelLocator.MainContainer.gameSettings.IsPaused)
                 return;
-            if (!PhotonNetwork.IsMasterClient)
+            if (!NetworkServiceLocator.PlayerService.IsMasterClient)
                 return; // 只有房主执行生成逻辑
             if (!isPhotonReady)
             {
@@ -49,9 +49,7 @@ namespace Application
                 else
                 {
                     canGenorate =
-                        PhotonNetwork.IsConnectedAndReady
-                        && PhotonNetwork.InRoom
-                        && PhotonNetwork.IsMasterClient;
+                        NetworkServiceLocator.PlayerService.IsConnectedAndInRoom;
                     if (canGenorate)
                     {
                         isPhotonReady = true;
@@ -107,7 +105,7 @@ namespace Application
         {
             if (EventChannelLocator.MainContainer.gameSettings.IsPaused)
                 return;
-            if (!PhotonNetwork.IsMasterClient)
+            if (!NetworkServiceLocator.PlayerService.IsMasterClient)
             {
                 return;
             }

@@ -6,14 +6,13 @@ using DG.Tweening;
 using Domain.Event;
 using Domain.Event.Channels.Player;
 using Domain.Manager;
-using Photon.Pun;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Presentation.UI
 {
-    public class AttributeInfoPanel : MonoBehaviourPun
+    public class AttributeInfoPanel : MonoBehaviour
     {
         [Header("显示属性的UI")]
         [SerializeField]

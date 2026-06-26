@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Domain.Character.Attribute;
 using Domain.Event;
-using Domain.Event.Channels.Player;
 using Domain.Player;
 using Domain.Enemy;
 using Domain.Manager;
@@ -40,14 +39,6 @@ namespace Domain.Combat.Trigger
 
         private AttributePlayerBase GetLocalPlayerAttribute()
         {
-            if (EventChannelLocator.MainContainer != null)
-            {
-                var query = new PlayerAttributeData(PlayerAttributeQueryType.GetLocalPlayerAttribute)
-                { attributeName = AttributeKeyConst.Main };
-                EventChannelLocator.MainContainer.playerAttributeChannel.Raise(query);
-                if (query.attribute != null)
-                    return query.attribute;
-            }
             if (PlayerManager.instance != null)
                 return PlayerManager.instance.GetLocalPlayerAttribute(AttributeKeyConst.Main);
             return null;

@@ -4,14 +4,15 @@ using Domain.Event;
 using Domain.Event.Channels.Combat;
 using Domain.Event.Channels.Player;
 using Domain.Event.Channels.Task;
+using Domain.Services;
 using Domain.Task;
-using Photon.Pun;
+using Photon.Pun; // 仅保留 [PunRPC] 属性引用
 using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Application
 {
-    public class TaskManager : MonoBehaviourPun
+    public class TaskManager : MonoBehaviour
     {
         #region 单例模式
         public static TaskManager instance;
@@ -66,18 +67,18 @@ namespace Application
         private void OnEnemyReported(EnemyReportData data)
         {
             if (data == null) return;
-            photonView.RPC("RPC_ReportCount", RpcTarget.MasterClient, data.position, data.photonViewID);
+            NetworkServiceLocator.ObjectService.InvokeRPC(this, "RPC_ReportCount", NetworkTarget.MasterClient, data.position, data.networkViewID);
         }
 
         private void OnTaskNoticeReceived(TaskNoticeData data)
         {
             if (data == null) return;
-            photonView.RPC("RPC_SetNotice", RpcTarget.All, data.name, data.description, data.limitTime, data.requiredCount);
+            NetworkServiceLocator.ObjectService.InvokeRPC(this, "RPC_SetNotice", NetworkTarget.All, data.name, data.description, data.limitTime, data.requiredCount);
         }
 
         public void SetNotice(string name, string description, int limitTime, int requeredCount = 1)
         {
-            photonView.RPC("RPC_SetNotice", RpcTarget.All, name, description, limitTime, requeredCount);
+            NetworkServiceLocator.ObjectService.InvokeRPC(this, "RPC_SetNotice", NetworkTarget.All, name, description, limitTime, requeredCount);
         }
 
         private void StartCountdownTime(int time)
@@ -102,10 +103,10 @@ namespace Application
                 int min = Mathf.FloorToInt(countdownTime / 60);
                 int sec = Mathf.FloorToInt(countdownTime % 60);
                 time = "剩余时间：" + $"{min:D2}:{sec:D2}";
-                photonView.RPC("RPC_UpdateAllPlayerTimeUI", RpcTarget.All, time);
+                NetworkServiceLocator.ObjectService.InvokeRPC(this, "RPC_UpdateAllPlayerTimeUI", NetworkTarget.All, time);
             }
             Debug.LogWarning("任务失败");
-            photonView.RPC("RPC_TaskFailed", RpcTarget.All);
+            NetworkServiceLocator.ObjectService.InvokeRPC(this, "RPC_TaskFailed", NetworkTarget.All);
             yield break;
         }
 
@@ -141,14 +142,15 @@ namespace Application
 
         public void ActivateTask(TaskBase taskBase)
         {
-            if (!PhotonNetwork.IsMasterClient)
+            if (!NetworkServiceLocator.PlayerService.IsMasterClient)
                 return;
             switch (taskBase)
             {
                 case KillTask killTask:
-                    photonView.RPC(
+                    NetworkServiceLocator.ObjectService.InvokeRPC(
+                        this,
                         "RPC_ActivateKillTask",
-                        RpcTarget.All,
+                        NetworkTarget.All,
                         killTask.TaskId,
                         killTask.limitTime,
                         killTask.ZoneCenter,
@@ -156,9 +158,10 @@ namespace Application
                     );
                     break;
                 case EscortTask escortTask:
-                    photonView.RPC(
+                    NetworkServiceLocator.ObjectService.InvokeRPC(
+                        this,
                         "RPC_ActivateEscortTask",
-                        RpcTarget.All,
+                        NetworkTarget.All,
                         escortTask.TaskId,
                         escortTask.limitTime,
                         escortTask.ZoneCenter,
@@ -173,7 +176,7 @@ namespace Application
         [PunRPC]
         void RPC_ActivateKillTask(string taskId, int limitTime, Vector3 ZoneCenter, int requiredKills)
         {
-            if (PhotonNetwork.IsMasterClient)
+            if (NetworkServiceLocator.PlayerService.IsMasterClient)
             {
                 StartCountdownTime(limitTime);
             }
@@ -200,7 +203,7 @@ namespace Application
             int requiredEscorts
         )
         {
-            if (PhotonNetwork.IsMasterClient)
+            if (NetworkServiceLocator.PlayerService.IsMasterClient)
             {
                 StartCountdownTime(limitTime);
             }
@@ -217,15 +220,15 @@ namespace Application
                 TaskUIUpdateData.SetIndicator(ZoneCenter, taskId));
         }
 
-        public void ReportCount(Vector3 killPosition, PhotonView enemyView)
+        public void ReportCount(Vector3 killPosition, int enemyViewID)
         {
-            photonView.RPC("RPC_ReportCount", RpcTarget.MasterClient, killPosition, enemyView.ViewID);
+            NetworkServiceLocator.ObjectService.InvokeRPC(this, "RPC_ReportCount", NetworkTarget.MasterClient, killPosition, enemyViewID);
         }
 
         [PunRPC]
         void RPC_ReportCount(Vector3 killPosition, int enemyViewID)
         {
-            if (!PhotonNetwork.IsMasterClient)
+            if (!NetworkServiceLocator.PlayerService.IsMasterClient)
                 return;
 
             if (reportedEnemies.Contains(enemyViewID))
@@ -252,9 +255,10 @@ namespace Application
                         {
                             task.IsCompleted = true;
                         }
-                        photonView.RPC(
+                        NetworkServiceLocator.ObjectService.InvokeRPC(
+                            this,
                             "RPC_UpdateProgress",
-                            RpcTarget.All,
+                            NetworkTarget.All,
                             task.TaskId,
                             kt.CurrentKills,
                             task.IsCompleted
@@ -278,9 +282,10 @@ namespace Application
                         {
                             escortTask.IsCompleted = true;
                         }
-                        photonView.RPC(
+                        NetworkServiceLocator.ObjectService.InvokeRPC(
+                            this,
                             "RPC_UpdateProgress",
-                            RpcTarget.All,
+                            NetworkTarget.All,
                             task.TaskId,
                             escortTask.currentEscorts,
                             task.IsCompleted

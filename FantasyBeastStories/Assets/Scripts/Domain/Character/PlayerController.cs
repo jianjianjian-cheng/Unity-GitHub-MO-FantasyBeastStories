@@ -6,16 +6,16 @@ using Cinemachine;
 using Domain.Event;
 using Domain.Event.Channels.Player;
 using Domain.Player;
+using Domain.Services;
 using Presentation.Other;
 using Photon.Pun;
-using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Application;
 
 namespace Domain.Character
 {
-  public class PlayerController : MonoBehaviourPun
+  public class PlayerController : MonoBehaviour
   {
     [Header("纯数据")]
     [SerializeField]
@@ -61,7 +61,7 @@ namespace Domain.Character
 
     protected virtual void Start()
     {
-      if (!photonView.IsMine)
+      if (!NetworkServiceLocator.PlayerService.IsOwnerOf(gameObject))
       {
         return; // 只处理本地玩家的输入和动画
       }
@@ -104,7 +104,7 @@ namespace Domain.Character
       {
         return; // 如果只显示角色，不处理输入
       }
-      if (!photonView.IsMine && photonView != null && !EventChannelLocator.MainContainer.gameSettings.IsTest)
+      if (!NetworkServiceLocator.PlayerService.IsOwnerOf(gameObject) && !EventChannelLocator.MainContainer.gameSettings.IsTest)
       {
         return; // 只处理本地玩家的输入和动画
       }
@@ -132,7 +132,7 @@ namespace Domain.Character
         }
         return;
       }
-      if (!photonView.IsMine && photonView != null)
+      if (!NetworkServiceLocator.PlayerService.IsOwnerOf(gameObject))
       {
         return; // 只处理本地玩家的输入和动画
       }
@@ -142,7 +142,7 @@ namespace Domain.Character
 
     protected virtual void OnEnable()
     {
-      localActorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
+      localActorNumber = NetworkServiceLocator.PlayerService.GetLocalActorNumber();
 
       // 注册玩家GameObject到PlayerManager（供敌人追踪使用，所有客户端都需要注册）
       if (PlayerManager.instance != null)
@@ -209,11 +209,8 @@ namespace Domain.Character
     protected virtual void OnDestroy()
     {
       // 只有在正常游戏中（非退出流程）才清理生成点
-      if (
-          photonView.IsMine
-          && PhotonNetwork.InRoom
-          && PhotonNetwork.NetworkClientState == ClientState.Joined
-      )
+      var playerService = NetworkServiceLocator.PlayerService;
+      if (playerService.IsOwnerOf(gameObject) && playerService.IsConnectedAndInRoom)
       {
         ClearSpawnPointOccupation();
       }
@@ -229,30 +226,24 @@ namespace Domain.Character
 
     protected virtual void ClearSpawnPointOccupation()
     {
-      if (
-          !PhotonNetwork.IsConnected
-          || PhotonNetwork.NetworkClientState == ClientState.Disconnecting
-      )
+      var playerService = NetworkServiceLocator.PlayerService;
+      if (!playerService.IsConnectedAndInRoom)
       {
         Debug.LogWarning("[PlayerController] Photon 已断开连接，跳过清理生成点属性");
         return;
       }
-      if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("CurrentSpawnPoint"))
+      object spawnPointObj = playerService.GetCustomProperty("CurrentSpawnPoint");
+      if (spawnPointObj != null)
       {
-        int spawnPointId = (int)
-            PhotonNetwork.LocalPlayer.CustomProperties["CurrentSpawnPoint"];
+        int spawnPointId = (int)spawnPointObj;
         SpawnPoint sp = GameManager.instance.GetSpawnPointById(spawnPointId);
-        if (sp != null && sp.GetOccupiedByPlayer() == PhotonNetwork.LocalPlayer.ActorNumber)
+        if (sp != null && sp.GetOccupiedByPlayer() == playerService.GetLocalActorNumber())
         {
           sp.ForceRelease();
         }
 
         // 清除玩家属性
-        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable()
-                {
-                    { "CurrentSpawnPoint", null },
-                };
-        PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+        playerService.SetCustomProperty("CurrentSpawnPoint", null);
       }
     }
 
@@ -266,9 +257,10 @@ namespace Domain.Character
       if (sceneIndex > 1)
       {
         EventChannelLocator.MainContainer.hpChangedChannel.Raise(attributePlayer.GetMaxHealth(), attributePlayer.GetCurrentHealth());
-        photonView.RPC(
+        NetworkServiceLocator.ObjectService.InvokeRPC(
+            this,
             "NoticeOtherPlayerDamage",
-            RpcTarget.Others,
+            NetworkTarget.Others,
             PlayerManager.instance.GetLocalPlayer().PlayerId.ToString(),
             attributePlayer.GetMaxHealth(),
             attributePlayer.GetCurrentHealth()
@@ -287,7 +279,7 @@ namespace Domain.Character
       {
         return;
       }
-      if (!photonView.IsMine)
+      if (!NetworkServiceLocator.PlayerService.IsOwnerOf(gameObject))
         return;
       //向上取整
       int damage = Mathf.CeilToInt(damageEventArgs.baseDamageValue);
@@ -377,10 +369,11 @@ namespace Domain.Character
       if (EventChannelLocator.MainContainer.gameSettings.IsTest)
         return;
 
-      photonView.RPC(
+      NetworkServiceLocator.ObjectService.InvokeRPC(
+          this,
           "RPC_SyncPlayerElement",
-          RpcTarget.All,
-          PhotonNetwork.LocalPlayer.ActorNumber,
+          NetworkTarget.All,
+          NetworkServiceLocator.PlayerService.GetLocalActorNumber(),
           (int)element
       );
     }
@@ -389,7 +382,7 @@ namespace Domain.Character
     {
       if (!EventChannelLocator.MainContainer.gameSettings.IsTest)
       {
-        if (!photonView.IsMine)
+        if (!NetworkServiceLocator.PlayerService.IsOwnerOf(gameObject))
         {
           return;
         }

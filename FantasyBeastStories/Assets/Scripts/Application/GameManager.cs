@@ -1,5 +1,4 @@
 using Infrastructure.Network;
-using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Domain.Event;

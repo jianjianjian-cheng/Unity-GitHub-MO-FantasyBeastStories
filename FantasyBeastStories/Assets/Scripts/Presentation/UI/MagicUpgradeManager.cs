@@ -7,18 +7,18 @@ using Domain.Event;
 using Domain.Event.Channels.General;
 using Domain.Event.Channels.Player;
 using Domain.Manager;
-using Photon.Pun;
+using Photon.Pun; // 仅保留 [PunRPC] 属性引用
+using Domain.Services;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
-using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 
 namespace Presentation.UI
 {
-  public class MagicUpgradeManager : MonoBehaviourPunCallbacks
+  public class MagicUpgradeManager : MonoBehaviour
   {
     #region 单例模式
     public static MagicUpgradeManager instance;
@@ -574,9 +574,7 @@ namespace Presentation.UI
         CloseMagicUpgradePanel();
         return;
       }
-      ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
-      props.Add(PLAYER_UPGRADE_READY_KEY, true);
-      PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+      NetworkServiceLocator.PlayerService.SetCustomProperty(PLAYER_UPGRADE_READY_KEY, true);
     }
 
     //获取卡牌对应特效
@@ -664,34 +662,17 @@ namespace Presentation.UI
       Debug.Log("卡片移动到end位置");
     }
 
-    public override void OnPlayerPropertiesUpdate(
-        Photon.Realtime.Player targetPlayer,
-        Hashtable changedProps
-    )
+    private void OnPlayerPropertyChanged(int actorNumber, string key, object value)
     {
-      if (
-          !changedProps.ContainsKey(PLAYER_UPGRADE_READY_KEY) || !PhotonNetwork.IsMasterClient
-      )
+      if (key != PLAYER_UPGRADE_READY_KEY || !NetworkServiceLocator.PlayerService.IsMasterClient)
       {
         return;
       }
 
-      if (CheckAllPlayersReady())
+      if (NetworkServiceLocator.PlayerService.AllPlayersHaveProperty(PLAYER_UPGRADE_READY_KEY, true))
       {
         EventChannelLocator.MainContainer.gameActionChannel.Raise(GameActionType.UpgradeAllConfirmed);
       }
-    }
-
-    private bool CheckAllPlayersReady()
-    {
-      foreach (var player in PhotonNetwork.PlayerList)
-      {
-        if (!player.CustomProperties.ContainsKey(PLAYER_UPGRADE_READY_KEY))
-          return false;
-        if (!(bool)player.CustomProperties[PLAYER_UPGRADE_READY_KEY])
-          return false;
-      }
-      return true;
     }
 
     private IEnumerator AnimateShadowAlpha()
@@ -867,9 +848,7 @@ namespace Presentation.UI
     private void OpenPanelInit(CardConfigBase[] cardData)
     {
       isConfirmed = false;
-      ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
-      props.Add(PLAYER_UPGRADE_READY_KEY, false);
-      PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+      NetworkServiceLocator.PlayerService.SetCustomProperty(PLAYER_UPGRADE_READY_KEY, false);
       SetCardData(cardData);
     }
 
@@ -883,10 +862,8 @@ namespace Presentation.UI
       // 重置确认状态
       isConfirmed = false;
 
-      // 重置Photon属性
-      ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
-      props.Add(PLAYER_UPGRADE_READY_KEY, false);
-      PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+      // 重置网络属性
+      NetworkServiceLocator.PlayerService.SetCustomProperty(PLAYER_UPGRADE_READY_KEY, false);
 
       StartCoroutine(AnimateShadowAlphaBack());
       HideOrShowGrossUpgradePanel(true);
@@ -894,10 +871,17 @@ namespace Presentation.UI
     }
 
 
-    public override void OnEnable()
+    void OnEnable()
     {
-      base.OnEnable();
       EventChannelLocator.MainContainer.magicUpgradeChannel.RegisterListener(OnMagicUpgradeRequested);
+      if (NetworkServiceLocator.IsInitialized)
+        NetworkServiceLocator.PlayerService.OnPlayerPropertyChanged += OnPlayerPropertyChanged;
+    }
+
+    void OnDisable()
+    {
+      if (NetworkServiceLocator.IsInitialized)
+        NetworkServiceLocator.PlayerService.OnPlayerPropertyChanged -= OnPlayerPropertyChanged;
     }
 
     void OnMagicUpgradeRequested(bool isOpen)

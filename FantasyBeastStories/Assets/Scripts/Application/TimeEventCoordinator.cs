@@ -5,6 +5,7 @@ using Domain.Event.Channels.General;
 using Domain.Event.Channels.Task;
 using Domain.Manager;
 using Domain.Player;
+using Domain.Services;
 using Domain.Task;
 using Domain.Time.TimeSystem;
 using UnityEngine;
@@ -73,7 +74,7 @@ namespace Application
         private void KillSacrifice(TimeEventData eventData)
         {
             Debug.Log($"任务激活: {eventData.eventName}" + eventData.description);
-            if (!Photon.Pun.PhotonNetwork.IsMasterClient)
+            if (!NetworkServiceLocator.PlayerService.IsMasterClient)
             {
                 return;
             }
@@ -93,7 +94,7 @@ namespace Application
 
         private void EscortRobot(TimeEventData eventData)
         {
-            if (!Photon.Pun.PhotonNetwork.IsMasterClient)
+            if (!NetworkServiceLocator.PlayerService.IsMasterClient)
             {
                 return;
             }

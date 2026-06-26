@@ -2048,12 +2048,12 @@ MonoBehaviour:
   isInLobby: 0
   isReadyPanel: {fileID: 2768187980737792915}
   testCardEffect: {fileID: 0}
-  impactCannonLightenPrefab: {fileID: 0}
-  impactCannonHitLightenPrefab: {fileID: 0}
-  impactCannonWinterPrefab: {fileID: 0}
-  impactCannonHitWinterPrefab: {fileID: 0}
-  impactCannonGrassPrefab: {fileID: 0}
-  impactCannonHitGrassPrefab: {fileID: 0}
+  impactCannonLightenPrefab: {fileID: 4717974646612442227, guid: de01ba9d2b8bef342b9068f5eb3264ab, type: 3}
+  impactCannonHitLightenPrefab: {fileID: 743576573993576157, guid: 57a0a59dae22bbf46904ae8c7a63670d, type: 3}
+  impactCannonWinterPrefab: {fileID: 6980703490817345712, guid: 577b09a2f221f0d45af3bbc26432a16b, type: 3}
+  impactCannonHitWinterPrefab: {fileID: 450033167261818607, guid: 9fe86f2f5bb8d6449a5014493dd002c9, type: 3}
+  impactCannonGrassPrefab: {fileID: 1259395337761259682, guid: 0266abb1138817747bcb23e85063a8d0, type: 3}
+  impactCannonHitGrassPrefab: {fileID: 141618438410259909, guid: d82118f277b2b724a94d1620fa87ff5c, type: 3}
 --- !u!114 &5871110717533689807
 MonoBehaviour:
   m_ObjectHideFlags: 0

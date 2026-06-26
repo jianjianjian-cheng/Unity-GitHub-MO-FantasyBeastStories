@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Domain.Event;
 using Domain.Player;
+using Domain.Services;
 using Infrastructure.Network;
 using Domain.Manager;
-using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -86,7 +86,7 @@ namespace Presentation.UI
 
       exitButton.onClick.AddListener(() =>
       {
-        if (PhotonNetwork.IsMasterClient)
+        if (NetworkServiceLocator.PlayerService.IsMasterClient)
         {
           Launcher.instance.ReturnToLobby();
         }
@@ -175,7 +175,7 @@ namespace Presentation.UI
       List<PlayerData> allPlayers = PlayerManager.instance.PlayerList;
       // 过滤并设置UI
       var otherPlayers = allPlayers
-          .Where(p => p.PlayerId != PhotonNetwork.LocalPlayer.UserId)
+          .Where(p => p.PlayerId != NetworkServiceLocator.PlayerService.GetLocalUserId())
           .Take(3)
           .ToList();
 

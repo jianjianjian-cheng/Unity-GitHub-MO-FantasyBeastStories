@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b993e395e52c03e4ca2e9b09ff9feca1, type: 3}
+  m_Name: UIChannels
+  m_EditorClassIdentifier: 
+  changeCanRotateChannel: {fileID: 11400000, guid: 999af596c4f701541b208f3ed1ad4e1e, type: 2}
+  pauseChannel: {fileID: 11400000, guid: 41a46bb46f73f5e47847ceae63acb9be, type: 2}
+  runeInfoChannel: {fileID: 11400000, guid: 476c1d79d3453044d90190d611390033, type: 2}
+  magicUpgradeChannel: {fileID: 11400000, guid: 77dd1f4fe75dfa74793321ce3f28849b, type: 2}
+  loadingChannel: {fileID: 11400000, guid: 393427de508f05940b29cebf0e5405e8, type: 2}
+  bloomChannel: {fileID: 11400000, guid: 48c6d2bd6ea599142a66d89be05af21f, type: 2}
+  experienceUpdateChannel: {fileID: 11400000, guid: e9f09f132124ae845b138bd99d964271, type: 2}
+  taskUIChannel: {fileID: 11400000, guid: 92594c51cecf87047ba3c7bcfb7bf86d, type: 2}
+  healthUpdateChannel: {fileID: 11400000, guid: b0b4077ca70dc484c8f487840edc1b70, type: 2}
+  taskActivationChannel: {fileID: 11400000, guid: a877e6b7ad546204787f6bda98a06a0a, type: 2}
+  taskNoticeChannel: {fileID: 11400000, guid: 5fda20fc9cb6bf54eab384b86d1323c8, type: 2}

@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using Domain.Character;
 using Domain.Event;
+using Domain.Services;
 using Infrastructure.Network;
-using Domain.Manager;
-using Photon.Pun;
+using Photon.Pun; // 仅保留 [PunRPC] 属性引用 + IPunObservable 接口
 using UnityEngine;
 using Application;
 
 namespace Presentation.Other
 {
-    public class SpawnPoint : MonoBehaviourPun, IPunObservable
+    public class SpawnPoint : MonoBehaviour, IPunObservable
     {
         [SerializeField]
         public int Id;
@@ -24,18 +24,14 @@ namespace Presentation.Other
         // 记录占用此生成点的玩家 ActorNumber
         private int occupiedByPlayer = -1;
 
-        // 同步变量
-        private bool networkIsEmpty = true;
-        private int networkOccupiedBy = -1;
-
         void Start()
         {
             // 初始化时确保所有生成点都为空
-            if (PhotonNetwork.IsMasterClient)
+            if (NetworkServiceLocator.PlayerService.IsMasterClient)
             {
                 isEmpty = true;
                 occupiedByPlayer = -1;
-                photonView.RPC("RPC_UpdateSpawnPointState", RpcTarget.All, true, -1);
+                NetworkServiceLocator.ObjectService.InvokeRPC(this, "RPC_UpdateSpawnPointState", NetworkTarget.All, true, -1);
             }
             InitializeSpawnPoint();
             transform.LookAt(new Vector3(0.182999998f, transform.position.y, -0.219999999f));
@@ -84,8 +80,7 @@ namespace Presentation.Other
             if (!other.gameObject.CompareTag("Player"))
                 return;
 
-            PhotonView playerPhotonView = other.GetComponent<PhotonView>();
-            if (playerPhotonView == null || !playerPhotonView.IsMine)
+            if (!NetworkServiceLocator.PlayerService.IsOwnerOf(other.gameObject))
                 return;
 
             Debug.Log($"玩家进入生成点: {gameObject.name}，ID: {Id}");
@@ -98,7 +93,7 @@ namespace Presentation.Other
             }
 
             // 只有本地玩家才触发占用
-            int playerActorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
+            int playerActorNumber = NetworkServiceLocator.PlayerService.GetLocalActorNumber();
             SetOccupied(true, playerActorNumber);
         }
 
@@ -107,8 +102,7 @@ namespace Presentation.Other
             if (!other.gameObject.CompareTag("Player"))
                 return;
 
-            PhotonView playerPhotonView = other.GetComponent<PhotonView>();
-            if (playerPhotonView == null || !playerPhotonView.IsMine)
+            if (!NetworkServiceLocator.PlayerService.IsOwnerOf(other.gameObject))
                 return;
 
             Debug.Log($"玩家离开生成点: {gameObject.name}，ID: {Id}");
@@ -120,7 +114,7 @@ namespace Presentation.Other
             }
 
             // 只有当前占用者离开时才释放
-            if (occupiedByPlayer == PhotonNetwork.LocalPlayer.ActorNumber)
+            if (occupiedByPlayer == NetworkServiceLocator.PlayerService.GetLocalActorNumber())
             {
                 SetOccupied(false, -1);
             }
@@ -141,14 +135,14 @@ namespace Presentation.Other
             );
 
             // 通过 RPC 同步状态
-            photonView.RPC("RPC_UpdateSpawnPointState", RpcTarget.All, isEmpty, occupiedByPlayer);
+            NetworkServiceLocator.ObjectService.InvokeRPC(this, "RPC_UpdateSpawnPointState", NetworkTarget.All, isEmpty, occupiedByPlayer);
 
             // 更新玩家属性
             if (occupied)
             {
                 UpdatePlayerSpawnPointProperty(Id);
             }
-            else if (PhotonNetwork.LocalPlayer.ActorNumber == playerActorNumber)
+            else if (NetworkServiceLocator.PlayerService.GetLocalActorNumber() == playerActorNumber)
             {
                 ClearPlayerSpawnPointProperty();
             }
@@ -159,8 +153,6 @@ namespace Presentation.Other
         {
             isEmpty = newIsEmpty;
             occupiedByPlayer = newOccupiedBy;
-            networkIsEmpty = newIsEmpty;
-            networkOccupiedBy = newOccupiedBy;
 
             Debug.Log(
                 $"[SpawnPoint {Id}] RPC更新状态: isEmpty={isEmpty}, occupiedBy={occupiedByPlayer}"
@@ -175,17 +167,12 @@ namespace Presentation.Other
 
         private void UpdatePlayerSpawnPointProperty(int spawnPointId)
         {
-            var props = new ExitGames.Client.Photon.Hashtable
-            {
-                { "CurrentSpawnPoint", spawnPointId },
-            };
-            PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+            NetworkServiceLocator.PlayerService.SetCustomProperty("CurrentSpawnPoint", spawnPointId);
         }
 
         private void ClearPlayerSpawnPointProperty()
         {
-            var props = new ExitGames.Client.Photon.Hashtable { { "CurrentSpawnPoint", null } };
-            PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+            NetworkServiceLocator.PlayerService.SetCustomProperty("CurrentSpawnPoint", null);
         }
 
         public bool IsEmpty()
@@ -204,18 +191,7 @@ namespace Presentation.Other
             SetOccupied(false, -1);
         }
 
-        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-        {
-            if (stream.IsWriting)
-            {
-                stream.SendNext(isEmpty);
-                stream.SendNext(occupiedByPlayer);
-            }
-            else
-            {
-                isEmpty = (bool)stream.ReceiveNext();
-                occupiedByPlayer = (int)stream.ReceiveNext();
-            }
-        }
+        // IPunObservable 接口实现 — 无状态需要同步，保留空实现以满足 PhotonView Observed 绑定
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) { }
     }
 }

@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Domain.Event;
 using Domain.Manager;
-using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 

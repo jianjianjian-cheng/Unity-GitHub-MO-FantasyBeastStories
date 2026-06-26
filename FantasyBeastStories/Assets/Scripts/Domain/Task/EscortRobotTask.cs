@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Domain.Event;
 using Domain.Event.Channels.Combat;
 using Domain.Character.Pets;
-using Photon.Pun;
+using Domain.Services;
 using UnityEngine;
 
 namespace Domain.Task
@@ -56,7 +56,7 @@ namespace Domain.Task
                     0,
                     Mathf.Sin(angle) * radius
                 );
-                PhotonNetwork.InstantiateRoomObject(robotPrefabpath, spawnPosition, Quaternion.identity);
+                NetworkServiceLocator.ObjectService.InstantiateRoomObject(robotPrefabpath, spawnPosition, Quaternion.identity);
             }
         }
 
@@ -67,7 +67,7 @@ namespace Domain.Task
                 Debug.Log("机器人进入传送区域: " + other.gameObject.name);
                 currentObjects.Add(other.gameObject);
                 EventChannelLocator.MainContainer.enemyReportChannel.Raise(new EnemyReportData(other.gameObject.transform.position,
-                other.gameObject.GetComponent<PhotonView>().ViewID
+                NetworkServiceLocator.ObjectService.GetViewID(other.gameObject)
                 ));
                 StopAllCoroutines();
                 StartCoroutine(StartTransfer());

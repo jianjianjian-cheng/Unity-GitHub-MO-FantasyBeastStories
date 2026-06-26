@@ -6,6 +6,7 @@ using Domain.Event;
 using Domain.Player;
 using Domain.Manager;
 using Domain.Combat.Trigger;
+using Domain.Services;
 using Photon.Pun;
 using Domain.Combat.FX;
 using Domain.Time;
@@ -540,7 +541,7 @@ namespace Domain.Enemy.Boss
 
             if (closestPlayer != null)
             {
-                _network.RPC("RPC_SyncPlayerTarget", Domain.Network.NetworkTarget.All, closestPlayer.GetPhotonView().ViewID);
+                _network.RPC("RPC_SyncPlayerTarget", Domain.Network.NetworkTarget.All, NetworkServiceLocator.ObjectService.GetViewID(closestPlayer));
             }
         }
 
@@ -549,7 +550,7 @@ namespace Domain.Enemy.Boss
         [PunRPC]
         private void RPC_SyncPlayerTarget(int targetViewID)
         {
-            PlayerTarget = PhotonView.Find(targetViewID).gameObject;
+            PlayerTarget = NetworkServiceLocator.ObjectService.FindByViewID(targetViewID);
         }
         [PunRPC]
         private void RPC_SyncTriggerAnim(string animName)

@@ -4,7 +4,7 @@ using Domain.Character;
 using Domain.Character.Pets;
 using Domain.Event;
 using Domain.Manager;
-using Photon.Pun;
+using Domain.Services;
 using UnityEngine;
 
 namespace Domain.Character
@@ -19,7 +19,7 @@ namespace Domain.Character
             // 实例化宠物
             if (!isOnlyShow || !EventChannelLocator.MainContainer.gameSettings.IsStayLobby)
             {
-                GameObject pet = PhotonNetwork.Instantiate(charmanderPet.name, transform.position, Quaternion.identity);
+                GameObject pet = NetworkServiceLocator.ObjectService.Instantiate(charmanderPet.name, transform.position, Quaternion.identity);
                 pet.transform.SetParent(transform.parent);
                 pet.GetComponent<Charmander>().SetOwner(this.gameObject); // 设置宠物的主人玩家
                 petList.Add(pet);
@@ -29,7 +29,7 @@ namespace Domain.Character
         //实例化并添加宠物的方法
         public void AddPet(GameObject petPrefab)
         {
-            GameObject pet = PhotonNetwork.Instantiate(petPrefab.name, transform.position, Quaternion.identity);
+            GameObject pet = NetworkServiceLocator.ObjectService.Instantiate(petPrefab.name, transform.position, Quaternion.identity);
             petList.Add(pet);
         }
     }

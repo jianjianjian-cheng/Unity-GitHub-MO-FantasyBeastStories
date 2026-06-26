@@ -4,7 +4,8 @@ using Domain.Event;
 using Domain.Event.Channels.Game;
 using Domain.Event.Channels.General;
 using Domain.Event.Channels.Player;
-using Photon.Pun;
+using Domain.Services;
+using Photon.Pun; // 仅保留 [PunRPC] 属性引用，RPC 调用已通过 NetworkServiceLocator 解耦
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -26,17 +27,11 @@ namespace Application
     /// 输出 → experienceUpdateChannel（更新 UI）
     /// 输出 → magicUpgradeChannel（开关升级面板）
     /// </summary>
-    public class ExperienceManager : MonoBehaviourPunCallbacks
+    public class ExperienceManager : MonoBehaviour
     {
         void Awake()
         {
-            EnsurePhotonView();
-        }
-
-        private void EnsurePhotonView()
-        {
-            PhotonView pv = GetComponent<PhotonView>();
-            if (pv == null) pv = gameObject.AddComponent<PhotonView>();
+            NetworkServiceLocator.ObjectService.EnsureView(this);
         }
 
         // ========== 升级队列系统 ==========
@@ -123,7 +118,7 @@ namespace Application
 
         public void AddExperience(int experience)
         {
-            if (!EventChannelLocator.MainContainer.gameSettings.IsTest && !PhotonNetwork.IsMasterClient)
+            if (!EventChannelLocator.MainContainer.gameSettings.IsTest && !NetworkServiceLocator.PlayerService.IsMasterClient)
             {
                 return;
             }
@@ -131,7 +126,7 @@ namespace Application
             currentExperience += experience;
 
             CheckAndQueueUpgrades();
-            photonView.RPC("RPC_SyncExperience", RpcTarget.All, currentExperience);
+            NetworkServiceLocator.ObjectService.InvokeRPC(this, "RPC_SyncExperience", NetworkTarget.All, currentExperience);
 
             if (pendingLevelUps.Count > 0 && !isProcessingLevelUp)
             {
@@ -143,7 +138,7 @@ namespace Application
         {
             if (!EventChannelLocator.MainContainer.gameSettings.IsTest)
             {
-                if (!PhotonNetwork.IsMasterClient)
+                if (!NetworkServiceLocator.PlayerService.IsMasterClient)
                 {
                     return;
                 }
@@ -173,7 +168,7 @@ namespace Application
                 OpenMagicUpgradePanel();
                 yield break;
             }
-            photonView.RPC("OpenMagicUpgradePanel", RpcTarget.All);
+            NetworkServiceLocator.ObjectService.InvokeRPC(this, "OpenMagicUpgradePanel", NetworkTarget.All);
         }
 
         [PunRPC]
@@ -186,7 +181,7 @@ namespace Application
         {
             if (!EventChannelLocator.MainContainer.gameSettings.IsTest)
             {
-                if (!PhotonNetwork.IsMasterClient)
+                if (!NetworkServiceLocator.PlayerService.IsMasterClient)
                 {
                     return;
                 }
@@ -202,7 +197,7 @@ namespace Application
                 }
                 else
                 {
-                    photonView.RPC("IncreaseLevel", RpcTarget.All, requiredExp);
+                    NetworkServiceLocator.ObjectService.InvokeRPC(this, "IncreaseLevel", NetworkTarget.All, requiredExp);
                 }
 
                 pendingLevelUps.Enqueue(currentLevel);
@@ -220,7 +215,7 @@ namespace Application
 
         public void OnPlayerUpgradeChoiceConfirmed()
         {
-            photonView.RPC("CloseMagicUpgradePanel", RpcTarget.All);
+            NetworkServiceLocator.ObjectService.InvokeRPC(this, "CloseMagicUpgradePanel", NetworkTarget.All);
         }
 
         [PunRPC]
@@ -232,7 +227,7 @@ namespace Application
 
         IEnumerator ProcessNextWithDelay()
         {
-            if (!PhotonNetwork.IsMasterClient)
+            if (!NetworkServiceLocator.PlayerService.IsMasterClient)
             {
                 yield break;
             }
@@ -263,7 +258,7 @@ namespace Application
 
         public void SetExperience(int experience)
         {
-            if (!EventChannelLocator.MainContainer.gameSettings.IsTest && !PhotonNetwork.IsMasterClient)
+            if (!EventChannelLocator.MainContainer.gameSettings.IsTest && !NetworkServiceLocator.PlayerService.IsMasterClient)
             {
                 return;
             }

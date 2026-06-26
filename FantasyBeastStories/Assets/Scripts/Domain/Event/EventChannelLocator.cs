@@ -1,5 +1,9 @@
-using UnityEngine;
 using Domain.Event.Channels;
+using Domain.Event.Channels.Combat;
+using Domain.Event.Channels.Game;
+using Domain.Event.Channels.Player;
+using Domain.Event.Channels.UI;
+using UnityEngine;
 
 namespace Domain.Event
 {
@@ -22,5 +26,11 @@ namespace Domain.Event
                 return _mainContainer;
             }
         }
+
+        // ========== 领域子容器便捷访问 ==========
+        public static CombatChannelsSO Combat => MainContainer?.combat;
+        public static PlayerChannelsSO Player => MainContainer?.player;
+        public static GameChannelsSO Game => MainContainer?.game;
+        public static UIChannelsSO UI => MainContainer?.ui;
     }
 }

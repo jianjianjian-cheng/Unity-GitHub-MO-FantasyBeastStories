@@ -6,17 +6,17 @@ using Domain.Event;
 using Domain.Event.Channels;
 using Domain.Event.Channels.General;
 using Domain.Event.Channels.Player;
-using Photon.Pun;
+using Domain.Services;
 using UnityEngine;
 
 namespace Domain.Player
 {
-    public class PlayerManager : MonoBehaviourPunCallbacks
+    public class PlayerManager : MonoBehaviour
     {
-        private Dictionary<
-            (int actorNumber, string key),
-            AttributePlayerBase
-        > attributePlayerBaseDictionary = new Dictionary<(int, string), AttributePlayerBase>();
+        /// <summary>
+        /// 属性缓存服务（统一管理 AttributePlayerBase 的增删查）
+        /// </summary>
+        private AttributeCacheService attributeCache;
 
         #region 单例模式
         public static PlayerManager instance;
@@ -27,7 +27,7 @@ namespace Domain.Player
             {
                 instance = this;
                 DontDestroyOnLoad(gameObject);
-                EventChannelLocator.MainContainer.playerAttributeChannel.RegisterListener(OnPlayerAttributeQuery);
+                attributeCache = new AttributeCacheService();
             }
             else
             {
@@ -39,48 +39,25 @@ namespace Domain.Player
         {
             EventChannelLocator.MainContainer.gameActionChannel.RegisterListener(OnGameAction);
             EventChannelLocator.MainContainer.playerQueryChannel.RegisterListener(OnPlayerQuery);
+            if (NetworkServiceLocator.IsInitialized)
+            {
+                NetworkServiceLocator.PlayerService.OnPlayerEnteredRoom += OnPlayerEnteredRoom;
+                NetworkServiceLocator.PlayerService.OnPlayerLeftRoom += OnPlayerLeftRoom;
+                NetworkServiceLocator.PlayerService.OnLocalJoinedRoom += OnLocalJoinedRoom;
+            }
         }
 
         void OnDisable()
         {
             EventChannelLocator.MainContainer.gameActionChannel.UnregisterListener(OnGameAction);
             EventChannelLocator.MainContainer.playerQueryChannel.UnregisterListener(OnPlayerQuery);
-            EventChannelLocator.MainContainer.playerAttributeChannel.UnregisterListener(OnPlayerAttributeQuery);
-        }
-
-        private void OnPlayerAttributeQuery(PlayerAttributeData data)
-        {
-            switch (data.queryType)
+            if (NetworkServiceLocator.IsInitialized)
             {
-                case PlayerAttributeQueryType.RegisterAttribute:
-                    if (int.TryParse(data.playerId, out int actorNum))
-                    {
-                        var key = (actorNum, data.attributeName);
-                        attributePlayerBaseDictionary[key] = data.attribute;
-                    }
-                    break;
-                case PlayerAttributeQueryType.UnregisterAttribute:
-                    if (int.TryParse(data.playerId, out int unregActorNum))
-                    {
-                        var unregKey = (unregActorNum, data.attributeName);
-                        attributePlayerBaseDictionary.Remove(unregKey);
-                    }
-                    break;
-                case PlayerAttributeQueryType.GetAttributeById:
-                    if (int.TryParse(data.playerId, out int getActorNum))
-                    {
-                        var getKey = (getActorNum, data.attributeName);
-                        attributePlayerBaseDictionary.TryGetValue(getKey, out data.attribute);
-                    }
-                    break;
-                case PlayerAttributeQueryType.GetLocalPlayerAttribute:
-                    int localActorNum = -1;
-                    try { localActorNum = PhotonNetwork.LocalPlayer.ActorNumber; }
-                    catch { }
-                    var localKey = (localActorNum, data.attributeName);
-                    attributePlayerBaseDictionary.TryGetValue(localKey, out data.attribute);
-                    break;
+                NetworkServiceLocator.PlayerService.OnPlayerEnteredRoom -= OnPlayerEnteredRoom;
+                NetworkServiceLocator.PlayerService.OnPlayerLeftRoom -= OnPlayerLeftRoom;
+                NetworkServiceLocator.PlayerService.OnLocalJoinedRoom -= OnLocalJoinedRoom;
             }
+            attributeCache?.Dispose();
         }
 
         private void OnGameAction(GameActionType actionType)
@@ -169,38 +146,36 @@ namespace Domain.Player
             }
         }
 
-        public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
+        private void OnPlayerEnteredRoom(int actorNumber, string userId)
         {
-            base.OnPlayerEnteredRoom(newPlayer);
-            if (PhotonNetwork.InRoom && PhotonNetwork.LocalPlayer != null)
+            if (NetworkServiceLocator.PlayerService.IsConnectedAndInRoom)
             {
-                AddPlayer(PlayerData.FromPhotonPlayer(newPlayer));
+                string nickName = NetworkServiceLocator.PlayerService.GetPlayerCustomProperty(actorNumber, "PlayerName") as string ?? "Player_" + actorNumber;
+                AddPlayer(new PlayerData(userId, nickName));
             }
         }
 
         // 当本地玩家加入房间时
-        public override void OnJoinedRoom()
+        private void OnLocalJoinedRoom()
         {
-            base.OnJoinedRoom();
             Debug.Log("[PlayerManager] 本地玩家加入房间，同步所有玩家");
             SyncAllPlayers();
         }
 
         // 当玩家离开房间时
-        public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
+        private void OnPlayerLeftRoom(int actorNumber, string userId)
         {
-            base.OnPlayerLeftRoom(otherPlayer);
-
-            if (PhotonNetwork.InRoom)
+            if (NetworkServiceLocator.PlayerService.IsConnectedAndInRoom)
             {
-                RemovePlayer(otherPlayer.UserId);
+                RemovePlayer(userId);
             }
         }
 
         // 同步所有玩家数据
         public void SyncAllPlayers()
         {
-            if (!PhotonNetwork.InRoom)
+            var playerService = NetworkServiceLocator.PlayerService;
+            if (!playerService.IsConnectedAndInRoom)
             {
                 Debug.LogWarning("[PlayerManager] 未在房间中，无法同步玩家");
                 return;
@@ -209,17 +184,11 @@ namespace Domain.Player
             playerDataDict.Clear();
 
             // 首先添加本地玩家
-            if (PhotonNetwork.LocalPlayer != null)
+            string localUserId = playerService.GetLocalUserId();
+            if (!string.IsNullOrEmpty(localUserId))
             {
-                PlayerData localData = PlayerData.FromPhotonPlayer(PhotonNetwork.LocalPlayer);
+                PlayerData localData = new PlayerData(localUserId, "LocalPlayer");
                 AddPlayer(localData);
-            }
-
-            // 添加其他玩家
-            foreach (var player in PhotonNetwork.PlayerListOthers)
-            {
-                PlayerData playerData = PlayerData.FromPhotonPlayer(player);
-                AddPlayer(playerData);
             }
 
             Debug.Log($"[PlayerManager] 同步完成，当前玩家数量: {PlayerCount}");
@@ -229,9 +198,10 @@ namespace Domain.Player
         // 获取本地玩家数据
         public PlayerData GetLocalPlayer()
         {
-            if (PhotonNetwork.LocalPlayer != null)
+            string localUserId = NetworkServiceLocator.PlayerService.GetLocalUserId();
+            if (!string.IsNullOrEmpty(localUserId))
             {
-                return GetPlayer(PhotonNetwork.LocalPlayer.UserId);
+                return GetPlayer(localUserId);
             }
             return null;
         }
@@ -239,7 +209,8 @@ namespace Domain.Player
         // 检查是否是本地玩家
         public bool IsLocalPlayer(string playerId)
         {
-            return PhotonNetwork.LocalPlayer != null && PhotonNetwork.LocalPlayer.UserId == playerId;
+            string localUserId = NetworkServiceLocator.PlayerService.GetLocalUserId();
+            return !string.IsNullOrEmpty(localUserId) && localUserId == playerId;
         }
 
         // 打印所有玩家信息
@@ -291,13 +262,7 @@ namespace Domain.Player
 
         public AttributePlayerBase GetLocalPlayerAttribute(string key)
         {
-            if (PhotonNetwork.LocalPlayer != null)
-            {
-                var dictKey = (PhotonNetwork.LocalPlayer.ActorNumber, key);
-                attributePlayerBaseDictionary.TryGetValue(dictKey, out var attr);
-                return attr;
-            }
-            return null;
+            return attributeCache?.GetLocalAttribute(key);
         }
     }
 }

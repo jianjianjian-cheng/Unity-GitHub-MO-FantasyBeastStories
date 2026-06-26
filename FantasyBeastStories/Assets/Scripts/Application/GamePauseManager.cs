@@ -1,13 +1,12 @@
 using Domain.Event;
 using Domain.Event.Channels.Game;
-using Photon.Pun;
-using Photon.Realtime;
+using Domain.Services;
+using Photon.Pun; // 仅保留 [PunRPC] 属性引用
 using UnityEngine;
-using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace Application
 {
-    public class GamePauseManager : MonoBehaviourPunCallbacks
+    public class GamePauseManager : MonoBehaviour
     {
         public static bool isPaused = false;
         public static GamePauseManager instance;
@@ -17,7 +16,6 @@ namespace Application
             if (instance == null)
             {
                 instance = this;
-                EnsurePhotonView();
             }
             else Destroy(gameObject);
         }
@@ -45,13 +43,10 @@ namespace Application
             var pauseStateChannel = EventChannelLocator.MainContainer.pauseStateChannel;
             if (pauseStateChannel != null) pauseStateChannel.Raise(pause);
 
-            if (PhotonNetwork.IsMasterClient)
+            if (NetworkServiceLocator.PlayerService.IsMasterClient)
             {
-                Hashtable pauseProps = new Hashtable();
-                pauseProps["IsPaused"] = isPaused;
-                PhotonNetwork.CurrentRoom.SetCustomProperties(pauseProps);
-                if (photonView != null)
-                    photonView.RPC("RPC_SetPauseState", RpcTarget.All, isPaused);
+                NetworkServiceLocator.PlayerService.SetRoomCustomProperty("IsPaused", isPaused);
+                NetworkServiceLocator.ObjectService.InvokeRPC(this, "RPC_SetPauseState", NetworkTarget.All, isPaused);
             }
         }
 
@@ -62,27 +57,6 @@ namespace Application
             EventChannelLocator.MainContainer.gameSettings.IsPaused = pause;
             var pauseStateChannel = EventChannelLocator.MainContainer.pauseStateChannel;
             if (pauseStateChannel != null) pauseStateChannel.Raise(pause);
-        }
-
-        public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
-        {
-            if (propertiesThatChanged.ContainsKey("IsPaused"))
-            {
-                bool newPauseState = (bool)propertiesThatChanged["IsPaused"];
-                if (isPaused != newPauseState)
-                {
-                    isPaused = newPauseState;
-                    EventChannelLocator.MainContainer.gameSettings.IsPaused = newPauseState;
-                    var pauseStateChannel = EventChannelLocator.MainContainer.pauseStateChannel;
-                    if (pauseStateChannel != null) pauseStateChannel.Raise(newPauseState);
-                }
-            }
-        }
-
-        private void EnsurePhotonView()
-        {
-            PhotonView pv = GetComponent<PhotonView>();
-            if (pv == null) pv = gameObject.AddComponent<PhotonView>();
         }
     }
 }

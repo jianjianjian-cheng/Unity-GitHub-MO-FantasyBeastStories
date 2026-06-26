@@ -11,12 +11,12 @@ namespace Domain.Event.Channels.Combat
     public class EnemyReportData : EventArgsBase
     {
         public Vector3 position;
-        public int photonViewID;
+        public int networkViewID;
 
-        public EnemyReportData(Vector3 position, int photonViewID)
+        public EnemyReportData(Vector3 position, int networkViewID)
         {
             this.position = position;
-            this.photonViewID = photonViewID;
+            this.networkViewID = networkViewID;
         }
     }
 }

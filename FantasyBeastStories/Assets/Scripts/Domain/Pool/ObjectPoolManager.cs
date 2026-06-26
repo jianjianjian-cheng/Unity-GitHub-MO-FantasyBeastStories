@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using Photon.Pun;
 using UnityEngine;
 using Domain.Event;
 using Domain.Event.Channels.General;
+using Domain.Services;
 
 namespace Domain.Pool
 {
@@ -100,7 +100,7 @@ namespace Domain.Pool
         private GameObject DamageNumPrefab;
 
         private const string ImpactCannonPath = "FX/ImpactCannon/";
-        private bool isPhotonReady = false;
+        private bool isPoolInitialized = false;
 
         void Start()
         {
@@ -110,14 +110,14 @@ namespace Domain.Pool
                 return;
             }
 
-            if (PhotonNetwork.IsConnectedAndReady && PhotonNetwork.InRoom)
+            if (NetworkServiceLocator.PlayerService.IsConnectedAndInRoom)
             {
                 InitializePool();
-                isPhotonReady = true;
+                isPoolInitialized = true;
             }
             else
             {
-                Debug.LogWarning("等待Photon连接");
+                Debug.LogWarning("等待网络连接就绪后初始化对象池");
             }
         }
 
@@ -125,10 +125,10 @@ namespace Domain.Pool
         {
             if (EventChannelLocator.MainContainer.gameSettings.IsTest)
                 return;
-            if (!isPhotonReady && PhotonNetwork.IsConnectedAndReady && PhotonNetwork.InRoom)
+            if (!isPoolInitialized && NetworkServiceLocator.PlayerService.IsConnectedAndInRoom)
             {
                 InitializePool();
-                isPhotonReady = true;
+                isPoolInitialized = true;
             }
         }
 
@@ -246,7 +246,6 @@ namespace Domain.Pool
 
         /// <summary>
         /// 添加多个对象到对象池
-        /// ===== 核心改动：统一使用 Instantiate，不再用 PhotonNetwork.Instantiate =====
         /// </summary>
         public void AddMultipleToPool(string poolName, GameObject prefab, int count)
         {
@@ -276,12 +275,12 @@ namespace Domain.Pool
         }
 
         /// <summary>
-        /// 创建新对象（普通 Instantiate，不经过 Photon 网络）
+        /// 创建新对象（普通 Instantiate，不经过网络同步）
         /// </summary>
         private GameObject CreateNewObject(string poolName, GameObject prefab)
         {
-            // ===== 关键：全部使用普通 Instantiate =====
-            // 这样生成的对象没有 PhotonView，不会被 Photon 自动同步
+            // ===== 全部使用普通 Instantiate =====
+            // 对象池中的对象不需要网络同步
             GameObject obj = UnityEngine.Object.Instantiate(prefab, transform.position, Quaternion.identity);
 
             if (obj == null)
