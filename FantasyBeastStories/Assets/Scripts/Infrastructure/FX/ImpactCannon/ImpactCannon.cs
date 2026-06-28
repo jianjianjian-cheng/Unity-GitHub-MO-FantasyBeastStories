@@ -92,7 +92,7 @@ namespace Infrastructure.FX.ImpactCannon
       {
         canSplit = false; // 没有分裂技能时，不允许分裂
       }
-      Invoke("DelayDestorySelf", 0.5f);
+      StartCoroutine(DelayDestroySelf(0.5f));
     }
 
     void OnDisable()
@@ -100,7 +100,7 @@ namespace Infrastructure.FX.ImpactCannon
       transform.localScale = baseScale;
       Debug.Log("冲击炮被禁用，返回对象池");
       rb.velocity = Vector3.zero;
-      CancelInvoke();
+      StopAllCoroutines();
     }
 
     public void SetAttributeFromPlayer(AttributePlayerBase attributePlayer)
@@ -438,8 +438,9 @@ namespace Infrastructure.FX.ImpactCannon
       Gizmos.DrawWireSphere(transform.position, 0.5f);
     }
 
-    private void DelayDestorySelf()
+    private IEnumerator DelayDestroySelf(float delay)
     {
+      yield return new WaitForSeconds(delay);
       EventChannelLocator.MainContainer.poolOperationChannel.Raise(
           PoolOperationData.CreateReturn(ObjectPoolConst.ImpactCannonTriggerPool, gameObject));
     }

@@ -110,7 +110,7 @@ namespace Presentation.UI
                 CriticalMultiplier.text = $"{attr.GetCriticalMultiplier():F1}x";
 
             if (CriticalChance != null)
-                CriticalChance.text = $"{attr.GetCriticalChance():F0}%";
+                CriticalChance.text = $"{attr.GetCriticalChance() * 100:F0}%";
 
             if (maxHealthText != null)
                 maxHealthText.text = $"{attr.GetMaxHealth():F0}";

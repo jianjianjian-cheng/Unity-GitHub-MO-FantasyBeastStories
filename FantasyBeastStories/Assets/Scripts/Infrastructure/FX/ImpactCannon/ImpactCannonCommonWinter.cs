@@ -18,10 +18,5 @@ namespace Infrastructure.FX.ImpactCannon
         {
             poolName = ObjectPoolConst.ImpactCannonWinterPool;
         }
-
-        protected override void ReturnToPool()
-        {
-            base.ReturnToPool();
-        }
     }
 }

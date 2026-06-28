@@ -12,18 +12,6 @@ namespace Presentation.UI
     private GameObject LoadingPanel;
     private ParticleSystem loadingParticle;
 
-    void Awake()
-    {
-      if (instance == null)
-      {
-        instance = this;
-        DontDestroyOnLoad(gameObject);
-      }
-      else
-      {
-        Destroy(gameObject);
-      }
-    }
 
     void OnEnable()
     {

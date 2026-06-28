@@ -147,8 +147,9 @@ namespace Presentation.UI.Framework.Base
     public void SetLayer(UILayer layer)
     {
       CurrentLayer = layer;
+      // +50 让画面排在层级 Canvas（遮罩所在）之上，同时仍然在其他层级 Canvas 之下
       if (_canvas != null)
-        _canvas.sortingOrder = (int)layer * 100;
+        _canvas.sortingOrder = (int)layer * 100 + 50;
     }
 
     public CanvasGroup GetCanvasGroup() => _canvasGroup;

@@ -6,6 +6,7 @@ using Cinemachine;
 using Domain.Event;
 using Domain.Event.Channels.Player;
 using Domain.Player;
+using Domain.Rune;
 using Domain.Services;
 using Presentation.PlayerInput;
 using UnityEngine;
@@ -68,6 +69,11 @@ namespace Domain.Character
         playerAttributeConfig = Resources.Load<PlayerAttributeConfigSO>("Config/PlayerAttributeConfig");
       attributePlayer = new AttributePlayerBase(playerAttributeConfig);
       attributePlayer.SetMoveSpeed(movementData.moveSpeed);
+
+      // 应用符文效果（仅在游戏场景，非大厅）
+      if (!isInLobby)
+        RuneEffectApplier.ApplyEquippedRunes(attributePlayer);
+
       playerInputHandler = new PlayerInputHandler();
     }
 

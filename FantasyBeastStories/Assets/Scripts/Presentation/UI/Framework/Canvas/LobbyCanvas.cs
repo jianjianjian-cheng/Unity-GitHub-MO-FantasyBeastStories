@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using Domain.Event;
 using Domain.Event.Channels.General;
+using Domain.Rune;
 using Domain.Services;
 using Presentation.UI;
 using Presentation.UI.Framework.Base;
@@ -11,6 +12,7 @@ using Presentation.UI.Framework.Utils;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LobbyCanvas : UIScreen
@@ -78,18 +80,6 @@ public class LobbyCanvas : UIScreen
 
         // 查找 UI 引用并初始化
         Initialize();
-    }
-
-    protected override void OnEnable()
-    {
-        base.OnEnable();
-        SubscribeEvents();
-    }
-
-    protected override void OnDisable()
-    {
-        base.OnDisable();
-        UnsubscribeEvents();
     }
 
     protected override void SubscribeEvents()
@@ -185,6 +175,7 @@ public class LobbyCanvas : UIScreen
         if (runePanel != null)
         {
             runePanel.OnRuneEquipped += OnRuneEquippedFromPanel;
+            runePanel.OnRuneUnequipped += OnRuneUnequippedFromPanel;
         }
 
         isInitialized = true;
@@ -344,10 +335,10 @@ public class LobbyCanvas : UIScreen
 
         OpenRunePanel();
 
-        // 通知 RunePanel 当前选中的是插槽 0
+        // 通知 RunePanel 选中装备插槽 0
         var runePanel = UIManager.Instance.GetScreen(RunePanelId) as RunePanel;
         if (runePanel != null)
-            runePanel.SetEquipTargetSlot(0);
+            runePanel.SelectEquipSlot(0);
     }
 
     private void OnRuneSlot2Clicked()
@@ -358,10 +349,10 @@ public class LobbyCanvas : UIScreen
 
         OpenRunePanel();
 
-        // 通知 RunePanel 当前选中的是插槽 1
+        // 通知 RunePanel 选中装备插槽 1
         var runePanel = UIManager.Instance.GetScreen(RunePanelId) as RunePanel;
         if (runePanel != null)
-            runePanel.SetEquipTargetSlot(1);
+            runePanel.SelectEquipSlot(1);
     }
 
     /// <summary>RunePanel 装备符文后的回调</summary>
@@ -376,6 +367,20 @@ public class LobbyCanvas : UIScreen
             var img = targetIcon.GetComponent<Image>();
             if (img != null)
                 img.sprite = equippedSprite;
+        }
+    }
+
+    /// <summary>RunePanel 卸下符文后的回调</summary>
+    private void OnRuneUnequippedFromPanel(int slotIndex)
+    {
+        Debug.Log($"[LobbyCanvas] 符文卸下回调: slotIndex={slotIndex}");
+
+        Transform targetIcon = slotIndex == 0 ? runeSlot1Icon : runeSlot2Icon;
+        if (targetIcon != null)
+        {
+            var img = targetIcon.GetComponent<Image>();
+            if (img != null)
+                img.sprite = null;
         }
     }
 
@@ -536,6 +541,13 @@ public class LobbyCanvas : UIScreen
             return;
         }
 
+        // 出发前捕获当前装备的符文，供游戏场景使用
+        var runePanel = UIManager.Instance.GetScreen(RunePanelId) as RunePanel;
+        if (runePanel != null)
+            RuneEquipmentSnapshot.CaptureFrom(runePanel);
+        else
+            Debug.LogWarning("[LobbyCanvas] 未找到 RunePanel，无法捕获符文装备数据");
+
         EventChannelLocator.MainContainer.gameActionChannel.Raise(GameActionType.SyncAllPlayers);
         isReady = true;
 
@@ -557,5 +569,36 @@ public class LobbyCanvas : UIScreen
     private void OnExitRoomClicked()
     {
         EventChannelLocator.MainContainer.gameActionChannel.Raise(GameActionType.QuitToMainMenu);
+    }
+
+    // ──────────────────────────────────────────────
+    //  场景卸载清理
+    // ──────────────────────────────────────────────
+
+    private void OnEnable()
+    {
+        base.OnEnable();
+        SubscribeEvents();
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
+    }
+
+    private void OnDisable()
+    {
+        base.OnDisable();
+        UnsubscribeEvents();
+        SceneManager.sceneUnloaded -= OnSceneUnloaded;
+    }
+
+    private void OnDestroy()
+    {
+        // 从 UIManager 取消注册，防止悬挂引用
+        UIManager.Instance.UnregisterScreen(this);
+    }
+
+    private void OnSceneUnloaded(Scene scene)
+    {
+        // 安全网：场景卸载时确保关闭自己
+        if (IsOpen)
+            Close();
     }
 }

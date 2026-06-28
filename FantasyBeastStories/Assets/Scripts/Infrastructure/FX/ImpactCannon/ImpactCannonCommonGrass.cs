@@ -18,10 +18,5 @@ namespace Infrastructure.FX.ImpactCannon
         {
             poolName = ObjectPoolConst.ImpactCannonGrassPool;
         }
-
-        protected override void ReturnToPool()
-        {
-            base.ReturnToPool();
-        }
     }
 }

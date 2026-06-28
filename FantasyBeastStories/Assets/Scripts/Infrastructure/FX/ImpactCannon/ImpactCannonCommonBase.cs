@@ -25,11 +25,12 @@ namespace Infrastructure.FX.ImpactCannon
 
         protected virtual void OnEnable()
         {
-            Invoke("ReturnToPool", 0.5f);
+            StartCoroutine(DelayReturnToPool(0.5f));
         }
 
-        protected virtual void ReturnToPool()
+        protected virtual IEnumerator DelayReturnToPool(float delay)
         {
+            yield return new WaitForSeconds(delay);
             transform.localScale = baseScale;
             EventChannelLocator.MainContainer.poolOperationChannel.Raise(
                 PoolOperationData.CreateReturn(poolName, gameObject));

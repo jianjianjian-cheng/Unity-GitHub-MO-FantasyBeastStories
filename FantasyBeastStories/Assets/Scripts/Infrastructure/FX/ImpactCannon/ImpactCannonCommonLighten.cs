@@ -18,10 +18,5 @@ namespace Infrastructure.FX.ImpactCannon
         {
             poolName = ObjectPoolConst.ImpactCannonLightenPool;
         }
-
-        protected override void ReturnToPool()
-        {
-            base.ReturnToPool();
-        }
     }
 }

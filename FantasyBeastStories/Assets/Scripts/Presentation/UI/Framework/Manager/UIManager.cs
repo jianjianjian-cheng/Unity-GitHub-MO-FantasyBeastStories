@@ -109,7 +109,6 @@ namespace Presentation.UI.Framework.Manager
       }
 
       _registeredScreens[screen.ScreenId] = screen;
-      screen.transform.SetParent(_layerCanvases[screen.DefaultLayer].transform);
       screen.SetLayer(screen.DefaultLayer);
     }
 
@@ -344,8 +343,19 @@ namespace Presentation.UI.Framework.Manager
       if (screen == null)
         return;
 
-      screen.transform.SetParent(_layerCanvases[layer].transform);
       screen.SetLayer(layer);
+    }
+
+    public void UnregisterScreen(UIScreen screen)
+    {
+      if (screen == null || string.IsNullOrEmpty(screen.ScreenId))
+        return;
+
+      if (_registeredScreens.TryGetValue(screen.ScreenId, out var registered) && registered == screen)
+      {
+        _registeredScreens.Remove(screen.ScreenId);
+        _navigationStack.Remove(screen);
+      }
     }
   }
 }
