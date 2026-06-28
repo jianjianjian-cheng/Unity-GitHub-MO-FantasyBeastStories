@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using Domain.Character;
 using Domain.Event;
 using Domain.Services;
-using Infrastructure.Network;
-using Photon.Pun; // 仅保留 [PunRPC] 属性引用 + IPunObservable 接口
 using UnityEngine;
 using Application;
+using Infrastructure.Network;
 
 namespace Presentation.Other
 {
-    public class SpawnPoint : MonoBehaviour, IPunObservable
+    public class SpawnPoint : MonoBehaviour, ISpawnPoint
     {
         [SerializeField]
-        public int Id;
+        private int id;
+        public int Id { get => id; set => id = value; }
 
         [SerializeField]
         private bool isEmpty = true;
@@ -31,7 +31,8 @@ namespace Presentation.Other
             {
                 isEmpty = true;
                 occupiedByPlayer = -1;
-                NetworkServiceLocator.ObjectService.InvokeRPC(this, "RPC_UpdateSpawnPointState", NetworkTarget.All, true, -1);
+                var viewID = NetworkServiceLocator.ObjectService.GetViewID(gameObject);
+                NetworkServiceLocator.ObjectService.InvokeRPC(PresentationRpcBridge.Instance, "RPC_UpdateSpawnPointState", NetworkTarget.All, viewID, true, -1);
             }
             InitializeSpawnPoint();
             transform.LookAt(new Vector3(0.182999998f, transform.position.y, -0.219999999f));
@@ -39,13 +40,13 @@ namespace Presentation.Other
 
         private void InitializeSpawnPoint()
         {
-            if (Launcher.instance == null)
+            if (NetworkServiceLocator.ObjectPoolService == null)
             {
-                Debug.LogError($"[SpawnPoint-{Id}] Launcher.instance 为 null，请检查场景中 Launcher 脚本的组件引用是否因 namespace 变更而丢失");
+                Debug.LogError($"[SpawnPoint-{Id}] ObjectPoolService 未注册");
                 return;
             }
 
-            spawnFx = Launcher.instance.GetInactiveObjectByName("SpawnFX" + Id);
+            spawnFx = NetworkServiceLocator.ObjectPoolService.GetInactiveObjectByName("SpawnFX" + Id);
             if (spawnFx == null)
             {
                 Debug.Log($"未找到生成点的特效: SpawnFX{Id}");
@@ -135,7 +136,8 @@ namespace Presentation.Other
             );
 
             // 通过 RPC 同步状态
-            NetworkServiceLocator.ObjectService.InvokeRPC(this, "RPC_UpdateSpawnPointState", NetworkTarget.All, isEmpty, occupiedByPlayer);
+            var viewID = NetworkServiceLocator.ObjectService.GetViewID(gameObject);
+            NetworkServiceLocator.ObjectService.InvokeRPC(PresentationRpcBridge.Instance, "RPC_UpdateSpawnPointState", NetworkTarget.All, viewID, isEmpty, occupiedByPlayer);
 
             // 更新玩家属性
             if (occupied)
@@ -148,8 +150,10 @@ namespace Presentation.Other
             }
         }
 
-        [PunRPC]
-        public void RPC_UpdateSpawnPointState(bool newIsEmpty, int newOccupiedBy)
+        /// <summary>
+        /// 由 PresentationRpcBridge.RPC_UpdateSpawnPointState 调用
+        /// </summary>
+        public void HandleUpdateSpawnPointState(bool newIsEmpty, int newOccupiedBy)
         {
             isEmpty = newIsEmpty;
             occupiedByPlayer = newOccupiedBy;
@@ -157,12 +161,6 @@ namespace Presentation.Other
             Debug.Log(
                 $"[SpawnPoint {Id}] RPC更新状态: isEmpty={isEmpty}, occupiedBy={occupiedByPlayer}"
             );
-
-            // 通知 GameManager 更新生成点列表
-            if (GameManager.instance != null)
-            {
-                // GameManager.instance.OnSpawnPointStateChanged();
-            }
         }
 
         private void UpdatePlayerSpawnPointProperty(int spawnPointId)
@@ -190,8 +188,5 @@ namespace Presentation.Other
         {
             SetOccupied(false, -1);
         }
-
-        // IPunObservable 接口实现 — 无状态需要同步，保留空实现以满足 PhotonView Observed 绑定
-        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) { }
     }
 }

@@ -6,7 +6,6 @@ using Domain.Event.Channels.General;
 using Domain.Player;
 using ExitGames.Client.Photon;
 using ExitGames.Client.Photon.StructWrapping;
-using Domain.Manager;
 using Photon.Pun;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -14,12 +13,12 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Application;
-using Presentation.Other;
 using Presentation.UI;
+using Domain.Services;
 
 namespace Infrastructure.Network
 {
-  public class Launcher : MonoBehaviourPunCallbacks
+  public class Launcher : MonoBehaviourPunCallbacks, IObjectPoolService, IGameActionService
   {
     private bool allPlayersLoaded = false;
     private bool isAutoCreate = false;
@@ -47,6 +46,8 @@ namespace Infrastructure.Network
       {
         instance = this;
         DontDestroyOnLoad(gameObject);
+        NetworkServiceLocator.RegisterObjectPoolService(this);
+        NetworkServiceLocator.RegisterGameActionService(this);
       }
       else
       {
@@ -337,8 +338,8 @@ namespace Infrastructure.Network
       if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("CurrentSpawnPoint"))
       {
         int spawnPointId = (int)PhotonNetwork.LocalPlayer.CustomProperties["CurrentSpawnPoint"];
-        SpawnPoint sp = GameManager.instance.GetSpawnPointById(spawnPointId);
-        if (sp != null && sp.GetOccupiedByPlayer() == PhotonNetwork.LocalPlayer.ActorNumber)
+        ISpawnPoint sp = ServiceLocator.Get<GameManager>().GetSpawnPointById(spawnPointId);
+        if (sp != null && (sp as MonoBehaviour) != null && sp.GetOccupiedByPlayer() == PhotonNetwork.LocalPlayer.ActorNumber)
         {
           sp.ForceRelease();
           Debug.Log("[Launcher] 退出前释放生成点");
@@ -351,7 +352,7 @@ namespace Infrastructure.Network
       //初始化UI，避免切换场景时丢失UI
       if (scene.buildIndex == 1)
       {
-        // LobbyUIManager 负责大厅 UI 初始化 — 通过事件通道通知
+        // LobbyCanvas 负责大厅 UI 初始化 — 通过事件通道通知
         var roomJoinedChannel = EventChannelLocator.MainContainer.roomJoinedChannel;
         if (roomJoinedChannel != null)
           roomJoinedChannel.Raise(new RoomJoinedEventData());
@@ -404,7 +405,7 @@ namespace Infrastructure.Network
 
       if (scene.buildIndex > 1)
       {
-        GameManager.instance.isReady = false;
+        ServiceLocator.Get<GameManager>().isReady = false;
         EventChannelLocator.MainContainer.gameSettings.IsStayLobby = false;
         // 玩家进入游戏场景后标记已加载完成
         Hashtable loadProps = new Hashtable
@@ -432,7 +433,7 @@ namespace Infrastructure.Network
 
       // 确保生成点已初始化
       yield return new WaitUntil(() =>
-          GameManager.instance != null && GameManager.instance.GetEmptySpawnPoint() != null
+          ServiceLocator.Get<GameManager>() != null && ServiceLocator.Get<GameManager>().GetEmptySpawnPoint() != null
       );
 
       // 生成玩家角色
@@ -460,7 +461,7 @@ namespace Infrastructure.Network
         Debug.Log("[Launcher] 当前不是游戏场景，跳过玩家生成");
         return;
       }
-      GameManager.instance.FindSpawnPoints();
+      ServiceLocator.Get<GameManager>().FindSpawnPoints();
       Debug.Log("执行CreatedOrJoinedRoom");
 
       // 确保PlayerManager存在
@@ -511,7 +512,7 @@ namespace Infrastructure.Network
     /// </summary>
     private GameObject SpawnPlayer()
     {
-      Transform spawnPoint = GameManager.instance.GetEmptySpawnPoint()?.transform;
+      Transform spawnPoint = ServiceLocator.Get<GameManager>().GetEmptySpawnPoint()?.transform;
 
       if (spawnPoint == null)
       {
@@ -532,7 +533,7 @@ namespace Infrastructure.Network
       player.name = "Player_" + PhotonNetwork.LocalPlayer.UserId;
 
       // 记录当前使用的生成点ID到玩家属性
-      SpawnPoint sp = spawnPoint.GetComponent<SpawnPoint>();
+      ISpawnPoint sp = spawnPoint.GetComponent<ISpawnPoint>();
       if (sp != null)
       {
         var props = new Hashtable { { "CurrentSpawnPoint", sp.Id } };
@@ -575,7 +576,7 @@ namespace Infrastructure.Network
     // 在指定生成点生成角色
     private GameObject RespawnAtSpawnPoint(int spawnPointId)
     {
-      SpawnPoint targetSpawnPoint = GameManager.instance.GetSpawnPointById(spawnPointId);
+      ISpawnPoint targetSpawnPoint = ServiceLocator.Get<GameManager>().GetSpawnPointById(spawnPointId);
 
       if (targetSpawnPoint == null)
       {
@@ -585,7 +586,7 @@ namespace Infrastructure.Network
         return SpawnPlayer();
       }
 
-      Transform spawnTransform = targetSpawnPoint.transform;
+      Transform spawnTransform = ((MonoBehaviour)targetSpawnPoint).transform;
       Vector3 spawnPosition = CalculateSpawnPosition(spawnTransform);
 
       GameObject player = PhotonNetwork.Instantiate(
@@ -613,7 +614,7 @@ namespace Infrastructure.Network
       if (otherPlayer.CustomProperties.ContainsKey("CurrentSpawnPoint"))
       {
         int spawnPointId = (int)otherPlayer.CustomProperties["CurrentSpawnPoint"];
-        SpawnPoint sp = GameManager.instance.GetSpawnPointById(spawnPointId);
+        ISpawnPoint sp = ServiceLocator.Get<GameManager>().GetSpawnPointById(spawnPointId);
         if (sp != null)
         {
           sp.ForceRelease();
@@ -787,9 +788,9 @@ namespace Infrastructure.Network
 
     public void ResetSpawnPointState(int spawnPointIndex)
     {
-      foreach (var spawnPoint in GameManager.instance.spawnPoints)
+      foreach (var spawnPoint in ServiceLocator.Get<GameManager>().spawnPoints)
       {
-        if (spawnPoint.GetComponent<SpawnPoint>().Id == spawnPointIndex) { }
+        if (spawnPoint.GetComponent<ISpawnPoint>().Id == spawnPointIndex) { }
       }
     }
 
@@ -853,8 +854,8 @@ namespace Infrastructure.Network
         {
           int spawnPointId = (int)
               PhotonNetwork.LocalPlayer.CustomProperties["CurrentSpawnPoint"];
-          SpawnPoint sp = GameManager.instance.GetSpawnPointById(spawnPointId);
-          if (sp != null)
+          ISpawnPoint sp = ServiceLocator.Get<GameManager>().GetSpawnPointById(spawnPointId);
+          if (sp != null && (sp as MonoBehaviour) != null)
           {
             sp.ForceRelease();
           }

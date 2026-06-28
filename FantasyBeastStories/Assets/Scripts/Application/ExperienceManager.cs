@@ -5,7 +5,7 @@ using Domain.Event.Channels.Game;
 using Domain.Event.Channels.General;
 using Domain.Event.Channels.Player;
 using Domain.Services;
-using Photon.Pun; // 仅保留 [PunRPC] 属性引用，RPC 调用已通过 NetworkServiceLocator 解耦
+using Infrastructure.Network;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -29,9 +29,22 @@ namespace Application
     /// </summary>
     public class ExperienceManager : MonoBehaviour
     {
+        public static ExperienceManager Instance { get; private set; }
+
         void Awake()
         {
-            NetworkServiceLocator.ObjectService.EnsureView(this);
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+        }
+
+        void OnDestroy()
+        {
+            if (Instance == this)
+            {
+                Instance = null;
+            }
         }
 
         // ========== 升级队列系统 ==========
@@ -126,7 +139,7 @@ namespace Application
             currentExperience += experience;
 
             CheckAndQueueUpgrades();
-            NetworkServiceLocator.ObjectService.InvokeRPC(this, "RPC_SyncExperience", NetworkTarget.All, currentExperience);
+            NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "RPC_SyncExperience", NetworkTarget.All, currentExperience);
 
             if (pendingLevelUps.Count > 0 && !isProcessingLevelUp)
             {
@@ -165,16 +178,10 @@ namespace Application
             yield return new WaitForSeconds(1f);
             if (EventChannelLocator.MainContainer.gameSettings.IsTest)
             {
-                OpenMagicUpgradePanel();
+                EventChannelLocator.MainContainer.magicUpgradeChannel.Raise(true);
                 yield break;
             }
-            NetworkServiceLocator.ObjectService.InvokeRPC(this, "OpenMagicUpgradePanel", NetworkTarget.All);
-        }
-
-        [PunRPC]
-        public void OpenMagicUpgradePanel()
-        {
-            EventChannelLocator.MainContainer.magicUpgradeChannel.Raise(true);
+            NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "OpenMagicUpgradePanel", NetworkTarget.All);
         }
 
         private void CheckAndQueueUpgrades()
@@ -193,11 +200,11 @@ namespace Application
 
                 if (EventChannelLocator.MainContainer.gameSettings.IsTest)
                 {
-                    IncreaseLevel(requiredExp);
+                    HandleIncreaseLevelRPC(requiredExp);
                 }
                 else
                 {
-                    NetworkServiceLocator.ObjectService.InvokeRPC(this, "IncreaseLevel", NetworkTarget.All, requiredExp);
+                    NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "IncreaseLevel", NetworkTarget.All, requiredExp);
                 }
 
                 pendingLevelUps.Enqueue(currentLevel);
@@ -215,45 +222,49 @@ namespace Application
 
         public void OnPlayerUpgradeChoiceConfirmed()
         {
-            NetworkServiceLocator.ObjectService.InvokeRPC(this, "CloseMagicUpgradePanel", NetworkTarget.All);
+            NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "CloseMagicUpgradePanel", NetworkTarget.All);
         }
 
-        [PunRPC]
-        private void CloseMagicUpgradePanel()
+        /// <summary>
+        /// 由 AppRpcBridge 在收到 RPC 后调用
+        /// 关闭升级面板并在 Master 客户端启动下一级升级流程
+        /// </summary>
+        public static void HandleCloseMagicUpgradePanelRPC()
         {
             EventChannelLocator.MainContainer.magicUpgradeChannel.Raise(false);
-            StartCoroutine(ProcessNextWithDelay());
+            if (Instance != null && NetworkServiceLocator.PlayerService.IsMasterClient)
+            {
+                Instance.StartCoroutine(Instance.DelayedProcessNextLevelUp());
+            }
         }
 
-        IEnumerator ProcessNextWithDelay()
+        private IEnumerator DelayedProcessNextLevelUp()
         {
-            if (!NetworkServiceLocator.PlayerService.IsMasterClient)
-            {
-                yield break;
-            }
             yield return new WaitForSeconds(0.5f);
             ProcessNextLevelUp();
         }
 
         /// <summary>
-        /// RPC：同步经验值到所有客户端（仅更新数值，UI 由事件通道处理）
+        /// 由 AppRpcBridge 在收到 RPC 后调用：同步经验值到所有客户端
         /// </summary>
-        [PunRPC]
-        private void RPC_SyncExperience(int syncedExp)
+        public static void HandleSyncExperienceRPC(int syncedExp)
         {
-            currentExperience = syncedExp;
-            RaiseExperienceUpdate();
+            if (Instance == null) return;
+            Instance.currentExperience = syncedExp;
+            Instance.RaiseExperienceUpdate();
         }
 
-        [PunRPC]
-        private void IncreaseLevel(int requiredExp)
+        /// <summary>
+        /// 由 AppRpcBridge 在收到 RPC 后调用：增加等级
+        /// </summary>
+        public static void HandleIncreaseLevelRPC(int requiredExp)
         {
-            currentExperience -= requiredExp;
-            currentLevel++;
-            upgradeExperience = (int)(upgradeExperience * 1.5);
+            if (Instance == null) return;
+            Instance.currentExperience -= requiredExp;
+            Instance.currentLevel++;
+            Instance.upgradeExperience = (int)(Instance.upgradeExperience * 1.5);
 
-            // 通过事件通道通知 UI 更新
-            RaiseExperienceUpdate();
+            Instance.RaiseExperienceUpdate();
         }
 
         public void SetExperience(int experience)

@@ -5,7 +5,6 @@ using Domain.Event;
 using Domain.Event.Channels.Player;
 using Domain.Pool;
 using Domain.Services;
-using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -87,10 +86,10 @@ namespace Domain.Character
 
       if (!EventChannelLocator.MainContainer.gameSettings.IsTest)
       {
-        NetworkServiceLocator.ObjectService.InvokeRPC(
-            this,
+        NetworkServiceLocator.DomainRpcService?.InvokeRPC(
             "RPC_InitElementPool",
             NetworkTarget.Others,
+            NetworkServiceLocator.ObjectService.GetViewID(gameObject),
             (int)element
         );
       }
@@ -136,8 +135,10 @@ namespace Domain.Character
       return attributePlayer.GetMaxAttackCount();
     }
 
-    [PunRPC]
-    public void RPC_InitElementPool(int elementInt)
+    /// <summary>
+    /// 由 DomainRpcBridge.RPC_InitElementPool 调用 — 在其他客户端初始化元素对象池
+    /// </summary>
+    public void HandleInitElementPool(int elementInt)
     {
       Element element = (Element)elementInt;
 

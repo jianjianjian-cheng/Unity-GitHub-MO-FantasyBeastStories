@@ -1,5 +1,4 @@
 using Domain.Character.Attribute;
-using Domain.Manager;
 using Domain.Pool;
 using UnityEngine;
 using Domain.Event;

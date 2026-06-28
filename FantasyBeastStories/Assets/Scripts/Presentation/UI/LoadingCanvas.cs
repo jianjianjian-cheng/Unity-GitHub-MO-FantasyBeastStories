@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Domain.Event;
-using Domain.Manager;
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -14870,7 +14870,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b60aa07e036c6d942babe60a89856c49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolName: 
+  poolName: ImpactCannonHitCommonPool
 --- !u!1 &5112403347238810573
 GameObject:
   m_ObjectHideFlags: 0

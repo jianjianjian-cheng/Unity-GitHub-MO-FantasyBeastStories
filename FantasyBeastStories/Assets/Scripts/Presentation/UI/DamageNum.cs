@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using Domain.Pool;
-using Domain.Manager;
+using Application;
 
 namespace Presentation.UI
 {
@@ -190,7 +190,7 @@ namespace Presentation.UI
       rectTransform.localScale = initialScale;
 
       // 回收到对象池
-      ObjectPoolManager.instance?.ReturnToPool(ObjectPoolConst.DamageNumPool, gameObject);
+      ServiceLocator.Get<ObjectPoolManager>()?.ReturnToPool(ObjectPoolConst.DamageNumPool, gameObject);
     }
 
     /// <summary>
@@ -227,7 +227,7 @@ namespace Presentation.UI
       ResetState();
 
       // 立即回收到对象池
-      ObjectPoolManager.instance?.ReturnToPool(ObjectPoolConst.DamageNumPool, gameObject);
+      ServiceLocator.Get<ObjectPoolManager>()?.ReturnToPool(ObjectPoolConst.DamageNumPool, gameObject);
     }
 
     /// <summary>

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Domain.Enemy;
 using Infrastructure.Network;
 using Domain.Item;
-using Domain.Manager;
 using Photon.Pun;
 using UnityEngine;
 using Domain.Event;

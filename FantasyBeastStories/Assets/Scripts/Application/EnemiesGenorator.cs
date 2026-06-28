@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using Infrastructure.Network;
 using UnityEngine;
 using Domain.Event.Channels.Game;
 using Domain.Event;
 using Domain.Services;
 using Domain.Time;
+using Infrastructure.Network;
 
 namespace Application
 {
@@ -35,7 +35,7 @@ namespace Application
 
         void Update()
         {
-            if (EventChannelLocator.MainContainer.gameSettings.IsPaused)
+            if (GamePauseManager.isPaused)
                 return;
             if (!NetworkServiceLocator.PlayerService.IsMasterClient)
                 return; // 只有房主执行生成逻辑
@@ -76,15 +76,15 @@ namespace Application
             if (updateSpawnIntervalCounter >= updateSpawnInterval)
             {
                 float dc = 1;
-                if (SyncedGameTimeManager.Instance.GetTotalGameTime() > 600f && SyncedGameTimeManager.Instance.GetTotalGameTime() < 1200f)
+                if (ServiceLocator.Get<SyncedGameTimeManager>().GetTotalGameTime() > 600f && ServiceLocator.Get<SyncedGameTimeManager>().GetTotalGameTime() < 1200f)
                 {
                     dc = QueryDifficultyCoefficient() * 1;
                 }
-                else if (SyncedGameTimeManager.Instance.GetTotalGameTime() > 900f)
+                else if (ServiceLocator.Get<SyncedGameTimeManager>().GetTotalGameTime() > 900f)
                 {
                     dc = QueryDifficultyCoefficient() * 2f;
                 }
-                else if (SyncedGameTimeManager.Instance.GetTotalGameTime() > 1200f)
+                else if (ServiceLocator.Get<SyncedGameTimeManager>().GetTotalGameTime() > 1200f)
                 {
                     dc = QueryDifficultyCoefficient() * 3f;
                 }
@@ -93,7 +93,7 @@ namespace Application
                     dc = QueryDifficultyCoefficient();
                 }
                 spawnInterval = 8 / dc;
-                if (SyncedGameTimeManager.Instance.GetIsGenerated())
+                if (ServiceLocator.Get<SyncedGameTimeManager>().GetIsGenerated())
                 {
                     spawnInterval = 6f;
                 }
@@ -103,7 +103,7 @@ namespace Application
 
         private void SpawnEnemy()
         {
-            if (EventChannelLocator.MainContainer.gameSettings.IsPaused)
+            if (GamePauseManager.isPaused)
                 return;
             if (!NetworkServiceLocator.PlayerService.IsMasterClient)
             {

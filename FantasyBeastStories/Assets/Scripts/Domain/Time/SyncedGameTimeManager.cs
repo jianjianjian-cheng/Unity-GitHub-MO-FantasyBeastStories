@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Application;
 using Domain.Services;
 using Domain.Time.TimeSystem;
-using Photon.Pun;
 using UnityEngine;
 using DG.Tweening;
 using Domain.Event;
@@ -49,34 +49,150 @@ namespace Domain.Time
         public Action OnGameTimeFinished;
         public Action OnGameTimeLoop;
 
-        // 单例
-        public static SyncedGameTimeManager Instance { get; private set; }
-
         private float originDifficultyCoefficient = 1f;
+
+        /// <summary>
+        /// 单例实例引用（供静态Handler方法使用）
+        /// </summary>
+        public static SyncedGameTimeManager Instance { get; private set; }
 
         void Awake()
         {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
             Instance = this;
+            ServiceLocator.Register(this);
+            DomainServiceLocator.Register(this);
+            DontDestroyOnLoad(gameObject);
         }
 
         void Start()
         {
             if (NetworkServiceLocator.PlayerService.IsMasterClient)
             {
-                NetworkServiceLocator.ObjectService.InvokeRPC(this, "RPC_SyncStartCaTime", NetworkTarget.All);
+                NetworkServiceLocator.DomainRpcService?.InvokeRPC("RPC_SyncStartCaTime", NetworkTarget.All);
             }
         }
 
-        //通知其他玩家游戏开始计时
-        [PunRPC]
-        private void RPC_SyncStartCaTime()
+        void OnEnable()
         {
-            StartGameTime();
+            if (EventChannelLocator.MainContainer.timeQueryChannel != null)
+            {
+                EventChannelLocator.MainContainer.timeQueryChannel.RegisterListener(OnTimeQuery);
+            }
+        }
+
+        void OnDisable()
+        {
+            if (EventChannelLocator.MainContainer.timeQueryChannel != null)
+            {
+                EventChannelLocator.MainContainer.timeQueryChannel.UnregisterListener(OnTimeQuery);
+            }
+        }
+
+        /// <summary>
+        /// 响应 TimeQueryEventChannelSO 的查询请求
+        /// </summary>
+        private void OnTimeQuery(TimeQueryData data)
+        {
+            data.currentTime = currentTime;
+            data.normalizedTime = GetNormalizedTime();
+            data.totalGameTime = totalGameTime;
+            data.remainingTime = GetRemainingTime();
+            data.isTimeRunning = isRunning;
+        }
+
+        // ---- 静态 Handler 方法（供 DomainRpcBridge 调用） ----
+
+        /// <summary>
+        /// 由 DomainRpcBridge.RPC_SyncStartCaTime 调用
+        /// </summary>
+        public static void HandleSyncStartCaTime()
+        {
+            if (Instance != null) Instance.StartGameTime();
+        }
+
+        /// <summary>
+        /// 由 DomainRpcBridge.RPC_OnTimeEventTriggered 调用
+        /// </summary>
+        public static void HandleOnTimeEventTriggered(string eventId, float triggerTime)
+        {
+            if (Instance == null) return;
+            if (!NetworkServiceLocator.PlayerService.IsMasterClient)
+            {
+                var timeEvent = Instance.timeEvents.Find(e => e.eventId == eventId);
+                if (timeEvent != null && !timeEvent.isTriggered)
+                {
+                    timeEvent.isTriggered = true;
+                    Instance.triggeredEventIds.Add(eventId);
+                    Instance.TriggerEvent(timeEvent);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 由 DomainRpcBridge.RPC_GameTimeFinished 调用
+        /// </summary>
+        public static void HandleGameTimeFinished()
+        {
+            if (Instance == null) return;
+            Instance.isRunning = false;
+            Instance.OnGameTimeFinished?.Invoke();
+            EventChannelLocator.MainContainer.gameStateChangeChannel.Raise(GameState.GameOver);
+        }
+
+        /// <summary>
+        /// 由 DomainRpcBridge.RPC_SyncSetTime 调用
+        /// </summary>
+        public static void HandleSyncSetTime(float time)
+        {
+            if (Instance == null) return;
+            if (!NetworkServiceLocator.PlayerService.IsMasterClient)
+            {
+                Instance.currentTime = Mathf.Clamp(time, 0, Instance.totalGameTime);
+            }
+        }
+
+        /// <summary>
+        /// 由 DomainRpcBridge.RPC_SyncStartTime 调用
+        /// </summary>
+        public static void HandleSyncStartTime()
+        {
+            if (Instance == null) return;
+            if (!NetworkServiceLocator.PlayerService.IsMasterClient)
+            {
+                Instance.isRunning = true;
+                EventChannelLocator.MainContainer.timeStartedChannel.Raise();
+            }
+        }
+
+        /// <summary>
+        /// 由 DomainRpcBridge.RPC_SyncPauseTime 调用
+        /// </summary>
+        public static void HandleSyncPauseTime()
+        {
+            if (Instance == null) return;
+            if (!NetworkServiceLocator.PlayerService.IsMasterClient)
+            {
+                Instance.isRunning = false;
+                EventChannelLocator.MainContainer.timePausedChannel.Raise();
+            }
+        }
+
+        /// <summary>
+        /// 由 DomainRpcBridge.RPC_SyncResetTime 调用
+        /// </summary>
+        public static void HandleSyncResetTime()
+        {
+            if (Instance == null) return;
+            if (!NetworkServiceLocator.PlayerService.IsMasterClient)
+            {
+                Instance.currentTime = 0f;
+                Instance.triggeredEventIds.Clear();
+                foreach (var evt in Instance.timeEvents)
+                {
+                    evt.isTriggered = false;
+                }
+                EventChannelLocator.MainContainer.timeResetChannel.Raise();
+            }
         }
 
         void Update()
@@ -85,7 +201,6 @@ namespace Domain.Time
                 return;
 
             var playerService = NetworkServiceLocator.PlayerService;
-            var objectService = NetworkServiceLocator.ObjectService;
 
             // 时间更新逻辑
             float deltaTime = UnityEngine.Time.deltaTime;
@@ -114,7 +229,7 @@ namespace Domain.Time
 
                     if (playerService.IsConnectedAndInRoom && playerService.IsMasterClient && isSynced)
                     {
-                        objectService.InvokeRPC(this, "RPC_SyncResetTime", NetworkTarget.All);
+                        NetworkServiceLocator.DomainRpcService?.InvokeRPC("RPC_SyncResetTime", NetworkTarget.All);
                     }
                 }
                 else
@@ -125,7 +240,7 @@ namespace Domain.Time
 
                     if (playerService.IsConnectedAndInRoom && playerService.IsMasterClient && isSynced)
                     {
-                        objectService.InvokeRPC(this, "RPC_GameTimeFinished", NetworkTarget.All);
+                        NetworkServiceLocator.DomainRpcService?.InvokeRPC("RPC_GameTimeFinished", NetworkTarget.All);
                     }
                 }
             }
@@ -160,7 +275,6 @@ namespace Domain.Time
         void CheckAndTriggerEvents()
         {
             var playerService = NetworkServiceLocator.PlayerService;
-            var objectService = NetworkServiceLocator.ObjectService;
 
             foreach (var timeEvent in timeEvents)
             {
@@ -181,8 +295,7 @@ namespace Domain.Time
 
                         if (playerService.IsConnectedAndInRoom && playerService.IsMasterClient && isSynced)
                         {
-                            objectService.InvokeRPC(
-                                this,
+                            NetworkServiceLocator.DomainRpcService?.InvokeRPC(
                                 "RPC_OnTimeEventTriggered",
                                 NetworkTarget.All,
                                 timeEvent.eventId,
@@ -211,115 +324,6 @@ namespace Domain.Time
             EventChannelLocator.MainContainer.timeEventChannel.Raise(args);
         }
 
-        #region PUN2 网络同步
-
-        [PunRPC]
-        void RPC_OnTimeEventTriggered(string eventId, float triggerTime, PhotonMessageInfo info)
-        {
-            if (!NetworkServiceLocator.PlayerService.IsMasterClient)
-            {
-                var timeEvent = timeEvents.Find(e => e.eventId == eventId);
-                if (timeEvent != null && !timeEvent.isTriggered)
-                {
-                    timeEvent.isTriggered = true;
-                    triggeredEventIds.Add(eventId);
-                    TriggerEvent(timeEvent);
-                }
-            }
-        }
-
-        [PunRPC]
-        void RPC_GameTimeFinished(PhotonMessageInfo info)
-        {
-            isRunning = false;
-            OnGameTimeFinished?.Invoke();
-            EventChannelLocator.MainContainer.gameStateChangeChannel.Raise(GameState.GameOver);
-        }
-
-        [PunRPC]
-        void RPC_SyncSetTime(float time, PhotonMessageInfo info)
-        {
-            if (!NetworkServiceLocator.PlayerService.IsMasterClient)
-            {
-                currentTime = Mathf.Clamp(time, 0, totalGameTime);
-            }
-        }
-
-        [PunRPC]
-        void RPC_SyncStartTime(PhotonMessageInfo info)
-        {
-            if (!NetworkServiceLocator.PlayerService.IsMasterClient)
-            {
-                isRunning = true;
-                EventChannelLocator.MainContainer.timeStartedChannel.Raise();
-            }
-        }
-
-        [PunRPC]
-        void RPC_SyncPauseTime(PhotonMessageInfo info)
-        {
-            if (!NetworkServiceLocator.PlayerService.IsMasterClient)
-            {
-                isRunning = false;
-                EventChannelLocator.MainContainer.timePausedChannel.Raise();
-            }
-        }
-
-        [PunRPC]
-        void RPC_SyncResetTime(PhotonMessageInfo info)
-        {
-            if (!NetworkServiceLocator.PlayerService.IsMasterClient)
-            {
-                currentTime = 0f;
-                triggeredEventIds.Clear();
-                foreach (var evt in timeEvents)
-                {
-                    evt.isTriggered = false;
-                }
-                EventChannelLocator.MainContainer.timeResetChannel.Raise();
-            }
-        }
-
-        [PunRPC]
-        void RPC_SyncBossUI(float bossHealth)
-        {
-
-        }
-
-        public void InitializeBossUI(float maxHealth, string bossName)
-        {
-            var bossHPUI = GameObject.Find("BossHPUI");
-            if (bossHPUI != null)
-            {
-                bossHPUI.SetActive(true);
-                var slider = bossHPUI.GetComponentInChildren<UnityEngine.UI.Slider>();
-                if (slider != null)
-                {
-                    slider.maxValue = maxHealth;
-                    slider.value = maxHealth;
-                }
-                var nameText = bossHPUI.GetComponentInChildren<TMPro.TextMeshProUGUI>();
-                if (nameText != null)
-                {
-                    nameText.text = bossName;
-                }
-            }
-        }
-
-        public void UpdateHPUI(float currentHealth)
-        {
-            var bossHPUI = GameObject.Find("BossHPUI");
-            if (bossHPUI != null)
-            {
-                var slider = bossHPUI.GetComponentInChildren<UnityEngine.UI.Slider>();
-                if (slider != null)
-                {
-                    slider.value = currentHealth;
-                }
-            }
-        }
-        #endregion
-
         #region 有关于与时间相关的游戏机制
         private void GenerateFinalBoss(string name)
         {
@@ -334,14 +338,13 @@ namespace Domain.Time
         public void StartGameTime()
         {
             var playerService = NetworkServiceLocator.PlayerService;
-            var objectService = NetworkServiceLocator.ObjectService;
 
             if (!playerService.IsConnectedAndInRoom || playerService.IsMasterClient || !isSynced)
             {
                 isRunning = true;
                 if (playerService.IsConnectedAndInRoom && playerService.IsMasterClient && isSynced)
                 {
-                    objectService.InvokeRPC(this, "RPC_SyncStartTime", NetworkTarget.Others);
+                    NetworkServiceLocator.DomainRpcService?.InvokeRPC("RPC_SyncStartTime", NetworkTarget.Others);
                 }
                 EventChannelLocator.MainContainer.timeStartedChannel.Raise();
             }
@@ -350,14 +353,13 @@ namespace Domain.Time
         public void PauseGameTime()
         {
             var playerService = NetworkServiceLocator.PlayerService;
-            var objectService = NetworkServiceLocator.ObjectService;
 
             if (!playerService.IsConnectedAndInRoom || playerService.IsMasterClient || !isSynced)
             {
                 isRunning = false;
                 if (playerService.IsConnectedAndInRoom && playerService.IsMasterClient && isSynced)
                 {
-                    objectService.InvokeRPC(this, "RPC_SyncPauseTime", NetworkTarget.Others);
+                    NetworkServiceLocator.DomainRpcService?.InvokeRPC("RPC_SyncPauseTime", NetworkTarget.Others);
                 }
                 EventChannelLocator.MainContainer.timePausedChannel.Raise();
             }
@@ -368,7 +370,6 @@ namespace Domain.Time
         public void ResetGameTime()
         {
             var playerService = NetworkServiceLocator.PlayerService;
-            var objectService = NetworkServiceLocator.ObjectService;
 
             if (!playerService.IsConnectedAndInRoom || playerService.IsMasterClient || !isSynced)
             {
@@ -381,7 +382,7 @@ namespace Domain.Time
 
                 if (playerService.IsConnectedAndInRoom && playerService.IsMasterClient && isSynced)
                 {
-                    objectService.InvokeRPC(this, "RPC_SyncResetTime", NetworkTarget.All);
+                    NetworkServiceLocator.DomainRpcService?.InvokeRPC("RPC_SyncResetTime", NetworkTarget.All);
                 }
                 EventChannelLocator.MainContainer.timeResetChannel.Raise();
             }
@@ -390,7 +391,6 @@ namespace Domain.Time
         public void SetTime(float time)
         {
             var playerService = NetworkServiceLocator.PlayerService;
-            var objectService = NetworkServiceLocator.ObjectService;
 
             time = Mathf.Clamp(time, 0f, totalGameTime);
             if (!playerService.IsConnectedAndInRoom || playerService.IsMasterClient || !isSynced)
@@ -398,7 +398,7 @@ namespace Domain.Time
                 currentTime = time;
                 if (playerService.IsConnectedAndInRoom && playerService.IsMasterClient && isSynced)
                 {
-                    objectService.InvokeRPC(this, "RPC_SyncSetTime", NetworkTarget.Others, time);
+                    NetworkServiceLocator.DomainRpcService?.InvokeRPC("RPC_SyncSetTime", NetworkTarget.Others, time);
                 }
             }
         }

@@ -61,6 +61,34 @@ namespace Infrastructure.Network
             var service = PlayerService;
             if (service == null) return;
             service.NotifyLocalJoinedRoom();
+
+            // 加入房间后，为三个 RPC Bridge 分配 PhotonView View ID
+            // 它们在 BeforeSceneLoad 时用 new GameObject() 创建，当时 Photon 未连接，View ID 为 0
+            AllocateBridgeViewIDs();
+        }
+
+        /// <summary>
+        /// 为 AppRpcBridge / DomainRpcBridge / PresentationRpcBridge 分配 View ID
+        /// 使它们能通过 PhotonView.RPC() 正常调用
+        /// </summary>
+        private static void AllocateBridgeViewIDs()
+        {
+            string[] bridgeNames = { "AppRpcBridge", "DomainRpcBridge", "PresentationRpcBridge" };
+            foreach (var name in bridgeNames)
+            {
+                var go = GameObject.Find(name);
+                if (go != null)
+                {
+                    var pv = go.GetComponent<PhotonView>();
+                    if (pv != null && pv.ViewID == 0)
+                    {
+                        if (PhotonNetwork.AllocateViewID(pv))
+                            Debug.Log($"[PhotonCallbackBridge] 已为 {name} 分配 View ID: {pv.ViewID}");
+                        else
+                            Debug.LogWarning($"[PhotonCallbackBridge] 为 {name} 分配 View ID 失败");
+                    }
+                }
+            }
         }
     }
 }

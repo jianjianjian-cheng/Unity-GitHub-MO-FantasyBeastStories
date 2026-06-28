@@ -6038,7 +6038,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 716b9ed618ba2564daf9f0be9ec36ea5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Id: 2
+  id: 2
   isEmpty: 1
   spawnFx: {fileID: 0}
 --- !u!1 &71803785
@@ -6706,7 +6706,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 716b9ed618ba2564daf9f0be9ec36ea5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Id: 1
+  id: 1
   isEmpty: 1
   spawnFx: {fileID: 0}
 --- !u!1001 &128163066
@@ -53166,18 +53166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 457e349b33bff8e46aa98d67eeb1160c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testPrefab: {fileID: 0}
-  ImpactCannonCommonPrefab: {fileID: 6703064352361486596, guid: b871e56a3d277c942a360caf1c06a2b2, type: 3}
-  ImpactCannonHitCommonPrefab: {fileID: 5112403345868107898, guid: 6f34ef0d986e9db4199cf75805f79753, type: 3}
-  IImpactCannonHitLightenPrefab: {fileID: 743576573993576157, guid: 57a0a59dae22bbf46904ae8c7a63670d, type: 3}
-  ImpactCannonLightenPrefab: {fileID: 4717974646612442227, guid: de01ba9d2b8bef342b9068f5eb3264ab, type: 3}
-  ImpactCannonWinterPrefab: {fileID: 6980703490817345712, guid: 577b09a2f221f0d45af3bbc26432a16b, type: 3}
-  ImpactCannonHitWinterPrefab: {fileID: 450033167261818607, guid: 9fe86f2f5bb8d6449a5014493dd002c9, type: 3}
-  ImpactCannonGrassPrefab: {fileID: 1259395337761259682, guid: 0266abb1138817747bcb23e85063a8d0, type: 3}
-  ImpactCannonHitGrassPrefab: {fileID: 141618438410259909, guid: d82118f277b2b724a94d1620fa87ff5c, type: 3}
-  ImpactCannonTriggerPrefab: {fileID: 2367065165679467529, guid: 2342899d2b649dd45bb301e1919c37e8, type: 3}
-  FireFirePrefab: {fileID: 0}
-  DamageNumPrefab: {fileID: 5479169006107287667, guid: 50bb26c31a111ad4397535e404c3b404, type: 3}
+  poolConfig: {fileID: 11400000, guid: fdfb0200307230d47b608637357e1672, type: 2}
 --- !u!1001 &1042061563
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -65718,7 +65707,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 716b9ed618ba2564daf9f0be9ec36ea5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Id: 0
+  id: 0
   isEmpty: 1
   spawnFx: {fileID: 0}
 --- !u!1001 &1179084943
@@ -136820,7 +136809,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 716b9ed618ba2564daf9f0be9ec36ea5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Id: 3
+  id: 3
   isEmpty: 1
   spawnFx: {fileID: 0}
 --- !u!1 &2144491489

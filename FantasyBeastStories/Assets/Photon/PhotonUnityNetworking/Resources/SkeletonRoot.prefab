@@ -597,12 +597,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 779225e3e6d3f0b41bc052dda7b5a130, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyData:
+    currentState: 0
+    isInitialized: 0
   damageEventChannel: {fileID: 11400000, guid: 9d6c4e0be67ba6c42a5c60e91040904e, type: 2}
   _network: {fileID: 6823781936261374293}
   animator: {fileID: 3202466513927889513}
   rb: {fileID: 2424846866186777879}
   PlayerTarget: {fileID: 0}
-  currentState: 0
   attackDamage: 10
   attackCooldown: 1.5
   playerLayer:
@@ -631,7 +633,7 @@ MonoBehaviour:
     SynchronizeType: 2
     Name: die
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: ReStart
   m_SynchronizeLayers:
   - SynchronizeType: 2

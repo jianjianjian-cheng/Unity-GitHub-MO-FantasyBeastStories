@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Application; // TODO: GamePauseManager.isPaused 移到事件通道后移除
 using Domain.Event;
 using Domain.Event.Channels.Game;
-using Domain.Time;
-using Domain.Manager;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -52,7 +51,7 @@ namespace Domain.Enemy
         protected override void Update()
         {
             base.Update();
-            if (EventChannelLocator.MainContainer.gameSettings.IsPaused || enemyData.currentState == EnemyState.Die)
+            if (GamePauseManager.isPaused || enemyData.currentState == EnemyState.Die)
             {
                 navMeshAgent.isStopped = true;
                 return;
@@ -119,20 +118,24 @@ namespace Domain.Enemy
                 navMeshAgent.speed = enemyData.attribute.moveSpeed;
                 navMeshAgent.updatePosition = true;
             }
-            //根据游戏难度更新最大生命值
-            if (SyncedGameTimeManager.Instance != null && SyncedGameTimeManager.Instance.GetCurrentTime() > 600f && SyncedGameTimeManager.Instance.GetCurrentTime() < 900f)
+            //根据游戏难度更新最大生命值（通过事件通道查询当前时间）
+            var timeQuery = new TimeQueryData();
+            EventChannelLocator.MainContainer.timeQueryChannel?.Query(timeQuery);
+            float currentTime = timeQuery.currentTime;
+
+            if (currentTime > 600f && currentTime < 900f)
             {
                 enemyData.attribute.maxHealth = enemyData.attribute.maxHealth * (QueryDifficultyCoefficient() + 2.5f);
             }
-            else if (SyncedGameTimeManager.Instance != null && SyncedGameTimeManager.Instance.GetCurrentTime() > 900f && SyncedGameTimeManager.Instance.GetCurrentTime() < 1200f)
+            else if (currentTime > 900f && currentTime < 1200f)
             {
                 enemyData.attribute.maxHealth = enemyData.attribute.maxHealth * (QueryDifficultyCoefficient() + 3.5f);
             }
-            else if (SyncedGameTimeManager.Instance != null && SyncedGameTimeManager.Instance.GetCurrentTime() > 1200f)
+            else if (currentTime > 1200f)
             {
                 enemyData.attribute.maxHealth = enemyData.attribute.maxHealth * (QueryDifficultyCoefficient() + 4.5f);
             }
-            else if (SyncedGameTimeManager.Instance != null && SyncedGameTimeManager.Instance.GetCurrentTime() > 300f && SyncedGameTimeManager.Instance.GetCurrentTime() < 600f)
+            else if (currentTime > 300f && currentTime < 600f)
             {
                 enemyData.attribute.maxHealth = enemyData.attribute.maxHealth * QueryDifficultyCoefficient();
             }
@@ -158,7 +161,7 @@ namespace Domain.Enemy
                 return;
 
             // 暂停时停止移动
-            if (EventChannelLocator.MainContainer.gameSettings.IsPaused)
+            if (GamePauseManager.isPaused)
             {
                 navMeshAgent.isStopped = true;
                 return;

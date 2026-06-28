@@ -1,12 +1,14 @@
+using Domain.Event;
+using Domain.Event.Channels.Game;
+using Domain.Time.TimeSystem;
 using UnityEngine;
 using UnityEngine.UI;
-using Domain.Time;
 
 namespace Presentation.UI
 {
     /// <summary>
     /// 时间进度条UI：显示游戏时间进度
-    /// 从 SyncedGameTimeManager 获取时间数据并更新界面
+    /// 通过 TimeEventChannelSO 订阅时间更新，不直接依赖 Domain 层 MonoBehaviour
     /// </summary>
     public class TimeProgressUI : MonoBehaviour
     {
@@ -17,16 +19,18 @@ namespace Presentation.UI
         [SerializeField]
         private Text timeText;
 
+        private float totalGameTime = 0f;
         private bool isSubscribed = false;
+        private bool isInitialized = false;
 
         void OnEnable()
         {
-            TrySubscribe();
+            SubscribeToTimeChannel();
         }
 
         void OnDisable()
         {
-            Unsubscribe();
+            UnsubscribeFromTimeChannel();
         }
 
         void Start()
@@ -44,65 +48,75 @@ namespace Presentation.UI
                 timeProgressSlider.minValue = 0f;
                 timeProgressSlider.maxValue = 1f;
             }
-
-            // 如果管理器已经存在，立即刷新一次
-            if (SyncedGameTimeManager.Instance != null)
-            {
-                UpdateTimeProgress(SyncedGameTimeManager.Instance.GetNormalizedTime() *
-                                   SyncedGameTimeManager.Instance.GetTotalGameTime());
-            }
         }
 
         void Update()
         {
-            // 持续尝试订阅，直到 SyncedGameTimeManager 就绪
             if (!isSubscribed)
             {
-                TrySubscribe();
+                SubscribeToTimeChannel();
+            }
+            if (!isInitialized)
+            {
+                QueryTotalGameTime();
             }
         }
 
-        private void TrySubscribe()
+        private void SubscribeToTimeChannel()
         {
             if (isSubscribed) return;
-            if (SyncedGameTimeManager.Instance == null) return;
+            if (EventChannelLocator.MainContainer?.timeEventChannel == null) return;
 
-            SyncedGameTimeManager.Instance.OnTimeUpdated += UpdateTimeProgress;
+            EventChannelLocator.MainContainer.timeEventChannel.RegisterListener(OnTimeUpdated);
             isSubscribed = true;
 
-            // 订阅成功时立即刷新一次
-            UpdateTimeProgress(SyncedGameTimeManager.Instance.GetNormalizedTime() *
-                               SyncedGameTimeManager.Instance.GetTotalGameTime());
-
-            Debug.Log("[TimeProgressUI] 已订阅 SyncedGameTimeManager 时间更新");
+            Debug.Log("[TimeProgressUI] 已订阅 TimeEventChannelSO");
         }
 
-        private void Unsubscribe()
+        private void UnsubscribeFromTimeChannel()
         {
             if (!isSubscribed) return;
-            if (SyncedGameTimeManager.Instance != null)
+            if (EventChannelLocator.MainContainer?.timeEventChannel != null)
             {
-                SyncedGameTimeManager.Instance.OnTimeUpdated -= UpdateTimeProgress;
+                EventChannelLocator.MainContainer.timeEventChannel.UnregisterListener(OnTimeUpdated);
             }
             isSubscribed = false;
         }
 
-        private void UpdateTimeProgress(float currentTime)
+        private void QueryTotalGameTime()
         {
-            if (timeProgressSlider != null && SyncedGameTimeManager.Instance != null)
+            if (EventChannelLocator.MainContainer?.timeQueryChannel == null) return;
+
+            var query = new TimeQueryData();
+            EventChannelLocator.MainContainer.timeQueryChannel.Query(query);
+            if (query.totalGameTime > 0f)
             {
-                timeProgressSlider.value = SyncedGameTimeManager.Instance.GetNormalizedTime();
+                totalGameTime = query.totalGameTime;
+                isInitialized = true;
+            }
+        }
+
+        private void OnTimeUpdated(TimeEventArgs args)
+        {
+            UpdateTimeDisplay(args.currentTime);
+        }
+
+        private void UpdateTimeDisplay(float currentTime)
+        {
+            float normalizedTime = totalGameTime > 0f ? currentTime / totalGameTime : 0f;
+            float remainingTime = Mathf.Max(0f, totalGameTime - currentTime);
+
+            if (timeProgressSlider != null)
+            {
+                timeProgressSlider.value = normalizedTime;
             }
 
-            if (timeText != null && SyncedGameTimeManager.Instance != null)
+            if (timeText != null)
             {
-                float total = SyncedGameTimeManager.Instance.GetTotalGameTime();
-                float remaining = SyncedGameTimeManager.Instance.GetRemainingTime();
-
                 int curMinutes = Mathf.FloorToInt(currentTime / 60);
                 int curSeconds = Mathf.FloorToInt(currentTime % 60);
-                int remMinutes = Mathf.FloorToInt(remaining / 60);
-                int remSeconds = Mathf.FloorToInt(remaining % 60);
+                int remMinutes = Mathf.FloorToInt(remainingTime / 60);
+                int remSeconds = Mathf.FloorToInt(remainingTime % 60);
 
                 timeText.text = string.Format(
                     "{0}:{1:D2} / {2}:{3:D2}",

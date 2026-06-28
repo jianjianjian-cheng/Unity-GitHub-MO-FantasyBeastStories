@@ -2361,10 +2361,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2009046411}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 275, y: -160}
-  m_SizeDelta: {x: 550, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &276209209
 MonoBehaviour:
@@ -2419,13 +2419,14 @@ GameObject:
   - component: {fileID: 288026086}
   - component: {fileID: 288026088}
   - component: {fileID: 288026087}
+  - component: {fileID: 288026089}
   m_Layer: 5
   m_Name: CharactorPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &288026086
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2488,6 +2489,29 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 288026085}
   m_CullTransparentMesh: 1
+--- !u!114 &288026089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 288026085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01338ca976e1c834aaa8fca504c033d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screenId: CharactorPanel
+  defaultLayer: 1
+  useMask: 1
+  closeOnEsc: 1
+  destroyOnClose: 0
+  openAnimation: {fileID: 11400000, guid: e431699bc2e9d9a41ba02e3aa6fb9210, type: 2}
+  closeAnimation: {fileID: 0}
+  nextCharacterButton: {fileID: 791935803}
+  previousCharacterButton: {fileID: 985434072}
+  SwitchButton: {fileID: 2075080668}
+  CharactorShowPosition: {fileID: 1104526004}
 --- !u!1001 &288200400
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2641,6 +2665,7 @@ GameObject:
   - component: {fileID: 297506302}
   - component: {fileID: 297506301}
   - component: {fileID: 297506300}
+  - component: {fileID: 297506304}
   m_Layer: 5
   m_Name: LobbyCanvas
   m_TagString: Untagged
@@ -2738,6 +2763,34 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &297506304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 297506299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 235cfce03ec8cfc49abd72c5cd87d5d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screenId: LobbyCanvas
+  defaultLayer: 1
+  useMask: 1
+  closeOnEsc: 1
+  destroyOnClose: 0
+  openAnimation: {fileID: 0}
+  closeAnimation: {fileID: 0}
+  postProcessVolume: {fileID: 935035928}
+  lobbyNavButton: {fileID: 894045889}
+  characterNavButton: {fileID: 1469920214}
+  runeNavButton: {fileID: 1680512852}
+  missionNavButton: {fileID: 445362469}
+  startButton: {fileID: 0}
+  exitRoomButton: {fileID: 0}
+  runeSlot1Button: {fileID: 0}
+  runeSlot2Button: {fileID: 0}
 --- !u!1001 &313247339
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3392,7 +3445,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lookAt: {fileID: 1381270530}
   distance: 5
-  rotationSpeed: 30
+  rotationSpeed: 5
   requireMouseButton: 1
 --- !u!1 &343169683
 GameObject:
@@ -7967,7 +8020,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9704e49c1b49e8d4bb6f7e142d7b21df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EventName: OnReceiveCard_WizardBoy
   sceneIndex: 2
   isReady: 0
   spawnPoints: []
@@ -7985,24 +8037,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1b2c3d4e5f678901234567890123456, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  exitRoomButton: {fileID: 0}
+  runeButton: {fileID: 0}
+  RunePanel: {fileID: 0}
+  runeList: []
+  EquipButton: {fileID: 0}
+  currentEquippedRuneIds: 0000000000000000
+  MassionButton: {fileID: 0}
+  nameUIText: {fileID: 0}
+  startButton: {fileID: 0}
+  CharactorPanel: {fileID: 0}
+  PostProcessVolume: {fileID: 0}
   lobbyButton: {fileID: 0}
   characterButton: {fileID: 0}
-  runeButton: {fileID: 0}
-  MassionButton: {fileID: 0}
-  startButton: {fileID: 0}
-  exitRoomButton: {fileID: 0}
-  nameUIText: {fileID: 0}
-  PostProcessVolume: {fileID: 0}
-  CharactorPanel: {fileID: 0}
-  CharactorIll: {fileID: 0}
-  CharactorShowPosition: {fileID: 0}
-  nextCharacterButton: {fileID: 0}
-  previousCharacterButton: {fileID: 0}
-  SwitchButton: {fileID: 0}
-  RunePanel: {fileID: 0}
-  EquipButton: {fileID: 0}
   RuneIcon_1: {fileID: 0}
   RuneIcon_2: {fileID: 0}
+  selectedRuneIcon: {fileID: 0}
+  selectedRuneListItem: {fileID: 0}
+  selectedButtonImage: {fileID: 0}
+  defaultButtonImage: {fileID: 0}
+  isReady: 0
 --- !u!1 &791935803
 GameObject:
   m_ObjectHideFlags: 0
@@ -10943,10 +10997,10 @@ RectTransform:
   - {fileID: 296904214}
   m_Father: {fileID: 343169684}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 300, y: -90}
-  m_SizeDelta: {x: 180, y: 180}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1122843130
 MonoBehaviour:
@@ -11844,13 +11898,14 @@ GameObject:
   - component: {fileID: 1195601292}
   - component: {fileID: 1195601294}
   - component: {fileID: 1195601293}
+  - component: {fileID: 1195601295}
   m_Layer: 5
   m_Name: RunePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1195601292
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11910,6 +11965,29 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1195601291}
   m_CullTransparentMesh: 1
+--- !u!114 &1195601295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1195601291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73e7f25ad65e3ce48a45e34d35a87516, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screenId: RunePanel
+  defaultLayer: 1
+  useMask: 1
+  closeOnEsc: 1
+  destroyOnClose: 0
+  openAnimation: {fileID: 11400000, guid: e431699bc2e9d9a41ba02e3aa6fb9210, type: 2}
+  closeAnimation: {fileID: 0}
+  equipButton: {fileID: 1911066519}
+  runeSlotList:
+  - {fileID: 2144434433}
+  - {fileID: 1122843128}
 --- !u!1001 &1207220881
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14248,7 +14326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 716b9ed618ba2564daf9f0be9ec36ea5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Id: 3
+  id: 3
   isEmpty: 1
   spawnFx: {fileID: 0}
 --- !u!65 &1444982383
@@ -18412,7 +18490,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 716b9ed618ba2564daf9f0be9ec36ea5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Id: 1
+  id: 1
   isEmpty: 1
   spawnFx: {fileID: 0}
 --- !u!65 &1822684968
@@ -18507,7 +18585,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 716b9ed618ba2564daf9f0be9ec36ea5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Id: 0
+  id: 0
   isEmpty: 1
   spawnFx: {fileID: 0}
 --- !u!65 &1823661738
@@ -19846,50 +19924,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6392624678508591806, guid: 826b2d236bb0c0549bd6f5a07bc72b71, type: 3}
   m_PrefabInstance: {fileID: 1948966542}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1962218858
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1962218860}
-  - component: {fileID: 1962218859}
-  m_Layer: 0
-  m_Name: EventManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &1962218859
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1962218858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 511b2b432ee689340a0e1f28fe04d8e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1962218860
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1962218858}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.1294375, y: 4.808058, z: 0.5806575}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1965858698
 GameObject:
   m_ObjectHideFlags: 0
@@ -20276,7 +20310,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 67.9}
-  m_SizeDelta: {x: 550, y: 210}
+  m_SizeDelta: {x: 550, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2009046412
 MonoBehaviour:
@@ -21442,7 +21476,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 716b9ed618ba2564daf9f0be9ec36ea5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Id: 2
+  id: 2
   isEmpty: 1
   spawnFx: {fileID: 0}
 --- !u!65 &2101048671
@@ -21565,10 +21599,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2009046411}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 275, y: -50}
-  m_SizeDelta: {x: 550, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2104679765
 MonoBehaviour:
@@ -22021,10 +22055,10 @@ RectTransform:
   - {fileID: 154867837}
   m_Father: {fileID: 343169684}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 90, y: -90}
-  m_SizeDelta: {x: 180, y: 180}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2144434435
 MonoBehaviour:
@@ -22563,7 +22597,6 @@ SceneRoots:
   - {fileID: 762411072}
   - {fileID: 297506303}
   - {fileID: 1307942175}
-  - {fileID: 1962218860}
   - {fileID: 2043892764}
   - {fileID: 630458795}
   - {fileID: 935035929}

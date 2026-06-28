@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Domain.Manager;
 using Domain.Combat.Trigger;
 using UnityEngine;
 using Domain.Character;

@@ -3,7 +3,6 @@ using Domain.Event;
 using Domain.Event.Channels.Game;
 using Domain.Event.Channels.General;
 using Domain.Event.Channels.Task;
-using Domain.Manager;
 using Domain.Player;
 using Domain.Services;
 using Domain.Task;

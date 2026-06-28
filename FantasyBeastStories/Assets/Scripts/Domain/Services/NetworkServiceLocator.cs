@@ -4,6 +4,9 @@ namespace Domain.Services
     {
         private static INetworkPlayerService _playerService;
         private static INetworkObjectService _objectService;
+        private static IObjectPoolService _objectPoolService;
+        private static IGameActionService _gameActionService;
+        private static IDomainRpcService _domainRpcService;
 
         public static INetworkPlayerService PlayerService
         {
@@ -29,6 +32,42 @@ namespace Domain.Services
             }
         }
 
+        public static IObjectPoolService ObjectPoolService
+        {
+            get
+            {
+                if (_objectPoolService == null)
+                {
+                    UnityEngine.Debug.LogError("[NetworkServiceLocator] IObjectPoolService 未注册。请在游戏启动时调用 RegisterObjectPoolService() 注册对象池服务");
+                }
+                return _objectPoolService;
+            }
+        }
+
+        public static IGameActionService GameActionService
+        {
+            get
+            {
+                if (_gameActionService == null)
+                {
+                    UnityEngine.Debug.LogError("[NetworkServiceLocator] IGameActionService 未注册。请在游戏启动时调用 RegisterGameActionService() 注册游戏动作服务");
+                }
+                return _gameActionService;
+            }
+        }
+
+        public static IDomainRpcService DomainRpcService
+        {
+            get
+            {
+                if (_domainRpcService == null)
+                {
+                    UnityEngine.Debug.LogError("[NetworkServiceLocator] IDomainRpcService 未注册。请在游戏启动时调用 RegisterDomainRpcService() 注册DomainRPC服务");
+                }
+                return _domainRpcService;
+            }
+        }
+
         public static bool IsInitialized => _playerService != null && _objectService != null;
 
         public static void Register(INetworkPlayerService playerService, INetworkObjectService objectService)
@@ -36,6 +75,24 @@ namespace Domain.Services
             _playerService = playerService;
             _objectService = objectService;
             UnityEngine.Debug.Log("[NetworkServiceLocator] 网络服务注册完成");
+        }
+
+        public static void RegisterObjectPoolService(IObjectPoolService objectPoolService)
+        {
+            _objectPoolService = objectPoolService;
+            UnityEngine.Debug.Log("[NetworkServiceLocator] IObjectPoolService 注册完成");
+        }
+
+        public static void RegisterGameActionService(IGameActionService gameActionService)
+        {
+            _gameActionService = gameActionService;
+            UnityEngine.Debug.Log("[NetworkServiceLocator] IGameActionService 注册完成");
+        }
+
+        public static void RegisterDomainRpcService(IDomainRpcService domainRpcService)
+        {
+            _domainRpcService = domainRpcService;
+            UnityEngine.Debug.Log("[NetworkServiceLocator] IDomainRpcService 注册完成");
         }
     }
 }

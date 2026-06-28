@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Domain.Event;
 using Domain.Pool;
 using Infrastructure.FX.ImpactCannon;
-using Domain.Manager;
 using Photon.Pun;
 using Domain.Combat.Trigger;
 using UnityEngine;

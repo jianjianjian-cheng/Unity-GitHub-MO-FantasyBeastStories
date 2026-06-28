@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Domain.Event;
 using Domain.Event.Channels;
-using Domain.Manager;
 using UnityEngine;
 
 

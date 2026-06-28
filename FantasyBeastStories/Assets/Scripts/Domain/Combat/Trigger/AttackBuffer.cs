@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Domain.Event;
-using Domain.Manager;
 
 namespace Domain.Combat.Trigger
 {

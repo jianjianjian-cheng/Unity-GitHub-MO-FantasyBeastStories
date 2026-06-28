@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using Domain.Network;
-using Photon.Pun;
+using Domain.Services;
 
 namespace Domain.Character.Pets
 {
@@ -132,12 +132,24 @@ namespace Domain.Character.Pets
 
           moveDistance = currentMoveDistance;
 
-          _network.RPC("RPC_OnPushed", NetworkTarget.All, pushDirection, moveDistance);
+          // 通过 IDomainRpcService 发送 RPC 到所有客户端
+          if (_network != null)
+          {
+            NetworkServiceLocator.DomainRpcService?.InvokeRPC(
+                "RPC_OnPushed",
+                Domain.Services.NetworkTarget.All,
+                _network.ViewID,
+                pushDirection,
+                moveDistance
+            );
+          }
         }
       }
     }
 
-    [PunRPC]
+    /// <summary>
+    /// 本地直接触发动画（非 RPC）
+    /// </summary>
     private void PlayTriggerAnimation(string triggerName)
     {
       if (animator != null)
@@ -146,8 +158,20 @@ namespace Domain.Character.Pets
       }
     }
 
-    [PunRPC]
-    void RPC_OnPushed(Vector3 pushDir, float moveDist)
+    // ---- 公共 Handler 方法（供 DomainRpcBridge 调用） ----
+
+    /// <summary>
+    /// 由 DomainRpcBridge.RPC_PlayTriggerAnimation 调用
+    /// </summary>
+    public void HandlePlayTriggerAnimation(string triggerName)
+    {
+      PlayTriggerAnimation(triggerName);
+    }
+
+    /// <summary>
+    /// 由 DomainRpcBridge.RPC_OnPushed 调用
+    /// </summary>
+    public void HandleOnPushed(Vector3 pushDir, float moveDist)
     {
       this.pushDirection = pushDir;
       this.moveDistance = moveDist;
@@ -300,11 +324,22 @@ namespace Domain.Character.Pets
 
     public void StartTransfer()
     {
-      _network.RPC("RPC_StartTransfer", Domain.Network.NetworkTarget.All);
+      if (_network != null)
+      {
+        NetworkServiceLocator.DomainRpcService?.InvokeRPC(
+            "RPC_StartTransfer",
+            Domain.Services.NetworkTarget.All,
+            _network.ViewID
+        );
+      }
     }
 
-    [PunRPC]
-    void RPC_StartTransfer()
+    // ---- 公共 Handler 方法（供 DomainRpcBridge 调用） ----
+
+    /// <summary>
+    /// 由 DomainRpcBridge.RPC_StartTransfer 调用
+    /// </summary>
+    public void HandleStartTransfer()
     {
       isTransfering = true;
       StopAllCoroutines();

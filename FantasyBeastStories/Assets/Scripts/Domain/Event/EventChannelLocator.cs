@@ -1,3 +1,4 @@
+using Application;
 using Domain.Event.Channels;
 using Domain.Event.Channels.Combat;
 using Domain.Event.Channels.Game;
@@ -17,7 +18,15 @@ namespace Domain.Event
             {
                 if (_mainContainer == null)
                 {
-                    _mainContainer = Resources.Load<EventChannelContainerSO>("EventChannels/MainEventChannels");
+                    // 优先从 ServiceLocator 获取（由 InfrastructureRegistrar 预加载注册）
+                    _mainContainer = ServiceLocator.Get<EventChannelContainerSO>();
+
+                    // 兜底：从 Resources 加载
+                    if (_mainContainer == null)
+                    {
+                        _mainContainer = Resources.Load<EventChannelContainerSO>("EventChannels/MainEventChannels");
+                    }
+
                     if (_mainContainer == null)
                     {
                         Debug.LogError("未找到 MainEventChannels 资源，请在 Resources/EventChannels 目录下创建");

@@ -1,4 +1,3 @@
-using Domain.Manager;
 using Photon.Pun;
 using UnityEngine;
 using Domain.Event;

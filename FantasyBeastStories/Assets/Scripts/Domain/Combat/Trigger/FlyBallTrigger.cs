@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Domain.Enemy;
 using Domain.Combat.FX;
-using Domain.Manager;
 using Domain.Event;
 using UnityEngine;
 

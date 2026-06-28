@@ -1,6 +1,5 @@
 using System.Collections;
 using Domain.Event;
-using Domain.Manager;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;

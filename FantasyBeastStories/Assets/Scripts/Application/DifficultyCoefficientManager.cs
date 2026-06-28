@@ -86,7 +86,7 @@ namespace Application
         /// <param name="currentTime"></param>
         public void UpdateDifficultyCoefficient(float currentTime)
         {
-            float totalTime = SyncedGameTimeManager.Instance.GetTotalGameTime();
+            float totalTime = ServiceLocator.Get<SyncedGameTimeManager>().GetTotalGameTime();
             float progress = Mathf.Clamp01(currentTime / totalTime);
             difficultyCoefficient = 1.0f + progress * 0.5f;
         }

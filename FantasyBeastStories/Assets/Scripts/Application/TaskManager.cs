@@ -6,7 +6,7 @@ using Domain.Event.Channels.Player;
 using Domain.Event.Channels.Task;
 using Domain.Services;
 using Domain.Task;
-using Photon.Pun; // 仅保留 [PunRPC] 属性引用
+using Infrastructure.Network;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -16,6 +16,7 @@ namespace Application
     {
         #region 单例模式
         public static TaskManager instance;
+        public static TaskManager Instance => instance;
 
         void Awake()
         {
@@ -67,18 +68,18 @@ namespace Application
         private void OnEnemyReported(EnemyReportData data)
         {
             if (data == null) return;
-            NetworkServiceLocator.ObjectService.InvokeRPC(this, "RPC_ReportCount", NetworkTarget.MasterClient, data.position, data.networkViewID);
+            NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "RPC_ReportCount", NetworkTarget.MasterClient, data.position, data.networkViewID);
         }
 
         private void OnTaskNoticeReceived(TaskNoticeData data)
         {
             if (data == null) return;
-            NetworkServiceLocator.ObjectService.InvokeRPC(this, "RPC_SetNotice", NetworkTarget.All, data.name, data.description, data.limitTime, data.requiredCount);
+            NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "RPC_SetNotice", NetworkTarget.All, data.name, data.description, data.limitTime, data.requiredCount);
         }
 
         public void SetNotice(string name, string description, int limitTime, int requeredCount = 1)
         {
-            NetworkServiceLocator.ObjectService.InvokeRPC(this, "RPC_SetNotice", NetworkTarget.All, name, description, limitTime, requeredCount);
+            NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "RPC_SetNotice", NetworkTarget.All, name, description, limitTime, requeredCount);
         }
 
         private void StartCountdownTime(int time)
@@ -103,36 +104,32 @@ namespace Application
                 int min = Mathf.FloorToInt(countdownTime / 60);
                 int sec = Mathf.FloorToInt(countdownTime % 60);
                 time = "剩余时间：" + $"{min:D2}:{sec:D2}";
-                NetworkServiceLocator.ObjectService.InvokeRPC(this, "RPC_UpdateAllPlayerTimeUI", NetworkTarget.All, time);
+                NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "RPC_UpdateAllPlayerTimeUI", NetworkTarget.All, time);
             }
             Debug.LogWarning("任务失败");
-            NetworkServiceLocator.ObjectService.InvokeRPC(this, "RPC_TaskFailed", NetworkTarget.All);
+            NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "RPC_TaskFailed", NetworkTarget.All);
             yield break;
         }
 
-        [PunRPC]
-        private void RPC_UpdateAllPlayerTimeUI(string time)
+        /// <summary>
+        /// 由 AppRpcBridge 在收到 RPC 后调用：更新所有玩家的任务时间 UI
+        /// </summary>
+        public static void HandleUpdateAllPlayerTimeUIRPC(string time)
         {
             EventChannelLocator.MainContainer.taskUIChannel.Raise(TaskUIUpdateData.UpdateTime(time));
         }
 
-        [PunRPC]
-        private void RPC_TaskFailed()
+        /// <summary>
+        /// 由 AppRpcBridge 在收到 RPC 后调用：任务失败
+        /// </summary>
+        public static void HandleTaskFailedRPC()
         {
-            if ((taskZone == null))
-            {
-                return;
-            }
-            Destroy(taskZone.gameObject);
+            if (Instance == null) return;
+            if (Instance.taskZone == null) return;
+            Destroy(Instance.taskZone.gameObject);
+            Instance.taskZone = null;
             EventChannelLocator.MainContainer.taskUIChannel.Raise(TaskUIUpdateData.ClearIndicator());
             EventChannelLocator.MainContainer.taskUIChannel.Raise(TaskUIUpdateData.HideNotice());
-        }
-
-        [PunRPC]
-        void RPC_SetNotice(string name, string description, int limitTime, int requeredCount)
-        {
-            EventChannelLocator.MainContainer.taskUIChannel.Raise(
-                TaskUIUpdateData.ShowNotice(name, description, limitTime, requeredCount));
         }
 
         void Notice_Data(string data)
@@ -148,7 +145,7 @@ namespace Application
             {
                 case KillTask killTask:
                     NetworkServiceLocator.ObjectService.InvokeRPC(
-                        this,
+                        AppRpcBridge.Instance,
                         "RPC_ActivateKillTask",
                         NetworkTarget.All,
                         killTask.TaskId,
@@ -159,7 +156,7 @@ namespace Application
                     break;
                 case EscortTask escortTask:
                     NetworkServiceLocator.ObjectService.InvokeRPC(
-                        this,
+                        AppRpcBridge.Instance,
                         "RPC_ActivateEscortTask",
                         NetworkTarget.All,
                         escortTask.TaskId,
@@ -173,70 +170,81 @@ namespace Application
             }
         }
 
-        [PunRPC]
-        void RPC_ActivateKillTask(string taskId, int limitTime, Vector3 ZoneCenter, int requiredKills)
+        /// <summary>
+        /// 由 AppRpcBridge 在收到 RPC 后调用：激活击杀任务
+        /// </summary>
+        public static void HandleActivateKillTaskRPC(string taskId, int limitTime, Vector3 zoneCenter, int requiredKills)
         {
+            if (Instance == null) return;
+
             if (NetworkServiceLocator.PlayerService.IsMasterClient)
             {
-                StartCountdownTime(limitTime);
+                Instance.StartCountdownTime(limitTime);
             }
-            taskZone = Instantiate(
+            Instance.taskZone = Instantiate(
                 Resources.Load<GameObject>("TaskPrefab/" + taskId),
-                ZoneCenter,
+                zoneCenter,
                 Quaternion.identity
             );
-            tasks.Clear();
+            Instance.tasks.Clear();
 
-            KillTask killTask = new KillTask(taskId, ZoneCenter, 7, requiredKills, limitTime);
-            tasks[taskId] = killTask;
+            KillTask killTask = new KillTask(taskId, zoneCenter, 7, requiredKills, limitTime);
+            Instance.tasks[taskId] = killTask;
 
-            Debug.Log($"任务{taskId}已激活，中心位置：{ZoneCenter}" + taskZone.name);
+            Debug.Log($"任务{taskId}已激活，中心位置：{zoneCenter}" + Instance.taskZone.name);
             EventChannelLocator.MainContainer.taskUIChannel.Raise(
-                TaskUIUpdateData.SetIndicator(ZoneCenter, taskId));
+                TaskUIUpdateData.SetIndicator(zoneCenter, taskId));
         }
 
-        [PunRPC]
-        void RPC_ActivateEscortTask(
+        /// <summary>
+        /// 由 AppRpcBridge 在收到 RPC 后调用：激活护送任务
+        /// </summary>
+        public static void HandleActivateEscortTaskRPC(
             string taskId,
             int limitTime,
-            Vector3 ZoneCenter,
+            Vector3 zoneCenter,
             int requiredEscorts
         )
         {
+            if (Instance == null) return;
+
             if (NetworkServiceLocator.PlayerService.IsMasterClient)
             {
-                StartCountdownTime(limitTime);
+                Instance.StartCountdownTime(limitTime);
             }
-            taskZone = Instantiate(
+            Instance.taskZone = Instantiate(
                 Resources.Load<GameObject>("TaskPrefab/" + taskId),
-                ZoneCenter,
+                zoneCenter,
                 Quaternion.identity
             );
-            tasks.Clear();
-            EscortTask escortTask = new EscortTask(taskId, ZoneCenter, 4, requiredEscorts, limitTime);
-            tasks[escortTask.TaskId] = escortTask;
-            Debug.Log($"任务{taskId}已激活，中心位置：{ZoneCenter}" + taskZone.name);
+            Instance.tasks.Clear();
+            EscortTask escortTask = new EscortTask(taskId, zoneCenter, 4, requiredEscorts, limitTime);
+            Instance.tasks[escortTask.TaskId] = escortTask;
+            Debug.Log($"任务{taskId}已激活，中心位置：{zoneCenter}" + Instance.taskZone.name);
             EventChannelLocator.MainContainer.taskUIChannel.Raise(
-                TaskUIUpdateData.SetIndicator(ZoneCenter, taskId));
+                TaskUIUpdateData.SetIndicator(zoneCenter, taskId));
         }
 
         public void ReportCount(Vector3 killPosition, int enemyViewID)
         {
-            NetworkServiceLocator.ObjectService.InvokeRPC(this, "RPC_ReportCount", NetworkTarget.MasterClient, killPosition, enemyViewID);
+            NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "RPC_ReportCount", NetworkTarget.MasterClient, killPosition, enemyViewID);
         }
 
-        [PunRPC]
-        void RPC_ReportCount(Vector3 killPosition, int enemyViewID)
+        /// <summary>
+        /// 由 AppRpcBridge 在收到 RPC 后调用：上报击杀计数
+        /// </summary>
+        public static void HandleReportCountRPC(Vector3 killPosition, int enemyViewID)
         {
+            if (Instance == null) return;
             if (!NetworkServiceLocator.PlayerService.IsMasterClient)
                 return;
 
-            if (reportedEnemies.Contains(enemyViewID))
+            if (Instance.reportedEnemies.Contains(enemyViewID))
             {
                 return;
             }
 
-            foreach (var task in tasks.Values)
+            foreach (var task in Instance.tasks.Values)
             {
                 if (task.IsCompleted)
                     continue;
@@ -247,7 +255,7 @@ namespace Application
                     if (Vector3.Distance(killPosition, task.ZoneCenter) <= task.ZoneRadius)
                     {
                         kt.CurrentKills++;
-                        reportedEnemies.Add(enemyViewID);
+                        Instance.reportedEnemies.Add(enemyViewID);
                         Debug.LogWarning(
                             $"任务{task.TaskId}击 增加1," + $"当前击杀次数：{kt.CurrentKills}"
                         );
@@ -256,7 +264,7 @@ namespace Application
                             task.IsCompleted = true;
                         }
                         NetworkServiceLocator.ObjectService.InvokeRPC(
-                            this,
+                            AppRpcBridge.Instance,
                             "RPC_UpdateProgress",
                             NetworkTarget.All,
                             task.TaskId,
@@ -273,7 +281,7 @@ namespace Application
                     if (Vector3.Distance(killPosition, task.ZoneCenter) <= task.ZoneRadius)
                     {
                         escortTask.currentEscorts++;
-                        reportedEnemies.Add(enemyViewID);
+                        Instance.reportedEnemies.Add(enemyViewID);
                         Debug.LogWarning(
                             $"任务{task.TaskId}击 增加1,"
                                 + $"当前运输机器人：{escortTask.currentEscorts}"
@@ -283,7 +291,7 @@ namespace Application
                             escortTask.IsCompleted = true;
                         }
                         NetworkServiceLocator.ObjectService.InvokeRPC(
-                            this,
+                            AppRpcBridge.Instance,
                             "RPC_UpdateProgress",
                             NetworkTarget.All,
                             task.TaskId,
@@ -297,29 +305,33 @@ namespace Application
             }
         }
 
-        [PunRPC]
-        void RPC_UpdateProgress(string taskId, int count, bool completed)
+        /// <summary>
+        /// 由 AppRpcBridge 在收到 RPC 后调用：更新任务进度
+        /// </summary>
+        public static void HandleUpdateProgressRPC(string taskId, int count, bool completed)
         {
-            if (tasks.TryGetValue(taskId, out var task))
+            if (Instance == null) return;
+
+            if (Instance.tasks.TryGetValue(taskId, out var task))
             {
                 switch (task)
                 {
                     case KillTask killTask:
                         killTask.CurrentKills = count;
                         killTask.IsCompleted = completed;
-                        OnTaskUpdated?.Invoke(task);
-                        Notice_Data($"{count}/{killTask.RequiredKills}");
+                        Instance.OnTaskUpdated?.Invoke(task);
+                        Instance.Notice_Data($"{count}/{killTask.RequiredKills}");
                         break;
                     case EscortTask escortTask:
                         escortTask.currentEscorts = count;
                         escortTask.IsCompleted = completed;
-                        OnTaskUpdated?.Invoke(task);
-                        Notice_Data($"{count}/{escortTask.requiredEscorts}");
+                        Instance.OnTaskUpdated?.Invoke(task);
+                        Instance.Notice_Data($"{count}/{escortTask.requiredEscorts}");
                         break;
                 }
 
                 if (completed)
-                    OnTaskCompleted?.Invoke(task);
+                    Instance.OnTaskCompleted?.Invoke(task);
             }
         }
 

@@ -4,9 +4,9 @@ using Domain.Character.Attribute;
 using Domain.Event;
 using Domain.Player;
 using Domain.Enemy;
-using Domain.Manager;
 using Domain.Network;
 using UnityEngine;
+using Application;
 
 namespace Domain.Combat.Trigger
 {
@@ -46,7 +46,7 @@ namespace Domain.Combat.Trigger
 
         public override void Update()
         {
-            if (EventChannelLocator.MainContainer.gameSettings.IsPaused)
+            if (GamePauseManager.isPaused)
                 return;
             if (!_network.IsMine)
             {

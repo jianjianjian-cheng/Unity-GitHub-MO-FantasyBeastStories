@@ -4,8 +4,6 @@ using System.Linq;
 using Domain.Event;
 using Domain.Player;
 using Domain.Services;
-using Infrastructure.Network;
-using Domain.Manager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -88,7 +86,7 @@ namespace Presentation.UI
       {
         if (NetworkServiceLocator.PlayerService.IsMasterClient)
         {
-          Launcher.instance.ReturnToLobby();
+          NetworkServiceLocator.ObjectPoolService.ReturnToLobby();
         }
       });
 

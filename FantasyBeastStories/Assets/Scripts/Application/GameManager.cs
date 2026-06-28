@@ -1,23 +1,20 @@
-using Infrastructure.Network;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Domain.Event;
 using Domain.Event.Channels.General;
-using Presentation.Other;
+using Domain.Services;
 using System.Collections.Generic;
 
 namespace Application
 {
-    public class GameManager : MonoBehaviour
+    public class GameManager : MonoBehaviour, ISpawnPointService
     {
-        public static bool isOpenUI = false;
-
         public int sceneIndex = 2;
         public bool isReady = false;
 
         [SerializeField]
         public GameObject[] spawnPoints = { }; // 生成点列表
-        private Dictionary<int, SpawnPoint> spawnPointDict = new Dictionary<int, SpawnPoint>();
+        private Dictionary<int, ISpawnPoint> spawnPointDict = new Dictionary<int, ISpawnPoint>();
 
         [SerializeField]
         private bool isStayLobbyInspector; // 在Inspector面板中设置的是否在大厅场景
@@ -25,21 +22,14 @@ namespace Application
         [SerializeField]
         private bool isTestInspector; // 在Inspector面板中设置的测试模式
 
-        public static GameManager instance;
-
         void Awake()
         {
+            ServiceLocator.Register(this);
+            DomainServiceLocator.Register(this);
+            DomainServiceLocator.Register<ISpawnPointService>(this);
             EventChannelLocator.MainContainer.gameSettings.IsStayLobby = isStayLobbyInspector;
             EventChannelLocator.MainContainer.gameSettings.IsTest = isTestInspector;
-            if (instance == null)
-            {
-                instance = this;
-                DontDestroyOnLoad(gameObject);
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+            DontDestroyOnLoad(gameObject);
         }
 
         void OnEnable()
@@ -69,11 +59,11 @@ namespace Application
             {
                 if (spawnPoints[i] != null)
                 {
-                    SpawnPoint sp = spawnPoints[i].GetComponent<SpawnPoint>();
+                    ISpawnPoint sp = spawnPoints[i].GetComponent<ISpawnPoint>();
                     if (sp != null)
                     {
                         spawnPointDict[sp.Id] = sp;
-                        Debug.Log($"[GameManager] 找到生成点: ID={sp.Id}, Name={sp.name}");
+                        Debug.Log($"[GameManager] 找到生成点: ID={sp.Id}, Name={spawnPoints[i].name}");
                     }
                 }
             }
@@ -86,7 +76,7 @@ namespace Application
                 if (spawnPoint == null)
                     continue;
 
-                SpawnPoint sp = spawnPoint.GetComponent<SpawnPoint>();
+                ISpawnPoint sp = spawnPoint.GetComponent<ISpawnPoint>();
                 if (sp == null)
                     continue;
 
@@ -102,7 +92,7 @@ namespace Application
         }
 
         // 根据玩家 ActorNumber 获取其当前使用的生成点
-        public SpawnPoint GetSpawnPointByPlayer(int actorNumber)
+        public ISpawnPoint GetSpawnPointByPlayer(int actorNumber)
         {
             foreach (var sp in spawnPointDict.Values)
             {
@@ -115,9 +105,9 @@ namespace Application
         }
 
         // 根据 ID 获取生成点
-        public SpawnPoint GetSpawnPointById(int id)
+        public ISpawnPoint GetSpawnPointById(int id)
         {
-            spawnPointDict.TryGetValue(id, out SpawnPoint sp);
+            spawnPointDict.TryGetValue(id, out ISpawnPoint sp);
             return sp;
         }
 
@@ -134,14 +124,14 @@ namespace Application
             {
                 case GameActionType.QuitToLobby:
                 case GameActionType.QuitToMainMenu:
-                    if (Launcher.instance != null)
-                        Launcher.instance.QuitToMainMenu();
+                    if (NetworkServiceLocator.GameActionService != null)
+                        NetworkServiceLocator.GameActionService.QuitToMainMenu();
                     break;
                 case GameActionType.SwitchCharacter:
                     break;
                 case GameActionType.SetLocalReady:
-                    if (Launcher.instance != null)
-                        Launcher.instance.SetLocalReady(true);
+                    if (NetworkServiceLocator.GameActionService != null)
+                        NetworkServiceLocator.GameActionService.SetLocalReady(true);
                     break;
                 case GameActionType.SyncAllPlayers:
                     break;
@@ -162,14 +152,5 @@ namespace Application
     {
         public const string WiZardBoy = "WizardBoyRoot";
         public const string LittleRedGirl = "LittleRedGirlRoot";
-    }
-}
-
-namespace Presentation.Lobby
-{
-    // 供 LobbyUIManager 访问的静态属性
-    public static class GameManager
-    {
-        public static bool isOpenUI = false;
     }
 }

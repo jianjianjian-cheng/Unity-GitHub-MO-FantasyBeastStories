@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f977d2908c9e7b14ea4d1ba956ba6658, type: 3}
+  m_Name: PoolConfig
+  m_EditorClassIdentifier: 
+  pools:
+  - poolName: TestPool
+    prefab: {fileID: 6980703490817345712, guid: 577b09a2f221f0d45af3bbc26432a16b, type: 3}
+    preloadCount: 0
+  - poolName: ImpactCannonCommonPool
+    prefab: {fileID: 6703064352361486596, guid: b871e56a3d277c942a360caf1c06a2b2, type: 3}
+    preloadCount: 10
+  - poolName: ImpactCannonHitCommonPool
+    prefab: {fileID: 5112403345868107898, guid: 6f34ef0d986e9db4199cf75805f79753, type: 3}
+    preloadCount: 20
+  - poolName: ImpactCannonLightenPool
+    prefab: {fileID: 4717974646612442227, guid: de01ba9d2b8bef342b9068f5eb3264ab, type: 3}
+    preloadCount: 10
+  - poolName: ImpactCannonHitLightenPool
+    prefab: {fileID: 743576573993576157, guid: 57a0a59dae22bbf46904ae8c7a63670d, type: 3}
+    preloadCount: 20
+  - poolName: ImpactCannonWinterPool
+    prefab: {fileID: 6980703490817345712, guid: 577b09a2f221f0d45af3bbc26432a16b, type: 3}
+    preloadCount: 10
+  - poolName: ImpactCannonHitWinterPool
+    prefab: {fileID: 450033167261818607, guid: 9fe86f2f5bb8d6449a5014493dd002c9, type: 3}
+    preloadCount: 20
+  - poolName: ImpactCannonGrassPool
+    prefab: {fileID: 1259395337761259682, guid: 0266abb1138817747bcb23e85063a8d0, type: 3}
+    preloadCount: 10
+  - poolName: ImpactCannonHitGrassPool
+    prefab: {fileID: 141618438410259909, guid: d82118f277b2b724a94d1620fa87ff5c, type: 3}
+    preloadCount: 20
+  - poolName: ImpactCannonTriggerPool
+    prefab: {fileID: 2367065165679467529, guid: 2342899d2b649dd45bb301e1919c37e8, type: 3}
+    preloadCount: 20
+  - poolName: FireFirePool
+    prefab: {fileID: 4717974646612442227, guid: de01ba9d2b8bef342b9068f5eb3264ab, type: 3}
+    preloadCount: 0
+  - poolName: DamageNumPool
+    prefab: {fileID: 5479169006107287667, guid: 50bb26c31a111ad4397535e404c3b404, type: 3}
+    preloadCount: 100

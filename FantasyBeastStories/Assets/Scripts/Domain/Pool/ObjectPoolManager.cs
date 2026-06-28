@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Application;
 using Domain.Event;
 using Domain.Event.Channels.General;
 using Domain.Services;
@@ -8,18 +9,14 @@ namespace Domain.Pool
 {
     public class ObjectPoolManager : MonoBehaviour
     {
-        public static ObjectPoolManager instance;
+        [SerializeField]
+        private PoolConfigSO poolConfig;
 
         void Awake()
         {
-            if (instance == null)
-            {
-                instance = this;
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+            ServiceLocator.Register(this);
+            DomainServiceLocator.Register(this);
+            DontDestroyOnLoad(gameObject);
         }
 
         void OnEnable()
@@ -57,53 +54,15 @@ namespace Domain.Pool
             new Dictionary<string, List<GameObject>>();
         private Dictionary<string, GameObject> prefabCache = new Dictionary<string, GameObject>();
 
-        [SerializeField]
-        private GameObject testPrefab;
-
-        [Header("ImpactCannon")]
-        [SerializeField]
-        //无元素
-        private GameObject ImpactCannonCommonPrefab;
-
-        [SerializeField]
-        private GameObject ImpactCannonHitCommonPrefab;
-
-        //电元素
-        [SerializeField]
-        public GameObject IImpactCannonHitLightenPrefab;
-
-        [SerializeField]
-        public GameObject ImpactCannonLightenPrefab;
-
-        //冰元素
-        [SerializeField]
-        public GameObject ImpactCannonWinterPrefab;
-
-        [SerializeField]
-        public GameObject ImpactCannonHitWinterPrefab;
-
-        //草元素
-        [SerializeField]
-        public GameObject ImpactCannonGrassPrefab;
-
-        [SerializeField]
-        public GameObject ImpactCannonHitGrassPrefab;
-
-        [SerializeField]
-        private GameObject ImpactCannonTriggerPrefab;
-
-        [SerializeField]
-        private GameObject FireFirePrefab;
-
-        [Header("伤害数字")]
-        [SerializeField]
-        private GameObject DamageNumPrefab;
-
-        private const string ImpactCannonPath = "FX/ImpactCannon/";
         private bool isPoolInitialized = false;
 
         void Start()
         {
+            if (poolConfig == null)
+            {
+                poolConfig = Resources.Load<PoolConfigSO>("Config/PoolConfig");
+            }
+
             if (EventChannelLocator.MainContainer.gameSettings.IsTest)
             {
                 InitializePool();
@@ -134,16 +93,27 @@ namespace Domain.Pool
 
         private void InitializePool()
         {
-            // 缓存预制体引用
-            CachePrefab("TestPool", testPrefab);
-            CachePrefab("ImpactCannonCommonPool", ImpactCannonCommonPrefab);
-            CachePrefab("ImpactCannonTriggerPool", ImpactCannonTriggerPrefab);
-            CachePrefab("ImpactCannonHitCommonPool", ImpactCannonHitCommonPrefab);
-            CachePrefab("DamageNumPool", DamageNumPrefab);
-            AddMultipleToPool("ImpactCannonCommonPool", ImpactCannonCommonPrefab, 10);
-            AddMultipleToPool("ImpactCannonHitCommonPool", ImpactCannonHitCommonPrefab, 20);
-            AddMultipleToPool("ImpactCannonTriggerPool", ImpactCannonTriggerPrefab, 10);
-            AddMultipleToPool("DamageNumPool", DamageNumPrefab, 100);
+            if (poolConfig == null || poolConfig.pools == null)
+            {
+                Debug.LogError("[ObjectPoolManager] PoolConfigSO 未配置");
+                return;
+            }
+
+            foreach (var entry in poolConfig.pools)
+            {
+                if (entry == null || entry.prefab == null)
+                {
+                    Debug.LogWarning($"[ObjectPoolManager] 跳过无效的池配置: {entry?.poolName ?? "null"}");
+                    continue;
+                }
+
+                CachePrefab(entry.poolName, entry.prefab);
+
+                if (entry.preloadCount > 0)
+                {
+                    AddMultipleToPool(entry.poolName, entry.prefab, entry.preloadCount);
+                }
+            }
         }
 
         private void CachePrefab(string key, GameObject prefab)
@@ -279,8 +249,6 @@ namespace Domain.Pool
         /// </summary>
         private GameObject CreateNewObject(string poolName, GameObject prefab)
         {
-            // ===== 全部使用普通 Instantiate =====
-            // 对象池中的对象不需要网络同步
             GameObject obj = UnityEngine.Object.Instantiate(prefab, transform.position, Quaternion.identity);
 
             if (obj == null)
@@ -289,7 +257,6 @@ namespace Domain.Pool
                 return null;
             }
 
-            // 命名方便调试
             obj.name = $"{prefab.name}_Pooled";
 
             return obj;
@@ -325,7 +292,6 @@ namespace Domain.Pool
             return 0;
         }
 
-        //在OnDestroy中调用，销毁所有对象池中的对象
         public void DestroyAllPools()
         {
             foreach (var pool in objectPools.Values)
@@ -343,25 +309,20 @@ namespace Domain.Pool
         }
     }
 
-    public class ObjectPoolConst
+    // ===== 向后兼容的常量引用（推荐使用 PoolConst） =====
+    public static class ObjectPoolConst
     {
-        public const string ImpactCannonCommonPool = "ImpactCannonCommonPool";
-        public const string ImpactCannonLightenPool = "ImpactCannonLightenPool";
-        public const string ImpactCannonHitCommonPool = "ImpactCannonHitCommonPool";
-        public const string ImpactCannonHitLightenPool = "ImpactCannonHitLightenPool";
-        public const string ImpactCannonWinterPool = "ImpactCannonWinterPool";
-        public const string ImpactCannonHitWinterPool = "ImpactCannonHitWinterPool";
-        public const string ImpactCannonGrassPool = "ImpactCannonGrassPool";
-        public const string ImpactCannonHitGrassPool = "ImpactCannonHitGrassPool";
-        public const string TestPool = "TestPool";
-        public const string ImpactCannonTriggerPool = "ImpactCannonTriggerPool";
-        public const string FireFirePool = "FireFirePool";
-        public const string DamageNumPool = "DamageNumPool";
-    }
-
-    public class ObjectImpactCannonPrefabName
-    {
-        public const string ImpactCannonCommon = "ImpactCannonCommon";
-        public const string ImpactCannonLighten = "ImpactCannonLighten";
+        public const string ImpactCannonCommonPool = PoolConst.ImpactCannonCommonPool;
+        public const string ImpactCannonLightenPool = PoolConst.ImpactCannonLightenPool;
+        public const string ImpactCannonHitCommonPool = PoolConst.ImpactCannonHitCommonPool;
+        public const string ImpactCannonHitLightenPool = PoolConst.ImpactCannonHitLightenPool;
+        public const string ImpactCannonWinterPool = PoolConst.ImpactCannonWinterPool;
+        public const string ImpactCannonHitWinterPool = PoolConst.ImpactCannonHitWinterPool;
+        public const string ImpactCannonGrassPool = PoolConst.ImpactCannonGrassPool;
+        public const string ImpactCannonHitGrassPool = PoolConst.ImpactCannonHitGrassPool;
+        public const string TestPool = PoolConst.TestPool;
+        public const string ImpactCannonTriggerPool = PoolConst.ImpactCannonTriggerPool;
+        public const string FireFirePool = PoolConst.FireFirePool;
+        public const string DamageNumPool = PoolConst.DamageNumPool;
     }
 }

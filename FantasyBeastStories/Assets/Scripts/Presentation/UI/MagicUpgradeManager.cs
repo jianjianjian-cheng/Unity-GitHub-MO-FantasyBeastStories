@@ -6,8 +6,6 @@ using DG.Tweening;
 using Domain.Event;
 using Domain.Event.Channels.General;
 using Domain.Event.Channels.Player;
-using Domain.Manager;
-using Photon.Pun; // 仅保留 [PunRPC] 属性引用
 using Domain.Services;
 using TMPro;
 using UnityEngine;

@@ -5,7 +5,6 @@ using Domain.Character.Attribute;
 using DG.Tweening;
 using Domain.Event;
 using Domain.Event.Channels.Player;
-using Domain.Manager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

@@ -16,57 +16,45 @@ namespace Domain.Character.Attribute
 {
     public class AttributePlayerBase
     {
-        protected bool isDead = false; //是否死亡,默认false
+        protected PlayerAttributeConfigSO config;
+
+        protected bool isDead = false;
         protected float attackPower;
-        protected float defensePower = 0; //防御伤害,默认0
-        protected float criticalMultiplier = 1.2f; //暴击倍率,默认1倍
-        protected float criticalChance = 0.2f; //暴击概率,默认20%
-        protected float maxHealth = 100f; //最大生命值,默认100
-        protected float currentHealth; //当前生命值
-        protected float moveSpeed = 2f; //移动速度,默认2f
-        protected float attackInterval = 2; //攻击间隔
-        protected float healthRecover = 0f; //生命值恢复,默认0f
-        protected float attackspeed = 100f;
-        protected int maxAttackCount = 1;
-        protected int comboCount = 1;
+        protected float defensePower;
+        protected float criticalMultiplier;
+        protected float criticalChance;
+        protected float maxHealth;
+        protected float currentHealth;
+        protected float moveSpeed;
+        protected float attackInterval;
+        protected float healthRecover;
+        protected float attackspeed;
+        protected int maxAttackCount;
+        protected int comboCount;
         protected int empowerCharge;
         protected Element currentElement = Element.Common;
 
         protected bool isSplit = false;
         protected int splitCount = 0;
 
-        public AttributePlayerBase(
-            float attackPower,
-            float defensePower,
-            float maxHealth,
-            float moveSpeed,
-            float criticalMultiplier,
-            float criticalChance
-        )
+        public AttributePlayerBase(PlayerAttributeConfigSO config)
         {
-            //初始化最大生命值为默认值
-            this.maxHealth = maxHealth;
-            //初始化当前生命值为最大生命值
-            this.currentHealth = maxHealth;
-            //初始化移动速度为默认值
-            this.moveSpeed = moveSpeed;
-            //初始化攻击伤害为默认值
-            this.attackPower = attackPower;
-            //初始化防御伤害为默认值
-            this.defensePower = defensePower;
-            //初始化暴击倍率为默认值
-            this.criticalMultiplier = criticalMultiplier;
-            //初始化暴击概率为默认值
-            this.criticalChance = criticalChance;
-            //初始化最大攻击次数为默认值
-            maxAttackCount = 1;
-            //初始化连击次数为默认值
-            comboCount = 1;
-            empowerCharge = 1;
-            //初始化当前元素为默认值
-            currentElement = Element.Common;
+            this.config = config;
 
-            //初始化是否分割为默认值
+            maxHealth = config.baseMaxHealth;
+            currentHealth = config.baseMaxHealth;
+            moveSpeed = config.baseMoveSpeed;
+            attackPower = config.baseAttackPower;
+            defensePower = config.baseDefensePower;
+            criticalMultiplier = config.baseCriticalMultiplier;
+            criticalChance = config.baseCriticalChance;
+            attackInterval = config.maxAttackInterval;
+            healthRecover = config.baseHealthRecover;
+            attackspeed = config.baseAttackSpeed;
+            maxAttackCount = config.baseMaxAttackCount;
+            comboCount = config.baseComboCount;
+            empowerCharge = config.baseEmpowerCharge;
+            currentElement = Element.Common;
             isSplit = false;
             splitCount = 0;
         }
@@ -86,10 +74,10 @@ namespace Domain.Character.Attribute
             attackInterval -= (attackInterval * newRatio);
             //向下取整,保留2位小数
             attackInterval = Mathf.Round(attackInterval * 100) / 100;
-            //如果攻击间隔小于0,则设置为0
-            if (attackInterval < 0.5f)
+            //如果攻击间隔小于最小值,则设置为最小值
+            if (attackInterval < config.minAttackInterval)
             {
-                attackInterval = 0.5f;
+                attackInterval = config.minAttackInterval;
             }
         }
 
@@ -169,10 +157,10 @@ namespace Domain.Character.Attribute
             criticalChance += newRatio;
             //向下取整,保留2位小数
             criticalChance = Mathf.Round(criticalChance * 100) / 100;
-            //如果暴击概率大于0.8,则设置为0.8
-            if (criticalChance > 0.8f)
+            //如果暴击概率大于上限,则设置为上限
+            if (criticalChance > config.maxCriticalChance)
             {
-                criticalChance = 0.8f;
+                criticalChance = config.maxCriticalChance;
             }
         }
 

@@ -9,7 +9,6 @@ using Domain.Event.Channels.Combat;
 using Domain.Event.Channels.Player;
 using Domain.Pool;
 using Infrastructure.Network;
-using Domain.Manager;
 using Domain.Combat.Trigger;
 using Domain.Combat.FX;
 using Unity.VisualScripting;

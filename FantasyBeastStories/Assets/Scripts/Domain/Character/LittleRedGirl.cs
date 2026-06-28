@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Domain.Character;
 using Domain.Character.Pets;
 using Domain.Event;
-using Domain.Manager;
 using Domain.Services;
 using UnityEngine;
 

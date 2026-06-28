@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Domain.Enemy;
 using Domain.Event;
-using Domain.Manager;
 using UnityEngine;
 
 namespace Domain.Combat.Trigger

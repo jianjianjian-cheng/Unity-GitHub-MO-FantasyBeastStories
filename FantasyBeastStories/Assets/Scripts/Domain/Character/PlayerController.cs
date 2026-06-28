@@ -7,8 +7,7 @@ using Domain.Event;
 using Domain.Event.Channels.Player;
 using Domain.Player;
 using Domain.Services;
-using Presentation.Other;
-using Photon.Pun;
+using Presentation.PlayerInput;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Application;
@@ -20,6 +19,9 @@ namespace Domain.Character
     [Header("纯数据")]
     [SerializeField]
     protected PlayerMovementData movementData;
+
+    [SerializeField]
+    protected PlayerAttributeConfigSO playerAttributeConfig;
 
     [SerializeField]
     protected bool isOnlyShow = false; // 是否只为显示角色而不用于其他操作
@@ -34,6 +36,9 @@ namespace Domain.Character
     [SerializeField]
     protected Animator animator; // 动画组件
 
+    [Header("输入设置")]
+    // 输入读取统一由 PlayerInputHandler 静态类处理
+
     [Header("旋转设置")]
     protected AttributePlayerBase attributePlayer; // 玩家属性组件
 
@@ -44,6 +49,9 @@ namespace Domain.Character
     protected GameObject isReadyPanel; // 准备界面
     int localActorNumber; // 本地玩家ActorNumber
     int sceneIndex; // 场景索引
+
+
+    protected PlayerInputHandler playerInputHandler;
 
     // 公开属性：外部通过该属性访问生成点索引（底层数据存储在 movementData 中）
     public int spawnPointIndex
@@ -56,7 +64,11 @@ namespace Domain.Character
     {
       movementData = new PlayerMovementData();
       isInLobby = EventChannelLocator.MainContainer.gameSettings.IsStayLobby;
-      attributePlayer = new AttributePlayerBase(300f, 0f, 300f, movementData.moveSpeed, 1.2f, 0.1f);
+      if (playerAttributeConfig == null)
+        playerAttributeConfig = Resources.Load<PlayerAttributeConfigSO>("Config/PlayerAttributeConfig");
+      attributePlayer = new AttributePlayerBase(playerAttributeConfig);
+      attributePlayer.SetMoveSpeed(movementData.moveSpeed);
+      playerInputHandler = new PlayerInputHandler();
     }
 
     protected virtual void Start()
@@ -98,7 +110,7 @@ namespace Domain.Character
     // Update is called once per frame
     protected virtual void Update()
     {
-      if (EventChannelLocator.MainContainer.gameSettings.IsPaused)
+      if (GamePauseManager.isPaused)
         return;
       if (isOnlyShow)
       {
@@ -118,7 +130,7 @@ namespace Domain.Character
 
     protected virtual void FixedUpdate()
     {
-      if (EventChannelLocator.MainContainer.gameSettings.IsPaused)
+      if (GamePauseManager.isPaused)
       {
         // 暂停时停止移动和旋转
         if (rb != null)
@@ -170,12 +182,13 @@ namespace Domain.Character
 
     protected virtual void HandleInput()
     {
-      // 获取水平输入（A/D或左右箭头）
-      float horizontal = Input.GetAxis("Horizontal");
-      // 获取垂直输入（W/S或上下箭头）
-      float vertical = Input.GetAxis("Vertical");
-      // 计算移动方向（基于世界坐标）
-      movementData.movementDirection = new Vector3(horizontal, 0f, vertical).normalized;
+      // 驱动输入处理器更新原始输入值
+      playerInputHandler.Update();
+
+      float h = playerInputHandler.Horizontal;
+      float v = playerInputHandler.Vertical;
+
+      movementData.movementDirection = new Vector3(h, 0f, v).normalized;
     }
 
     protected virtual void MoveCharacter()
@@ -236,8 +249,11 @@ namespace Domain.Character
       if (spawnPointObj != null)
       {
         int spawnPointId = (int)spawnPointObj;
-        SpawnPoint sp = GameManager.instance.GetSpawnPointById(spawnPointId);
-        if (sp != null && sp.GetOccupiedByPlayer() == playerService.GetLocalActorNumber())
+        var spawnService = DomainServiceLocator.Get<ISpawnPointService>();
+        ISpawnPoint sp = spawnService?.GetSpawnPointById(spawnPointId);
+        // sp 可能已被场景卸载销毁（场景切换时 SpawnPoint 先于 DontDestroyOnLoad 对象销毁）
+        // 对 Unity 对象必须用 MonoBehaviour 转换判断，不能用 Equals(null)
+        if (sp != null && (sp as MonoBehaviour) != null && sp.GetOccupiedByPlayer() == playerService.GetLocalActorNumber())
         {
           sp.ForceRelease();
         }
@@ -257,8 +273,7 @@ namespace Domain.Character
       if (sceneIndex > 1)
       {
         EventChannelLocator.MainContainer.hpChangedChannel.Raise(attributePlayer.GetMaxHealth(), attributePlayer.GetCurrentHealth());
-        NetworkServiceLocator.ObjectService.InvokeRPC(
-            this,
+        NetworkServiceLocator.DomainRpcService?.InvokeRPC(
             "NoticeOtherPlayerDamage",
             NetworkTarget.Others,
             PlayerManager.instance.GetLocalPlayer().PlayerId.ToString(),
@@ -300,18 +315,21 @@ namespace Domain.Character
       return damage - (int)attributePlayer.GetDefensePower();
     }
 
-    //通知其他玩家我受到了伤害，让其更新UI
-    [PunRPC]
-    protected virtual void NoticeOtherPlayerDamage(
-        string playerId,
-        float MaxHP,
-        float CurrentHP
-    )
+    // ---- 静态 Handler 方法（供 DomainRpcBridge 调用） ----
+
+    /// <summary>
+    /// 由 DomainRpcBridge.RPC_SyncPlayerElement 调用
+    /// </summary>
+    public static void HandleSyncPlayerElement(int actorNumber, int elementInt)
     {
-      // 更新其他玩家的血条数值
-      var hpChannel = EventChannelLocator.MainContainer.healthUpdateChannel;
-      if (hpChannel != null)
-        hpChannel.Raise(HealthUpdateData.OtherPlayer(playerId, MaxHP, CurrentHP));
+      var query = new PlayerAttributeData(PlayerAttributeQueryType.GetAttributeById)
+      { playerId = actorNumber.ToString(), attributeName = AttributeKeyConst.Main };
+      EventChannelLocator.MainContainer.playerAttributeChannel.Raise(query);
+      AttributePlayerBase playerAttr = query.attribute;
+      if (playerAttr != null)
+      {
+        playerAttr.SetCurrentElement((Element)elementInt);
+      }
     }
 
     // 当玩家断开连接时
@@ -349,33 +367,18 @@ namespace Domain.Character
       SyncElementToAll(element);
     }
 
-    // 添加元素同步 RPC
-    [PunRPC]
-    protected virtual void RPC_SyncPlayerElement(int actorNumber, int elementInt)
-    {
-      var query = new PlayerAttributeData(PlayerAttributeQueryType.GetAttributeById)
-      { playerId = actorNumber.ToString(), attributeName = AttributeKeyConst.Main };
-      EventChannelLocator.MainContainer.playerAttributeChannel.Raise(query);
-      AttributePlayerBase playerAttr = query.attribute;
-      if (playerAttr != null)
-      {
-        playerAttr.SetCurrentElement((Element)elementInt);
-      }
-    }
-
     // 同步元素到所有客户端
     protected virtual void SyncElementToAll(Element element)
     {
       if (EventChannelLocator.MainContainer.gameSettings.IsTest)
         return;
 
-      NetworkServiceLocator.ObjectService.InvokeRPC(
-          this,
-          "RPC_SyncPlayerElement",
-          NetworkTarget.All,
-          NetworkServiceLocator.PlayerService.GetLocalActorNumber(),
-          (int)element
-      );
+      NetworkServiceLocator.DomainRpcService?.InvokeRPC(
+            "RPC_SyncPlayerElement",
+            NetworkTarget.All,
+            NetworkServiceLocator.PlayerService.GetLocalActorNumber(),
+            (int)element
+        );
     }
 
     protected virtual void OnApplicationCard(CardConfigBase card)

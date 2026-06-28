@@ -42,19 +42,12 @@ namespace Presentation.Other
 
         void OnEnable()
         {
-            EventChannelLocator.MainContainer.changeCanRotateChannel.RegisterListener(OnChangeCanRotate);
+            canRotate = true;
         }
 
         void OnDisable()
         {
-            EventChannelLocator.MainContainer.changeCanRotateChannel.UnregisterListener(OnChangeCanRotate);
-        }
-
-        private void OnChangeCanRotate(bool canRotate)
-        {
-            this.canRotate = canRotate;
-            Debug.Log($"canRotate: {canRotate}");
-            modelTransform.eulerAngles = Vector3.zero;
+            canRotate = false;
         }
     }
 }

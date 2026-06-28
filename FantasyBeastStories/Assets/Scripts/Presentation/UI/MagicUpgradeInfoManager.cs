@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Domain.CardData;
 using Domain.Event;
 using Domain.Event.Channels.Player;
-using Domain.Manager;
 using UnityEngine;
 
 namespace Presentation.UI

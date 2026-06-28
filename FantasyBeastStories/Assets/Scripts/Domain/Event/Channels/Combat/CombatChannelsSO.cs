@@ -8,5 +8,7 @@ namespace Domain.Event.Channels.Combat
         public DamageEventChannelSO damageEventChannel;
         public PlayerDamageEventChannelSO playerDamageEventChannel;
         public EnemyReportEventChannelSO enemyReportChannel;
+        public DamageDisplayEventChannelSO damageDisplayChannel;
+        public BossHPUpdateEventChannelSO bossHPUpdateChannel;
     }
 }

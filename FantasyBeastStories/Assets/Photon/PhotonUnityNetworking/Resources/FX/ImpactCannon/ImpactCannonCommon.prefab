@@ -29313,6 +29313,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5871714673956397529}
+  - component: {fileID: 6864663192344766950}
   m_Layer: 11
   m_Name: ImpactCannonCommon
   m_TagString: Untagged
@@ -29336,3 +29337,15 @@ Transform:
   - {fileID: 2225093043607303225}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6864663192344766950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6703064352361486596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 064b2ce31c6f2714f880302e22ea03fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

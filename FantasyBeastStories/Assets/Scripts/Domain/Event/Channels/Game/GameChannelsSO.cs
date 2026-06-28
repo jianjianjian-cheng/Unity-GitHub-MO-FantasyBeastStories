@@ -22,5 +22,8 @@ namespace Domain.Event.Channels.Game
         public TimeStartedEventChannelSO timeStartedChannel;
         public TimePausedEventChannelSO timePausedChannel;
         public TimeResetEventChannelSO timeResetChannel;
+
+        [Header("时间查询")]
+        public TimeQueryEventChannelSO timeQueryChannel;
     }
 }

@@ -27,6 +27,7 @@ namespace Domain.Event.Channels
     public DamageEventChannelSO damageEventChannel => combat != null ? combat.damageEventChannel : null;
     public PlayerDamageEventChannelSO playerDamageEventChannel => combat != null ? combat.playerDamageEventChannel : null;
     public EnemyReportEventChannelSO enemyReportChannel => combat != null ? combat.enemyReportChannel : null;
+    public BossHPUpdateEventChannelSO bossHPUpdateChannel => combat != null ? combat.bossHPUpdateChannel : null;
     #endregion
 
     #region 玩家事件
@@ -50,6 +51,7 @@ namespace Domain.Event.Channels
     public TimeStartedEventChannelSO timeStartedChannel => game != null ? game.timeStartedChannel : null;
     public TimePausedEventChannelSO timePausedChannel => game != null ? game.timePausedChannel : null;
     public TimeResetEventChannelSO timeResetChannel => game != null ? game.timeResetChannel : null;
+    public TimeQueryEventChannelSO timeQueryChannel => game != null ? game.timeQueryChannel : null;
     #endregion
 
     #region UI事件

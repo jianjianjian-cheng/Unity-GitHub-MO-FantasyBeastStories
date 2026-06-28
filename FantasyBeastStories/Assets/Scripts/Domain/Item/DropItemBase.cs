@@ -2,8 +2,8 @@ using System.Collections;
 using Domain.Event;
 using Domain.Network;
 using Domain.Pool;
+using Domain.Services;
 using UnityEngine;
-using Photon.Pun;
 
 namespace Domain.Item
 {
@@ -146,11 +146,20 @@ namespace Domain.Item
             PoolOperationData.CreateDespawn(PoolConst.ExperienceBall_Blue, gameObject));
         return;
       }
-      _network.RPC("RPC_DespawnItem", NetworkTarget.MasterClient);
+      // 通过 IDomainRpcService 发送 RPC 到 MasterClient，附带 ViewID
+      if (_network != null)
+      {
+        NetworkServiceLocator.DomainRpcService?.InvokeRPC(
+            "RPC_DespawnItem",
+            Domain.Services.NetworkTarget.MasterClient,
+            _network.ViewID);
+      }
     }
 
-    [PunRPC]
-    public void RPC_DespawnItem()
+    /// <summary>
+    /// 由 DomainRpcBridge.RPC_DespawnItem 调用 — 在 MasterClient 上执行销毁
+    /// </summary>
+    public void HandleDespawnItem()
     {
       EventChannelLocator.MainContainer.poolOperationChannel.Raise(
           PoolOperationData.CreateDespawn(PoolConst.ExperienceBall_Blue, gameObject));

@@ -4,12 +4,11 @@ using UnityEngine;
 using UnityEngine.AI;
 using Domain.Event;
 using Domain.Player;
-using Domain.Manager;
 using Domain.Combat.Trigger;
 using Domain.Services;
-using Photon.Pun;
 using Domain.Combat.FX;
-using Domain.Time;
+using Application;
+using Domain.Event.Channels.Combat;
 
 namespace Domain.Enemy.Boss
 {
@@ -159,7 +158,7 @@ namespace Domain.Enemy.Boss
         {
             base.Update();
 
-            if (EventChannelLocator.MainContainer.gameSettings.IsPaused || enemyData.currentState == EnemyState.Die)
+            if (GamePauseManager.isPaused || enemyData.currentState == EnemyState.Die)
             {
                 if (navMeshAgent != null && navMeshAgent.enabled)
                     navMeshAgent.isStopped = true;
@@ -541,23 +540,28 @@ namespace Domain.Enemy.Boss
 
             if (closestPlayer != null)
             {
-                _network.RPC("RPC_SyncPlayerTarget", Domain.Network.NetworkTarget.All, NetworkServiceLocator.ObjectService.GetViewID(closestPlayer));
+                NetworkServiceLocator.DomainRpcService?.InvokeRPC("RPC_SyncPlayerTarget", NetworkTarget.All, NetworkServiceLocator.ObjectService.GetViewID(closestPlayer));
             }
         }
 
 
-        #region  RPC
-        [PunRPC]
-        private void RPC_SyncPlayerTarget(int targetViewID)
+        #region  RPC Handlers（供 DomainRpcBridge 调用）
+
+        /// <summary>
+        /// 由 DomainRpcBridge.RPC_SyncPlayerTarget 调用
+        /// </summary>
+        public void HandleSyncPlayerTarget(int targetViewID)
         {
             PlayerTarget = NetworkServiceLocator.ObjectService.FindByViewID(targetViewID);
         }
-        [PunRPC]
-        private void RPC_SyncTriggerAnim(string animName)
+
+        /// <summary>
+        /// 由 DomainRpcBridge.RPC_SyncTriggerAnim 调用
+        /// </summary>
+        public void HandleSyncTriggerAnim(string animName)
         {
             animator.SetTrigger(animName);
         }
-
 
         #endregion
 
@@ -575,7 +579,7 @@ namespace Domain.Enemy.Boss
                 navMeshAgent.isStopped = true;
 
             yield return new WaitForSeconds(0.1f);
-            _network.RPC("RPC_SyncTriggerAnim", Domain.Network.NetworkTarget.All, "Bite");
+            NetworkServiceLocator.DomainRpcService?.InvokeRPC("RPC_SyncTriggerAnim", NetworkTarget.All, "Bite");
 
             // 前摇
             yield return new WaitForSeconds(biteWindUp);
@@ -623,7 +627,7 @@ namespace Domain.Enemy.Boss
                 navMeshAgent.isStopped = true;
 
             yield return new WaitForSeconds(0.1f);
-            _network.RPC("RPC_SyncTriggerAnim", Domain.Network.NetworkTarget.All, "Fireball");
+            NetworkServiceLocator.DomainRpcService?.InvokeRPC("RPC_SyncTriggerAnim", NetworkTarget.All, "Fireball");
 
             // 前摇
             yield return new WaitForSeconds(rayBeamWindUp);
@@ -805,10 +809,17 @@ namespace Domain.Enemy.Boss
             if (navMeshAgent != null)
                 navMeshAgent.isStopped = true;
 
-            _network.RPC("RPC_SyncTriggerAnim", Domain.Network.NetworkTarget.All, "Spawn");
+            NetworkServiceLocator.DomainRpcService?.InvokeRPC("RPC_SyncTriggerAnim", NetworkTarget.All, "Spawn");
             enemyData.attribute.SetAttackPower(30);
             enemyData.attribute.SetMaxHealth(100000);
-            SyncedGameTimeManager.Instance.InitializeBossUI(100000, "蛛王菲力甫斯");
+            var bossHPInitData = new BossHPUpdateData
+            {
+                maxHealth = 100000,
+                currentHealth = 100000,
+                bossName = "蛛王菲力甫斯",
+                isInitialized = true
+            };
+            EventChannelLocator.MainContainer.bossHPUpdateChannel.Raise(bossHPInitData);
             // 登场演出
             yield return new WaitForSeconds(2f);
 
@@ -840,7 +851,7 @@ namespace Domain.Enemy.Boss
                 navMeshAgent.isStopped = true;
 
             // 转场演出
-            _network.RPC("RPC_SyncTriggerAnim", Domain.Network.NetworkTarget.All, "PhaseTransition");  // 可以在动画中添加转场效果
+            NetworkServiceLocator.DomainRpcService?.InvokeRPC("RPC_SyncTriggerAnim", NetworkTarget.All, "PhaseTransition");  // 可以在动画中添加转场效果
             yield return new WaitForSeconds(1.5f);
 
             currentMoveSpeed = phase2MoveSpeed;
@@ -877,7 +888,7 @@ namespace Domain.Enemy.Boss
                 navMeshAgent.isStopped = true;
 
             // 死亡动画
-            _network.RPC("RPC_SyncTriggerAnim", Domain.Network.NetworkTarget.All, "Die");
+            NetworkServiceLocator.DomainRpcService?.InvokeRPC("RPC_SyncTriggerAnim", NetworkTarget.All, "Die");
 
             // 死亡演出时间（等待动画播放）
             yield return new WaitForSeconds(2f);
@@ -897,7 +908,12 @@ namespace Domain.Enemy.Boss
         protected override void OnDamageReceived(EventArgsBase args)
         {
             base.OnDamageReceived(args);
-            SyncedGameTimeManager.Instance.UpdateHPUI(enemyData.attribute.currentHealth);
+            var bossHPUpdateData = new BossHPUpdateData
+            {
+                currentHealth = enemyData.attribute.currentHealth,
+                isInitialized = false
+            };
+            EventChannelLocator.MainContainer.bossHPUpdateChannel.Raise(bossHPUpdateData);
         }
         #endregion
 

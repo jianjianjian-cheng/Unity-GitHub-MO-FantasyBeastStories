@@ -8,7 +8,7 @@ using Domain.Pool;
 using Domain.Network;
 using UnityEngine;
 using UnityEngine.AI;
-using Presentation.UI;
+using Application;
 
 namespace Domain.Enemy
 {
@@ -61,7 +61,7 @@ namespace Domain.Enemy
 
     protected virtual void Update()
     {
-      if (EventChannelLocator.MainContainer.gameSettings.IsPaused)
+      if (GamePauseManager.isPaused)
         return;
       // 如果已死亡，不执行更新逻辑
       if (enemyData.currentState == EnemyState.Die)
@@ -393,17 +393,13 @@ namespace Domain.Enemy
       );
       if (EventChannelLocator.MainContainer.gameSettings.IsTest)
       {
-        ObjectPoolManager
-            .instance.GetFromPoolAndActivate(
-                PoolConst.DamageNumPool,
-                transform.position
-            )
-            .GetComponent<DamageNum>()
-            .Play(
+        EventChannelLocator.MainContainer.combat.damageDisplayChannel?.Raise(
+            new DamageDisplayEventArgs(
                 damageEventArgs.finalDamageValue,
                 transform.position,
                 damageEventArgs.isCritical
-            );
+            )
+        );
       }
       enemyData.attribute.TakeDamageSpecial(damageEventArgs.element);
       if (enemyData.attribute.GetIsDie())
