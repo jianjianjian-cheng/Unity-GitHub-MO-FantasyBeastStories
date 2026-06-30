@@ -48,56 +48,14 @@ namespace Domain.Enemy.Boss
         [SerializeField] private NavMeshAgent navMeshAgent;
         #endregion
 
-        #region 攻击参数
-        [Header("咬击")]
-        [SerializeField] private float biteRange = 2f;
-        [SerializeField] private float biteDamage = 3f;
-        [SerializeField] private float biteWindUp = 0.4f;
-        [SerializeField] private float biteCooldown = 2f;
-
-        [Header("射线")]
-        [SerializeField] private float rayBeamSpeed = 8f;
-        [SerializeField] private float rayBeamDamage = 5f;
-        [SerializeField] private float rayBeamWindUp = 0.5f;
-        [SerializeField] private float rayBeamCooldown = 12f;
-
-        [Header("连续火球")]
-        [SerializeField] private float fireballSpeed = 2f;
-        [SerializeField] private int fireballBurstCount = 5;
-        [SerializeField] private float fireballBurstInterval = 0.2f;
-        [SerializeField] private float fireballBurstSpread = 15f;
-        [SerializeField] private float fireballBurstWindUp = 0.7f;
-        [SerializeField] private float fireballBurstCooldown = 8f;
-
-        [Header("滚动追踪")]
-        [SerializeField] private float rollSpeed = 12f;
-        [SerializeField] private float rollDuration = 2f;
-        [SerializeField] private float rollDamage = 5f;
-        [SerializeField] private float rollWindUp = 0.6f;
-        [SerializeField] private float rollCooldown = 10f;
-        [SerializeField] private float rollTurnSpeed = 120f;
+        #region 数据配置（ScriptableObject 驱动）
+        [Header("Boss 数据配置")]
+        [SerializeField] private BossConfigSO config;
         #endregion
 
-        #region 阶段参数
+        #region 运行时状态
         private IReadOnlyList<GameObject> players;
         private float playerTargetUpdateInterval = 20f;
-        [Header("阶段血量阈值")]
-        [SerializeField] private float phase2HealthPercent = 0.5f;
-
-        [Header("一阶段")]
-        [SerializeField] private float phase1MoveSpeed = 2f;
-        [SerializeField] private float phase1PreferredDistance = 5f;
-
-        [Header("二阶段")]
-        [SerializeField] private float phase2MoveSpeed = 1f;
-        [SerializeField] private float phase2PreferredDistance = 4f;
-        [SerializeField] private float phase2CooldownMultiplier = 0.7f;
-        #endregion
-
-        #region 防卡死参数
-        [Header("防卡死参数")]
-        [SerializeField] private float maxAdjustTime = 5f;  // 最大调整时间
-        [SerializeField] private float idleActionInterval = 1f;  // 空闲时决策间隔
         #endregion
         private float idleDecisionTimer = 0f;
         private float adjustTimeCounter = 0f;
@@ -138,7 +96,7 @@ namespace Domain.Enemy.Boss
             {
                 navMeshAgent.updateRotation = false;
                 navMeshAgent.autoBraking = true;
-                navMeshAgent.speed = phase1MoveSpeed;
+                navMeshAgent.speed = config.phase1MoveSpeed;
                 navMeshAgent.acceleration = 3f;
             }
 
@@ -146,10 +104,10 @@ namespace Domain.Enemy.Boss
             PlayerManager.instance != null ? PlayerManager.instance.ActivePlayerObjects : null;
 
             // 初始化冷却时间，加入随机偏移避免所有Boss同时攻击
-            biteTimer = Random.Range(0f, biteCooldown * 0.5f);
-            rayBeamTimer = Random.Range(5f, rayBeamCooldown * 0.5f);
-            fireballBurstTimer = Random.Range(fireballBurstCooldown * 0.5f, fireballBurstCooldown);
-            rollTimer = Random.Range(rollCooldown * 0.5f, rollCooldown);
+            biteTimer = Random.Range(0f, config.biteCooldown * 0.5f);
+            rayBeamTimer = Random.Range(5f, config.rayBeamCooldown * 0.5f);
+            fireballBurstTimer = Random.Range(config.fireballBurstCooldown * 0.5f, config.fireballBurstCooldown);
+            rollTimer = Random.Range(config.rollCooldown * 0.5f, config.rollCooldown);
 
             StartCoroutine(SpawnSequence());
         }
@@ -181,7 +139,7 @@ namespace Domain.Enemy.Boss
                 if (idleDecisionTimer <= 0 && !isAdjustingPosition)
                 {
                     DecideNextAction();
-                    idleDecisionTimer = idleActionInterval;
+                    idleDecisionTimer = config.idleActionInterval;
                 }
             }
         }
@@ -305,7 +263,7 @@ namespace Domain.Enemy.Boss
                 return;
             }
 
-            // if (currentPhase == BossPhase.Phase1 && hpPercent <= phase2HealthPercent)
+            // if (currentPhase == BossPhase.Phase1 && hpPercent <= config.phase2HealthPercent)
             // {
             //     StartCoroutine(TransitionToPhase2());
             // }
@@ -334,7 +292,7 @@ namespace Domain.Enemy.Boss
                 {
                     // 所有技能冷却中，保持待机
                     currentAction = BossAction.Idle;
-                    idleDecisionTimer = idleActionInterval;  // 等下个周期再检查
+                    idleDecisionTimer = config.idleActionInterval;  // 等下个周期再检查
                 }
                 return;
             }
@@ -343,7 +301,7 @@ namespace Domain.Enemy.Boss
             if (isAdjustingPosition)
             {
                 adjustTimeCounter += UnityEngine.Time.deltaTime;
-                if (adjustTimeCounter > maxAdjustTime)
+                if (adjustTimeCounter > config.maxAdjustTime)
                 {
                     // 超时强制退出调整
                     ForceStopAdjustment();
@@ -374,7 +332,7 @@ namespace Domain.Enemy.Boss
         private void ExecuteBestAttack(float distance)
         {
             // 近距离优先咬击
-            if (biteTimer <= 0 && distance <= biteRange * 1.2f)
+            if (biteTimer <= 0 && distance <= config.biteRange * 1.2f)
             {
                 StartCoroutine(BiteAttack());
                 return;
@@ -488,7 +446,7 @@ namespace Domain.Enemy.Boss
             navMeshAgent.SetDestination(hit.position);
 
             // 等待到达目标或超时
-            float timeout = maxAdjustTime;
+            float timeout = config.maxAdjustTime;
             float elapsed = 0f;
 
             while (elapsed < timeout)
@@ -569,7 +527,7 @@ namespace Domain.Enemy.Boss
         private IEnumerator BiteAttack()
         {
             currentAction = BossAction.Bite;
-            biteTimer = biteCooldown;
+            biteTimer = config.biteCooldown;
 
             // 精确转向面向玩家
             yield return StartCoroutine(UpdateFacingCoroutine(PlayerTarget.transform));
@@ -582,12 +540,12 @@ namespace Domain.Enemy.Boss
             NetworkServiceLocator.DomainRpcService?.InvokeRPC("RPC_SyncTriggerAnim", NetworkTarget.All, "Bite");
 
             // 前摇
-            yield return new WaitForSeconds(biteWindUp);
+            yield return new WaitForSeconds(config.biteWindUp);
 
             // 判定
             Collider[] playersInRange = Physics.OverlapSphere(
                 bitePoint.transform.position,
-                biteRange,
+                config.biteRange,
                 LayerMask.GetMask("Player")
             );
 
@@ -599,7 +557,7 @@ namespace Domain.Enemy.Boss
                         Element.Common,
                         gameObject,
                         col.gameObject,
-                        biteDamage * enemyData.attribute.attackPower,
+                        config.biteDamage * enemyData.attribute.attackPower,
                         false,
                         1f
                     );
@@ -617,7 +575,7 @@ namespace Domain.Enemy.Boss
         private IEnumerator RayBeamAttack()
         {
             currentAction = BossAction.RayBeam;
-            rayBeamTimer = rayBeamCooldown;
+            rayBeamTimer = config.rayBeamCooldown;
 
             // 精确转向面向玩家
             yield return StartCoroutine(UpdateFacingCoroutine(PlayerTarget.transform));
@@ -630,7 +588,7 @@ namespace Domain.Enemy.Boss
             NetworkServiceLocator.DomainRpcService?.InvokeRPC("RPC_SyncTriggerAnim", NetworkTarget.All, "Fireball");
 
             // 前摇
-            yield return new WaitForSeconds(rayBeamWindUp);
+            yield return new WaitForSeconds(config.rayBeamWindUp);
 
             // 后摇
             yield return new WaitForSeconds(0.2f);
@@ -641,7 +599,7 @@ namespace Domain.Enemy.Boss
         private IEnumerator FireballBurstAttack()
         {
             currentAction = BossAction.FireballBurst;
-            fireballBurstTimer = fireballBurstCooldown;
+            fireballBurstTimer = config.fireballBurstCooldown;
 
             // 精确转向面向玩家
             yield return StartCoroutine(UpdateFacingCoroutine(PlayerTarget.transform));
@@ -654,10 +612,10 @@ namespace Domain.Enemy.Boss
             animator.SetBool("IsFireballBurst", true);
 
             // 前摇
-            yield return new WaitForSeconds(fireballBurstWindUp);
+            yield return new WaitForSeconds(config.fireballBurstWindUp);
 
             // 连续发射
-            for (int i = 0; i < fireballBurstCount; i++)
+            for (int i = 0; i < config.fireballBurstCount; i++)
             {
                 if (fireballPrefab != null && rayBeamPoint != null && PlayerTarget != null)
                 {
@@ -673,7 +631,7 @@ namespace Domain.Enemy.Boss
                     // }
                     //已经在动画中处理
                 }
-                yield return new WaitForSeconds(fireballBurstInterval);
+                yield return new WaitForSeconds(config.fireballBurstInterval);
             }
 
 
@@ -687,19 +645,19 @@ namespace Domain.Enemy.Boss
         private IEnumerator RollAttack()
         {
             currentAction = BossAction.Roll;
-            rollTimer = rollCooldown;
+            rollTimer = config.rollCooldown;
 
             // 精确转向面向玩家
             yield return StartCoroutine(UpdateFacingCoroutine(PlayerTarget.transform));
             yield return new WaitForSeconds(0.1f);
 
             // 前摇
-            yield return new WaitForSeconds(rollWindUp);
+            yield return new WaitForSeconds(config.rollWindUp);
 
             if (navMeshAgent != null)
             {
                 navMeshAgent.isStopped = true;
-                navMeshAgent.speed = rollSpeed;
+                navMeshAgent.speed = config.rollSpeed;
             }
 
             if (rollCollider != null)
@@ -724,7 +682,7 @@ namespace Domain.Enemy.Boss
             }
 
             float elapsedTime = 0f;
-            while (elapsedTime < rollDuration)
+            while (elapsedTime < config.rollDuration)
             {
                 if (PlayerTarget != null)
                 {
@@ -737,12 +695,12 @@ namespace Domain.Enemy.Boss
                     transform.rotation = Quaternion.RotateTowards(
                         transform.rotation,
                         targetRotation,
-                        rollTurnSpeed * UnityEngine.Time.deltaTime
+                        config.rollTurnSpeed * UnityEngine.Time.deltaTime
                     );
                 }
 
                 if (navMeshAgent != null)
-                    navMeshAgent.Move(transform.forward * rollSpeed * UnityEngine.Time.deltaTime);
+                    navMeshAgent.Move(transform.forward * config.rollSpeed * UnityEngine.Time.deltaTime);
 
                 elapsedTime += UnityEngine.Time.deltaTime;
                 yield return null;
@@ -777,7 +735,7 @@ namespace Domain.Enemy.Boss
         {
             GameObject rayBeam = Instantiate(rayBeamPrefab, rayBeamPoint.position, rayBeamPoint.rotation);
             RayBeam rayBeamScript = rayBeam.GetComponentInChildren<RayBeam>();
-            float FinalRayBeamDamage = enemyData.attribute.GetAttackPower() * rayBeamDamage;
+            float FinalRayBeamDamage = enemyData.attribute.GetAttackPower() * config.rayBeamDamageMultiplier;
             rayBeamScript.SetOwnerAndAttribute(gameObject, FinalRayBeamDamage);
             StartCoroutine(DelayDestoryRayBeam(rayBeam));
         }
@@ -785,7 +743,7 @@ namespace Domain.Enemy.Boss
         {
             GameObject fireballBurst = Instantiate(fireballPrefab, fireballBurstPoint.transform.position, Quaternion.identity);
             IFIreBallProjectile fireBallProjectile = fireballBurst.GetComponent<IFIreBallProjectile>();
-            fireBallProjectile.SetTargetAndDamage(PlayerTarget.transform, enemyData.attribute.GetAttackPower() * 6);
+            fireBallProjectile.SetTargetAndDamage(PlayerTarget.transform, enemyData.attribute.GetAttackPower() * config.fireballDamageMultiplier);
         }
 
 
@@ -810,13 +768,13 @@ namespace Domain.Enemy.Boss
                 navMeshAgent.isStopped = true;
 
             NetworkServiceLocator.DomainRpcService?.InvokeRPC("RPC_SyncTriggerAnim", NetworkTarget.All, "Spawn");
-            enemyData.attribute.SetAttackPower(30);
-            enemyData.attribute.SetMaxHealth(100000);
+            enemyData.attribute.SetAttackPower(config.attackPower);
+            enemyData.attribute.SetMaxHealth(config.maxHealth);
             var bossHPInitData = new BossHPUpdateData
             {
-                maxHealth = 100000,
-                currentHealth = 100000,
-                bossName = "蛛王菲力甫斯",
+                maxHealth = config.maxHealth,
+                currentHealth = config.maxHealth,
+                bossName = config.bossName,
                 isInitialized = true
             };
             EventChannelLocator.MainContainer.bossHPUpdateChannel.Raise(bossHPInitData);
@@ -824,8 +782,8 @@ namespace Domain.Enemy.Boss
             yield return new WaitForSeconds(2f);
 
             currentPhase = BossPhase.Phase1;
-            currentMoveSpeed = phase1MoveSpeed;
-            currentPreferredDistance = phase1PreferredDistance;
+            currentMoveSpeed = config.phase1MoveSpeed;
+            currentPreferredDistance = config.phase1PreferredDistance;
 
             if (navMeshAgent != null)
             {
@@ -854,8 +812,8 @@ namespace Domain.Enemy.Boss
             NetworkServiceLocator.DomainRpcService?.InvokeRPC("RPC_SyncTriggerAnim", NetworkTarget.All, "PhaseTransition");  // 可以在动画中添加转场效果
             yield return new WaitForSeconds(1.5f);
 
-            currentMoveSpeed = phase2MoveSpeed;
-            currentPreferredDistance = phase2PreferredDistance;
+            currentMoveSpeed = config.phase2MoveSpeed;
+            currentPreferredDistance = config.phase2PreferredDistance;
 
             if (navMeshAgent != null)
             {
@@ -871,6 +829,10 @@ namespace Domain.Enemy.Boss
         private IEnumerator DeathSequence()
         {
             currentPhase = BossPhase.Death;
+
+            // 🔔 先触发Boss死亡事件（必须在 StopAllCoroutines 之前，否则协程自身被杀死）
+            Debug.Log($"[{gameObject.name}] DeathSequence: 触发 Boss 死亡事件，channel 是否为 null = {EventChannelLocator.MainContainer.bossDeathChannel == null}");
+            EventChannelLocator.MainContainer.bossDeathChannel?.Raise();
 
             // 重置所有动画状态
             animator.SetBool("IsTurningLeft", false);
@@ -910,6 +872,7 @@ namespace Domain.Enemy.Boss
             base.OnDamageReceived(args);
             var bossHPUpdateData = new BossHPUpdateData
             {
+                maxHealth = enemyData.attribute.maxHealth,
                 currentHealth = enemyData.attribute.currentHealth,
                 isInitialized = false
             };
@@ -925,12 +888,12 @@ namespace Domain.Enemy.Boss
             if (bitePoint != null)
             {
                 Gizmos.color = Color.red;
-                Gizmos.DrawWireSphere(bitePoint.position, biteRange);
+                Gizmos.DrawWireSphere(bitePoint.position, config.biteRange);
             }
 
             // 绘制首选距离
             Gizmos.color = Color.yellow;
-            float dist = currentPreferredDistance > 0 ? currentPreferredDistance : phase1PreferredDistance;
+            float dist = currentPreferredDistance > 0 ? currentPreferredDistance : config.phase1PreferredDistance;
             Gizmos.DrawWireSphere(transform.position, dist);
 
             // 绘制移动状态

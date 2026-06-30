@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Domain.Event;
+using Presentation.UI.Framework.Panel;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -63,16 +63,14 @@ namespace Presentation.Lobby
         IEnumerator loadScene(int index)
         {
             yield return new WaitForSeconds(2f);
-            EventChannelLocator.MainContainer.loadingChannel.Raise(true);
-            yield return new WaitForSeconds(2f);
+            yield return StartCoroutine(Loading.Instance.Show());
+            yield return new WaitForSeconds(1f);
             AsyncOperation asyn = SceneManager.LoadSceneAsync(index);
             asyn.completed += OnSceneLoaded;
         }
 
         private void OnSceneLoaded(AsyncOperation operation)
         {
-            // LoadingCanvas.instance.HideLoading();
-            // loadingAnimator.SetBool("FadeIn", false);
         }
     }
 }

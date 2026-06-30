@@ -40,18 +40,24 @@ namespace Presentation.UI
 
         void Awake()
         {
+            // 自动查找未绑定的 TextMeshPro 引用
+            var texts = GetComponentsInChildren<TextMeshProUGUI>(true);
+            if (this.name == null && texts.Length > 0) this.name = texts[0];
+            if (description == null && texts.Length > 1) description = texts[1];
+            if (data == null && texts.Length > 2) data = texts[2];
+            if (limitTime == null && texts.Length > 3) limitTime = texts[3];
+
             // 获取或添加 CanvasGroup 组件
             canvasGroup = GetComponent<CanvasGroup>();
             if (canvasGroup == null)
-            {
                 canvasGroup = gameObject.AddComponent<CanvasGroup>();
-            }
 
             // 获取 RectTransform
             rectTransform = GetComponent<RectTransform>();
             if (rectTransform == null)
             {
                 Debug.LogError("TaskNotice 需要挂载在带有 RectTransform 的 UI 对象上！");
+                return;
             }
 
             // 记录初始位置
@@ -62,23 +68,20 @@ namespace Presentation.UI
 
         void Update() { }
 
-        public void SetInfo(string name, string description, int limitTime , int requireCount)
+        public void SetInfo(string name, string description, int limitTime, int requireCount)
         {
-            this.name.text = name;
-            this.description.text = description;
-            this.limitTime.text = "剩余时间：" + limitTime.ToString();
-            this.data.text = $"{0}/{requireCount}";
+            if (this.name != null) this.name.text = name;
+            if (this.description != null) this.description.text = description;
+            if (this.limitTime != null) this.limitTime.text = "剩余时间：" + limitTime.ToString();
+            if (this.data != null) this.data.text = $"{0}/{requireCount}";
         }
 
         public void Notice_Data(string data)
         {
-            this.data.text = data;
+            if (this.data != null) this.data.text = data;
         }
 
-        private void OnEnable()
-        {
-            PlaySlideAnimation(true);
-        }
+        private void OnEnable() { }
 
         private void OnDisable()
         {
@@ -88,7 +91,7 @@ namespace Presentation.UI
 
         public void UpDateTime(string time)
         {
-            limitTime.text = time;
+            if (limitTime != null) limitTime.text = time;
         }
 
         /// <summary>
@@ -99,6 +102,10 @@ namespace Presentation.UI
         {
             // 停止当前正在播放的动画
             KillTween();
+
+            // 组件未初始化完成则不播放
+            if (rectTransform == null || canvasGroup == null)
+                return;
 
             // 设置初始状态
             if (slideIn)

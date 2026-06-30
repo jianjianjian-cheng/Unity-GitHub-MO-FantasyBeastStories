@@ -28,6 +28,8 @@ namespace Domain.Event.Channels
     public PlayerDamageEventChannelSO playerDamageEventChannel => combat != null ? combat.playerDamageEventChannel : null;
     public EnemyReportEventChannelSO enemyReportChannel => combat != null ? combat.enemyReportChannel : null;
     public BossHPUpdateEventChannelSO bossHPUpdateChannel => combat != null ? combat.bossHPUpdateChannel : null;
+    public BossDeathEventChannelSO bossDeathChannel => combat?.bossDeathChannel;
+    public BossSpawnEventChannelSO bossSpawnChannel => game?.bossSpawnChannel;
     #endregion
 
     #region 玩家事件
@@ -64,6 +66,8 @@ namespace Domain.Event.Channels
     public ExperienceUpdateEventChannelSO experienceUpdateChannel => ui != null ? ui.experienceUpdateChannel : null;
     public TaskUIEventChannelSO taskUIChannel => ui != null ? ui.taskUIChannel : null;
     public HealthUpdateEventChannelSO healthUpdateChannel => ui != null ? ui.healthUpdateChannel : null;
+    public CoinUpdateEventChannelSO coinUpdateChannel => ui != null ? ui.coinUpdateChannel : null;
+    public MatchStatsUpdateEventChannelSO matchStatsUpdateChannel => ui != null ? ui.matchStatsUpdateChannel : null;
     #endregion
 
     #region 任务事件

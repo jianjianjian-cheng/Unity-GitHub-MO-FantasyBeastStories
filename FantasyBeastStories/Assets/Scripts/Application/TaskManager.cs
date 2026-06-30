@@ -7,6 +7,7 @@ using Domain.Event.Channels.Task;
 using Domain.Services;
 using Domain.Task;
 using Infrastructure.Network;
+using Presentation.UI;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -56,6 +57,7 @@ namespace Application
             OnTaskCompleted += OnTaskCompletedFun;
             EventChannelLocator.MainContainer.taskNoticeChannel.RegisterListener(OnTaskNoticeReceived);
             EventChannelLocator.MainContainer.enemyReportChannel.RegisterListener(OnEnemyReported);
+            EventChannelLocator.MainContainer.taskActivationChannel.RegisterListener(OnTaskActivationReceived);
         }
 
         private void OnDisable()
@@ -63,6 +65,7 @@ namespace Application
             OnTaskCompleted -= OnTaskCompletedFun;
             EventChannelLocator.MainContainer.taskNoticeChannel.UnregisterListener(OnTaskNoticeReceived);
             EventChannelLocator.MainContainer.enemyReportChannel.UnregisterListener(OnEnemyReported);
+            EventChannelLocator.MainContainer.taskActivationChannel.UnregisterListener(OnTaskActivationReceived);
         }
 
         private void OnEnemyReported(EnemyReportData data)
@@ -75,6 +78,15 @@ namespace Application
         {
             if (data == null) return;
             NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "RPC_SetNotice", NetworkTarget.All, data.name, data.description, data.limitTime, data.requiredCount);
+        }
+
+        /// <summary>
+        /// 收到 taskActivationChannel 事件 → 分发到 ActivateTask
+        /// </summary>
+        private void OnTaskActivationReceived(TaskBase task)
+        {
+            if (task == null) return;
+            ActivateTask(task);
         }
 
         public void SetNotice(string name, string description, int limitTime, int requeredCount = 1)
@@ -361,6 +373,9 @@ namespace Application
                 StopCoroutine(taskRoutine);
             }
             taskZone = null;
+            // 标记：本次卡牌选择必定为 3 张英雄专属强化
+            if (MagicUpgradeManager.instance != null)
+                MagicUpgradeManager.instance.isAllExCard = true;
             EventChannelLocator.MainContainer.magicUpgradeChannel.Raise(true);
             var expQuery = new SkillQueryData(SkillQueryType.GetUpgradeExperience);
             EventChannelLocator.MainContainer.skillQueryChannel.Raise(expQuery);

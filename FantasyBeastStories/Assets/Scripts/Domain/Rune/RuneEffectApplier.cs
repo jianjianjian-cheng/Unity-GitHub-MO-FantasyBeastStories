@@ -86,7 +86,7 @@ namespace Domain.Rune
 
             switch (runeData.specialPowerDescription)
             {
-                case "初始发射数量+1":
+                case "初始穿透次数+1":
                     attr.AddMaxAttackCount(1);
                     Debug.Log($"[RuneEffectApplier] 初始发射数量 +1 → {attr.GetMaxAttackCount()}");
                     break;
@@ -108,5 +108,6 @@ namespace Domain.Rune
                       $"攻击间隔: {attr.GetAttackInterval()}\n" +
                       $"移动速度: {attr.GetMoveSpeed()}");
         }
+
     }
 }

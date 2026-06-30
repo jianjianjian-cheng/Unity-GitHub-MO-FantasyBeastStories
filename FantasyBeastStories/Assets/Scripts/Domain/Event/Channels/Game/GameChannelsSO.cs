@@ -1,3 +1,4 @@
+using Domain.Event.Channels.Combat;
 using Domain.Event.Channels.General;
 using UnityEngine;
 
@@ -25,5 +26,8 @@ namespace Domain.Event.Channels.Game
 
         [Header("时间查询")]
         public TimeQueryEventChannelSO timeQueryChannel;
+
+        [Header("Boss事件")]
+        public BossSpawnEventChannelSO bossSpawnChannel;
     }
 }

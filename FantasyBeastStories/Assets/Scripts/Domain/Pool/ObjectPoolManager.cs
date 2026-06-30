@@ -16,7 +16,6 @@ namespace Domain.Pool
         {
             ServiceLocator.Register(this);
             DomainServiceLocator.Register(this);
-            DontDestroyOnLoad(gameObject);
         }
 
         void OnEnable()

@@ -1,14 +1,19 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Domain.Event;
 using Domain.Event.Channels.General;
 using Domain.Services;
 using System.Collections.Generic;
+using Presentation.UI.Framework.Panel;
+using Infrastructure.Network;
 
 namespace Application
 {
     public class GameManager : MonoBehaviour, ISpawnPointService
     {
+        public static GameManager instance;
+
         public int sceneIndex = 2;
         public bool isReady = false;
 
@@ -24,24 +29,34 @@ namespace Application
 
         void Awake()
         {
-            ServiceLocator.Register(this);
-            DomainServiceLocator.Register(this);
-            DomainServiceLocator.Register<ISpawnPointService>(this);
-            EventChannelLocator.MainContainer.gameSettings.IsStayLobby = isStayLobbyInspector;
-            EventChannelLocator.MainContainer.gameSettings.IsTest = isTestInspector;
-            DontDestroyOnLoad(gameObject);
+            if (instance == null)
+            {
+                instance = this;
+                ServiceLocator.Register(this);
+                DomainServiceLocator.Register(this);
+                DomainServiceLocator.Register<ISpawnPointService>(this);
+                EventChannelLocator.MainContainer.gameSettings.IsStayLobby = isStayLobbyInspector;
+                EventChannelLocator.MainContainer.gameSettings.IsTest = isTestInspector;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
 
         void OnEnable()
         {
             SceneManager.sceneLoaded += OnSceneLoaded;
             EventChannelLocator.MainContainer.gameActionChannel.RegisterListener(OnGameActionReceived);
+            EventChannelLocator.MainContainer.bossDeathChannel?.RegisterListener(OnBossDeath);
         }
 
         void OnDisable()
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
             EventChannelLocator.MainContainer.gameActionChannel.UnregisterListener(OnGameActionReceived);
+            EventChannelLocator.MainContainer.bossDeathChannel?.UnregisterListener(OnBossDeath);
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -115,6 +130,43 @@ namespace Application
         public void OnSpawnPointStateChanged()
         {
             Debug.Log("[GameManager] 生成点状态已更新");
+        }
+        #endregion
+
+        #region Boss死亡→返回大厅
+        /// <summary>
+        /// Boss死亡时触发：MasterClient 延迟10秒后自动切换回大厅场景
+        /// </summary>
+        private void OnBossDeath()
+        {
+            Debug.Log($"[GameManager] OnBossDeath 收到！IsMasterClient={NetworkServiceLocator.PlayerService?.IsMasterClient}, IsTest={EventChannelLocator.MainContainer.gameSettings.IsTest}");
+
+            // 仅在 MasterClient 或测试模式下执行场景切换
+            if (!EventChannelLocator.MainContainer.gameSettings.IsTest && !NetworkServiceLocator.PlayerService.IsMasterClient)
+                return;
+
+            Debug.Log("[GameManager] Boss已死亡，10秒后返回大厅...");
+            StartCoroutine(DelayedLobbyTransition());
+        }
+
+        private IEnumerator DelayedLobbyTransition()
+        {
+            // 延迟10秒，让玩家观看死亡演出 + 结算缓冲
+            yield return new WaitForSeconds(10f);
+
+            Debug.Log("[GameManager] 正在返回大厅...");
+            // 加载大厅场景（场景索引1）
+            if (EventChannelLocator.MainContainer.gameSettings.IsTest)
+            {
+                SceneManager.LoadScene(1);
+            }
+            else
+            {
+                if (NetworkServiceLocator.PlayerService.IsMasterClient)
+                {
+                    NetworkServiceLocator.ObjectPoolService.ReturnToLobby();
+                }
+            }
         }
         #endregion
 

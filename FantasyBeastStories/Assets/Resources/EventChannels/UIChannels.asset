@@ -21,5 +21,7 @@ MonoBehaviour:
   experienceUpdateChannel: {fileID: 11400000, guid: e9f09f132124ae845b138bd99d964271, type: 2}
   taskUIChannel: {fileID: 11400000, guid: 92594c51cecf87047ba3c7bcfb7bf86d, type: 2}
   healthUpdateChannel: {fileID: 11400000, guid: b0b4077ca70dc484c8f487840edc1b70, type: 2}
+  coinUpdateChannel: {fileID: 11400000, guid: 4ce2fe1831db5e442888978fbcede6a7, type: 2}
+  matchStatsUpdateChannel: {fileID: 11400000, guid: 3fbd4ff40ee07b044aabd5b94464aae0, type: 2}
   taskActivationChannel: {fileID: 11400000, guid: a877e6b7ad546204787f6bda98a06a0a, type: 2}
   taskNoticeChannel: {fileID: 11400000, guid: 5fda20fc9cb6bf54eab384b86d1323c8, type: 2}

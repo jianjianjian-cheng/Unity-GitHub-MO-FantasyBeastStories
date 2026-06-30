@@ -531,12 +531,13 @@ GameObject:
   - component: {fileID: 8675894652554190728}
   - component: {fileID: 4879197476638676878}
   - component: {fileID: 5759902226738697892}
+  - component: {fileID: 2287339490282947379}
+  - component: {fileID: 1930712936979821215}
   - component: {fileID: 2691239695838100668}
   - component: {fileID: 3333433870232147947}
   - component: {fileID: 8783560511710462947}
   - component: {fileID: 4088150061419970593}
   - component: {fileID: 8473362111187734840}
-  - component: {fileID: 1930712936979821215}
   m_Layer: 7
   m_Name: Boss_Horror
   m_TagString: Enemy
@@ -614,6 +615,40 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2287339490282947379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4847922173559036256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fd834580877fd343a090f570563013d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!195 &1930712936979821215
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4847922173559036256}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!114 &2691239695838100668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -623,48 +658,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 4847922173559036256}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5f71d67adab60f439295244bd4f24c9, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f9e39e98b901a488e111700bf1fb2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyData:
+    currentState: 0
+    isInitialized: 0
+  damageEventChannel: {fileID: 11400000, guid: 9d6c4e0be67ba6c42a5c60e91040904e, type: 2}
+  _network: {fileID: 2287339490282947379}
   animator: {fileID: 5759902226738697892}
   rb: {fileID: 4879197476638676878}
   PlayerTarget: {fileID: 0}
-  currentState: 0
   rayBeamPoint: {fileID: 5656052339195723215}
   bitePoint: {fileID: 7502754639684529314}
   rayBeamPrefab: {fileID: 3578584058624714247, guid: 4ec0acf9e80dce742b5b9f286b947c67, type: 3}
   fireballPrefab: {fileID: 58768117104554071, guid: 00da8ebdf7053b446a17b53e7d81b837, type: 3}
   fireballBurstPoint: {fileID: 8547860197809792760}
   rollCollider: {fileID: 0}
-  navMeshAgent: {fileID: 0}
-  biteRange: 1
-  biteDamage: 3
-  biteWindUp: 0.4
-  biteCooldown: 2
-  rayBeamSpeed: 8
-  rayBeamDamage: 5
-  rayBeamWindUp: 0.5
-  rayBeamCooldown: 12
-  fireballSpeed: 8
-  fireballBurstCount: 5
-  fireballBurstInterval: 0.5
-  fireballBurstSpread: 15
-  fireballBurstWindUp: 0.7
-  fireballBurstCooldown: 8
-  rollSpeed: 5
-  rollDuration: 2
-  rollDamage: 5
-  rollWindUp: 0.6
-  rollCooldown: 10
-  rollTurnSpeed: 60
-  phase2HealthPercent: 0.5
-  phase1MoveSpeed: 4
-  phase1PreferredDistance: 4
-  phase2MoveSpeed: 4
-  phase2PreferredDistance: 4
-  phase2CooldownMultiplier: 0.7
-  maxAdjustTime: 5
-  idleActionInterval: 1
+  navMeshAgent: {fileID: 1930712936979821215}
+  config: {fileID: 11400000, guid: 07f80b4d38e31244098c16b0ed43d8e8, type: 2}
   currentPhase: 0
   currentAction: 0
 --- !u!136 &3333433870232147947
@@ -778,28 +790,6 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
---- !u!195 &1930712936979821215
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4847922173559036256}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!1 &5445380092123422523
 GameObject:
   m_ObjectHideFlags: 0

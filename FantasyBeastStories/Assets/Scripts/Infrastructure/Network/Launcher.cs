@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using Domain.Character;
 using Domain.Event;
-using Domain.Event.Channels.General;
 using Domain.Player;
 using ExitGames.Client.Photon;
 using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun;
+using Presentation.UI.Framework.Panel;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -223,9 +223,15 @@ namespace Infrastructure.Network
       }
       else
       {
-        // 不在房间中，直接加载开始界面
-        LoadMainMenuScene();
+        // 不在房间中，直接加载开始界面（需先显示 loading）
+        StartCoroutine(ShowAndLoadMainMenu());
       }
+    }
+
+    private IEnumerator ShowAndLoadMainMenu()
+    {
+      yield return StartCoroutine(Loading.Instance.Show());
+      LoadMainMenuScene();
     }
 
     /// <summary>
@@ -238,6 +244,10 @@ namespace Infrastructure.Network
       pendingRoomName = "";
       isJoiningRoom = false;
       isAutoCreate = false;
+
+
+      // 禁用自动同步场景，避免 Photon 干扰菜单场景
+      PhotonNetwork.AutomaticallySyncScene = false;
 
       // 加载开始界面（假设场景索引为0或1，根据你的实际设置调整）
       SceneManager.LoadScene(0); // 或 SceneManager.LoadScene("MainMenu") 使用场景名称
@@ -291,24 +301,21 @@ namespace Infrastructure.Network
         Debug.Log("所有玩家已准备，开始加载场景");
         isRoomLoading = true;
 
-        EventChannelLocator.MainContainer.loadingChannel.Raise(true);
-
-        // 修改：不要在这里启动协程，而是直接加载场景
-        // PhotonNetwork.LoadLevel 会自动同步给所有玩家
         StartCoroutine(LoadLevelAfterDelay());
       }
     }
 
     // 新增：延迟加载场景的协程
-    IEnumerator LoadLevelAfterDelay()
+    public IEnumerator LoadLevelAfterDelay(int index = 2)
     {
       isLoadingScene = true;
       yield return new WaitForSeconds(2f);
 
+      yield return StartCoroutine(Loading.Instance.Show());
       // 只有房主加载场景
       if (PhotonNetwork.IsMasterClient)
       {
-        PhotonNetwork.LoadLevel(2);
+        PhotonNetwork.LoadLevel(index);
       }
     }
 
@@ -318,7 +325,7 @@ namespace Infrastructure.Network
       // 如果是退出到主菜单
       if (isQuittingToMenu)
       {
-        LoadMainMenuScene();
+        StartCoroutine(ShowAndLoadMainMenu());
         return;
       }
       if (!string.IsNullOrEmpty(pendingRoomName))
@@ -368,6 +375,9 @@ namespace Infrastructure.Network
         isRoomLoading = false;
         isLoadingScene = false;
         allPlayersLoaded = false;
+
+        // 关闭加载画面（返回大厅时 Loading.Show() 已提前打开）
+        // Loading.Instance.Hide();
 
         // 重置本地玩家的 PlayerReady 属性（关键修复）
         if (
@@ -480,7 +490,7 @@ namespace Infrastructure.Network
       }
 
       // 隐藏加载界面
-      HideLoadingCanvas();
+      // HideLoading();
 
       // 设置房间信息
       SetupRoomInfo();
@@ -503,7 +513,7 @@ namespace Infrastructure.Network
       else
       {
         // PlayerManager已存在，强制同步
-        EventChannelLocator.MainContainer.gameActionChannel.Raise(GameActionType.SyncAllPlayers);
+        EventChannelLocator.MainContainer.gameActionChannel.Raise(Domain.Event.Channels.General.GameActionType.SyncAllPlayers);
       }
     }
 
@@ -723,9 +733,9 @@ namespace Infrastructure.Network
     /// <summary>
     /// 隐藏加载画布
     /// </summary>
-    private void HideLoadingCanvas()
+    private void HideLoading()
     {
-      EventChannelLocator.MainContainer.loadingChannel.Raise(false);
+      StartCoroutine(Loading.Instance.Hide());
     }
 
     /// <summary>
@@ -814,7 +824,7 @@ namespace Infrastructure.Network
         }
       }
 
-      EventChannelLocator.MainContainer.loadingChannel.Raise(false);
+      // StartCoroutine(Loading.Instance.Hide());
 
       allPlayersLoaded = true;
       Debug.Log("所有玩家已加载完成，开始游戏！");
@@ -831,17 +841,23 @@ namespace Infrastructure.Network
         return;
       }
 
-      // 只有房主可以发起场景切换
+      // ★★★ 修复：无论房主还是非房主，都先显示 loading ★★★
+      // 非房主通过 Photon 场景同步加载大厅后，OnSceneLoaded → Hide() 会自动关闭
+      StartCoroutine(ReturnToLobbyCoroutine());
+    }
+
+    private IEnumerator ReturnToLobbyCoroutine()
+    {
+      yield return StartCoroutine(Loading.Instance.Show());
+
       if (PhotonNetwork.IsMasterClient)
       {
-        // 使用 Photon 的场景同步功能加载大厅场景
-        PhotonNetwork.LoadLevel(1); // 场景1是大厅
+        PhotonNetwork.LoadLevel(1);
         Debug.Log("[Launcher] 房主发起切换到大厅场景");
       }
       else
       {
-        // 非房主等待房主发起切换
-        Debug.Log("[Launcher] 等待房主切换场景...");
+        Debug.Log("[Launcher] 等待房主同步场景...");
       }
     }
 

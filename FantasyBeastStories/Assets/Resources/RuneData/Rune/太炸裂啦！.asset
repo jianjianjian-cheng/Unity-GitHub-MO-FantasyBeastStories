@@ -17,9 +17,9 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 67628f21e4b9a2b458177da498d3aff3, type: 3}
   rarity: 3
   powers:
-  - value: 30
-    label: "%\u57FA\u7840\u4F24\u5BB3"
   - value: 20
+    label: "%\u57FA\u7840\u4F24\u5BB3"
+  - value: 10
     label: "%\u66B4\u51FB\u7387"
   specialPowerName: "\u5C0F\u6CD5\u5E08\u4E13\u5C5E\uFF1A"
   specialPowerDescription: "\u521D\u59CB\u7A7F\u900F\u6B21\u6570+1"

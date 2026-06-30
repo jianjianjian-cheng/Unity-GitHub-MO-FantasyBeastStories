@@ -87,6 +87,12 @@ namespace Infrastructure.Network
             SyncedGameTimeManager.HandleSyncResetTime();
         }
 
+        [PunRPC]
+        public void RPC_BossSpawn(string bossName)
+        {
+            SyncedGameTimeManager.HandleBossSpawn(bossName);
+        }
+
         // ============================================================
         // DropItemBase RPC
         // ============================================================

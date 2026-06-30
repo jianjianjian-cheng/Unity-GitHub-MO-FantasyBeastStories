@@ -84,6 +84,7 @@ MonoBehaviour:
   - RPC_SyncBossUI
   - RPC_SyncExperience
   - RPC_PlayTriggerAnimation
+  - RPC_BossSpawn
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -92,6 +92,9 @@ namespace Presentation.UI
 
     // 是否已确认
     private bool isConfirmed = false;
+    // 防止面板重复打开
+    private bool _isPanelActive = false;
+
     private const string PLAYER_UPGRADE_READY_KEY = "UpgradeReady";
 
     public bool isAllExCard = false;
@@ -791,6 +794,12 @@ namespace Presentation.UI
     //打开魔法升级面板
     public void OpenMagicUpgradePanel()
     {
+      if (_isPanelActive)
+      {
+        Debug.LogWarning("MagicUpgradePanel 已打开，忽略重复请求");
+        return;
+      }
+      _isPanelActive = true;
       EventChannelLocator.MainContainer.bloomChannel.Raise(8f);
 
       Debug.Log("打开魔法升级面板");
@@ -853,6 +862,7 @@ namespace Presentation.UI
     //关闭魔法升级面板
     public void CloseMagicUpgradePanel()
     {
+      _isPanelActive = false;
       EventChannelLocator.MainContainer.bloomChannel.Raise(5f);
 
       Debug.Log("关闭魔法升级面板");

@@ -13,7 +13,6 @@ namespace Application
     void Awake()
     {
       ServiceLocator.Register(this);
-      DontDestroyOnLoad(gameObject);
     }
 
     void OnEnable()

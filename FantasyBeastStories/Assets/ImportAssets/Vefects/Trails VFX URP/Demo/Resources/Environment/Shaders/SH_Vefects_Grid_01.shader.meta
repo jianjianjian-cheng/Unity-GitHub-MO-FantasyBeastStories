@@ -7,6 +7,7 @@ ShaderImporter:
   - _Masks: {fileID: 2800000, guid: da13cff96126c2142a4282f9b0b912f2, type: 3}
   - _Normal: {fileID: 2800000, guid: a6c07b142c14fe64097eb43b7eb9ea05, type: 3}
   nonModifiableTextures: []
+  preprocessorOverride: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

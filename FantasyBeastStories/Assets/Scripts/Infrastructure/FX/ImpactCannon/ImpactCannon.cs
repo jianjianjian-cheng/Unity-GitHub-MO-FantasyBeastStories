@@ -76,7 +76,6 @@ namespace Infrastructure.FX.ImpactCannon
       var query = new SkillQueryData(SkillQueryType.GetMaxAttackCount);
       EventChannelLocator.MainContainer.skillQueryChannel.Raise(query);
       maxAttackCount = query.intValue;
-      Debug.Log($"最大攻击次数：{maxAttackCount}");
       attackCount = 0;
       ignoreEnemy = null;
       canSplit = true;

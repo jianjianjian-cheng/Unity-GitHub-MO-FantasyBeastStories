@@ -19,6 +19,13 @@ namespace Domain.Item
     private GameObject moveTarget;
     private Coroutine flyCoroutine;
 
+    // ── 受保护的访问器，供子类使用 ──
+    protected Rigidbody Rb => rb;
+    protected DropItemData DropItemData => dropItemData;
+    protected NetworkIdentityBase Network => _network;
+    protected GameObject MoveTarget => moveTarget;
+    protected Coroutine FlyCoroutine { get => flyCoroutine; set => flyCoroutine = value; }
+
     protected virtual void Awake()
     {
       dropItemData = new DropItemData();
@@ -63,7 +70,7 @@ namespace Domain.Item
       }
     }
 
-    private void ApplyExplosionEffect()
+    protected virtual void ApplyExplosionEffect()
     {
       if (rb == null)
         return;
@@ -159,7 +166,7 @@ namespace Domain.Item
     /// <summary>
     /// 由 DomainRpcBridge.RPC_DespawnItem 调用 — 在 MasterClient 上执行销毁
     /// </summary>
-    public void HandleDespawnItem()
+    public virtual void HandleDespawnItem()
     {
       EventChannelLocator.MainContainer.poolOperationChannel.Raise(
           PoolOperationData.CreateDespawn(PoolConst.ExperienceBall_Blue, gameObject));

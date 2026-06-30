@@ -13,7 +13,10 @@ namespace Presentation.UI
     {
         [Header("动画设置")]
         [SerializeField]
-        private float animationDuration = 0.5f; // 动画持续时间
+        private float animationDuration = 0.5f; // 浮现/隐藏动画持续时间
+
+        [SerializeField]
+        private float displayDuration = 5f; // 显示持续时间（之后自动隐藏）
 
         [SerializeField]
         private float moveDistance = 100f; // 移动距离
@@ -31,36 +34,32 @@ namespace Presentation.UI
 
         private void Awake()
         {
+            // 自动查找未绑定的 TextMeshPro 引用
+            if (contentText == null)
+                contentText = GetComponent<TextMeshProUGUI>();
+
             // 获取或添加 CanvasGroup 组件
             canvasGroup = GetComponent<CanvasGroup>();
             if (canvasGroup == null)
-            {
                 canvasGroup = gameObject.AddComponent<CanvasGroup>();
-            }
 
             // 获取 RectTransform
             rectTransform = GetComponent<RectTransform>();
             if (rectTransform == null)
             {
                 Debug.LogError("TaskPreface 需要挂载在带有 RectTransform 的 UI 对象上！");
+                return;
             }
 
             // 记录初始位置
             originalPosition = rectTransform.anchoredPosition;
         }
 
-        private void OnEnable()
-        {
-            // 可选：激活时自动播放浮现动画
-            PlayTextAnimation(true);
-        }
+        private void OnEnable() { }
 
         private void OnDisable()
         {
-            // 停止动画防止报错
             KillTween();
-            // 隐藏 UI
-            PlayTextAnimation(false);
         }
 
         /// <summary>
@@ -72,6 +71,10 @@ namespace Presentation.UI
             // 停止当前正在播放的动画
             KillTween();
 
+            // 组件未初始化完成则不播放
+            if (rectTransform == null || canvasGroup == null)
+                return;
+
             // 设置初始状态
             if (showIn)
             {
@@ -80,12 +83,29 @@ namespace Presentation.UI
                 canvasGroup.alpha = 0f;
                 gameObject.SetActive(true);
 
-                // 向下移动到原位 + 逐渐显示
+                // 浮现动画 → 停留 displayDuration 秒 → 自动隐藏
                 Sequence sequence = DOTween.Sequence();
+                // ① 向下移动到原位 + 逐渐显示
                 sequence.Join(
                     rectTransform.DOAnchorPos(originalPosition, animationDuration).SetEase(easeType)
                 );
                 sequence.Join(canvasGroup.DOFade(1f, animationDuration).SetEase(easeType));
+                // ② 等待显示持续时间
+                sequence.AppendInterval(displayDuration);
+                // ③ 自动隐藏（向上移动 + 逐渐隐藏）
+                sequence.Append(
+                    rectTransform
+                        .DOAnchorPos(
+                            originalPosition + new Vector2(0, -moveDistance),
+                            animationDuration
+                        )
+                        .SetEase(easeType)
+                );
+                sequence.Join(canvasGroup.DOFade(0f, animationDuration).SetEase(easeType));
+                sequence.OnComplete(() =>
+                {
+                    gameObject.SetActive(false);
+                });
                 currentTween = sequence;
             }
             else

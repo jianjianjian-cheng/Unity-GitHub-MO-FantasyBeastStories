@@ -9,6 +9,7 @@ using UnityEngine;
 using DG.Tweening;
 using Domain.Event;
 using Domain.Event.Channels.Game;
+using Photon.Pun;
 
 namespace Domain.Time
 {
@@ -29,7 +30,11 @@ namespace Domain.Time
         [Tooltip("是否循环播放（时间结束后重置）")]
         public bool loop = false;
 
-        [Header("事件列表")]
+        [Header("事件列表（数据驱动）")]
+        [SerializeField]
+        private TimeEventListSO timeEventList;
+
+        /// <summary>运行时事件列表（从 SO 加载副本，支持运行时增删）</summary>
         public List<TimeEventData> timeEvents = new List<TimeEventData>();
 
         [Header("最终Boss设置")]
@@ -61,7 +66,18 @@ namespace Domain.Time
             Instance = this;
             ServiceLocator.Register(this);
             DomainServiceLocator.Register(this);
-            DontDestroyOnLoad(gameObject);
+
+            // 从 ScriptableObject 加载事件列表副本
+            if (timeEventList != null)
+            {
+                timeEvents = timeEventList.GetEvents();
+                Debug.Log($"[SyncedGameTimeManager] 从 {timeEventList.name} 加载了 {timeEvents.Count} 个时间事件");
+            }
+            else
+            {
+                Debug.LogWarning("[SyncedGameTimeManager] timeEventList 未赋值，使用空的运行时列表");
+                timeEvents = new List<TimeEventData>();
+            }
         }
 
         void Start()
@@ -78,6 +94,10 @@ namespace Domain.Time
             {
                 EventChannelLocator.MainContainer.timeQueryChannel.RegisterListener(OnTimeQuery);
             }
+            if (EventChannelLocator.MainContainer.pauseChannel != null)
+            {
+                EventChannelLocator.MainContainer.pauseChannel.RegisterListener(OnGamePauseChanged);
+            }
         }
 
         void OnDisable()
@@ -85,6 +105,10 @@ namespace Domain.Time
             if (EventChannelLocator.MainContainer.timeQueryChannel != null)
             {
                 EventChannelLocator.MainContainer.timeQueryChannel.UnregisterListener(OnTimeQuery);
+            }
+            if (EventChannelLocator.MainContainer.pauseChannel != null)
+            {
+                EventChannelLocator.MainContainer.pauseChannel.UnregisterListener(OnGamePauseChanged);
             }
         }
 
@@ -98,6 +122,14 @@ namespace Domain.Time
             data.totalGameTime = totalGameTime;
             data.remainingTime = GetRemainingTime();
             data.isTimeRunning = isRunning;
+        }
+
+        /// <summary>
+        /// 响应 pauseChannel — 选择卡片/升级面板打开时暂停计时
+        /// </summary>
+        private void OnGamePauseChanged(bool isPaused)
+        {
+            isRunning = !isPaused;
         }
 
         // ---- 静态 Handler 方法（供 DomainRpcBridge 调用） ----
@@ -137,6 +169,20 @@ namespace Domain.Time
             Instance.isRunning = false;
             Instance.OnGameTimeFinished?.Invoke();
             EventChannelLocator.MainContainer.gameStateChangeChannel.Raise(GameState.GameOver);
+        }
+
+        /// <summary>
+        /// 由 DomainRpcBridge.RPC_BossSpawn 调用
+        /// 非主机客户端收到通知后，触发本地事件通道 → UI 更新
+        /// </summary>
+        public static void HandleBossSpawn(string bossName)
+        {
+            if (Instance == null) return;
+            if (!NetworkServiceLocator.PlayerService.IsMasterClient)
+            {
+                Instance.isBossGenerated = true;
+                EventChannelLocator.MainContainer.bossSpawnChannel.Raise(bossName);
+            }
         }
 
         /// <summary>
@@ -258,10 +304,20 @@ namespace Domain.Time
                 EventChannelLocator.MainContainer.timeChangeEnemyAttributeChannel.Raise(currentTime);
             }
 
-            // 生成最终Boss
-            if (currentTime >= totalGameTime - 480f)
+            // 生成最终Boss（仅主机检测时间条件）
+            if (currentTime >= totalGameTime - 1795f && !isBossGenerated)
             {
-                GenerateFinalBoss(bossName);
+                isBossGenerated = true;
+
+                // 所有客户端：触发事件通道 → BossSpawner 生成 + UI 更新
+                EventChannelLocator.MainContainer.bossSpawnChannel.Raise(bossName);
+
+                // 联机同步：通知非主机客户端触发本地事件（用于 UI 等表现层）
+                if (NetworkServiceLocator.PlayerService.IsMasterClient && isSynced)
+                {
+                    NetworkServiceLocator.DomainRpcService?.InvokeRPC(
+                        "RPC_BossSpawn", NetworkTarget.Others, bossName);
+                }
             }
 
             // 触发时间更新事件
@@ -324,14 +380,8 @@ namespace Domain.Time
             EventChannelLocator.MainContainer.timeEventChannel.Raise(args);
         }
 
-        #region 有关于与时间相关的游戏机制
-        private void GenerateFinalBoss(string name)
-        {
-            if (isBossGenerated) return;
-            if (!NetworkServiceLocator.PlayerService.IsMasterClient) return;
-            isBossGenerated = true;
-        }
-        #endregion
+        // GenerateFinalBoss 逻辑已迁移至 Update 中的事件通道方式
+        // 由 bossSpawnChannel.Raise(bossName) 触发，BossSpawner 监听处理
 
         #region 公共控制方法
 

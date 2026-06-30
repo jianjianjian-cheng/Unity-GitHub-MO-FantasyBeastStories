@@ -115,13 +115,8 @@ namespace Presentation.UI
             {
                 int curMinutes = Mathf.FloorToInt(currentTime / 60);
                 int curSeconds = Mathf.FloorToInt(currentTime % 60);
-                int remMinutes = Mathf.FloorToInt(remainingTime / 60);
-                int remSeconds = Mathf.FloorToInt(remainingTime % 60);
 
-                timeText.text = string.Format(
-                    "{0}:{1:D2} / {2}:{3:D2}",
-                    curMinutes, curSeconds, remMinutes, remSeconds
-                );
+                timeText.text = string.Format("{0}:{1:D2}", curMinutes, curSeconds);
             }
         }
     }

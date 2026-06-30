@@ -260,6 +260,10 @@ namespace Domain.Enemy
     protected virtual void EnterDie()
     {
       EventChannelLocator.MainContainer.enemyReportChannel.Raise(new EnemyReportData(transform.position, _network.ViewID));
+
+      // 记录本次击杀到对局统计
+      MatchStatisticsManager.Instance?.RecordKill();
+
       // 停止物理移动
       if (rb != null)
       {
@@ -385,6 +389,10 @@ namespace Domain.Enemy
       damageEventArgs.CalculateFinalDamageValue();
       damageEventArgs.finalDamageValue = Mathf.Ceil(damageEventArgs.finalDamageValue);
       enemyData.attribute.TakeDamage(damageEventArgs.finalDamageValue);
+
+      // 记录本次伤害到对局统计
+      MatchStatisticsManager.Instance?.RecordDamage(Mathf.RoundToInt(damageEventArgs.finalDamageValue));
+
       Debug.Log(
           "最终伤害为："
               + damageEventArgs.finalDamageValue

@@ -15,3 +15,6 @@ MonoBehaviour:
   damageEventChannel: {fileID: 11400000, guid: 9d6c4e0be67ba6c42a5c60e91040904e, type: 2}
   playerDamageEventChannel: {fileID: 11400000, guid: 543eef87ebb612a44bbf4198e65968dc, type: 2}
   enemyReportChannel: {fileID: 11400000, guid: bd52be28009efaf488a246523146d5b3, type: 2}
+  damageDisplayChannel: {fileID: 0}
+  bossHPUpdateChannel: {fileID: 11400000, guid: 957d5b0ae75947e4f8854b1966b15b3d, type: 2}
+  bossDeathChannel: {fileID: 11400000, guid: afe2c3face0fa924b9aced3e1b7004d4, type: 2}

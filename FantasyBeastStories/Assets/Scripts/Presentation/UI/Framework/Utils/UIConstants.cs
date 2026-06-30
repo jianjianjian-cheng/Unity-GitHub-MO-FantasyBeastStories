@@ -41,6 +41,7 @@ namespace Presentation.UI.Framework.Utils
             public const string Tooltip = "Tooltip";
             public const string Settings = "Settings";
             public const string Inventory = "Inventory";
+            public const string MatchResult = "MatchResult";
         }
 
         public static class AnimationNames

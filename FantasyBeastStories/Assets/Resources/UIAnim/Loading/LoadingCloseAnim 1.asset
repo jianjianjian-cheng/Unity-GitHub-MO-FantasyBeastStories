@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd365817305b9a9478d9333cd2111985, type: 3}
+  m_Name: LoadingCloseAnim 1
+  m_EditorClassIdentifier: 
+  duration: 1
+  ease: 6
+  useCanvasGroup: 1
+  animDuration: 1
+  startAlpha: 1
+  endAlpha: 0

@@ -18,6 +18,12 @@ namespace Domain.Event.Channels.UI
         public TaskUIEventChannelSO taskUIChannel;
         public HealthUpdateEventChannelSO healthUpdateChannel;
 
+        [Header("金币事件")]
+        public CoinUpdateEventChannelSO coinUpdateChannel;
+
+        [Header("对局统计事件")]
+        public MatchStatsUpdateEventChannelSO matchStatsUpdateChannel;
+
         [Header("任务事件")]
         public TaskActivationEventChannelSO taskActivationChannel;
         public TaskNoticeEventChannelSO taskNoticeChannel;

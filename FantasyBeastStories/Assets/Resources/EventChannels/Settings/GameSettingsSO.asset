@@ -13,6 +13,4 @@ MonoBehaviour:
   m_Name: GameSettingsSO
   m_EditorClassIdentifier: 
   IsTest: 0
-  IsPaused: 0
   IsStayLobby: 0
-  IsOpenUI: 0
