@@ -132,6 +132,26 @@ namespace Infrastructure.Network
 
     // ===================== 公共接口 =====================
 
+    /// <summary>
+    /// 运行时动态注册对象池（由生成器等组件在 Start 中调用）
+    /// 如果池名已存在则跳过，不会重复注册
+    /// </summary>
+    /// <param name="poolName">池名称</param>
+    /// <param name="prefab">预制体引用</param>
+    /// <param name="preloadCount">预创建数量</param>
+    public void RegisterPool(string poolName, GameObject prefab, int preloadCount = 10)
+    {
+      if (string.IsNullOrEmpty(poolName) || prefab == null)
+        return;
+      if (pools.ContainsKey(poolName))
+        return; // 已存在，不重复注册
+
+      this.prefabs[poolName] = prefab;
+      pools[poolName] = new Queue<GameObject>();
+      Preload(poolName, preloadCount);
+      Debug.Log($"[NetworkObjectPool] 运行时注册池: {poolName}, 预加载 x{preloadCount}");
+    }
+
     /// <summary>生成对象，自动处理测试模式与网络模式</summary>
     public GameObject Spawn(string poolName, Vector3 position, Quaternion rotation = default)
     {

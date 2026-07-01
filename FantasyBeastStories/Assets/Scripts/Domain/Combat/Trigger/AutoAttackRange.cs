@@ -15,7 +15,7 @@ namespace Domain.Combat.Trigger
         {
             if (other.gameObject.CompareTag("Player"))
             {
-                enemyBase.OnHandleTriggerEnter(other.gameObject);
+                // enemyBase.OnHandleTriggerEnter(other.gameObject);
                 Debug.LogWarning("进入攻击范围" + other.gameObject.name);
             }
         }
@@ -24,7 +24,7 @@ namespace Domain.Combat.Trigger
         {
             if (other.gameObject.CompareTag("Player"))
             {
-                enemyBase.OnHandleTriggerExit(other.gameObject);
+                // enemyBase.OnHandleTriggerExit(other.gameObject);
             }
         }
     }

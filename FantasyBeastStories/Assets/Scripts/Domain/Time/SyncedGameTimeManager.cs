@@ -22,7 +22,7 @@ namespace Domain.Time
     {
         [Header("时间设置")]
         [Tooltip("总游戏时间（秒）")]
-        public float totalGameTime = 120f;
+        public float totalGameTime = 1800f;
 
         [Tooltip("是否启用网络同步（非主机/房主跟随主机时间）")]
         public bool isSynced = true;
@@ -305,7 +305,7 @@ namespace Domain.Time
             }
 
             // 生成最终Boss（仅主机检测时间条件）
-            if (currentTime >= totalGameTime - 1795f && !isBossGenerated)
+            if (currentTime >= totalGameTime - 900f && !isBossGenerated)
             {
                 isBossGenerated = true;
 

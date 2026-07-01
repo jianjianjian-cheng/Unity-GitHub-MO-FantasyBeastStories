@@ -81,7 +81,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &9003073503236321233
 Transform:
   m_ObjectHideFlags: 0
@@ -606,10 +606,7 @@ MonoBehaviour:
   rb: {fileID: 2424846866186777879}
   PlayerTarget: {fileID: 0}
   attackDamage: 10
-  attackCooldown: 1.5
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 0
+  attackRange: 2
   pathUpdateInterval: 0.3
 --- !u!114 &2726188790719604096
 MonoBehaviour:

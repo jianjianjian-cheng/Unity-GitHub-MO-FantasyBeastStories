@@ -84,10 +84,11 @@ namespace Domain.Rune
         {
             Debug.Log($"[RuneEffectApplier] 应用特殊技能: {runeData.specialPowerName} → {runeData.specialPowerDescription}");
 
-            switch (runeData.specialPowerDescription)
+            switch (runeData.specialPowerName)
             {
-                case "初始穿透次数+1":
+                case "小法师专属：":
                     attr.AddMaxAttackCount(1);
+                    attr.AddComboCount(1); // 同步增加连击计数上限
                     Debug.Log($"[RuneEffectApplier] 初始发射数量 +1 → {attr.GetMaxAttackCount()}");
                     break;
 

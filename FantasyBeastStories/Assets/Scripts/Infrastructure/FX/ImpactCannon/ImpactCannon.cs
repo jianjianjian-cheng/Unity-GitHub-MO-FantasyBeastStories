@@ -293,6 +293,9 @@ namespace Infrastructure.FX.ImpactCannon
         case Element.Winter:
           poolName = ObjectPoolConst.ImpactCannonWinterPool;
           break;
+        case Element.Grass:
+          poolName = ObjectPoolConst.ImpactCannonGrassPool;
+          break;
         default:
           poolName = ObjectPoolConst.ImpactCannonCommonPool;
           break;

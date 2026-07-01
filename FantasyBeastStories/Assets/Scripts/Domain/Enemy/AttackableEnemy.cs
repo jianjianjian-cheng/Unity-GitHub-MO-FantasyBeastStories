@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using Application; // TODO: GamePauseManager.isPaused 移到事件通道后移除
 using Domain.Event;
 using Domain.Event.Channels.Game;
+using Domain.Player;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace Domain.Enemy
 {
     /// <summary>
-    /// 可攻击玩家的敌人类，继承自EnemyBase
-    /// 在这个类中实现攻击玩家的逻辑
+    /// 可攻击玩家的敌人类，继承自 EnemyBase。
+    /// 通过距离判定替代碰撞体触发，提高大批量怪物时的性能。
+    /// 无攻击动画，怪物紧贴玩家时自动按间隔造成伤害。
     /// </summary>
     public class AttackableEnemy : EnemyBase
     {
@@ -18,29 +20,21 @@ namespace Domain.Enemy
         [SerializeField]
         protected float attackDamage = 10f;
 
-        [SerializeField]
-        protected float attackCooldown = 1.5f;
-
-        [SerializeField]
-        protected LayerMask playerLayer;
+        [SerializeField, Tooltip("攻击距离（怪物与玩家的距离小于此值时造成伤害）")]
+        protected float attackRange = 2f;
 
         [SerializeField]
         protected float pathUpdateInterval = 0.3f; // NavMesh寻路更新间隔（秒）
-        private NavMeshAgent navMeshAgent;
-        private List<GameObject> targetAttackPlayers;
-        private float pathUpdateTimer; // 寻路更新计时器
 
-        private float QueryDifficultyCoefficient()
-        {
-            var query = new DifficultyCoefficientQueryData();
-            EventChannelLocator.MainContainer.difficultyCoefficientQueryChannel.Raise(query);
-            return query.result;
-        }
+        private NavMeshAgent navMeshAgent;
+        private float pathUpdateTimer;
+
+        protected float attackInterval = 0.7f;
+        protected float attackCooldownTimer = 0f;
 
         protected override void Start()
         {
             base.Start();
-            targetAttackPlayers = new List<GameObject>();
             navMeshAgent = GetComponent<NavMeshAgent>();
             if (navMeshAgent != null)
             {
@@ -53,48 +47,53 @@ namespace Domain.Enemy
             base.Update();
             if (GamePauseManager.isPaused || enemyData.currentState == EnemyState.Die)
             {
-                navMeshAgent.isStopped = true;
+                if (navMeshAgent != null)
+                    navMeshAgent.isStopped = true;
                 return;
             }
             else
             {
-                navMeshAgent.isStopped = false;
+                if (navMeshAgent != null)
+                    navMeshAgent.isStopped = false;
             }
             DealDamageToPlayers();
         }
 
-        public void OnHandleTriggerEnter(GameObject player)
-        {
-            targetAttackPlayers.Add(player);
-        }
-
-        public void OnHandleTriggerExit(GameObject player)
-        {
-            targetAttackPlayers.Remove(player);
-        }
-
-        protected float attackInterval = 0.7f;
-        protected float attackCooldownTimer = 0f;
-
+        /// <summary>
+        /// 距离判定：对攻击范围内的所有玩家造成伤害。
+        /// 使用 sqrMagnitude 避免开根号，提高性能。
+        /// </summary>
         private void DealDamageToPlayers()
         {
             if (enemyData.currentState == EnemyState.Die)
                 return;
-            // 累加时间
+
             attackCooldownTimer += UnityEngine.Time.deltaTime;
+            if (attackCooldownTimer < attackInterval)
+                return;
 
-            // 检查是否达到攻击间隔
-            if (attackCooldownTimer >= attackInterval)
+            attackCooldownTimer = 0f;
+
+            // 从 PlayerManager 获取所有活跃玩家
+            var players = PlayerManager.instance != null
+                ? PlayerManager.instance.ActivePlayerObjects
+                : null;
+
+            if (players == null || players.Count == 0)
+                return;
+
+            float sqrRange = attackRange * attackRange;
+            Vector3 enemyPos = transform.position;
+
+            for (int i = 0; i < players.Count; i++)
             {
-                // 重置计时器
-                attackCooldownTimer = 0f;
+                var player = players[i];
+                if (player == null) continue;
 
-                // 对所有目标玩家造成伤害
-                foreach (var player in targetAttackPlayers)
+                // 距离平方比较，避免开根号
+                Vector3 diff = player.transform.position - enemyPos;
+                if (diff.sqrMagnitude <= sqrRange)
                 {
-                    if (player == null)
-                        continue; // 安全检查
-
                     DamageEventArgs damageEventArgs = new DamageEventArgs(
                         Element.Common,
                         gameObject,
@@ -118,33 +117,26 @@ namespace Domain.Enemy
                 navMeshAgent.speed = enemyData.attribute.moveSpeed;
                 navMeshAgent.updatePosition = true;
             }
-            //根据游戏难度更新最大生命值（通过事件通道查询当前时间）
+
+            // 获取当前游戏时间
             var timeQuery = new TimeQueryData();
             EventChannelLocator.MainContainer.timeQueryChannel?.Query(timeQuery);
             float currentTime = timeQuery.currentTime;
 
-            if (currentTime > 600f && currentTime < 900f)
-            {
-                enemyData.attribute.maxHealth = enemyData.attribute.maxHealth * (QueryDifficultyCoefficient() + 2.5f);
-            }
-            else if (currentTime > 900f && currentTime < 1200f)
-            {
-                enemyData.attribute.maxHealth = enemyData.attribute.maxHealth * (QueryDifficultyCoefficient() + 3.5f);
-            }
-            else if (currentTime > 1200f)
-            {
-                enemyData.attribute.maxHealth = enemyData.attribute.maxHealth * (QueryDifficultyCoefficient() + 4.5f);
-            }
-            else if (currentTime > 300f && currentTime < 600f)
-            {
-                enemyData.attribute.maxHealth = enemyData.attribute.maxHealth * QueryDifficultyCoefficient();
-            }
-            else
-            {
-                enemyData.attribute.maxHealth = enemyData.attribute.maxHealth * 1;
-            }
-            enemyData.attribute.currentHealth = enemyData.attribute.maxHealth;
-            Debug.Log($"最大生命值: {enemyData.attribute.maxHealth}");
+            // 获取玩家数量（单人模式=1，四人模式=4）
+            int playerCount = PlayerManager.instance != null ? PlayerManager.instance.PlayerCount : 1;
+
+            // 根据玩家数量计算目标最大血量
+            // 1人→3000, 4人→5000, 中间人数线性插值
+            float targetMaxHealth = 3000f + (playerCount - 1) * (2000f / 3f);
+
+            // 基于时间的进度：8分钟（480s）达到最大值
+            float progress = Mathf.Clamp01(currentTime / 480f);
+
+            // 从基础血量（500）线性增长到目标血量
+            float newMaxHealth = Mathf.Lerp(500f, targetMaxHealth, progress);
+            enemyData.attribute.maxHealth = newMaxHealth;
+            enemyData.attribute.currentHealth = newMaxHealth;
         }
 
         protected override void OnDisable()
@@ -160,7 +152,6 @@ namespace Domain.Enemy
             if (navMeshAgent == null)
                 return;
 
-            // 暂停时停止移动
             if (GamePauseManager.isPaused)
             {
                 navMeshAgent.isStopped = true;
@@ -169,7 +160,6 @@ namespace Domain.Enemy
 
             navMeshAgent.isStopped = false;
 
-            // 限制寻路更新频率，避免每帧重算路径
             pathUpdateTimer -= UnityEngine.Time.deltaTime;
             if (pathUpdateTimer <= 0f)
             {
@@ -181,14 +171,14 @@ namespace Domain.Enemy
         protected override void EnterRun()
         {
             base.EnterRun();
-            pathUpdateTimer = 0f; // 进入Run状态时立即更新一次寻路
+            pathUpdateTimer = 0f;
         }
 
         protected override void EnterDie()
         {
             base.EnterDie();
-            navMeshAgent.isStopped = true;
-            targetAttackPlayers.Clear();
+            if (navMeshAgent != null)
+                navMeshAgent.isStopped = true;
         }
 
         protected override void UpdateDie()

@@ -19,6 +19,7 @@ public class LobbyCanvas : UIScreen
 {
     private const string CharactorPanelId = "CharactorPanel";
     private const string RunePanelId = "RunePanel";
+    private const string MassionPanelId = "MassionPanel";
 
     [Header("Lobby References")]
     [SerializeField] private Volume postProcessVolume;
@@ -203,6 +204,10 @@ public class LobbyCanvas : UIScreen
 
         if (startButton != null)
             startButton.onClick.AddListener(OnStartClicked);
+
+        if (missionNavButton != null)
+            missionNavButton.onClick.AddListener(OnOpenMassionPanel);
+
     }
 
     // ──────────────────────────────────────────────
@@ -217,7 +222,10 @@ public class LobbyCanvas : UIScreen
         var runePanel = UIManager.Instance.GetScreen(RunePanelId);
         bool runeOpen = runePanel != null && (runePanel.IsOpen || runePanel.IsAnimating);
 
-        return charactorOpen || runeOpen;
+        var massionPanel = UIManager.Instance.GetScreen(MassionPanelId);
+        bool massionOpen = massionPanel != null && (massionPanel.IsOpen || massionPanel.IsAnimating);
+
+        return charactorOpen || runeOpen || massionOpen;
     }
 
     /// <summary>直接设置模糊效果及相机旋转状态（不查询面板状态，用于主动打开/关闭时）</summary>
@@ -248,14 +256,16 @@ public class LobbyCanvas : UIScreen
     private void OnCharacterNavClicked()
     {
         CloseRunePanel();
+        CloseMassionPanel();
         SetButtonSelected(characterNavButton?.gameObject);
         OpenCharactorPanel();
     }
 
     private void OnRuneNavClicked()
     {
-        SetButtonSelected(runeNavButton?.gameObject);
         CloseCharactorPanel();
+        CloseMassionPanel();
+        SetButtonSelected(runeNavButton?.gameObject);
         OpenRunePanel();
     }
 
@@ -493,6 +503,7 @@ public class LobbyCanvas : UIScreen
     {
         CloseCharactorPanel();
         CloseRunePanel();
+        CloseMassionPanel();
     }
 
     private void HandleEscape()
@@ -560,6 +571,43 @@ public class LobbyCanvas : UIScreen
         }
 
         EventChannelLocator.MainContainer.gameActionChannel.Raise(GameActionType.SetLocalReady);
+    }
+
+
+    // ──────────────────────────────────────────────
+    //  任务面板
+    // ──────────────────────────────────────────────
+
+    private void OnOpenMassionPanel()
+    {
+        CloseCharactorPanel();
+        CloseRunePanel();
+        SetButtonSelected(missionNavButton?.gameObject);
+        OpenMassionPanel();
+    }
+
+    private void OpenMassionPanel()
+    {
+        UIScreen panel = UIManager.Instance.GetScreen(MassionPanelId);
+        if (panel == null)
+        {
+            Debug.LogError($"[LobbyCanvas] GetScreen(\"{MassionPanelId}\") 返回 null！请确认 MassionPanel 已注册");
+            return;
+        }
+        panel.Open();
+        SetBlurAndRotation(true);
+    }
+
+    private void CloseMassionPanel()
+    {
+        var panel = UIManager.Instance.GetScreen(MassionPanelId);
+        if (panel == null)
+        {
+            Debug.LogWarning($"[LobbyCanvas] CloseMassionPanel: 未找到面板 {MassionPanelId}");
+            return;
+        }
+        panel.Close();
+        SetBlurAndRotation(false);
     }
 
     // ──────────────────────────────────────────────
