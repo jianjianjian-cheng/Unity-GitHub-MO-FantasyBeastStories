@@ -29,5 +29,11 @@ namespace Domain.Rune
             if (EquippedRuneId2 != -1) ids.Add(EquippedRuneId2);
             return ids.ToArray();
         }
+
+        public static void SetBoth(int runeId1, int runeId2)
+        {
+            EquippedRuneId1 = runeId1;
+            EquippedRuneId2 = runeId2;
+        }
     }
 }

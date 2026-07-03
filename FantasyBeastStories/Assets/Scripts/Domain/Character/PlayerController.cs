@@ -171,6 +171,11 @@ namespace Domain.Character
           { playerId = localActorNumber.ToString(), attributeName = AttributeKeyConst.Main }
       );
       EventChannelLocator.MainContainer.playerDamageEventChannel.RegisterListener(OnDamageReceived);
+
+      // 所有角色共用的频道注册
+      EventChannelLocator.MainContainer.cardReceivedChannel.RegisterListener(OnApplicationCard);
+      EventChannelLocator.MainContainer.skillQueryChannel.RegisterListener(OnSkillQuery);
+      SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     protected virtual void OnDisable()
@@ -184,6 +189,11 @@ namespace Domain.Character
           { playerId = localActorNumber.ToString(), attributeName = AttributeKeyConst.Main }
       );
       EventChannelLocator.MainContainer.playerDamageEventChannel.UnregisterListener(OnDamageReceived);
+
+      // 所有角色共用的频道注销
+      EventChannelLocator.MainContainer.cardReceivedChannel.UnregisterListener(OnApplicationCard);
+      EventChannelLocator.MainContainer.skillQueryChannel.UnregisterListener(OnSkillQuery);
+      SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     protected virtual void HandleInput()
@@ -483,6 +493,22 @@ namespace Domain.Character
           EventChannelLocator.MainContainer.skillQueryChannel.Raise(new SkillQueryData(SkillQueryType.AddLuckRate, 20));
           break;
       }
+    }
+
+    /// <summary>
+    /// 技能查询回调（由子类重写处理角色专属的查询，如 GetMaxAttackCount）
+    /// </summary>
+    protected virtual void OnSkillQuery(SkillQueryData data) { }
+
+    /// <summary>
+    /// 场景加载完成回调（由子类重写处理角色专属的场景加载逻辑）
+    /// </summary>
+    protected virtual void OnSceneLoaded(Scene scene, LoadSceneMode mode) { }
+
+    /// <summary>获取最大攻击次数</summary>
+    protected int GetMaxAttackCount()
+    {
+      return attributePlayer.GetMaxAttackCount();
     }
   }
 }

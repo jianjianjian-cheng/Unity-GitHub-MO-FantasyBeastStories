@@ -606,8 +606,14 @@ MonoBehaviour:
   rb: {fileID: 2424846866186777879}
   PlayerTarget: {fileID: 0}
   attackDamage: 10
-  attackRange: 2
+  attackRange: 1
   pathUpdateInterval: 0.3
+  lod0Distance: 8
+  lod1Distance: 15
+  lodRefreshInterval: 0.5
+  lod1AttackIntervalMultiplier: 3
+  lod2FreezeAnimation: 1
+  lod2DisableAttack: 1
 --- !u!114 &2726188790719604096
 MonoBehaviour:
   m_ObjectHideFlags: 0

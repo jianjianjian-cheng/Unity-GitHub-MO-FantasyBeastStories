@@ -85,6 +85,7 @@ MonoBehaviour:
   - RPC_SyncExperience
   - RPC_PlayTriggerAnimation
   - RPC_BossSpawn
+  - OpenExMagicUpgradePanel
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

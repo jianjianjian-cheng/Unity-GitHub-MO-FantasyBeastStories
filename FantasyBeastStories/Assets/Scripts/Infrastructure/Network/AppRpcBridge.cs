@@ -4,6 +4,7 @@ using Domain.Event;
 using Domain.Event.Channels.Game;
 using Domain.Services;
 using Photon.Pun;
+using Presentation.UI;
 using UnityEngine;
 
 namespace Infrastructure.Network
@@ -53,6 +54,14 @@ namespace Infrastructure.Network
         [PunRPC]
         public void OpenMagicUpgradePanel()
         {
+            EventChannelLocator.MainContainer.magicUpgradeChannel.Raise(true);
+        }
+
+        [PunRPC]
+        public void OpenExMagicUpgradePanel()
+        {
+            if (MagicUpgradeManager.instance != null)
+                MagicUpgradeManager.instance.isAllExCard = true;
             EventChannelLocator.MainContainer.magicUpgradeChannel.Raise(true);
         }
 

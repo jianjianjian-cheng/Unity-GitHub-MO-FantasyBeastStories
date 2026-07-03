@@ -70,8 +70,8 @@ public class MassionPanel : UIScreen
             return;
         }
 
-        // 读取当前进度
-        var progressMap = QuestTaskInventory.LoadAllProgress();
+        // 读取当前进度（从 QuestTaskManager，由 SaveManager 统一管理）
+        var progressMap = QuestTaskManager.Instance.GetAllProgress();
 
         foreach (var taskData in database.allTasks)
         {

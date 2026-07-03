@@ -6,7 +6,6 @@ using Domain.Event.Channels.Player;
 using Domain.Pool;
 using Domain.Services;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Domain.Character
@@ -39,20 +38,14 @@ namespace Domain.Character
     protected override void OnEnable()
     {
       base.OnEnable();
-      EventChannelLocator.MainContainer.cardReceivedChannel.RegisterListener(OnApplicationCard);
-      EventChannelLocator.MainContainer.skillQueryChannel.RegisterListener(OnSkillQuery);
-      SceneManager.sceneLoaded += OnSceneLoad;
     }
 
     protected override void OnDisable()
     {
       base.OnDisable();
-      EventChannelLocator.MainContainer.cardReceivedChannel.UnregisterListener(OnApplicationCard);
-      EventChannelLocator.MainContainer.skillQueryChannel.UnregisterListener(OnSkillQuery);
-      SceneManager.sceneLoaded -= OnSceneLoad;
     }
 
-    private void OnSkillQuery(SkillQueryData data)
+    protected override void OnSkillQuery(SkillQueryData data)
     {
       if (data.queryType == SkillQueryType.GetMaxAttackCount)
       {
@@ -130,11 +123,6 @@ namespace Domain.Character
       }
     }
 
-    private int GetMaxAttackCount()
-    {
-      return attributePlayer.GetMaxAttackCount();
-    }
-
     /// <summary>
     /// 由 DomainRpcBridge.RPC_InitElementPool 调用 — 在其他客户端初始化元素对象池
     /// </summary>
@@ -200,7 +188,5 @@ namespace Domain.Character
           break;
       }
     }
-
-    private void OnSceneLoad(Scene scene, LoadSceneMode mode) { }
   }
 }

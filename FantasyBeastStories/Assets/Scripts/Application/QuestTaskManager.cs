@@ -24,6 +24,9 @@ namespace Application
         // 对局中暂存的进度（taskId → 本次累加次数）
         private Dictionary<int, int> pendingProgress = new Dictionary<int, int>();
 
+        // 跨对局累计进度（由 SaveManager 统一读写，替代 QuestTaskInventory）
+        private Dictionary<int, int> cumulativeProgress = new Dictionary<int, int>();
+
         // 任务数据库
         private QuestTaskDatabaseSO taskDatabase;
 
@@ -96,28 +99,25 @@ namespace Application
         // ──────────────────────────────────
 
         /// <summary>
-        /// 对局结束：将本次 pendingProgress 合并到持久化存储。
+        /// 对局结束：将本次 pendingProgress 合并到累计进度。
         /// 由 MatchStatisticsManager.FinalizeMatch() 或 GameManager 在返回大厅时调用。
+        /// 合并后的数据由 SaveManager 统一持久化到硬盘。
         /// </summary>
         public void FinalizeTasks()
         {
             if (pendingProgress.Count == 0) return;
-
-            var savedProgress = QuestTaskInventory.LoadAllProgress();
 
             foreach (var kvp in pendingProgress)
             {
                 int taskId = kvp.Key;
                 int added = kvp.Value;
 
-                if (savedProgress.ContainsKey(taskId))
-                    savedProgress[taskId] += added;
+                if (cumulativeProgress.ContainsKey(taskId))
+                    cumulativeProgress[taskId] += added;
                 else
-                    savedProgress[taskId] = added;
+                    cumulativeProgress[taskId] = added;
 
-                QuestTaskInventory.SaveProgress(taskId, savedProgress[taskId]);
-
-                Debug.Log($"[QuestTaskManager] 任务 {taskId} 进度 +{added}，当前累计 {savedProgress[taskId]}");
+                Debug.Log($"[QuestTaskManager] 任务 {taskId} 进度 +{added}，当前累计 {cumulativeProgress[taskId]}");
             }
 
             pendingProgress.Clear();
@@ -129,10 +129,28 @@ namespace Application
             pendingProgress.Clear();
         }
 
-        /// <summary>获取所有任务的最新进度（从持久化存储读取）</summary>
+        /// <summary>获取所有任务的累计进度（给 SaveManager 存档时调用）</summary>
         public Dictionary<int, int> GetAllProgress()
         {
-            return QuestTaskInventory.LoadAllProgress();
+            return cumulativeProgress;
         }
+
+        #region 公共方法
+        /// <summary>
+        /// 从存档恢复所有任务进度（由 SaveManager 读档时调用）
+        /// </summary>
+        public void SetAllProgress(Dictionary<int, int> progress)
+        {
+            cumulativeProgress.Clear();
+            if (progress == null) return;
+
+            foreach (var kvp in progress)
+            {
+                cumulativeProgress[kvp.Key] = kvp.Value;
+            }
+
+            Debug.Log($"[QuestTaskManager] 从存档恢复 {cumulativeProgress.Count} 个任务进度");
+        }
+        #endregion
     }
 }

@@ -7,10 +7,14 @@ namespace Application
     /// 金币系统管理器（Application 层）
     ///
     /// 职责：
-    /// - 管理金币的增删查
+    /// - 管理金币的增删查（运行时内存值）
     /// - 提供金币计算公式 CalculateCoins(kills, totalDamage)
-    /// - 通过 PlayerPrefs 持久化金币数据
     /// - 通过 EventChannel 与 Presentation 层通信
+    ///
+    /// 持久化说明：
+    /// - 不再使用 PlayerPrefs，由 SaveManager 统一管理
+    /// - SaveManager.LoadGame() → SetCoins() 恢复
+    /// - SaveManager.SaveGame() → GetCoins() 收集
     ///
     /// 通信方式：
     /// 输出 → coinUpdateChannel（金币变化时更新 UI）
@@ -30,10 +34,6 @@ namespace Application
         [SerializeField] private int baseCoinPerKill = 50;
         [SerializeField] private float damageCoinFactor = 0.1f;
 
-        // ========== 持久化 Key ==========
-
-        private const string COIN_PREFS_KEY = "PlayerCoins";
-
         // ========== 运行时状态 ==========
 
         private int currentCoins;
@@ -46,7 +46,6 @@ namespace Application
             {
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
-                LoadCoins();
             }
             else
             {
@@ -58,7 +57,6 @@ namespace Application
         {
             if (Instance == this)
             {
-                SaveCoins();
                 Instance = null;
             }
         }
@@ -77,7 +75,6 @@ namespace Application
             if (amount <= 0) return;
 
             currentCoins += amount;
-            SaveCoins();
             RaiseCoinUpdate(amount);
         }
 
@@ -92,7 +89,6 @@ namespace Application
             if (currentCoins < amount) return false;
 
             currentCoins -= amount;
-            SaveCoins();
             RaiseCoinUpdate(-amount);
             return true;
         }
@@ -104,7 +100,6 @@ namespace Application
 
             int delta = amount - currentCoins;
             currentCoins = amount;
-            SaveCoins();
             RaiseCoinUpdate(delta);
         }
 
@@ -128,26 +123,10 @@ namespace Application
             return killReward + damageReward;
         }
 
-        // ========== 持久化 ==========
-
-        /// <summary>保存金币到 PlayerPrefs</summary>
-        private void SaveCoins()
-        {
-            PlayerPrefs.SetInt(COIN_PREFS_KEY, currentCoins);
-            PlayerPrefs.Save();
-        }
-
-        /// <summary>从 PlayerPrefs 加载金币</summary>
-        private void LoadCoins()
-        {
-            currentCoins = PlayerPrefs.GetInt(COIN_PREFS_KEY, 0);
-        }
-
         /// <summary>重置金币为 0（用于测试）</summary>
         public void ResetCoins()
         {
             currentCoins = 0;
-            SaveCoins();
             RaiseCoinUpdate(0);
         }
 

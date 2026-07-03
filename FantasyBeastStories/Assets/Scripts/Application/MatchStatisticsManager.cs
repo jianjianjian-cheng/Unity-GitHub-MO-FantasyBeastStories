@@ -32,6 +32,14 @@ namespace Application
         private float matchStartTime;
 
         // ──────────────────────────────────
+        //  生涯累计数据（跨对局持久化）
+        // ──────────────────────────────────
+
+        private int lifetimeKills;
+        private int lifetimeDamage;
+        private int lifetimeMatches;
+
+        // ──────────────────────────────────
         //  待结算状态（用于判断是否展示结算面板）
         // ──────────────────────────────────
 
@@ -152,6 +160,9 @@ namespace Application
             {
                 HasPendingMatchResult = true;
                 PendingResult = result;
+                lifetimeKills += totalKillsInMatch;
+                lifetimeDamage += totalDamageInMatch;
+                lifetimeMatches++;
                 RaiseMatchStatsUpdate(result);
             }
 
@@ -196,5 +207,27 @@ namespace Application
 
             EventChannelLocator.MainContainer.matchStatsUpdateChannel.Raise(data);
         }
+
+
+        #region  公共方法
+        public int GetTotalKillsInMatch() => totalKillsInMatch;
+
+        public void SetLifetimeStats(int kills, int damage, int matches)
+        {
+            lifetimeKills = kills;
+            lifetimeDamage = damage;
+            lifetimeMatches = matches;
+        }
+
+        /// <summary>
+        /// 获取生涯累计统计（给 SaveManager 读档时调用）
+        /// </summary>
+        public (int kills, int damage, int matches) GetLifetimeStats()
+        {
+            return (lifetimeKills, lifetimeDamage, lifetimeMatches);
+        }
+
+
+        #endregion
     }
 }

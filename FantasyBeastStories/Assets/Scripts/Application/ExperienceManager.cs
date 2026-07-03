@@ -6,6 +6,7 @@ using Domain.Event.Channels.General;
 using Domain.Event.Channels.Player;
 using Domain.Services;
 using Infrastructure.Network;
+using Presentation.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -55,6 +56,9 @@ namespace Application
         private int currentExperience;
         private int currentLevel;
         private int upgradeExperience;
+
+        // 专属卡牌升级倍数奖励：记录当前选卡对应的等级，用于判断是否触发 3 级额外奖励
+        private int lastBonusCheckLevel = -1;
 
         void OnEnable()
         {
@@ -173,6 +177,7 @@ namespace Application
             }
 
             int levelForThisChoice = pendingLevelUps.Dequeue();
+            lastBonusCheckLevel = levelForThisChoice; // 保存等级供面板关闭时检查倍数奖励
             StartCoroutine(OpenMagicUpgradePanelWithDelay());
         }
 
@@ -231,13 +236,24 @@ namespace Application
         /// <summary>
         /// 由 AppRpcBridge 在收到 RPC 后调用
         /// 关闭升级面板并在 Master 客户端启动下一级升级流程
+        /// 每 3 级额外触发一次专属卡牌升级（三张不重复专属卡牌）
         /// </summary>
         public static void HandleCloseMagicUpgradePanelRPC()
         {
             EventChannelLocator.MainContainer.magicUpgradeChannel.Raise(false);
             if (Instance != null && NetworkServiceLocator.PlayerService.IsMasterClient)
             {
-                Instance.StartCoroutine(Instance.DelayedProcessNextLevelUp());
+                // 每升级 3 次（3、6、9...级）额外赠送一次专属卡牌升级
+                if (Instance.lastBonusCheckLevel > 0 && Instance.lastBonusCheckLevel % 3 == 0)
+                {
+                    Instance.lastBonusCheckLevel = -1; // 防止重复触发
+                    Instance.StartCoroutine(Instance.OpenExUpgradePanelWithDelay());
+                }
+                else
+                {
+                    Instance.lastBonusCheckLevel = -1;
+                    Instance.StartCoroutine(Instance.DelayedProcessNextLevelUp());
+                }
             }
         }
 
@@ -245,6 +261,22 @@ namespace Application
         {
             yield return new WaitForSeconds(0.5f);
             ProcessNextLevelUp();
+        }
+
+        /// <summary>
+        /// 专属卡牌升级面板：延迟后打开，显示三张不重复专属卡牌
+        /// </summary>
+        private IEnumerator OpenExUpgradePanelWithDelay()
+        {
+            yield return new WaitForSeconds(1f);
+            if (EventChannelLocator.MainContainer.gameSettings.IsTest)
+            {
+                if (MagicUpgradeManager.instance != null)
+                    MagicUpgradeManager.instance.isAllExCard = true;
+                EventChannelLocator.MainContainer.magicUpgradeChannel.Raise(true);
+                yield break;
+            }
+            NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "OpenExMagicUpgradePanel", NetworkTarget.All);
         }
 
         /// <summary>

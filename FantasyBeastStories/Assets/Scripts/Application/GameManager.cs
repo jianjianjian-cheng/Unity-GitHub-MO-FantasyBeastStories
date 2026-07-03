@@ -62,6 +62,13 @@ namespace Application
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             FindSpawnPoints();
+
+            // 进入大厅时自动加载存档
+            if (scene.buildIndex == 1)
+            {
+                if (SaveManager.Instance != null)
+                    SaveManager.Instance.LoadGame();
+            }
         }
 
         #region 生成点管理
@@ -153,6 +160,10 @@ namespace Application
         {
             // 延迟10秒，让玩家观看死亡演出 + 结算缓冲
             yield return new WaitForSeconds(10f);
+
+            // ★ 返回大厅前自动保存（对局结算数据）
+            if (SaveManager.Instance != null)
+                SaveManager.Instance.SaveGame();
 
             Debug.Log("[GameManager] 正在返回大厅...");
             // 加载大厅场景（场景索引1）
