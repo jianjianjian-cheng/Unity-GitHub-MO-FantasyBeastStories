@@ -771,8 +771,8 @@
 				sampler2D _CameraOpaqueTexture;
 				#define SampleScreenTexture(uv) tex2Dproj(_CameraOpaqueTexture, uv)
 			#else
-				sampler2D _GrabTexture;
-				#define SampleScreenTexture(uv) tex2Dproj(_GrabTexture, uv)
+				sampler2D _ProjectGrabTexture;
+				#define SampleScreenTexture(uv) tex2Dproj(_ProjectGrabTexture, uv)
 			#endif
 			UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 

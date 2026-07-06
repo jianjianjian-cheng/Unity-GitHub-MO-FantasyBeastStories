@@ -323,5 +323,6 @@ namespace Domain.Pool
         public const string ImpactCannonTriggerPool = PoolConst.ImpactCannonTriggerPool;
         public const string FireFirePool = PoolConst.FireFirePool;
         public const string DamageNumPool = PoolConst.DamageNumPool;
+
     }
 }

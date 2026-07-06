@@ -15,6 +15,7 @@ namespace Domain.Combat.Trigger
     /// </summary>
     public abstract class AttackRangeBase : TriggerBase
     {
+        protected INetworkFireballCaster _networkCaster;
         [SerializeField] protected NetworkIdentityBase _network;
 
         [Header("纯数据")]
@@ -23,6 +24,9 @@ namespace Domain.Combat.Trigger
         protected AttributePlayerBase attributePlayerBase;
         protected List<GameObject> gameObjects = new List<GameObject>();
         protected GameObject targetEnemy;
+
+        /// <summary>是否正在连射中（连射期间不再触发新攻击）</summary>
+        private bool _isAttacking;
 
         public override void Start()
         {
@@ -56,6 +60,10 @@ namespace Domain.Combat.Trigger
                 attributePlayerBase = GetLocalPlayerAttribute();
             if (attributePlayerBase == null)
                 return;
+
+            // 每帧清理已死亡的敌人，确保怪物死亡后及时从列表移除
+            CleanupDeadEnemies();
+
             base.Update();
             Attack();
         }
@@ -71,21 +79,29 @@ namespace Domain.Combat.Trigger
                 return;
 
             attackRangeData.attackInterval = attributePlayerBase.GetAttackInterval();
-            // 攻击间隔控制
+
+            // 攻击间隔中 → 等待计时器归零
             if (attackRangeData.attackTimer > 0)
             {
                 attackRangeData.attackTimer -= UnityEngine.Time.deltaTime;
                 return;
             }
-            attackRangeData.attackTimer = attackRangeData.attackInterval;
 
-            // 调用子类实现的攻击方法
-            StartCoroutine(AttackCoroutine());
+            // 计时器归零 + 不在连射中 → 启动新一轮连射
+            if (!_isAttacking)
+            {
+                StartCoroutine(AttackSequenceCoroutine());
+            }
         }
 
-        //协程，用于短时间内连续攻击,限定攻击次数
-        private IEnumerator AttackCoroutine()
+        /// <summary>
+        /// 攻击序列协程：先完成连射，结束后才设置攻击间隔计时器
+        /// </summary>
+        private IEnumerator AttackSequenceCoroutine()
         {
+            _isAttacking = true;
+
+            // ── 阶段一：连射 ──
             while (attackRangeData.comboCounter <= attributePlayerBase.GetComboCount())
             {
                 attackRangeData.isCharged = (attackRangeData.empowerChargeCounter >= attributePlayerBase.GetEmpowerCharge());
@@ -99,6 +115,10 @@ namespace Domain.Combat.Trigger
             }
             attackRangeData.isCharged = false;
             attackRangeData.comboCounter = 1;
+
+            // ── 阶段二：连射全部完成 → 开始计算攻击间隔 ──
+            attackRangeData.attackTimer = attackRangeData.attackInterval;
+            _isAttacking = false;
         }
 
         /// <summary>
@@ -107,17 +127,10 @@ namespace Domain.Combat.Trigger
         protected abstract void PerformAttack();
 
         /// <summary>
-        /// 寻找最近的敌人
+        /// 清理已死亡的敌人，确保怪物死亡后及时从 gameObjects 移除
         /// </summary>
-        protected virtual void UpdateEnemyTarget()
+        private void CleanupDeadEnemies()
         {
-            if (gameObjects.Count == 0)
-            {
-                targetEnemy = null;
-                return;
-            }
-
-            // 清理无效目标（已销毁/已死亡/非敌人）
             for (int i = gameObjects.Count - 1; i >= 0; i--)
             {
                 var enemyGo = gameObjects[i];
@@ -128,11 +141,20 @@ namespace Domain.Combat.Trigger
                 }
 
                 var enemyBase = enemyGo.GetComponent<EnemyBase>();
-                if (enemyBase == null || enemyBase.GetIsDie())
+                if (enemyBase == null || enemyBase.IsDeadOrDying())
                 {
                     gameObjects.RemoveAt(i);
                 }
             }
+        }
+
+        /// <summary>
+        /// 寻找最近的敌人
+        /// </summary>
+        protected virtual void UpdateEnemyTarget()
+        {
+            // 先清理已死亡的敌人
+            CleanupDeadEnemies();
 
             if (gameObjects.Count == 0)
             {
@@ -188,26 +210,55 @@ namespace Domain.Combat.Trigger
         public override void OnTriggerEnter(Collider other)
         {
             base.OnTriggerEnter(other);
-            if (other.gameObject.GetComponent<EnemyBase>() != null)
+            // 使用 GetComponentInParent 支持子物体 Collider 的情况
+            var enemyBase = other.gameObject.GetComponentInParent<EnemyBase>();
+            if (enemyBase != null && !enemyBase.IsDeadOrDying())
             {
-                gameObjects.Add(other.gameObject);
+                GameObject rootGo = enemyBase.gameObject;
+                // 去重：避免同一敌人因多个子 Collider 被重复添加
+                if (!gameObjects.Contains(rootGo))
+                {
+                    gameObjects.Add(rootGo);
+                }
             }
         }
 
         public override void OnTriggerStay(Collider other)
         {
             base.OnTriggerStay(other);
-            var enemyBase = other.gameObject.GetComponent<EnemyBase>();
-            if (enemyBase == null || enemyBase.GetIsDie())
+            // 使用 GetComponentInParent 兼容子物体 Collider
+            var enemyBase = other.gameObject.GetComponentInParent<EnemyBase>();
+            if (enemyBase == null || enemyBase.IsDeadOrDying())
             {
-                gameObjects.Remove(other.gameObject);
+                // 移除时也使用根 GameObject
+                if (enemyBase != null)
+                    gameObjects.Remove(enemyBase.gameObject);
+                else
+                    gameObjects.Remove(other.gameObject);
+            }
+            else
+            {
+                GameObject rootGo = enemyBase.gameObject;
+                if (!gameObjects.Contains(rootGo))
+                {
+                    gameObjects.Add(rootGo);
+                }
             }
         }
 
         public override void OnTriggerExit(Collider other)
         {
             base.OnTriggerExit(other);
-            gameObjects.Remove(other.gameObject);
+            // 使用 GetComponentInParent 支持子物体 Collider 的情况
+            var enemyBase = other.gameObject.GetComponentInParent<EnemyBase>();
+            if (enemyBase != null)
+            {
+                gameObjects.Remove(enemyBase.gameObject);
+            }
+            else
+            {
+                gameObjects.Remove(other.gameObject);
+            }
         }
 
         /// <summary>

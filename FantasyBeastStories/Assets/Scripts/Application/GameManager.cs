@@ -208,12 +208,12 @@ namespace Application
     public class CharactorIndex
     {
         public const int WiZardBoy = 0;
-        public const int LittleRedGirl = 1;
+        public const int BingNv = 1;
     }
 
     public class CharactorName
     {
         public const string WiZardBoy = "WizardBoyRoot";
-        public const string LittleRedGirl = "LittleRedGirlRoot";
+        public const string BingNv = "BingNvRoot";
     }
 }

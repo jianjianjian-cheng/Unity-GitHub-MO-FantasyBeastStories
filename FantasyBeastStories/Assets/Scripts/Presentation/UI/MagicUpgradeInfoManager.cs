@@ -227,10 +227,9 @@ namespace Presentation.UI
                 case CharacterCardType.WizardBoy:
                     card = GetRandomFromArrayWithStackable(cardDatabaseEX.cardsEX_WizardBoy);
                     break;
-                case "待定":
-                    // TODO: 后续扩展
-                    Debug.LogWarning("CardType 1 尚未实现");
-                    return null;
+                case CharacterCardType.BingNv:
+                    card = GetRandomFromArrayWithStackable(cardDatabaseEX.cardsEX_BingNv);
+                    break;
                 case "待定2":
                     // TODO: 后续扩展
                     Debug.LogWarning("CardType 2 尚未实现");
@@ -337,9 +336,9 @@ namespace Presentation.UI
                 case CharacterCardType.WizardBoy:
                     targetArray = cardDatabaseEX.cardsEX_WizardBoy;
                     break;
-                case "待定":
-                    Debug.LogWarning("CardType 1 尚未实现");
-                    return null;
+                case CharacterCardType.BingNv:
+                    targetArray = cardDatabaseEX.cardsEX_BingNv;
+                    break;
                 case "待定2":
                     Debug.LogWarning("CardType 2 尚未实现");
                     return null;

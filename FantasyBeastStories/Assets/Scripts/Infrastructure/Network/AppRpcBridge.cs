@@ -85,6 +85,31 @@ namespace Infrastructure.Network
         }
 
         // ============================================================
+        // 经验球非网络化 RPC（方案二）
+        // ============================================================
+
+        /// <summary>房主 → 所有人：在指定位置生成一个经验球</summary>
+        [PunRPC]
+        public void RPC_SpawnExpBall(int ballId, Vector3 pos, int expValue)
+        {
+            ExperienceManager.HandleSpawnExpBallRPC((uint)ballId, pos, expValue);
+        }
+
+        /// <summary>任意客户端 → 房主：认领一个经验球</summary>
+        [PunRPC]
+        public void RPC_ClaimExpBall(int ballId, int expValue)
+        {
+            ExperienceManager.HandleClaimExpBallRPC((uint)ballId, expValue);
+        }
+
+        /// <summary>房主 → 所有人：该球已被收集，隐藏它</summary>
+        [PunRPC]
+        public void RPC_ExpBallCollected(int ballId)
+        {
+            ExperienceManager.HandleExpBallCollectedRPC((uint)ballId);
+        }
+
+        // ============================================================
         // TaskManager RPC
         // ============================================================
 

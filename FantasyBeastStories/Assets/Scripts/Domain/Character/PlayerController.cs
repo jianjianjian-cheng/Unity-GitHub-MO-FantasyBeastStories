@@ -166,9 +166,14 @@ namespace Domain.Character
       if (PlayerManager.instance != null)
         EventChannelLocator.MainContainer.playerQueryChannel.Raise(new PlayerQueryData(PlayerQueryType.RegisterPlayerObject) { playerObject = gameObject });
 
+      // 使用该 GameObject 的 Owner ActorNumber 注册属性，避免非拥有者覆盖本地玩家缓存
+      // 说明：同一客户端上所有 PlayerController 共用 localActorNumber，
+      // 若用 localActorNumber 注册非拥有者的属性，会覆盖拥有者的缓存条目，
+      // 导致卡牌效果更新了拥有者属性后，Tab 面板读取的是被覆盖的旧值。
+      int ownerActorNumber = NetworkServiceLocator.ObjectService.GetOwnerActorNumber(this);
       EventChannelLocator.MainContainer.playerAttributeChannel.Raise(
           new PlayerAttributeData(PlayerAttributeQueryType.RegisterAttribute, AttributeKeyConst.Main, attributePlayer)
-          { playerId = localActorNumber.ToString(), attributeName = AttributeKeyConst.Main }
+          { playerId = ownerActorNumber.ToString(), attributeName = AttributeKeyConst.Main }
       );
       EventChannelLocator.MainContainer.playerDamageEventChannel.RegisterListener(OnDamageReceived);
 
@@ -186,7 +191,7 @@ namespace Domain.Character
 
       EventChannelLocator.MainContainer.playerAttributeChannel.Raise(
           new PlayerAttributeData(PlayerAttributeQueryType.UnregisterAttribute)
-          { playerId = localActorNumber.ToString(), attributeName = AttributeKeyConst.Main }
+          { playerId = NetworkServiceLocator.ObjectService.GetOwnerActorNumber(this).ToString(), attributeName = AttributeKeyConst.Main }
       );
       EventChannelLocator.MainContainer.playerDamageEventChannel.UnregisterListener(OnDamageReceived);
 
@@ -248,7 +253,7 @@ namespace Domain.Character
       {
         EventChannelLocator.MainContainer.playerAttributeChannel.Raise(
             new PlayerAttributeData(PlayerAttributeQueryType.UnregisterAttribute)
-            { playerId = localActorNumber.ToString(), attributeName = AttributeKeyConst.Main }
+            { playerId = NetworkServiceLocator.ObjectService.GetOwnerActorNumber(this).ToString(), attributeName = AttributeKeyConst.Main }
         );
       }
     }
@@ -413,84 +418,84 @@ namespace Domain.Character
         //以下是所有角色公用的卡牌效果
         //------普通品质-------
         case "锋利的短剑":
-          attributePlayer.AddAttackPower(8);
+          attributePlayer.AddAttackPower(card.Value);
           break;
         case "饱满的生命":
-          attributePlayer.AddMaxHealth(30);
+          attributePlayer.AddMaxHealth(card.Value);
           SetAndChangeHPUI();
           break;
         case "温暖的篝火":
-          movementData.healthRecover += 2;
+          movementData.healthRecover += card.Value;
           attributePlayer.SetHealthRecover(movementData.healthRecover);
           break;
         case "敏锐的直觉":
-          attributePlayer.AddCriticalChance(6);
+          attributePlayer.AddCriticalChance(card.Value);
           break;
         case "坚韧的意志":
-          attributePlayer.AddDefensePower(8);
+          attributePlayer.AddDefensePower(card.Value);
           break;
         case "涌动的暗劲":
-          attributePlayer.AddCriticalMultiplier(10);
+          attributePlayer.AddCriticalMultiplier(card.Value);
           break;
         case "迅捷的手腕":
-          attributePlayer.ReduceAttackInterval(10);
+          attributePlayer.ReduceAttackInterval(card.Value);
           break;
         case "稚嫩四叶草":
-          EventChannelLocator.MainContainer.skillQueryChannel.Raise(new SkillQueryData(SkillQueryType.AddLuckRate, 5));
+          EventChannelLocator.MainContainer.skillQueryChannel.Raise(new SkillQueryData(SkillQueryType.AddLuckRate, card.Value));
           break;
         //------史诗品质-------
         case "锐利的狼牙":
-          attributePlayer.AddAttackPower(20);
+          attributePlayer.AddAttackPower(card.Value);
           break;
         case "不朽的壁垒":
-          attributePlayer.AddDefensePower(18);
+          attributePlayer.AddDefensePower(card.Value);
           break;
         case "巨人的血脉":
-          attributePlayer.AddMaxHealth(80);
+          attributePlayer.AddMaxHealth(card.Value);
           SetAndChangeHPUI();
           break;
         case "涌动的生机":
-          movementData.healthRecover += 3;
+          movementData.healthRecover += card.Value;
           attributePlayer.SetHealthRecover(movementData.healthRecover);
           break;
         case "鹰眼的凝视":
-          attributePlayer.AddCriticalChance(15);
+          attributePlayer.AddCriticalChance(card.Value);
           break;
         case "断罪的裁决":
-          attributePlayer.AddCriticalMultiplier(20);
+          attributePlayer.AddCriticalMultiplier(card.Value);
           break;
         case "狂乱的舞步":
-          attributePlayer.ReduceAttackInterval(20);
+          attributePlayer.ReduceAttackInterval(card.Value);
           break;
         case "青年四叶草":
-          EventChannelLocator.MainContainer.skillQueryChannel.Raise(new SkillQueryData(SkillQueryType.AddLuckRate, 10));
+          EventChannelLocator.MainContainer.skillQueryChannel.Raise(new SkillQueryData(SkillQueryType.AddLuckRate, card.Value));
           break;
         //------传说品质-------
         case "弑神的魔剑":
-          attributePlayer.AddAttackPower(40);
+          attributePlayer.AddAttackPower(card.Value);
           break;
         case "圣光的庇护":
-          attributePlayer.AddDefensePower(25);
+          attributePlayer.AddDefensePower(card.Value);
           break;
         case "永恒的生命":
-          attributePlayer.AddMaxHealth(150);
+          attributePlayer.AddMaxHealth(card.Value);
           SetAndChangeHPUI();
           break;
         case "神愈的圣光":
-          movementData.healthRecover += 5;
+          movementData.healthRecover += card.Value;
           attributePlayer.SetHealthRecover(movementData.healthRecover);
           break;
         case "必然的邂逅":
-          attributePlayer.AddCriticalChance(25);
+          attributePlayer.AddCriticalChance(card.Value);
           break;
         case "终末的号角":
-          attributePlayer.AddCriticalMultiplier(50);
+          attributePlayer.AddCriticalMultiplier(card.Value);
           break;
         case "极限的超越":
-          attributePlayer.ReduceAttackInterval(30);
+          attributePlayer.ReduceAttackInterval(card.Value);
           break;
         case "幸运四叶草":
-          EventChannelLocator.MainContainer.skillQueryChannel.Raise(new SkillQueryData(SkillQueryType.AddLuckRate, 20));
+          EventChannelLocator.MainContainer.skillQueryChannel.Raise(new SkillQueryData(SkillQueryType.AddLuckRate, card.Value));
           break;
       }
     }

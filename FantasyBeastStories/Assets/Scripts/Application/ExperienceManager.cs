@@ -4,6 +4,8 @@ using Domain.Event;
 using Domain.Event.Channels.Game;
 using Domain.Event.Channels.General;
 using Domain.Event.Channels.Player;
+using Domain.Item;
+using Domain.Pool;
 using Domain.Services;
 using Infrastructure.Network;
 using Presentation.UI;
@@ -57,6 +59,16 @@ namespace Application
         private int currentLevel;
         private int upgradeExperience;
 
+        // ========== 经验球非网络化（方案二） ==========
+        /// <summary>下一个可用的 ballId 自增计数器（仅房主使用）</summary>
+        private uint nextBallId = 1;
+
+        /// <summary>已认领的球 ID 集合，防止重复计数（仅房主使用）</summary>
+        private HashSet<uint> claimedBalls = new HashSet<uint>();
+
+        /// <summary>当前活跃的本地经验球映射 ballId → GameObject（所有客户端使用）</summary>
+        private Dictionary<uint, GameObject> activeExpBalls = new Dictionary<uint, GameObject>();
+
         // 专属卡牌升级倍数奖励：记录当前选卡对应的等级，用于判断是否触发 3 级额外奖励
         private int lastBonusCheckLevel = -1;
 
@@ -78,6 +90,10 @@ namespace Application
             EventChannelLocator.MainContainer.gameActionChannel.UnregisterListener(OnGameActionReceived);
             EventChannelLocator.MainContainer.experienceChannel.UnregisterListener(OnExperienceReceived);
             EventChannelLocator.MainContainer.skillQueryChannel.UnregisterListener(OnSkillQuery);
+
+            // 清理经验球状态
+            activeExpBalls.Clear();
+            claimedBalls.Clear();
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -109,6 +125,11 @@ namespace Application
         private void Initialize()
         {
             upgradeExperience = 100;
+
+            // 重置经验球去重状态
+            nextBallId = 1;
+            claimedBalls.Clear();
+
             RaiseExperienceUpdate();
         }
 
@@ -300,6 +321,116 @@ namespace Application
             Instance.upgradeExperience = (int)(Instance.upgradeExperience * 1.5);
 
             Instance.RaiseExperienceUpdate();
+        }
+
+        // ============================================================
+        // 经验球非网络化 RPC 处理（方案二）
+        // ============================================================
+
+        /// <summary>
+        /// 由 AppRpcBridge.RPC_SpawnExpBall 调用
+        /// 每个客户端在本地生成一个经验球（非网络对象）
+        /// </summary>
+        public static void HandleSpawnExpBallRPC(uint ballId, Vector3 position, int expValue)
+        {
+            if (Instance == null) return;
+            Instance.SpawnLocalExpBall(ballId, position, expValue);
+        }
+
+        /// <summary>
+        /// 由 AppRpcBridge.RPC_ClaimExpBall 调用（仅房主执行）
+        /// 处理经验球认领：去重检查 → 加经验 → 广播隐藏
+        /// </summary>
+        public static void HandleClaimExpBallRPC(uint ballId, int expValue)
+        {
+            if (Instance == null) return;
+            Instance.ClaimLocalExpBall(ballId, expValue);
+        }
+
+        /// <summary>
+        /// 由 AppRpcBridge.RPC_ExpBallCollected 调用
+        /// 所有客户端隐藏对应的本地经验球
+        /// </summary>
+        public static void HandleExpBallCollectedRPC(uint ballId)
+        {
+            if (Instance == null) return;
+            Instance.HideLocalExpBall(ballId);
+        }
+
+        // ── 实例方法 ──
+
+        /// <summary>
+        /// 生成一个全局唯一的 ballId（仅房主调用）
+        /// </summary>
+        public uint GenerateBallId()
+        {
+            return nextBallId++;
+        }
+
+        private void SpawnLocalExpBall(uint ballId, Vector3 position, int expValue)
+        {
+            var poolManager = ServiceLocator.Get<ObjectPoolManager>();
+            if (poolManager == null)
+            {
+                Debug.LogWarning("[ExperienceManager] ObjectPoolManager 不可用，无法生成经验球");
+                return;
+            }
+
+            var ballObj = poolManager.GetFromPoolAndActivate(PoolConst.ExperienceBall_Blue_Local, position);
+            if (ballObj == null)
+            {
+                Debug.LogWarning($"[ExperienceManager] 本地经验球池 {PoolConst.ExperienceBall_Blue_Local} 为空");
+                return;
+            }
+
+            var ball = ballObj.GetComponent<ExperienceBallBase>();
+            if (ball == null)
+            {
+                poolManager.ReturnToPool(PoolConst.ExperienceBall_Blue_Local, ballObj);
+                return;
+            }
+
+            ball.Setup(ballId, expValue);
+            activeExpBalls[ballId] = ballObj;
+        }
+
+        private void ClaimLocalExpBall(uint ballId, int expValue)
+        {
+            // 去重检查：已认领过则忽略
+            if (!claimedBalls.Add(ballId))
+            {
+                Debug.Log($"[ExperienceManager] 球 {ballId} 已被认领，忽略重复请求");
+                return;
+            }
+
+            // 加经验（AddExperience 内部会检查 IsMasterClient）
+            AddExperience(expValue);
+
+            // 广播隐藏此球到所有客户端
+            NetworkServiceLocator.ObjectService.InvokeRPC(
+                AppRpcBridge.Instance, "RPC_ExpBallCollected",
+                NetworkTarget.All, (int)ballId);
+        }
+
+        private void HideLocalExpBall(uint ballId)
+        {
+            if (!activeExpBalls.TryGetValue(ballId, out var ballObj))
+            {
+                // 球可能已被拾取者本地回收，属正常情况
+                return;
+            }
+
+            activeExpBalls.Remove(ballId);
+
+            var poolManager = ServiceLocator.Get<ObjectPoolManager>();
+            if (poolManager != null)
+            {
+                poolManager.ReturnToPool(PoolConst.ExperienceBall_Blue_Local, ballObj);
+            }
+            else
+            {
+                Destroy(ballObj);
+            }
         }
 
         public void SetExperience(int experience)

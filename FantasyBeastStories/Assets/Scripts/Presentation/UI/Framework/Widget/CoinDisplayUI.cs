@@ -67,7 +67,7 @@ public class CoinDisplayUI : UIWidget
     }
 
     /// <summary>
-    /// 从 CoinManager 读取当前金币数并刷新 UI
+    /// 从 CoinManager 读取当前金币数并刷新 UI（≥1000 显示为 X.XK）
     /// </summary>
     private void RefreshDisplay()
     {
@@ -77,6 +77,20 @@ public class CoinDisplayUI : UIWidget
             ? CoinManager.Instance.GetCoins()
             : 0;
 
-        coinText.text = coins.ToString();
+        coinText.text = FormatCoins(coins);
+    }
+
+    /// <summary>
+    /// 将金币数格式化为易读形式：<1000 显示原值，≥1000 显示为 X.XK
+    /// </summary>
+    private static string FormatCoins(int amount)
+    {
+        if (amount < 1000)
+            return amount.ToString();
+
+        // 保留一位小数，并去掉多余的 .0
+        float kValue = amount / 1000f;
+        string formatted = kValue.ToString("0.#");
+        return $"{formatted}K";
     }
 }

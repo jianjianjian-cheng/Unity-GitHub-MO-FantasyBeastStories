@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: BossConfigSO
   m_EditorClassIdentifier: 
   bossName: "\u86DB\u738B\u83F2\u529B\u752B\u65AF"
-  maxHealth: 1000
-  attackPower: 30
+  maxHealth: 700000
+  attackPower: 20
   biteRange: 2
   biteDamage: 3
   biteWindUp: 0.4

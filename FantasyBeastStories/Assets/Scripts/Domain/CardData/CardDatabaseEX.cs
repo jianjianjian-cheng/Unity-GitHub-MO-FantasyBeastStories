@@ -8,5 +8,6 @@ namespace Domain.CardData
     public class CardDatabaseEX : ScriptableObject
     {
         public CardConfigEX[] cardsEX_WizardBoy;
+        public CardConfigEX[] cardsEX_BingNv;
     }
 }

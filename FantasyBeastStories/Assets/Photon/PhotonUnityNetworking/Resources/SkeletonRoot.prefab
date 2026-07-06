@@ -608,8 +608,8 @@ MonoBehaviour:
   attackDamage: 10
   attackRange: 1
   pathUpdateInterval: 0.3
-  lod0Distance: 8
-  lod1Distance: 15
+  lod0Distance: 15
+  lod1Distance: 25
   lodRefreshInterval: 0.5
   lod1AttackIntervalMultiplier: 3
   lod2FreezeAnimation: 1

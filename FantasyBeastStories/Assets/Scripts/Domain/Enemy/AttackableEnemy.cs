@@ -377,8 +377,6 @@ namespace Domain.Enemy
         protected override void EnterDie()
         {
             base.EnterDie();
-            if (navMeshAgent != null)
-                navMeshAgent.isStopped = true;
         }
 
         protected override void UpdateDie()

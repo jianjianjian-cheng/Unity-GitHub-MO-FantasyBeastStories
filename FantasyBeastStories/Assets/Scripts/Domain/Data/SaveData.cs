@@ -42,5 +42,7 @@ namespace Domain.Data
         public float musicVolume = 0.8f;     // 音乐音量
         public float sfxVolume = 1.0f;       // 音效音量
         public int qualityLevel = 2;         // 画质等级
+
+        public int selectedCharacterIndex = 0;// 选中的角色索引，默认WizardBoy
     }
 }

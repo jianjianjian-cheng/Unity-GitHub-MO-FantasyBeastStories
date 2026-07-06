@@ -1,16 +1,13 @@
 using System.Collections;
-using Domain.Event;
-using Domain.Network;
 using Domain.Pool;
 using Domain.Services;
+using Application;
 using UnityEngine;
 
 namespace Domain.Item
 {
   public class DropItemBase : MonoBehaviour
   {
-    [SerializeField] private NetworkIdentityBase _network;
-
     [Header("纯数据")]
     [SerializeField]
     private DropItemData dropItemData;
@@ -22,7 +19,6 @@ namespace Domain.Item
     // ── 受保护的访问器，供子类使用 ──
     protected Rigidbody Rb => rb;
     protected DropItemData DropItemData => dropItemData;
-    protected NetworkIdentityBase Network => _network;
     protected GameObject MoveTarget => moveTarget;
     protected Coroutine FlyCoroutine { get => flyCoroutine; set => flyCoroutine = value; }
 
@@ -30,8 +26,6 @@ namespace Domain.Item
     {
       dropItemData = new DropItemData();
       rb = GetComponent<Rigidbody>();
-      if (_network == null)
-        _network = GetComponent<NetworkIdentityBase>();
     }
 
     protected virtual void Start() { }
@@ -139,37 +133,13 @@ namespace Domain.Item
 
     public virtual void ResetState() { }
 
+    /// <summary>
+    /// 球到达玩家时调用（由子类 override 实现具体拾取逻辑）
+    /// </summary>
     protected virtual void OnReachPlayer()
     {
-      if (EventChannelLocator.MainContainer.gameSettings.IsTest)
-      {
-        EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-            PoolOperationData.CreateDespawn(PoolConst.ExperienceBall_Blue, gameObject));
-        return;
-      }
-      if (_network.IsMasterClient)
-      {
-        EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-            PoolOperationData.CreateDespawn(PoolConst.ExperienceBall_Blue, gameObject));
-        return;
-      }
-      // 通过 IDomainRpcService 发送 RPC 到 MasterClient，附带 ViewID
-      if (_network != null)
-      {
-        NetworkServiceLocator.DomainRpcService?.InvokeRPC(
-            "RPC_DespawnItem",
-            Domain.Services.NetworkTarget.MasterClient,
-            _network.ViewID);
-      }
-    }
-
-    /// <summary>
-    /// 由 DomainRpcBridge.RPC_DespawnItem 调用 — 在 MasterClient 上执行销毁
-    /// </summary>
-    public virtual void HandleDespawnItem()
-    {
-      EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-          PoolOperationData.CreateDespawn(PoolConst.ExperienceBall_Blue, gameObject));
+      // 默认行为：子类应重写此方法实现拾取逻辑
+      // 经验球子类已重写为：触发经验事件 → 上报房主 → 回本地池
     }
   }
 }

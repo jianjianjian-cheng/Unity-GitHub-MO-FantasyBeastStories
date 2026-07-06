@@ -94,24 +94,6 @@ namespace Infrastructure.Network
         }
 
         // ============================================================
-        // DropItemBase RPC
-        // ============================================================
-
-        [PunRPC]
-        public void RPC_DespawnItem(int viewID)
-        {
-            var go = NetworkServiceLocator.ObjectService.FindByViewID(viewID);
-            if (go != null)
-            {
-                var dropItem = go.GetComponent<DropItemBase>();
-                if (dropItem != null)
-                {
-                    dropItem.HandleDespawnItem();
-                }
-            }
-        }
-
-        // ============================================================
         // PlayerController RPC
         // ============================================================
 
@@ -223,6 +205,19 @@ namespace Infrastructure.Network
         // ============================================================
         // IDomainRpcService 实现（供 Domain 层通过接口调用，消除直接依赖）
         // ============================================================
+
+        /// <summary>
+        /// RPC：非房主端请求房主销毁指定怪物（处理房主端未检测到死亡的情况）
+        /// </summary>
+        [PunRPC]
+        public void RPC_RequestEnemyDestroy(int viewID)
+        {
+            var go = NetworkServiceLocator.ObjectService.FindByViewID(viewID);
+            if (go != null)
+            {
+                PhotonNetwork.Destroy(go);
+            }
+        }
 
         /// <summary>
         /// 通过此 Bridge 的 PhotonView 发送 RPC 到指定目标

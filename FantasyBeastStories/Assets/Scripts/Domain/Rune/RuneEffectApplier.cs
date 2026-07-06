@@ -1,3 +1,4 @@
+using Domain.Character;
 using Domain.Character.Attribute;
 using UnityEngine;
 
@@ -26,6 +27,9 @@ namespace Domain.Rune
                 return;
             }
 
+            // 确定当前角色类型（用于专属符文匹配）
+            string currentCharacterType = DetectCurrentCharacterType();
+
             foreach (int runeId in equippedIds)
             {
                 var runeData = database.GetRuneById(runeId);
@@ -44,7 +48,7 @@ namespace Domain.Rune
 
                 // ── 应用特殊技能（如专属符文的专属效果） ──
                 if (!string.IsNullOrEmpty(runeData.specialPowerDescription))
-                    ApplySpecialPower(attributes, runeData);
+                    ApplySpecialPower(attributes, runeData, currentCharacterType);
             }
 
             LogFinalAttributes(attributes);
@@ -80,8 +84,20 @@ namespace Domain.Rune
             }
         }
 
-        private static void ApplySpecialPower(AttributePlayerBase attr, RuneDataSO runeData)
+        private static void ApplySpecialPower(AttributePlayerBase attr, RuneDataSO runeData, string currentCharacterType)
         {
+            // ── 角色匹配检查：专属符文必须与当前角色一致才生效 ──
+            if (!string.IsNullOrEmpty(runeData.exclusiveCharacterType))
+            {
+                if (runeData.exclusiveCharacterType != currentCharacterType)
+                {
+                    Debug.Log($"[RuneEffectApplier] 跳过专属符文效果 [{runeData.specialPowerName}]："
+                              + $"角色 {currentCharacterType} 与符文专属角色 {runeData.exclusiveCharacterType} 不匹配");
+                    return;
+                }
+                Debug.Log($"[RuneEffectApplier] 专属符文效果匹配！角色 {currentCharacterType} ✅");
+            }
+
             Debug.Log($"[RuneEffectApplier] 应用特殊技能: {runeData.specialPowerName} → {runeData.specialPowerDescription}");
 
             switch (runeData.specialPowerName)
@@ -98,6 +114,23 @@ namespace Domain.Rune
                     Debug.LogWarning($"[RuneEffectApplier] 未处理的特殊技能: '{runeData.specialPowerDescription}'");
                     break;
             }
+        }
+
+        /// <summary>
+        /// 检测当前玩家的角色类型（通过场景中的 PlayerController 组件）
+        /// </summary>
+        private static string DetectCurrentCharacterType()
+        {
+            var player = Object.FindObjectOfType<PlayerController>();
+            if (player == null)
+            {
+                Debug.LogWarning("[RuneEffectApplier] 未找到场景中的 PlayerController，无法检测角色类型");
+                return string.Empty;
+            }
+
+            string typeName = player.GetType().Name;
+            Debug.Log($"[RuneEffectApplier] 检测到当前角色类型: {typeName}");
+            return typeName;
         }
 
         private static void LogFinalAttributes(AttributePlayerBase attr)

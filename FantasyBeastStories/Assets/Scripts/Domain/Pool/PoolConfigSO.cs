@@ -27,6 +27,18 @@ namespace Domain.Pool
             new PoolInitializationEntry { poolName = PoolConst.ImpactCannonTriggerPool, preloadCount = 10 },
             new PoolInitializationEntry { poolName = PoolConst.FireFirePool, preloadCount = 10 },
             new PoolInitializationEntry { poolName = PoolConst.DamageNumPool, preloadCount = 100 },
+            // 本地经验球池（非网络对象）
+            new PoolInitializationEntry { poolName = PoolConst.ExperienceBall_Blue_Local, preloadCount = 50 },
+            //BingNv 角色专属对象池
+            new PoolInitializationEntry { poolName = PoolConst.GuiLingFirePool, preloadCount = 10 },
+            new PoolInitializationEntry { poolName = PoolConst.GuiLingLightningPool, preloadCount = 10 },
+            new PoolInitializationEntry { poolName = PoolConst.GuiLingWinterPool, preloadCount = 10 },
+            new PoolInitializationEntry { poolName = PoolConst.GuiLingGrassPool, preloadCount = 10 },
+            //GuiLing 击中特效池
+            new PoolInitializationEntry { poolName = PoolConst.GuiLingHitFirePool, preloadCount = 20 },
+            new PoolInitializationEntry { poolName = PoolConst.GuiLingHitLightningPool, preloadCount = 20 },
+            new PoolInitializationEntry { poolName = PoolConst.GuiLingHitWinterPool, preloadCount = 20 },
+            new PoolInitializationEntry { poolName = PoolConst.GuiLingHitGrassPool, preloadCount = 20 },
         };
     }
 }

@@ -28,7 +28,7 @@ ScriptedImporter:
     (\"Visualize Distortion Particles\", Float) = 0 \r\n\t}\r\n\t\r\n\tCategory\r\n\t{\r\n\t\tTags\r\n\t\t{\r\n\t\t\t\"Queue\"=\"Transparent\"\r\n\t\t\t\"IgnoreProjector\"=\"True\"\r\n\t\t\t\"RenderType\"=\"Transparent\"\r\n\t\t\t\"PreviewType\"=\"Plane\"\r\n\t\t}\r\n\r\n\t\tBlend
     SrcAlpha OneMinusSrcAlpha, One One\r\n\t\tZWrite Off\r\n\t\tCull  Off\r\n\r\n\r\n\t\t//====================================================================================================================================\r\n\t\t//
     Built-in Rendering Pipeline\r\n\r\n\t\tSubShader\r\n\t\t{\r\n\t\t\tGrabPass\r\n\t\t\t{\r\n\t\t\t\tTags
-    { \"LightMode\" = \"Always\" }\r\n\t\t\t\t\"_GrabTexture\"\r\n\t\t\t}\r\n\t\t\t\r\n\t\t\tPass\r\n\t\t\t{\r\n\t\t\t\tName
+    { \"LightMode\" = \"Always\" }\r\n\t\t\t\t\"_ProjectGrabTexture\"\r\n\t\t\t}\r\n\t\t\t\r\n\t\t\tPass\r\n\t\t\t{\r\n\t\t\t\tName
     \"BASE\"\r\n\t\t\t\tTags { \"LightMode\"=\"ForwardBase\" }\r\n\r\n\t\t\t\tCGPROGRAM\r\n\r\n\t\t\t\t#pragma
     vertex vertex_program\r\n\t\t\t\t#pragma fragment fragment_program\r\n\r\n\t\t\t\t//vertInstancingSetup
     writes to global, not allowed with DXC\r\n\t\t\t\t// #pragma never_use_dxc\r\n\t\t\t\t//

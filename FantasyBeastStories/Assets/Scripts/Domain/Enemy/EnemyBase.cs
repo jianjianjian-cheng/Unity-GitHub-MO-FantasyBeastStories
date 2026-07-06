@@ -5,6 +5,7 @@ using Domain.Event;
 using Domain.Event.Channels.Combat;
 using Domain.Player;
 using Domain.Pool;
+using Domain.Services;
 using Domain.Network;
 using UnityEngine;
 using UnityEngine.AI;
@@ -272,6 +273,18 @@ namespace Domain.Enemy
         rb.isKinematic = true;
       }
 
+      // 停止 NavMeshAgent（所有怪物类型通用，即使子类不继承 AttackableEnemy）
+      var navAgent = GetComponent<NavMeshAgent>();
+      if (navAgent != null && navAgent.isActiveAndEnabled)
+      {
+        navAgent.isStopped = true;
+        if (navAgent.isOnNavMesh)
+          navAgent.ResetPath();
+      }
+
+      // 禁用所有 Collider（所有客户端都执行）
+      // 注意：之前非房主端不禁用 Collider 是因为 AttackRange 依赖 OnTriggerStay 检测死亡，
+      // 现在已经改用 IsDeadOrDying() 方法通过状态机判断死亡，不再依赖 Collider 状态
       foreach (Collider collider in colliders)
       {
         collider.enabled = false;
@@ -280,6 +293,7 @@ namespace Domain.Enemy
       if (animator != null)
       {
         animator.SetTrigger("die");
+        animator.Update(0f); // 强制立即触发动画过渡，修复非房主端死亡动画不播放的问题
       }
 
       DropExperience();
@@ -296,13 +310,30 @@ namespace Domain.Enemy
     // 返回对象池（子类可重写以指定池名）
     protected virtual void ReturnToPool()
     {
-      // 网络模式下，只有 MasterClient 才能销毁怪物
-      if (!EventChannelLocator.MainContainer.gameSettings.IsTest && !_network.IsMasterClient)
+      if (EventChannelLocator.MainContainer.gameSettings.IsTest)
       {
+        // 测试模式：直接本地回池
+        EventChannelLocator.MainContainer.poolOperationChannel.Raise(
+            PoolOperationData.CreateDespawn(GetPoolName(), gameObject));
         return;
       }
-      EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-          PoolOperationData.CreateDespawn(GetPoolName(), gameObject));
+
+      if (_network.IsMasterClient)
+      {
+        // 房主端：PhotonNetwork.Destroy 同步到所有客户端
+        EventChannelLocator.MainContainer.poolOperationChannel.Raise(
+            PoolOperationData.CreateDespawn(GetPoolName(), gameObject));
+      }
+      else
+      {
+        // 非房主端：通知房主销毁此怪物（处理房主端未检测到死亡的情况）
+        NetworkServiceLocator.DomainRpcService?.InvokeRPC(
+            "RPC_RequestEnemyDestroy",
+            Domain.Services.NetworkTarget.MasterClient,
+            _network.ViewID);
+        // 本地立即禁用，不等网络同步
+        gameObject.SetActive(false);
+      }
     }
 
     // 获取对象池名称（子类重写以指定自己所属的池）
@@ -318,7 +349,25 @@ namespace Domain.Enemy
 
     public virtual bool GetIsDie()
     {
+      // ★ 非房主客户端：不依赖本地死亡状态（isDead），避免 AttackRange 误判后移除目标
+      // 非房主只负责显示伤害数字和扣血效果，不参与死亡判定
+      // 房主销毁怪物时 PhotonNetwork.Destroy 会同步到所有客户端，届时怪物自然被移除
+      if (!EventChannelLocator.MainContainer.gameSettings.IsTest
+          && _network != null
+          && !_network.IsMasterClient)
+      {
+        return false;
+      }
       return enemyData.attribute.GetIsDie();
+    }
+
+    /// <summary>
+    /// 判断敌人是否真正死亡（对所有客户端生效）
+    /// 与 GetIsDie() 的区别：非房主端也会检查状态机，适用于弹道/投射物的死亡检测
+    /// </summary>
+    public bool IsDeadOrDying()
+    {
+      return GetIsDie() || enemyData.currentState == EnemyState.Die;
     }
 
     protected virtual void OnEnable()
@@ -326,19 +375,29 @@ namespace Domain.Enemy
       // 从对象池取出时重新初始化
       if (enemyData.isInitialized)
       {
-        InitializeEnemy();
+        // [修复-问题四] 调用 ResetState 确保对象池回收后的状态被完全重置
+        // 包括：物理(isKinematic)/碰撞体/动画/属性(isDead/currentHealth)/目标等
+        ResetState();
+
+        // 确保属性不为 null（[NonSerialized] 字段在序列化后可能丢失）
         if (enemyData.attribute == null)
         {
           enemyData.attribute = new AttributeEnemyBase(500, 500, 50, 2);
         }
+
+        InitializeEnemy();
       }
 
-      // [修改] 使用事件通道注册
-      if (damageEventChannel == null)
+      // [修复] 每次 OnEnable 都重新获取事件通道，避免第一次获取失败后永久缓存 null
+      damageEventChannel = EventChannelLocator.MainContainer?.damageEventChannel;
+      if (damageEventChannel != null)
       {
-        damageEventChannel = EventChannelLocator.MainContainer?.damageEventChannel;
+        damageEventChannel.RegisterListener(OnDamageReceived);
       }
-      damageEventChannel?.RegisterListener(OnDamageReceived);
+      else
+      {
+        Debug.LogWarning($"[EnemyBase] {gameObject.name} 无法获取 damageEventChannel，将无法收到伤害事件", this);
+      }
     }
 
     protected virtual void OnDisable()
@@ -410,6 +469,7 @@ namespace Domain.Enemy
         );
       }
       enemyData.attribute.TakeDamageSpecial(damageEventArgs.element);
+
       if (enemyData.attribute.GetIsDie())
       {
         TransitionToState(EnemyState.Die);

@@ -60,14 +60,11 @@ namespace Infrastructure.FX.ImpactCannon
       _networkCaster = FindObjectOfType<CastNetwork>();
       baseScale = transform.localScale;
 
-      // [新增] 初始化时检查事件通道
+      // [修复] 每次 Awake 都重新获取事件通道，避免缓存 null
+      damageEventChannel = EventChannelLocator.MainContainer?.damageEventChannel;
       if (damageEventChannel == null)
       {
-        damageEventChannel = EventChannelLocator.MainContainer?.damageEventChannel;
-        if (damageEventChannel == null)
-        {
-          Debug.LogWarning("[ImpactCannon] damageEventChannel 未配置，请在Inspector中赋值");
-        }
+        Debug.LogWarning("[ImpactCannon] damageEventChannel 未配置，请在Inspector中赋值或检查 MainContainer 是否就绪");
       }
     }
 
@@ -413,13 +410,13 @@ namespace Infrastructure.FX.ImpactCannon
           criticalMultiplier
       );
 
-      // 使用事件通道触发伤害事件
-      if (damageEventChannel == null)
+      // 使用事件通道触发伤害（不缓存，每次都重新获取）
+      var channel = EventChannelLocator.MainContainer?.damageEventChannel;
+      channel?.Raise(damageEventArgs);
+      if (channel == null)
       {
-        damageEventChannel = EventChannelLocator.MainContainer?.damageEventChannel;
+        Debug.LogWarning($"[ImpactCannon] damageEventChannel 为空，无法发送伤害事件", this);
       }
-
-      damageEventChannel?.Raise(damageEventArgs);
       Debug.Log($"[ImpactCannon] 通过事件通道触发伤害，目标: {enemyObj.name}");
     }
 

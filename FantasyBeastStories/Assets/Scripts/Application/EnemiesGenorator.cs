@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Domain.Enemy;
 using Domain.Event.Channels.Game;
 using Domain.Event;
 using Domain.Services;
@@ -29,6 +30,9 @@ namespace Application
         private float updateSpawnIntervalCounter = 0f;
         private float timer = 0f;
         bool canGenorate = false;
+
+        /// <summary>缓存的怪物数量监听器</summary>
+        private MonsterCountMonitor _countMonitor;
 
         /// <summary>
         /// 最低生成间隔（秒），在 10 分钟时达到此值
@@ -155,6 +159,25 @@ namespace Application
                 return;
             if (!NetworkServiceLocator.PlayerService.IsMasterClient)
                 return;
+
+            // 从 MonsterCountMonitor 读取该池的数量上限，达到上限则跳过生成
+            if (_countMonitor == null)
+                _countMonitor = ServiceLocator.Get<MonsterCountMonitor>();
+
+            int maxCount = _countMonitor != null
+                ? _countMonitor.GetMaxCount(actualPoolName)
+                : -1;
+
+            if (maxCount > 0)
+            {
+                int currentCount = _countMonitor.GetCount(actualPoolName);
+                if (currentCount >= maxCount)
+                {
+                    // 已达到上限，跳过本次生成
+                    return;
+                }
+            }
+
             if (!isPoolRegistered)
             {
                 Debug.LogWarning($"[EnemiesGenorator] {gameObject.name} 对象池未注册，尝试延迟注册");

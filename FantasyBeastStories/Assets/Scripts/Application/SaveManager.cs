@@ -32,6 +32,8 @@ namespace Application
         private const string SAVE_FILE_NAME = "save";
         private const string SAVE_VERSION = "1.0.0";
 
+        public static int SelectedCharacterIndex { get; set; } = 0;
+
         // ──────────────────────────────────
         //  单例生命周期
         // ──────────────────────────────────
@@ -48,6 +50,15 @@ namespace Application
             else
             {
                 Destroy(gameObject);
+            }
+        }
+
+        void Start()
+        {
+            // 启动时自动加载存档，确保 SelectedCharacterIndex 等数据从文件恢复
+            if (Instance == this && HasSave())
+            {
+                LoadGame();
             }
         }
 
@@ -187,6 +198,9 @@ namespace Application
                 currentSaveData.lifetimeDamage = stats.damage;
                 currentSaveData.lifetimeMatches = stats.matches;
             }
+
+            // 角色选择
+            currentSaveData.selectedCharacterIndex = SelectedCharacterIndex;
         }
 
         // ──────────────────────────────────
@@ -213,6 +227,9 @@ namespace Application
                     currentSaveData.lifetimeDamage,
                     currentSaveData.lifetimeMatches
                 );
+
+            // 角色选择
+            SelectedCharacterIndex = currentSaveData.selectedCharacterIndex;
         }
 
         // ──────────────────────────────────

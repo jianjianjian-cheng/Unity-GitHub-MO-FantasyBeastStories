@@ -12,7 +12,7 @@ namespace Domain.Combat.Trigger
   /// </summary>
   public class AttackRange_WizardBoy : AttackRangeBase
   {
-    private INetworkFireballCaster _networkCaster;
+
     private bool isTest = false;
 
     [Header("WizardBoy Settings")]

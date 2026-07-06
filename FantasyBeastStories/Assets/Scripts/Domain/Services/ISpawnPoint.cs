@@ -6,5 +6,6 @@ namespace Domain.Services
         bool IsEmpty();
         int GetOccupiedByPlayer();
         void ForceRelease();
+        void SetOccupied(bool occupied, int playerActorNumber);
     }
 }

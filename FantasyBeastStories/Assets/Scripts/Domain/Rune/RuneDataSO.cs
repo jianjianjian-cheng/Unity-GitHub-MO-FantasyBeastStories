@@ -12,6 +12,8 @@ public class RuneDataSO : ScriptableObject
     public List<RunePower> powers; // 属性修正列表
     public string specialPowerName;
     [TextArea] public string specialPowerDescription;
+    [Tooltip("专属符文绑定的角色类型（如 WizardBoy / BingNv），配合 ApplySpecialPower 判断")]
+    public string exclusiveCharacterType; // 为空表示全局通用
 }
 
 [System.Serializable]

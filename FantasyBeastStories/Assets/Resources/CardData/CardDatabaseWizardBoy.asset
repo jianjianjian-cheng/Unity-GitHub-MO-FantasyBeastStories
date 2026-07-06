@@ -43,3 +43,34 @@ MonoBehaviour:
     Value: 20
     Quality: "\u4F20\u8BF4"
     Stackable: 0
+  cardsEX_BingNv:
+  - Name: "\u51E4\u7FBD\u6D41\u706B"
+    Content: "\u5F52\u7FCE\u83B7\u5F97\u706B\u5143\u7D20\u52A0\u6210"
+    Value: 20
+    Quality: "\u4F20\u8BF4"
+    Stackable: 0
+  - Name: "\u6728\u7FCE\u56DE\u6625"
+    Content: "\u5F52\u7FCE\u83B7\u5F97\u8349\u5143\u7D20\u52A0\u6210"
+    Value: 2
+    Quality: "\u4F20\u8BF4"
+    Stackable: 0
+  - Name: "\u96F7\u7FCE\u60CA\u9E3F"
+    Content: "\u5F52\u7FCE\u83B7\u5F97\u7535\u5143\u7D20\u52A0\u6210"
+    Value: 20
+    Quality: "\u4F20\u8BF4"
+    Stackable: 0
+  - Name: "\u53E0\u7FBD\u8FFD\u98CE"
+    Content: "\u5F52\u7FCE\u73B0\u5728\u53EF\u4EE5\u8FDE\u5C04\uFF0C\u8FDE\u5C04\u6B21\u6570\u589E\u52A0"
+    Value: 1
+    Quality: "\u4F20\u8BF4"
+    Stackable: 1
+  - Name: "\u7A7F\u6797\u6253\u53F6"
+    Content: "\u5F52\u7FCE\u9501\u5B9A\u76EE\u6807\u589E\u52A0"
+    Value: 1
+    Quality: "\u4F20\u8BF4"
+    Stackable: 1
+  - Name: "\u4E00\u7FBD\u5343\u7FCE"
+    Content: "\u5F52\u7FCE\u73B0\u5728\u53EF\u4EE5\u5206\u88C2\uFF0C\u5206\u88C2\u6B21\u6570\u589E\u52A0"
+    Value: 1
+    Quality: "\u4F20\u8BF4"
+    Stackable: 1

@@ -86,6 +86,13 @@ MonoBehaviour:
   - RPC_PlayTriggerAnimation
   - RPC_BossSpawn
   - OpenExMagicUpgradePanel
+  - RPC_ClaimExpBall
+  - RPC_ExpBallCollected
+  - RPC_SpawnExpBall
+  - RPC_OnGuiLingCast
+  - RPC_OnSplitGuiLingCast
+  - RPC_PlayGuiLingHitVFX
+  - RPC_RequestEnemyDestroy
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

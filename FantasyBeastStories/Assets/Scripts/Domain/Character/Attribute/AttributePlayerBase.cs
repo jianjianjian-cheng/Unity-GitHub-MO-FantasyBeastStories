@@ -10,6 +10,7 @@ public enum Element
     Lightning,
     Winter,
     Grass,
+    Fire,
 }
 
 namespace Domain.Character.Attribute
@@ -32,6 +33,7 @@ namespace Domain.Character.Attribute
         protected int maxAttackCount;
         protected int comboCount;
         protected int empowerCharge;
+        protected int multiTargetCount;
         protected Element currentElement = Element.Common;
 
         protected bool isSplit = false;
@@ -54,6 +56,7 @@ namespace Domain.Character.Attribute
             maxAttackCount = config.baseMaxAttackCount;
             comboCount = config.baseComboCount;
             empowerCharge = config.baseEmpowerCharge;
+            multiTargetCount = config.baseMultiTargetCount;
             currentElement = Element.Common;
             isSplit = false;
             splitCount = 0;
@@ -306,6 +309,17 @@ namespace Domain.Character.Attribute
         public void AddSplitCount(int count)
         {
             this.splitCount += count;
+        }
+
+        public int GetMultiTargetCount()
+        {
+            return multiTargetCount;
+        }
+
+        public void AddMultiTargetCount(int count)
+        {
+            this.multiTargetCount += count;
+            Debug.Log($"多目标锁定数量增加{count}个,当前可锁定{multiTargetCount}个目标");
         }
     }
 }

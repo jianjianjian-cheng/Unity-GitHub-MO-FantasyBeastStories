@@ -136,7 +136,7 @@ Shader "Cartoon FX/Remaster/Particle Screen Distortion"
 			GrabPass
 			{
 				Tags { "LightMode" = "Always" }
-				"_GrabTexture"
+				"_ProjectGrabTexture"
 			}
 			
 			Pass
@@ -178,4 +178,3 @@ Shader "Cartoon FX/Remaster/Particle Screen Distortion"
 	
 	CustomEditor "CartoonFX.MaterialInspector"
 }
-

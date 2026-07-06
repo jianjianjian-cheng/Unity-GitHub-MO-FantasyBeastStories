@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Domain.Event;
 using Domain.Pool;
+using Domain.Combat.FX;
 using Infrastructure.FX.ImpactCannon;
 using Photon.Pun;
 using Domain.Combat.Trigger;
@@ -190,18 +191,11 @@ namespace Infrastructure.Network
       if (enemyView == null)
         return;
 
-      // 2. 根据元素类型选择击中特效池
+      // 2. 触发伤害事件（扣血）
+      // 注意：击中特效由各投射物系统自行处理，不在 RPC 中重复播放。
+      // - ImpactCannon: ImpactCannon.OnTriggerEnter → PlayHitEffect()
+      // - GuiLing:      GuiLingBase.OnTriggerEnter → LaunchEffect(hitVFX)
       Element element = (Element)elementInt;
-      string poolKey = GetHitPoolByElement(element);
-      GameObject hitEffect = null;
-      EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-          PoolOperationData.CreateGet(poolKey, hitPoint, (o) => hitEffect = o));
-      if (hitEffect != null)
-      {
-        hitEffect.GetComponentInChildren<ParticleSystem>()?.Play();
-      }
-
-      // 3. 触发伤害事件（扣血）
       DamageEventArgs damageEventArgs = new DamageEventArgs(
           element,
           gameObject,
@@ -257,7 +251,170 @@ namespace Infrastructure.Network
       }
     }
 
-    // 在 CastNetwork.cs 中添加
+    // ==================== GuiLing（鬼灵弹）投射物同步 ====================
+
+    /// <summary>
+    /// 接口实现：请求广播 GuiLing 发射（由 AttackRange_BingNv 调用）
+    /// </summary>
+    public void RequestGuiLingCast(Vector3 spawnPos, Vector3 direction, int targetViewID, int elementInt)
+    {
+      photonView.RPC(
+          "RPC_OnGuiLingCast",
+          RpcTarget.Others,
+          spawnPos,
+          direction,
+          targetViewID,
+          elementInt
+      );
+    }
+
+    /// <summary>
+    /// RPC：其他客户端收到后，在本地生成 GuiLing 视觉投射物
+    /// </summary>
+    [PunRPC]
+    void RPC_OnGuiLingCast(Vector3 spawnPos, Vector3 direction, int targetViewID, int elementInt)
+    {
+      Element element = (Element)elementInt;
+      SpawnGuiLingForOthers(spawnPos, direction, targetViewID, element);
+    }
+
+    /// <summary>
+    /// 为其他客户端生成本地 GuiLing（isMine = false，仅视觉表现）
+    /// </summary>
+    private void SpawnGuiLingForOthers(Vector3 spawnPos, Vector3 direction, int targetViewID, Element element)
+    {
+      string poolName = GetGuiLingPoolByElement(element);
+
+      GameObject guiLing = null;
+      EventChannelLocator.MainContainer.poolOperationChannel.Raise(
+          PoolOperationData.CreateGet(poolName, spawnPos, (o) => guiLing = o));
+      if (guiLing == null)
+      {
+        Debug.LogWarning($"[CastNetwork] 从对象池 {poolName} 获取 GuiLing 失败");
+        return;
+      }
+
+      // 查找目标
+      PhotonView targetView = PhotonView.Find(targetViewID);
+      Transform target = targetView != null ? targetView.transform : null;
+
+      var guiLingBase = guiLing.GetComponent<GuiLingBase>();
+      guiLingBase.poolName = poolName;
+      guiLingBase.SetTargetAndLaunch(target, direction);
+      // 重要：isMine = false，此投射物不负责伤害判定
+      guiLingBase.SetDamageData(false, 0f, 0f, 1f, element);
+      guiLingBase.SetSplitData(false, 0);
+    }
+
+    /// <summary>
+    /// 根据元素类型获取 GuiLing 对象池名称
+    /// </summary>
+    private static string GetGuiLingPoolByElement(Element element)
+    {
+      switch (element)
+      {
+        case Element.Fire: return PoolConst.GuiLingFirePool;
+        case Element.Lightning: return PoolConst.GuiLingLightningPool;
+        case Element.Grass: return PoolConst.GuiLingGrassPool;
+        case Element.Winter:
+        default: return PoolConst.GuiLingWinterPool;
+      }
+    }
+
+    // ==================== GuiLing 分裂弹同步 ====================
+
+    /// <summary>
+    /// 广播 GuiLing 分裂弹（由 GuiLingBase 命中时调用）
+    /// 其他客户端收到后生成本地视觉分裂弹
+    /// </summary>
+    public void BroadcastSplitGuiLingCast(Vector3 spawnPos, Vector3 direction, GameObject targetEnemy, int elementInt)
+    {
+      PhotonView targetView = targetEnemy.GetComponent<PhotonView>();
+      if (targetView == null)
+        return;
+
+      if (photonView == null)
+        return;
+
+      photonView.RPC(
+          "RPC_OnSplitGuiLingCast",
+          RpcTarget.Others,
+          spawnPos,
+          direction,
+          targetView.ViewID,
+          elementInt
+      );
+    }
+
+    /// <summary>
+    /// RPC：其他客户端收到后，在本地生成 GuiLing 分裂弹
+    /// </summary>
+    [PunRPC]
+    void RPC_OnSplitGuiLingCast(Vector3 spawnPos, Vector3 direction, int targetViewID, int elementInt)
+    {
+      Element element = (Element)elementInt;
+      SpawnGuiLingForOthers(spawnPos, direction, targetViewID, element);
+    }
+
+    // ==================== GuiLing 击中特效同步 ====================
+
+    /// <summary>
+    /// 广播 GuiLing 击中特效（由 GuiLingBase 命中时调用）
+    /// 其他客户端在精确位置播放击中特效，确保所有玩家看到一致的命中效果
+    /// </summary>
+    public void BroadcastGuiLingHitVFX(Vector3 hitPos, Vector3 normal, int elementInt)
+    {
+      if (photonView == null)
+        return;
+
+      photonView.RPC(
+          "RPC_PlayGuiLingHitVFX",
+          RpcTarget.Others,
+          hitPos,
+          normal,
+          elementInt
+      );
+    }
+
+    /// <summary>
+    /// RPC：其他客户端收到后，在本地播放 GuiLing 击中特效
+    /// </summary>
+    [PunRPC]
+    void RPC_PlayGuiLingHitVFX(Vector3 hitPos, Vector3 normal, int elementInt)
+    {
+      Element element = (Element)elementInt;
+      string hitPoolName = GetGuiLingHitPoolByElement(element);
+      if (string.IsNullOrEmpty(hitPoolName))
+        return;
+
+      GameObject hitEffect = null;
+      EventChannelLocator.MainContainer.poolOperationChannel.Raise(
+          PoolOperationData.CreateGet(hitPoolName, hitPos, (o) => hitEffect = o));
+      if (hitEffect == null)
+        return;
+
+      hitEffect.transform.position = hitPos;
+      hitEffect.transform.rotation = Quaternion.FromToRotation(Vector3.up, normal);
+      // GuiLingHit 脚本会在 OnEnable 中自动播放粒子并归还池
+    }
+
+    /// <summary>
+    /// 根据元素类型获取 GuiLing 击中特效对象池名称
+    /// </summary>
+    private static string GetGuiLingHitPoolByElement(Element element)
+    {
+      switch (element)
+      {
+        case Element.Fire: return PoolConst.GuiLingHitFirePool;
+        case Element.Lightning: return PoolConst.GuiLingHitLightningPool;
+        case Element.Grass: return PoolConst.GuiLingHitGrassPool;
+        case Element.Winter:
+        default: return PoolConst.GuiLingHitWinterPool;
+      }
+    }
+
+    // ==================== ImpactCannon 分裂弹（已有） ====================
+
     public void RequestSplitBullet(Vector3 spawnPos, Vector3 direction, int elementInt)
     {
       photonView.RPC(

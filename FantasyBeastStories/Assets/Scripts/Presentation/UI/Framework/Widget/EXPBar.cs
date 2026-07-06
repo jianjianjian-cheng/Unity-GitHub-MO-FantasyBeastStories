@@ -6,14 +6,13 @@ using UnityEngine.UI;
 
 /// <summary>
 /// 经验条 Widget：通过 experienceUpdateChannel 监听经验/等级变化，
-/// 自动更新 Slider 进度与 Text 文字。
+/// 自动更新 Slider 进度与等级文字（纯数字）。
 /// </summary>
 public class EXPBar : UIWidget
 {
     [Header("EXP Bar")]
     [SerializeField] private Slider expSlider;
     [SerializeField] private Text levelText;
-    [SerializeField] private Text expText;
 
     // ──────────────────────────────────────────────
     //  AutoBindComponents
@@ -27,15 +26,6 @@ public class EXPBar : UIWidget
 
         if (levelText == null)
             levelText = GetComponentInChildren<Text>();
-
-        if (expText == null && levelText != null)
-        {
-            Text[] allTexts = GetComponentsInChildren<Text>();
-            if (allTexts.Length >= 2 && allTexts[1] != levelText)
-                expText = allTexts[1];
-            else if (allTexts.Length >= 2)
-                expText = allTexts[0];
-        }
 
         // 初始化 Slider
         if (expSlider != null)
@@ -76,9 +66,6 @@ public class EXPBar : UIWidget
             expSlider.value = data.SliderProgress;
 
         if (levelText != null)
-            levelText.text = $"Lv.{data.CurrentLevel}";
-
-        if (expText != null)
-            expText.text = $"{data.CurrentExperience}/{data.UpgradeExperience}";
+            levelText.text = data.CurrentLevel.ToString();
     }
 }

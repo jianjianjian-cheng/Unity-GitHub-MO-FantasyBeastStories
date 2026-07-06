@@ -1,5 +1,120 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &75792261154080188
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1584348673306311283}
+  - component: {fileID: 795899938541442046}
+  - component: {fileID: 715475321722489199}
+  - component: {fileID: 4619800716812678555}
+  - component: {fileID: 4694133769030456864}
+  m_Layer: 0
+  m_Name: GuiLingLauncher
+  m_TagString: AttackTrigger
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1584348673306311283
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75792261154080188}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 882370963259173768}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &795899938541442046
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75792261154080188}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 15, y: 0.9153899, z: 15}
+  m_Center: {x: 0, y: 0.44416732, z: 0}
+--- !u!114 &715475321722489199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75792261154080188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &4619800716812678555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75792261154080188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06528250e4cd5494a9e8249b8239f92a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4694133769030456864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75792261154080188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87b5ac4ba172f2c43b86e4400a098a6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _network: {fileID: 8134500079965625316}
+  attackRangeData:
+    offsetY: 0.5
+    attackInterval: 2
+    searchRadius: 5
+    attackTimer: 0
+    comboCounter: 1
+    empowerChargeCounter: 1
+    isCharged: 0
+  horizontalSpreadAngle: 45
+  verticalSpreadAngle: 20
+  launchOffsetY: 0.5
+  bingNv: {fileID: 4402439747038677942}
 --- !u!1 &139961061507672883
 GameObject:
   m_ObjectHideFlags: 0
@@ -673,9 +788,9 @@ GameObject:
   - component: {fileID: 1915638820527352854}
   - component: {fileID: 552075044864449275}
   - component: {fileID: 4402439747038677942}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: bingnv
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -696,6 +811,7 @@ Transform:
   - {fileID: 5414831952659151505}
   - {fileID: 6554949106563206364}
   - {fileID: 7736407847932590877}
+  - {fileID: 1584348673306311283}
   m_Father: {fileID: 1130011632312629248}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &8771543960658206648
@@ -835,9 +951,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowLayerWeightsInspector: 1
   ShowParameterInspector: 1
-  m_SynchronizeParameters: []
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 2
+    Name: isRun
   m_SynchronizeLayers:
-  - SynchronizeType: 0
+  - SynchronizeType: 2
     LayerIndex: 0
 --- !u!114 &4402439747038677942
 MonoBehaviour:
@@ -867,8 +986,14 @@ MonoBehaviour:
   isInLobby: 0
   isReadyPanel: {fileID: 3938034492414468005}
   testCardEffect: {fileID: 0}
-  impactCannonWinterPrefab: {fileID: 0}
-  impactCannonHitWinterPrefab: {fileID: 0}
+  guiLingWinterPrefab: {fileID: 1316024693396300276, guid: 783b5a6ddad67ab43bd5968b4be24bcf, type: 3}
+  guiLingFirePrefab: {fileID: 1865212907280611922, guid: 1e362cb8ecc754f468b97c9635ea68f1, type: 3}
+  guiLingLightningPrefab: {fileID: 1084493295099975559, guid: efbbe76f14dacf446b9dd0a494771bd6, type: 3}
+  guiLingGrassPrefab: {fileID: 5630948002573865659, guid: 14bab58889d70614abe5345f193fddf7, type: 3}
+  guiLingWinterHitPrefab: {fileID: 0}
+  guiLingFireHitPrefab: {fileID: 0}
+  guiLingLightningHitPrefab: {fileID: 0}
+  guiLingGrassHitPrefab: {fileID: 0}
 --- !u!1 &2349296607511021552
 GameObject:
   m_ObjectHideFlags: 0

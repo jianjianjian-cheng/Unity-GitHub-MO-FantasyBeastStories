@@ -26,5 +26,8 @@ namespace Domain.Character.Attribute
         public int baseMaxAttackCount = 1;
         public int baseComboCount = 1;
         public int baseEmpowerCharge = 1;
+
+        [Header("多目标锁定（BingNv 专属）")]
+        public int baseMultiTargetCount = 3;
     }
 }

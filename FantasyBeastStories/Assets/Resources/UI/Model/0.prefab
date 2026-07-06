@@ -543,9 +543,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 3373169039550510592}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4993b433f3f4f1247beb4b441aa834fe, type: 3}
+  m_Script: {fileID: 11500000, guid: 58554cfd483b0db4cba9bb3cfe2d2559, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _network: {fileID: 965388608055596658}
+  attackRangeData:
+    offsetY: 0.5
+    attackInterval: 2
+    searchRadius: 5
+    attackTimer: 0
+    comboCounter: 1
+    empowerChargeCounter: 1
+    isCharged: 0
+  projectileSpeed: 10
 --- !u!114 &4198863019276704135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -577,13 +587,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3373169039550510592}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f300be027306f42438e8619d4badc94f, type: 3}
+  m_Script: {fileID: 11500000, guid: 9fd834580877fd343a090f570563013d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offsetY: 0.5
-  attackInterval: 2
-  searchRadius: 5
-  projectileSpeed: 10
 --- !u!1 &3604926067038061607
 GameObject:
   m_ObjectHideFlags: 0
@@ -1330,18 +1336,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 5960261563226902258}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72764ce4f5641124181f87990d0420c2, type: 3}
+  m_Script: {fileID: 11500000, guid: 19262c0f6aea50d458c6db5f8fe39a0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnPointIndex: 0
-  isOnlyShow: 1
+  movementData:
+    moveSpeed: 2.6
+    rotationSpeed: 6
+    movementDirection: {x: 0, y: 0, z: 0}
+    isRun: 0
+    spawnPointIndex: 0
+    healthRecover: 0
+    recoverInterval: 1
+  playerAttributeConfig: {fileID: 0}
+  isOnlyShow: 0
   virtualCamera: {fileID: 7878012293754597757}
   rb: {fileID: 5735253518535564270}
   animator: {fileID: 6089574322996996809}
-  rotationSpeed: 6
   isInLobby: 0
   isReadyPanel: {fileID: 0}
   testCardEffect: {fileID: 0}
+  impactCannonLightenPrefab: {fileID: 0}
+  impactCannonHitLightenPrefab: {fileID: 0}
+  impactCannonWinterPrefab: {fileID: 0}
+  impactCannonHitWinterPrefab: {fileID: 0}
+  impactCannonGrassPrefab: {fileID: 0}
+  impactCannonHitGrassPrefab: {fileID: 0}
 --- !u!1 &6779044417623158316
 GameObject:
   m_ObjectHideFlags: 0
@@ -1609,7 +1628,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7878012293754597757}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4aca652bc37a7541b1863c162a0d1aa, type: 3}
+  m_Script: {fileID: 11500000, guid: f22cc8aa75a848d49b545dfa0df9ceba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   virtualCamera: {fileID: 7322906102673443165}

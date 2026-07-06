@@ -446,6 +446,10 @@ namespace Infrastructure.Network
           ServiceLocator.Get<GameManager>() != null && ServiceLocator.Get<GameManager>().GetEmptySpawnPoint() != null
       );
 
+      //应用存档角色
+      ApplySavedCharacter();
+
+
       // 生成玩家角色
       GameObject player = SpawnPlayer();
       if (player != null)
@@ -530,6 +534,14 @@ namespace Infrastructure.Network
         return null;
       }
 
+      // ★ 立即标记生成点为占用状态并 RPC 同步，防止其他玩家也选到这个点
+      ISpawnPoint sp = spawnPoint.GetComponent<ISpawnPoint>();
+      if (sp != null)
+      {
+        int localActorNumber = NetworkServiceLocator.PlayerService.GetLocalActorNumber();
+        sp.SetOccupied(true, localActorNumber);
+      }
+
       Vector3 spawnPosition = CalculateSpawnPosition(spawnPoint);
 
       // 生成玩家
@@ -543,7 +555,6 @@ namespace Infrastructure.Network
       player.name = "Player_" + PhotonNetwork.LocalPlayer.UserId;
 
       // 记录当前使用的生成点ID到玩家属性
-      ISpawnPoint sp = spawnPoint.GetComponent<ISpawnPoint>();
       if (sp != null)
       {
         var props = new Hashtable { { "CurrentSpawnPoint", sp.Id } };
@@ -595,6 +606,10 @@ namespace Infrastructure.Network
         );
         return SpawnPlayer();
       }
+
+      // 立即标记占用，防止被其他玩家抢走
+      int localActorNumber = NetworkServiceLocator.PlayerService.GetLocalActorNumber();
+      targetSpawnPoint.SetOccupied(true, localActorNumber);
 
       Transform spawnTransform = ((MonoBehaviour)targetSpawnPoint).transform;
       Vector3 spawnPosition = CalculateSpawnPosition(spawnTransform);
@@ -787,6 +802,21 @@ namespace Infrastructure.Network
               && !obj.activeInHierarchy
               && obj.scene.IsValid() // 确保是场景中的物体，不是预制体资源
       );
+    }
+
+    private void ApplySavedCharacter()
+    {
+      int savedIndex = SaveManager.SelectedCharacterIndex;
+      switch (savedIndex)
+      {
+        case CharactorIndex.BingNv:
+          currentlySelectedCharacter.name = CharactorName.BingNv;
+          break;
+        case CharactorIndex.WiZardBoy:
+        default:
+          currentlySelectedCharacter.name = CharactorName.WiZardBoy;
+          break;
+      }
     }
 
     // 切换角色示例

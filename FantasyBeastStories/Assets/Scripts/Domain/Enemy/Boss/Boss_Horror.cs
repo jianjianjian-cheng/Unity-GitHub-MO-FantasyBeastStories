@@ -846,7 +846,7 @@ namespace Domain.Enemy.Boss
             isAdjustingPosition = false;
             adjustPositionCoroutine = null;
 
-            if (navMeshAgent != null)
+            if (navMeshAgent != null && navMeshAgent.isActiveAndEnabled && navMeshAgent.isOnNavMesh)
                 navMeshAgent.isStopped = true;
 
             // 死亡动画

@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
-using Domain.CardData;
+using Application;
+using Domain.Character;
 using Domain.Event;
-using Domain.Event.Channels.General;
-using Domain.Services;
+using Infrastructure.Network;
 using Presentation.UI.Framework.Base;
 using Presentation.UI.Framework.Manager;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,7 +24,13 @@ public class CharactorPanel : UIScreen
   private int currentCharactorIndex = 0; //当前角色索引
   private GameObject currentCharactorInstance; //当前角色实例
 
-  private string eventName = CharacterCardType.WizardBoy;
+  [Tooltip("角色信息相关")]
+  [SerializeField] private GameObject infoItemParent; //角色信息项父对象
+  [SerializeField] private TextMeshProUGUI characterNameText; //角色名称文本
+  [SerializeField] private Image characterIconImage; //角色图标
+  [Header("角色信息库")]
+  [SerializeField] private CharacterInfoLibrarySO characterInfoLibrary;
+  [SerializeField] private GameObject charactorInfoItemPrefab; //角色信息项预制体
 
   protected override void Awake()
   {
@@ -54,7 +61,11 @@ public class CharactorPanel : UIScreen
     scale.x *= -1;
     previousCharacterButtonImage.transform.localScale = scale;
 
-    SwitchCharactor(0); //默认角色为第一个角色
+    // 从存档读取已选择的角色索引，同步预览（默认 0 = WiZardBoy）
+    int savedIndex = SaveManager.Instance != null
+        ? SaveManager.SelectedCharacterIndex
+        : 0;
+    SwitchCharactor(savedIndex);
 
     //添加角色选择按钮的点击事件
     previousCharacterButton
@@ -90,6 +101,11 @@ public class CharactorPanel : UIScreen
   {
     base.OnBeforeOpen();
     Debug.Log($"[CharactorPanel] OnBeforeOpen: 面板即将打开, IsOpen={IsOpen}");
+
+    // 重置预览角色旋转角度，避免上次旋转残留
+    if (currentCharactorInstance != null)
+      currentCharactorInstance.transform.rotation = Quaternion.identity;
+
     EventChannelLocator.MainContainer.changeCanRotateChannel.Raise(true);
   }
 
@@ -118,20 +134,70 @@ public class CharactorPanel : UIScreen
     currentCharactorIndex = charactorIndex;
     currentCharactorInstance = Instantiate(prefab, CharactorShowPosition.transform);
     currentCharactorInstance.transform.localPosition = Vector3.zero;
+
+    // 同步更新角色信息展示
+    RefreshCharacterInfo(charactorIndex);
+  }
+
+  /// <summary>
+  /// 根据角色索引刷新名称、图标、能力介绍列表
+  /// </summary>
+  private void RefreshCharacterInfo(int charactorIndex)
+  {
+    if (characterInfoLibrary == null)
+      return;
+
+    CharacterInfoSO info = characterInfoLibrary.GetInfo(charactorIndex);
+    if (info == null)
+      return;
+
+    // 名称
+    if (characterNameText != null)
+      characterNameText.text = info.characterName;
+
+    // 图标
+    if (characterIconImage != null)
+      characterIconImage.sprite = info.characterIcon;
+
+    // 能力介绍列表：先清除旧的
+    if (infoItemParent == null || charactorInfoItemPrefab == null)
+      return;
+
+    for (int i = infoItemParent.transform.childCount - 1; i >= 0; i--)
+    {
+      Transform child = infoItemParent.transform.GetChild(i);
+      Destroy(child.gameObject);
+    }
+
+    // 为每条描述创建新的 Item
+    foreach (string desc in info.abilityDescriptions)
+    {
+      GameObject itemObj = Instantiate(charactorInfoItemPrefab, infoItemParent.transform);
+      CharactorInfoItem item = itemObj.GetComponent<CharactorInfoItem>();
+      if (item != null)
+        item.SetContent(desc);
+    }
   }
 
   private void SwitchCharactorButtonClicked()
   {
+    // 保存到存档，确保下次打开面板时同步
+    SaveManager.SelectedCharacterIndex = currentCharactorIndex;
+
+    // 立即持久化到本地存档，确保进入大厅时 LoadGame 读到最新值
+    if (SaveManager.Instance != null)
+      SaveManager.Instance.SaveGame();
+
     switch (currentCharactorIndex)
     {
-      case 0: // CharactorIndex.WiZardBoy
-        EventChannelLocator.MainContainer.gameActionChannel.Raise(GameActionType.SwitchCharacter);
-        eventName = CharacterCardType.WizardBoy;
+      case CharactorIndex.WiZardBoy:
+        Launcher.instance.SwitchCharacter(CharactorName.WiZardBoy);
         break;
-      case 1: // CharactorIndex.LittleRedGirl
-              // EventChannelLocator.MainContainer.gameActionChannel.Raise(GameActionType.SwitchCharacter);
+      case CharactorIndex.BingNv:
+        Launcher.instance.SwitchCharacter(CharactorName.BingNv);
         break;
       default:
+        Debug.LogWarning($"[CharactorPanel] 未知角色索引: {currentCharactorIndex}");
         break;
     }
   }

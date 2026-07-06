@@ -6,10 +6,11 @@ using Domain.Services;
 using UnityEngine;
 using Application;
 using Infrastructure.Network;
+using Photon.Pun;
 
 namespace Presentation.Other
 {
-    public class SpawnPoint : MonoBehaviour, ISpawnPoint
+    public class SpawnPoint : MonoBehaviour, ISpawnPoint, IPunObservable
     {
         [SerializeField]
         private int id;
@@ -121,7 +122,7 @@ namespace Presentation.Other
             }
         }
 
-        private void SetOccupied(bool occupied, int playerActorNumber)
+        public void SetOccupied(bool occupied, int playerActorNumber)
         {
             if (EventChannelLocator.MainContainer.gameSettings.IsTest)
                 return;
@@ -187,6 +188,17 @@ namespace Presentation.Other
         public void ForceRelease()
         {
             SetOccupied(false, -1);
+        }
+
+        /// <summary>
+        /// IPunObservable 接口实现（空实现）
+        /// 本组件通过 RPC 同步状态，不需要 PhotonView 序列化数据。
+        /// 但 PhotonView 的 Observed Components 列表中挂载了此组件，
+        /// 因此必须实现此接口以避免运行时错误。
+        /// </summary>
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            // 所有状态同步通过 RPC 完成，无需序列化
         }
     }
 }

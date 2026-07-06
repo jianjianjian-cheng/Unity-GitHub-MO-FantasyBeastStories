@@ -8,5 +8,8 @@ namespace Domain.CardData
     {
         /// <summary> WizardBoy 角色卡牌 </summary>
         public const string WizardBoy = "OnReceiveCard_WizardBoy";
+
+        /// <summary> BingNv 角色卡牌 </summary>
+        public const string BingNv = "OnReceiveCard_BingNv";
     }
 }

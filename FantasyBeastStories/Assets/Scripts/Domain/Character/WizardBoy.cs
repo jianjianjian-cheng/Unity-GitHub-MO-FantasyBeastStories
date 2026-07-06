@@ -5,6 +5,7 @@ using Domain.Event;
 using Domain.Event.Channels.Player;
 using Domain.Pool;
 using Domain.Services;
+using Presentation.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,12 +27,21 @@ namespace Domain.Character
     protected override void Start()
     {
       base.Start();
-      if (testCardEffect != null)
+
+      // ★ 仅本地玩家设置 MagicUpgradeManager 的角色卡牌类型
+      // 防止非本地角色的 Start() 覆盖当前客户端的卡牌池
+      if (NetworkServiceLocator.PlayerService.IsOwnerOf(gameObject))
       {
-        testCardEffect.onClick.AddListener(() =>
+        // 通知 MagicUpgradeManager 当前角色为 WizardBoy，专属卡牌使用对应卡池
+        MagicUpgradeManager.instance?.SetCurrentEventName(CharacterCardType.WizardBoy);
+
+        if (testCardEffect != null)
         {
-          SwitchElement(Element.Grass);
-        });
+          testCardEffect.onClick.AddListener(() =>
+          {
+            SwitchElement(Element.Grass);
+          });
+        }
       }
     }
 
@@ -110,6 +120,7 @@ namespace Domain.Character
           attributePlayer.SetCurrentElement(Element.Grass);
           SwitchElement(Element.Grass);
           movementData.healthRecover += 2;
+          attributePlayer.SetHealthRecover(movementData.healthRecover);
           break;
         case "流光分裂":
           attributePlayer.SetSplit(true);
