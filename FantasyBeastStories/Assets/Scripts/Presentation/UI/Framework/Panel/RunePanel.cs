@@ -17,9 +17,12 @@ public class RunePanel : UIScreen
     [SerializeField] private GameObject runeSlotPrefab;       // 符文插槽预制体
     [SerializeField] private GameObject runeSlotListPanel;    // 符文列表父级 Panel（生成的预制体挂在此 Panel 下）
 
-    [Header("符文装备插槽")]
+    [Header("装备插槽")]
     [SerializeField] private RuneEquip runeEquip1;
     [SerializeField] private RuneEquip runeEquip2;
+
+    [Header("拖拽")]
+    [SerializeField] private Color dragTargetHighlightColor = new Color(1f, 0.92f, 0.46f, 1f); // 拖拽时装备插槽高亮色
 
     // 运行时动态生成的符文插槽列表
     private List<GameObject> runeSlotList = new List<GameObject>();
@@ -69,23 +72,40 @@ public class RunePanel : UIScreen
         // 默认装备：RuneEquip_1 ← RuneSlot[0], RuneEquip_2 ← RuneSlot[1]
         EquipDefaultRunes();
 
+        // 刷新已装备标记 + 已装备符文排到最前面
+        RefreshAllEquippedMarks();
+        ReorderEquippedToFront();
+
         // 订阅装备插槽选中事件，默认选中插槽1
         if (runeEquip1 != null)
         {
             runeEquip1.OnSelected += OnEquipSlotSelected;
+            runeEquip1.OnDropReceived += OnRuneDropReceived;      // 拖拽丢落
             selectedEquip = runeEquip1;
             runeEquip1.SetSelected(true);
         }
         if (runeEquip2 != null)
+        {
             runeEquip2.OnSelected += OnEquipSlotSelected;
+            runeEquip2.OnDropReceived += OnRuneDropReceived;      // 拖拽丢落
+        }
+
+        // 订阅符文拖拽事件（全局，用于高亮可拖放区域）
+        RuneSlot.OnDragStarted += OnAnyRuneDragStarted;
+        RuneSlot.OnDragEnded += OnAnyRuneDragEnded;
     }
 
     protected override void OnBeforeOpen()
     {
         base.OnBeforeOpen();
 
-        // 默认选中符文槽第 1 项
-        if (selectedRuneListItem == null && runeSlotList.Count > 0)
+        // 刷新已装备标记 + 已装备符文排到最前面
+        RefreshAllEquippedMarks();
+        ReorderEquippedToFront();
+
+        // 取消旧的选中，重新选中列表第 1 项
+        DeselectAllItems();
+        if (runeSlotList.Count > 0)
             SetRuneSlotItemSelected(runeSlotList[0]);
 
         // 默认选中装备槽 1
@@ -165,6 +185,11 @@ public class RunePanel : UIScreen
             {
                 runeSlot.Setup(runeData);
                 runeSlot.OnClicked += OnRuneSlotClicked;
+
+                // 标记已装备状态
+                bool isEquipped = (runeEquip1 != null && runeEquip1.EquippedRuneId == runeId) ||
+                                  (runeEquip2 != null && runeEquip2.EquippedRuneId == runeId);
+                runeSlot.SetEquipped(isEquipped);
             }
 
             runeSlotList.Add(go);
@@ -204,7 +229,7 @@ public class RunePanel : UIScreen
             var equip = equipSlots[equipIndex];
             if (equip != null)
             {
-                equip.Equip(runeId, slot.RuneData.icon);
+                equip.Equip(runeId, slot.RuneData.icon, slot);
                 equipIndex++;
             }
         }
@@ -285,38 +310,64 @@ public class RunePanel : UIScreen
             return;
         }
 
-        int newRuneId = runeSlot.RuneData != null ? runeSlot.RuneData.runeId : runeSlot.SlotId;
-
-        // 情况1：该符文已装备在当前选中插槽 → 无效果
-        if (selectedEquip.EquippedRuneId == newRuneId)
+        if (EquipRune(runeSlot, selectedEquip))
         {
-            Debug.Log("[RunePanel] 该符文已装备在选中插槽，无变化");
-            return;
+            // 装备成功 → 刷新标记并重排
+            RefreshAllEquippedMarks();
+            ReorderEquippedToFront();
+        }
+    }
+
+    /// <summary>
+    /// 执行装备 / 调换逻辑，供点击装备按钮和拖拽丢落共用
+    /// </summary>
+    /// <returns>true = 装备成功 / 调换成功</returns>
+    public bool EquipRune(RuneSlot runeSlot, RuneEquip equipSlot)
+    {
+        if (runeSlot == null || equipSlot == null)
+        {
+            Debug.LogWarning("[RunePanel] EquipRune 参数为空");
+            return false;
         }
 
-        // 获取被选符文的图标（直接从 RuneDataSO 获取，无需查找子对象）
-        if (runeSlot.RuneData == null || runeSlot.RuneData.icon == null)
+        if (runeSlot.RuneData == null)
         {
-            Debug.LogWarning("[RunePanel] 选中符文没有图标数据");
-            return;
+            Debug.LogWarning("[RunePanel] 符文数据为空，无法装备");
+            return false;
+        }
+
+        int newRuneId = runeSlot.RuneData.runeId;
+
+        // 情况1：该符文已装备在当前插槽 → 无效果
+        if (equipSlot.EquippedRuneId == newRuneId)
+        {
+            Debug.Log("[RunePanel] 该符文已装备在选中插槽，无变化");
+            return false;
+        }
+
+        if (runeSlot.RuneData.icon == null)
+        {
+            Debug.LogWarning("[RunePanel] 符文没有图标数据");
+            return false;
         }
 
         Sprite newIcon = runeSlot.RuneData.icon;
-        RuneEquip otherEquip = (selectedEquip == runeEquip1) ? runeEquip2 : runeEquip1;
+        RuneEquip otherEquip = (equipSlot == runeEquip1) ? runeEquip2 : runeEquip1;
 
         // 情况2：该符文已装备在另一个插槽 → 调换两插槽的符文
         if (otherEquip != null && otherEquip.EquippedRuneId == newRuneId)
         {
-            int swappedRuneId = selectedEquip.EquippedRuneId;
-            Sprite swappedIcon = selectedEquip.EquippedIcon;
+            int swappedRuneId = equipSlot.EquippedRuneId;
+            Sprite swappedIcon = equipSlot.EquippedIcon;
+            RuneSlot swappedSlot = equipSlot.EquippedRuneSlot;
 
             // 选中插槽 ← 新符文
-            selectedEquip.Equip(newRuneId, newIcon);
+            equipSlot.Equip(newRuneId, newIcon, runeSlot);
 
             if (swappedRuneId != -1)
             {
                 // 另一插槽 ← 旧符文（调换）
-                otherEquip.Equip(swappedRuneId, swappedIcon);
+                otherEquip.Equip(swappedRuneId, swappedIcon, swappedSlot);
                 OnRuneEquipped?.Invoke(otherEquip.EquipIndex, swappedIcon);
             }
             else
@@ -327,27 +378,82 @@ public class RunePanel : UIScreen
             }
 
             // 通知 LobbyCanvas 更新选中插槽图标
-            OnRuneEquipped?.Invoke(selectedEquip.EquipIndex, newIcon);
+            OnRuneEquipped?.Invoke(equipSlot.EquipIndex, newIcon);
 
-            Debug.Log($"[RunePanel] 调换符文: 插槽{selectedEquip.EquipIndex}←{newRuneId}, 插槽{otherEquip.EquipIndex}←{swappedRuneId}");
+            Debug.Log($"[RunePanel] 调换符文: 插槽{equipSlot.EquipIndex}←{newRuneId}, 插槽{otherEquip.EquipIndex}←{swappedRuneId}");
         }
         else
         {
             // 情况3：全新装备 → 直接装备到选中插槽
-            selectedEquip.Equip(newRuneId, newIcon);
+            equipSlot.Equip(newRuneId, newIcon, runeSlot);
             ApplyEquipEffect(newRuneId);
 
             // 通知 LobbyCanvas
-            OnRuneEquipped?.Invoke(selectedEquip.EquipIndex, newIcon);
+            OnRuneEquipped?.Invoke(equipSlot.EquipIndex, newIcon);
 
-            Debug.Log($"[RunePanel] 装备符文: 插槽{selectedEquip.EquipIndex} ← {runeSlot.RuneName}");
+            Debug.Log($"[RunePanel] 装备符文: 插槽{equipSlot.EquipIndex} ← {runeSlot.RuneName}");
         }
+
+        return true;
     }
 
     /// <summary>应用装备效果（留空，仅记录装备符文，进入游戏时调用）</summary>
     private void ApplyEquipEffect(int runeId)
     {
         // TODO: 实际游戏效果在进入游戏时根据 EquippedRuneId 应用
+    }
+
+    // ──────────────────────────────────────────────
+    //  已装备标记刷新
+    // ──────────────────────────────────────────────
+
+    /// <summary>遍历所有 RuneSlot，刷新已装备标记（按实例精确匹配）</summary>
+    private void RefreshAllEquippedMarks()
+    {
+        foreach (var go in runeSlotList)
+        {
+            var runeSlot = go.GetComponent<RuneSlot>();
+            if (runeSlot == null) continue;
+
+            bool isEquipped = (runeEquip1 != null && runeEquip1.EquippedRuneSlot == runeSlot) ||
+                              (runeEquip2 != null && runeEquip2.EquippedRuneSlot == runeSlot);
+            runeSlot.SetEquipped(isEquipped);
+        }
+    }
+
+    /// <summary>将已装备的符文插槽移到列表最前面</summary>
+    private void ReorderEquippedToFront()
+    {
+        // 收集已装备的 GameObject
+        var equippedGOs = new List<GameObject>();
+        var unequippedGOs = new List<GameObject>();
+        foreach (var go in runeSlotList)
+        {
+            if (go == null) continue;
+            var runeSlot = go.GetComponent<RuneSlot>();
+            if (runeSlot == null) continue;
+
+            bool isEquipped = (runeEquip1 != null && runeEquip1.EquippedRuneSlot == runeSlot) ||
+                              (runeEquip2 != null && runeEquip2.EquippedRuneSlot == runeSlot);
+            if (isEquipped)
+                equippedGOs.Add(go);
+            else
+                unequippedGOs.Add(go);
+        }
+
+        // 按顺序设置 hierarchy 层级
+        runeSlotList.Clear();
+        int siblingIndex = 0;
+        foreach (var go in equippedGOs)
+        {
+            go.transform.SetSiblingIndex(siblingIndex++);
+            runeSlotList.Add(go);
+        }
+        foreach (var go in unequippedGOs)
+        {
+            go.transform.SetSiblingIndex(siblingIndex++);
+            runeSlotList.Add(go);
+        }
     }
 
     // ──────────────────────────────────────────────
@@ -376,5 +482,62 @@ public class RunePanel : UIScreen
         selectedRuneListItem = null;
         selectedEquip?.SetSelected(false);
         selectedEquip = null;
+    }
+
+    // ──────────────────────────────────────────────
+    //  拖拽丢落处理
+    // ──────────────────────────────────────────────
+
+    private void OnDestroy()
+    {
+        // 取消订阅事件，防止内存泄漏
+        RuneSlot.OnDragStarted -= OnAnyRuneDragStarted;
+        RuneSlot.OnDragEnded -= OnAnyRuneDragEnded;
+
+        if (runeEquip1 != null)
+        {
+            runeEquip1.OnSelected -= OnEquipSlotSelected;
+            runeEquip1.OnDropReceived -= OnRuneDropReceived;
+        }
+        if (runeEquip2 != null)
+        {
+            runeEquip2.OnSelected -= OnEquipSlotSelected;
+            runeEquip2.OnDropReceived -= OnRuneDropReceived;
+        }
+    }
+
+    /// <summary>拖拽开始时高亮装备插槽，提示可拖放区域</summary>
+    private void OnAnyRuneDragStarted(RuneSlot runeSlot)
+    {
+        SetEquipSlotsHighlight(true);
+    }
+
+    /// <summary>拖拽结束时取消装备插槽高亮</summary>
+    private void OnAnyRuneDragEnded(RuneSlot runeSlot)
+    {
+        SetEquipSlotsHighlight(false);
+    }
+
+    /// <summary>符文拖拽丢落到装备插槽上时执行装备</summary>
+    private void OnRuneDropReceived(RuneEquip equip, RuneSlot runeSlot)
+    {
+        if (EquipRune(runeSlot, equip))
+        {
+            // 装备成功 → 刷新标记并重排
+            RefreshAllEquippedMarks();
+            ReorderEquippedToFront();
+
+            // 选中该装备插槽（同步 UI 选中状态）
+            OnEquipSlotSelected(equip);
+        }
+    }
+
+    /// <summary>切换装备插槽的高亮状态</summary>
+    private void SetEquipSlotsHighlight(bool highlight)
+    {
+        if (runeEquip1 != null)
+            runeEquip1.SetHighlight(highlight, dragTargetHighlightColor);
+        if (runeEquip2 != null)
+            runeEquip2.SetHighlight(highlight, dragTargetHighlightColor);
     }
 }

@@ -88,6 +88,7 @@ namespace Domain.Combat.FX
         private float _criticalMultiplier;
         private Element _element;
         private float _damageMultiplier = 1f; // 当前目标死亡后切换目标，伤害衰减 40%
+        private bool _isReturning;           // 命中后标记归池中，阻止 FixedUpdate 继续设置速度
 
         // ===== 目标重寻 =====
         private float _lastSearchTime;
@@ -123,6 +124,9 @@ namespace Domain.Combat.FX
             _hasTarget = target != null;
             transform.forward = _launchDirection;
 
+            // 重置命中归池标记（对象池复用）
+            _isReturning = false;
+
             // 重置时间戳，确保弹道弧线从零开始
             _spawnTime = UnityEngine.Time.time;
 
@@ -143,6 +147,13 @@ namespace Domain.Combat.FX
                 {
                     ps.Play();
                 }
+            }
+
+            // 每次发射都播放发射特效（对象池复用后 Start() 不会再次调用）
+            var vfx = LaunchEffect(flashVFX, transform.position, Quaternion.identity);
+            if (vfx != null)
+            {
+                vfx.transform.forward = transform.forward;
             }
         }
 
@@ -189,16 +200,13 @@ namespace Domain.Combat.FX
             // 如果没有调用 SetTargetAndLaunch，使用当前朝向作为发射方向
             if (_launchDirection == Vector3.zero)
                 _launchDirection = transform.forward;
-
-            var vfx = LaunchEffect(flashVFX, transform.position, Quaternion.identity);
-            if (vfx != null)
-            {
-                vfx.transform.forward = transform.forward;
-            }
         }
 
         private void FixedUpdate()
         {
+            // 命中后已标记归池，不再更新速度（防止 FixedUpdate 在协程归池前覆盖速度导致卡住）
+            if (_isReturning) return;
+
             var elapsed = UnityEngine.Time.time - _spawnTime;
             var time = Mathf.Clamp01(elapsed / animationDuration);
             var curveValue = speedOverTime.Evaluate(time);
@@ -474,7 +482,10 @@ namespace Domain.Combat.FX
                 SplitToNearestEnemies(hitPoint, rootEnemy.gameObject);
             }
 
-            // 延迟 0.15s 归还到对象池，让击中特效播放完毕后再回收
+            // 标记归池中，阻止 FixedUpdate 继续设置速度（对象池复用后重置）
+            _isReturning = true;
+
+            // 延迟归还到对象池，让击中特效播放完毕后再回收
             StartCoroutine(DelayedReturnToPool(0f));
         }
 

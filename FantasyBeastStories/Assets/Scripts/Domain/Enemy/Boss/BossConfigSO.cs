@@ -42,6 +42,8 @@ namespace Domain.Enemy.Boss
         public float rollWindUp = 0.6f;
         public float rollCooldown = 10f;
         public float rollTurnSpeed = 120f;
+        [Tooltip("滚动时靠近玩家该距离内锁定方向，防止原地抽搐")]
+        public float rollRotationDeadZone = 3.5f;
 
         [Header("阶段参数")]
         [Tooltip("进入二阶段的血量百分比阈值")]

@@ -194,6 +194,11 @@ namespace Domain.Time
             if (!NetworkServiceLocator.PlayerService.IsMasterClient)
             {
                 Instance.currentTime = Mathf.Clamp(time, 0, Instance.totalGameTime);
+
+                // 同步后刷新 UI（校正本地漂移）
+                Instance.OnTimeUpdated?.Invoke(Instance.currentTime);
+                var args = new TimeEventArgs(null, Instance.currentTime);
+                EventChannelLocator.MainContainer.timeEventChannel.Raise(args);
             }
         }
 
@@ -207,6 +212,11 @@ namespace Domain.Time
             {
                 Instance.isRunning = true;
                 EventChannelLocator.MainContainer.timeStartedChannel.Raise();
+
+                // 立即刷新 UI（显示当前时间）
+                Instance.OnTimeUpdated?.Invoke(Instance.currentTime);
+                var args = new TimeEventArgs(null, Instance.currentTime);
+                EventChannelLocator.MainContainer.timeEventChannel.Raise(args);
             }
         }
 
@@ -220,6 +230,11 @@ namespace Domain.Time
             {
                 Instance.isRunning = false;
                 EventChannelLocator.MainContainer.timePausedChannel.Raise();
+
+                // 暂停时刷新 UI（显示暂停瞬间的时间）
+                Instance.OnTimeUpdated?.Invoke(Instance.currentTime);
+                var args = new TimeEventArgs(null, Instance.currentTime);
+                EventChannelLocator.MainContainer.timeEventChannel.Raise(args);
             }
         }
 
@@ -238,6 +253,11 @@ namespace Domain.Time
                     evt.isTriggered = false;
                 }
                 EventChannelLocator.MainContainer.timeResetChannel.Raise();
+
+                // 重置后刷新 UI
+                Instance.OnTimeUpdated?.Invoke(Instance.currentTime);
+                var args = new TimeEventArgs(null, Instance.currentTime);
+                EventChannelLocator.MainContainer.timeEventChannel.Raise(args);
             }
         }
 
@@ -247,83 +267,74 @@ namespace Domain.Time
                 return;
 
             var playerService = NetworkServiceLocator.PlayerService;
+            bool isLocalAuthority = !isSynced
+                                 || !playerService.IsConnectedAndInRoom
+                                 || playerService.IsMasterClient;
 
-            // 时间更新逻辑
-            float deltaTime = UnityEngine.Time.deltaTime;
+            // ── 所有客户端都本地累加时间（非房主仅用于 UI 显示，RPC 同步时校正漂移） ──
+            currentTime += UnityEngine.Time.deltaTime;
 
-            // 如果不是主机且启用了同步，时间由网络同步驱动，不本地累加
-            if (isSynced && playerService.IsConnectedAndInRoom && !playerService.IsMasterClient)
+            // ── 只有权威端（主机/单机）才检查时间到点、事件触发等逻辑 ──
+            if (isLocalAuthority)
             {
-                return;
-            }
-
-            // 主机或非同步模式：本地累加时间
-            currentTime += deltaTime;
-
-            if (currentTime >= totalGameTime)
-            {
-                if (loop)
+                if (currentTime >= totalGameTime)
                 {
-                    currentTime = 0f;
-                    triggeredEventIds.Clear();
-                    foreach (var evt in timeEvents)
+                    if (loop)
                     {
-                        evt.isTriggered = false;
+                        currentTime = 0f;
+                        triggeredEventIds.Clear();
+                        foreach (var evt in timeEvents)
+                        {
+                            evt.isTriggered = false;
+                        }
+
+                        OnGameTimeLoop?.Invoke();
+
+                        if (playerService.IsConnectedAndInRoom && playerService.IsMasterClient && isSynced)
+                        {
+                            NetworkServiceLocator.DomainRpcService?.InvokeRPC("RPC_SyncResetTime", NetworkTarget.All);
+                        }
                     }
-
-                    OnGameTimeLoop?.Invoke();
-
-                    if (playerService.IsConnectedAndInRoom && playerService.IsMasterClient && isSynced)
+                    else
                     {
-                        NetworkServiceLocator.DomainRpcService?.InvokeRPC("RPC_SyncResetTime", NetworkTarget.All);
+                        currentTime = totalGameTime;
+                        isRunning = false;
+                        OnGameTimeFinished?.Invoke();
+
+                        if (playerService.IsConnectedAndInRoom && playerService.IsMasterClient && isSynced)
+                        {
+                            NetworkServiceLocator.DomainRpcService?.InvokeRPC("RPC_GameTimeFinished", NetworkTarget.All);
+                        }
                     }
                 }
-                else
-                {
-                    currentTime = totalGameTime;
-                    isRunning = false;
-                    OnGameTimeFinished?.Invoke();
 
-                    if (playerService.IsConnectedAndInRoom && playerService.IsMasterClient && isSynced)
-                    {
-                        NetworkServiceLocator.DomainRpcService?.InvokeRPC("RPC_GameTimeFinished", NetworkTarget.All);
-                    }
-                }
-            }
-
-            // 检查事件触发（仅主机检查并广播）
-            if (!playerService.IsConnectedAndInRoom || playerService.IsMasterClient || !isSynced)
-            {
+                // 检查事件触发
                 CheckAndTriggerEvents();
-            }
 
-            // ✅ 每隔60秒触发一次
-            if (currentTime - lastTriggerTime >= 60f)
-            {
-                lastTriggerTime = currentTime;
-                EventChannelLocator.MainContainer.timeChangeEnemyAttributeChannel.Raise(currentTime);
-            }
-
-            // 生成最终Boss（仅主机检测时间条件）
-            if (currentTime >= totalGameTime - 900f && !isBossGenerated)
-            {
-                isBossGenerated = true;
-
-                // 所有客户端：触发事件通道 → BossSpawner 生成 + UI 更新
-                EventChannelLocator.MainContainer.bossSpawnChannel.Raise(bossName);
-
-                // 联机同步：通知非主机客户端触发本地事件（用于 UI 等表现层）
-                if (NetworkServiceLocator.PlayerService.IsMasterClient && isSynced)
+                // 每隔 60 秒触发敌人属性变化
+                if (currentTime - lastTriggerTime >= 60f)
                 {
-                    NetworkServiceLocator.DomainRpcService?.InvokeRPC(
-                        "RPC_BossSpawn", NetworkTarget.Others, bossName);
+                    lastTriggerTime = currentTime;
+                    EventChannelLocator.MainContainer.timeChangeEnemyAttributeChannel.Raise(currentTime);
+                }
+
+                // 生成最终 Boss
+                if (currentTime >= totalGameTime - 900f && !isBossGenerated)
+                {
+                    isBossGenerated = true;
+                    EventChannelLocator.MainContainer.bossSpawnChannel.Raise(bossName);
+
+                    if (playerService.IsMasterClient && isSynced)
+                    {
+                        NetworkServiceLocator.DomainRpcService?.InvokeRPC(
+                            "RPC_BossSpawn", NetworkTarget.Others, bossName);
+                    }
                 }
             }
 
-            // 触发时间更新事件
+            // ── 所有客户端都触发时间更新事件（UI 刷新用） ──
             OnTimeUpdated?.Invoke(currentTime);
 
-            // 通过SO事件通道广播时间更新
             var timeArgs = new TimeEventArgs(null, currentTime);
             EventChannelLocator.MainContainer.timeEventChannel.Raise(timeArgs);
         }

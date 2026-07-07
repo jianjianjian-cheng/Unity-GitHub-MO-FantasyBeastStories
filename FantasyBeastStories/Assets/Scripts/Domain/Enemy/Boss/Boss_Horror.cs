@@ -682,25 +682,45 @@ namespace Domain.Enemy.Boss
             }
 
             float elapsedTime = 0f;
+            bool isDirectionLocked = false;
+            Vector3 lockedDirection = direction;
+            float deadZoneSqr = config.rollRotationDeadZone * config.rollRotationDeadZone;
+
             while (elapsedTime < config.rollDuration)
             {
                 if (PlayerTarget != null)
                 {
-                    // 滚动过程中持续追踪玩家
-                    targetPosition = new Vector3(PlayerTarget.transform.position.x, transform.position.y, PlayerTarget.transform.position.z);
-                    direction = (targetPosition - transform.position).normalized;
+                    Vector3 targetPos = PlayerTarget.transform.position;
+                    float sqrDist = (targetPos - transform.position).sqrMagnitude;
 
-                    // 平滑转向
-                    Quaternion targetRotation = Quaternion.LookRotation(direction);
-                    transform.rotation = Quaternion.RotateTowards(
-                        transform.rotation,
-                        targetRotation,
-                        config.rollTurnSpeed * UnityEngine.Time.deltaTime
-                    );
+                    if (sqrDist > deadZoneSqr)
+                    {
+                        // 远距离：持续追踪玩家
+                        isDirectionLocked = false;
+                        targetPosition = new Vector3(targetPos.x, transform.position.y, targetPos.z);
+                        direction = (targetPosition - transform.position).normalized;
+
+                        Quaternion targetRotation = Quaternion.LookRotation(direction);
+                        transform.rotation = Quaternion.RotateTowards(
+                            transform.rotation,
+                            targetRotation,
+                            config.rollTurnSpeed * UnityEngine.Time.deltaTime
+                        );
+                    }
+                    else if (!isDirectionLocked)
+                    {
+                        // 进入死区：锁定当前方向，防止近距离抽搐
+                        isDirectionLocked = true;
+                        lockedDirection = transform.forward;
+                    }
+                    // 锁定时：不改变方向，保持 lockedDirection
                 }
 
                 if (navMeshAgent != null)
-                    navMeshAgent.Move(transform.forward * config.rollSpeed * UnityEngine.Time.deltaTime);
+                {
+                    Vector3 moveDir = isDirectionLocked ? lockedDirection : transform.forward;
+                    navMeshAgent.Move(moveDir * config.rollSpeed * UnityEngine.Time.deltaTime);
+                }
 
                 elapsedTime += UnityEngine.Time.deltaTime;
                 yield return null;

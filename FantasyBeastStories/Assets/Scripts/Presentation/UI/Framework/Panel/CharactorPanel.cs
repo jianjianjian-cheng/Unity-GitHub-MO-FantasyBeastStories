@@ -32,6 +32,8 @@ public class CharactorPanel : UIScreen
   [SerializeField] private CharacterInfoLibrarySO characterInfoLibrary;
   [SerializeField] private GameObject charactorInfoItemPrefab; //角色信息项预制体
 
+  private bool _buttonsInitialized = false; // 按钮是否已初始化
+
   protected override void Awake()
   {
     screenId = "CharactorPanel";
@@ -42,12 +44,18 @@ public class CharactorPanel : UIScreen
     Debug.Log("[CharactorPanel] Awake: 正在注册到 UIManager...");
     UIManager.Instance.RegisterScreen(this);
     Debug.Log("[CharactorPanel] Awake: 注册完成");
-    InitializeCharacterPanel();
-    Debug.Log("[CharactorPanel] Awake: 初始化完成");
+    // 注意：不再在 Awake 中初始化角色预览，
+    // 因为此时 SaveManager 尚未加载存档，SelectedCharacterIndex 始终为默认值 0。
+    // 改为在 OnBeforeOpen（每次打开面板时）延迟初始化，确保存档已加载。
   }
 
-  private void InitializeCharacterPanel()
+  /// <summary>
+  /// 初始化按钮事件（仅执行一次）
+  /// </summary>
+  private void InitializeButtons()
   {
+    if (_buttonsInitialized)
+      return;
 
     if (previousCharacterButton == null || nextCharacterButton == null || SwitchButton == null)
     {
@@ -55,19 +63,13 @@ public class CharactorPanel : UIScreen
       return;
     }
 
-    //翻转nextCharacterButton的图片
+    // 翻转 previousCharacterButton 的图片（向左箭头）
     Image previousCharacterButtonImage = previousCharacterButton.GetComponent<Image>();
     Vector3 scale = previousCharacterButtonImage.transform.localScale;
     scale.x *= -1;
     previousCharacterButtonImage.transform.localScale = scale;
 
-    // 从存档读取已选择的角色索引，同步预览（默认 0 = WiZardBoy）
-    int savedIndex = SaveManager.Instance != null
-        ? SaveManager.SelectedCharacterIndex
-        : 0;
-    SwitchCharactor(savedIndex);
-
-    //添加角色选择按钮的点击事件
+    // 添加上一个角色按钮的点击事件
     previousCharacterButton
         .GetComponent<Button>()
         .onClick.AddListener(() =>
@@ -78,6 +80,7 @@ public class CharactorPanel : UIScreen
           SwitchCharactor(newIndex);
         });
 
+    // 添加下一个角色按钮的点击事件
     nextCharacterButton
         .GetComponent<Button>()
         .onClick.AddListener(() =>
@@ -88,19 +91,31 @@ public class CharactorPanel : UIScreen
           SwitchCharactor(newIndex);
         });
 
-    //添加切换按钮的点击事件
+    // 添加切换按钮的点击事件
     SwitchButton
         .GetComponent<Button>()
         .onClick.AddListener(() =>
         {
           SwitchCharactorButtonClicked();
         });
+
+    _buttonsInitialized = true;
   }
 
   protected override void OnBeforeOpen()
   {
     base.OnBeforeOpen();
     Debug.Log($"[CharactorPanel] OnBeforeOpen: 面板即将打开, IsOpen={IsOpen}");
+
+    // 首次打开时初始化按钮事件
+    InitializeButtons();
+
+    // 每次打开面板时，从已加载的存档同步角色索引，确保预览与存档一致
+    // 此时 SaveManager.Start() 早已执行完毕，存档已加载，能读到正确的值
+    int savedIndex = SaveManager.Instance != null
+        ? SaveManager.SelectedCharacterIndex
+        : 0;
+    SwitchCharactor(savedIndex);
 
     // 重置预览角色旋转角度，避免上次旋转残留
     if (currentCharactorInstance != null)
