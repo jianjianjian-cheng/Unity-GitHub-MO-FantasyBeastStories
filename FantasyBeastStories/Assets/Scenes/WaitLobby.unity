@@ -3093,8 +3093,8 @@ RectTransform:
   - {fileID: 484127181}
   - {fileID: 1907133017}
   - {fileID: 1444831999}
-  - {fileID: 288026086}
   - {fileID: 1195601292}
+  - {fileID: 288026086}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -3503,6 +3503,8 @@ MonoBehaviour:
   hoverExitAnimation: {fileID: 11400000, guid: bf1128a57f1a94a458dd8673a9d99130, type: 2}
   equipIndex: 0
   iconImage: {fileID: 0}
+  highlightImage: {fileID: 0}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &327538910
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13261,6 +13263,7 @@ MonoBehaviour:
   runeSlotListPanel: {fileID: 343169683}
   runeEquip1: {fileID: 324550046}
   runeEquip2: {fileID: 2064875340}
+  dragTargetHighlightColor: {r: 1, g: 0.92, b: 0.46, a: 1}
 --- !u!1001 &1207220881
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23486,6 +23489,8 @@ MonoBehaviour:
   hoverExitAnimation: {fileID: 11400000, guid: bf1128a57f1a94a458dd8673a9d99130, type: 2}
   equipIndex: 1
   iconImage: {fileID: 0}
+  highlightImage: {fileID: 0}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &2065141353
 PrefabInstance:
   m_ObjectHideFlags: 0

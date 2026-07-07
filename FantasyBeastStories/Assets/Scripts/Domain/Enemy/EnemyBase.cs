@@ -451,6 +451,7 @@ namespace Domain.Enemy
 
       // 记录本次伤害到对局统计
       MatchStatisticsManager.Instance?.RecordDamage(Mathf.RoundToInt(damageEventArgs.finalDamageValue));
+      QuestTaskManager.Instance?.RecordDamage(Mathf.RoundToInt(damageEventArgs.finalDamageValue));
 
       Debug.Log(
           "最终伤害为："

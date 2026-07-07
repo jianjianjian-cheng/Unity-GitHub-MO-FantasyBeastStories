@@ -165,6 +165,7 @@ namespace Application
 
             // 记录本次获得的经验到对局统计
             MatchStatisticsManager.Instance?.RecordExperience(experience);
+            QuestTaskManager.Instance?.RecordExp();
 
             CheckAndQueueUpgrades();
             NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "RPC_SyncExperience", NetworkTarget.All, currentExperience);

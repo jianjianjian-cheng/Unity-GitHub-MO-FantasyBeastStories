@@ -82,6 +82,7 @@ namespace Application
         public void RecordKill()
         {
             totalKillsInMatch++;
+            QuestTaskManager.Instance?.RecordKill();
         }
 
         /// <summary>累加造成的伤害</summary>
@@ -138,6 +139,7 @@ namespace Application
             {
                 earnedCoins = CoinManager.Instance.CalculateCoins(totalKillsInMatch, totalDamageInMatch);
                 CoinManager.Instance.AddCoins(earnedCoins);
+                QuestTaskManager.Instance?.RecordCoin();
             }
 
             // 计算对局时长
@@ -163,6 +165,7 @@ namespace Application
                 lifetimeKills += totalKillsInMatch;
                 lifetimeDamage += totalDamageInMatch;
                 lifetimeMatches++;
+                QuestTaskManager.Instance?.RecordMatchComplete();
                 RaiseMatchStatsUpdate(result);
             }
 

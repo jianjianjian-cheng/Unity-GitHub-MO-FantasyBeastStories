@@ -164,6 +164,24 @@ public class MassionItem : UIWidget
     }
 
     /// <summary>
+    /// 设置初始旧进度（不触发完成动画，只显示已有进度）。
+    /// 调用后再调用 AnimateToTarget() 会从 oldVal 开始动画到新值。
+    /// </summary>
+    public void SetInitialProgress(int oldVal)
+    {
+        currentCount = Mathf.Max(0, oldVal);
+        float ratio = targetCount > 0 ? (float)currentCount / targetCount : 0f;
+        SetFillWidth(Mathf.Min(ratio, 1f));
+
+        if (progressText != null)
+            progressText.text = $"{currentCount}/{targetCount}";
+
+        // 不显示完成图标，等待动画结束或 SetFinalProgress
+        if (completedIcon != null)
+            completedIcon.gameObject.SetActive(false);
+    }
+
+    /// <summary>
     /// 直接设置最终进度状态（无动画），用于已完成的任务。
     /// </summary>
     public void SetFinalProgress(int progress)

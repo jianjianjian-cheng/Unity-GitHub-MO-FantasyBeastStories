@@ -172,6 +172,12 @@ namespace Application
             Debug.Log($"[SaveManager] 生涯经验 +{matchExp}，累计 {currentSaveData.totalExperience}");
         }
 
+        /// <summary>获取存档中所有任务的累计进度</summary>
+        public Dictionary<int, int> GetTaskProgress()
+        {
+            return currentSaveData.taskProgress;
+        }
+
         // ──────────────────────────────────
         //  数据收集（存档时调用）
         // ──────────────────────────────────
