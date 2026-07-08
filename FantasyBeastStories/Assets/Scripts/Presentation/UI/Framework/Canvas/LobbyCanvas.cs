@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Application;
 using DG.Tweening;
 using Domain.Event;
 using Domain.Event.Channels.General;
@@ -75,6 +76,9 @@ public class LobbyCanvas : UIScreen
     protected override void Start()
     {
         base.Start();
+
+        //播放大厅音乐
+        AudioManager.Instance.PlayBGM("bgm_main_menu");
 
         // 注册到 UIManager
         UIManager.Instance.RegisterScreen(this);

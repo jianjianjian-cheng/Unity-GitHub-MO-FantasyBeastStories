@@ -4,6 +4,7 @@ using Domain.Event;
 using Domain.Data;
 using Domain.Pool;
 using Domain.Network;
+using Application;
 
 namespace Domain.Combat.Trigger
 {
@@ -65,7 +66,7 @@ namespace Domain.Combat.Trigger
     {
       string visualPool = null;
       string triggerPool = ObjectPoolConst.ImpactCannonTriggerPool;
-
+      AudioManager.Instance.PlaySFX("sfx_wizard_fire", spawnPos);
       // 1. 生成视觉特效
       switch (attributePlayerBase.GetCurrentElement())
       {

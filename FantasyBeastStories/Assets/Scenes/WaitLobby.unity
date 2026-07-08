@@ -3374,6 +3374,7 @@ GameObject:
   - component: {fileID: 324550044}
   - component: {fileID: 324550043}
   - component: {fileID: 324550046}
+  - component: {fileID: 324550047}
   m_Layer: 5
   m_Name: RuneEquip_1
   m_TagString: Untagged
@@ -3505,6 +3506,21 @@ MonoBehaviour:
   iconImage: {fileID: 0}
   highlightImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &324550047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 324550041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a627e6048dbfbb4eb59f7a786d16d9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverSoundId: sfx_btn_hover
+  clickSoundId: sfx_button_click
+  hoverCooldown: 0.1
 --- !u!1001 &327538910
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3716,6 +3732,7 @@ GameObject:
   - component: {fileID: 342491452}
   - component: {fileID: 342491455}
   - component: {fileID: 342491456}
+  - component: {fileID: 342491457}
   m_Layer: 9
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3883,6 +3900,14 @@ MonoBehaviour:
   distance: 5
   rotationSpeed: 5
   requireMouseButton: 1
+--- !u!81 &342491457
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 342491451}
+  m_Enabled: 1
 --- !u!1 &343169683
 GameObject:
   m_ObjectHideFlags: 0
@@ -5294,6 +5319,7 @@ GameObject:
   - component: {fileID: 445362471}
   - component: {fileID: 445362470}
   - component: {fileID: 445362469}
+  - component: {fileID: 445362472}
   m_Layer: 5
   m_Name: MassionButton
   m_TagString: Untagged
@@ -5403,6 +5429,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 445362467}
   m_CullTransparentMesh: 1
+--- !u!114 &445362472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445362467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a627e6048dbfbb4eb59f7a786d16d9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverSoundId: sfx_btn_hover
+  clickSoundId: sfx_button_click
+  hoverCooldown: 0.1
 --- !u!1 &456791278
 GameObject:
   m_ObjectHideFlags: 0
@@ -10433,6 +10474,7 @@ GameObject:
   - component: {fileID: 894045891}
   - component: {fileID: 894045890}
   - component: {fileID: 894045889}
+  - component: {fileID: 894045892}
   m_Layer: 5
   m_Name: LobbyButton
   m_TagString: Untagged
@@ -10542,6 +10584,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 894045887}
   m_CullTransparentMesh: 1
+--- !u!114 &894045892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 894045887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a627e6048dbfbb4eb59f7a786d16d9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverSoundId: sfx_btn_hover
+  clickSoundId: sfx_button_click
+  hoverCooldown: 0.1
 --- !u!1001 &918094035
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16428,6 +16485,7 @@ GameObject:
   - component: {fileID: 1469920216}
   - component: {fileID: 1469920215}
   - component: {fileID: 1469920214}
+  - component: {fileID: 1469920217}
   m_Layer: 5
   m_Name: CharactorButton
   m_TagString: Untagged
@@ -16537,6 +16595,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1469920212}
   m_CullTransparentMesh: 1
+--- !u!114 &1469920217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1469920212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a627e6048dbfbb4eb59f7a786d16d9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverSoundId: sfx_btn_hover
+  clickSoundId: sfx_button_click
+  hoverCooldown: 0.1
 --- !u!1 &1480725677
 GameObject:
   m_ObjectHideFlags: 0
@@ -17997,6 +18070,7 @@ GameObject:
   - component: {fileID: 1590593849}
   - component: {fileID: 1590593848}
   - component: {fileID: 1590593847}
+  - component: {fileID: 1590593850}
   m_Layer: 5
   m_Name: ExitRoomButton
   m_TagString: Untagged
@@ -18106,6 +18180,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1590593845}
   m_CullTransparentMesh: 1
+--- !u!114 &1590593850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1590593845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a627e6048dbfbb4eb59f7a786d16d9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverSoundId: sfx_btn_hover
+  clickSoundId: sfx_button_click
+  hoverCooldown: 0.1
 --- !u!1001 &1593183256
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19222,6 +19311,7 @@ GameObject:
   - component: {fileID: 1680512854}
   - component: {fileID: 1680512853}
   - component: {fileID: 1680512852}
+  - component: {fileID: 1680512855}
   m_Layer: 5
   m_Name: RuneButton
   m_TagString: Untagged
@@ -19331,6 +19421,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1680512850}
   m_CullTransparentMesh: 1
+--- !u!114 &1680512855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1680512850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a627e6048dbfbb4eb59f7a786d16d9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverSoundId: sfx_btn_hover
+  clickSoundId: sfx_button_click
+  hoverCooldown: 0.1
 --- !u!1 &1694357985
 GameObject:
   m_ObjectHideFlags: 0
@@ -23360,6 +23465,7 @@ GameObject:
   - component: {fileID: 2064875338}
   - component: {fileID: 2064875337}
   - component: {fileID: 2064875340}
+  - component: {fileID: 2064875341}
   m_Layer: 5
   m_Name: RuneEquip_2
   m_TagString: Untagged
@@ -23491,6 +23597,21 @@ MonoBehaviour:
   iconImage: {fileID: 0}
   highlightImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &2064875341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2064875335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a627e6048dbfbb4eb59f7a786d16d9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverSoundId: sfx_btn_hover
+  clickSoundId: sfx_button_click
+  hoverCooldown: 0.1
 --- !u!1001 &2065141353
 PrefabInstance:
   m_ObjectHideFlags: 0

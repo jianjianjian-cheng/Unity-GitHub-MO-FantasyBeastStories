@@ -101,6 +101,8 @@ namespace Application
             if (_soundLibrary == null)
                 _soundLibrary = Resources.Load<SoundLibrarySO>("Audio/Libraries/MainSoundLibrary");
 
+            Debug.Log($"[AudioManager] 初始化: _soundLibrary={(_soundLibrary != null ? _soundLibrary.name : "NULL")}, _config={(_config != null ? _config.name : "NULL")}, _audioMixer={(_audioMixer != null ? _audioMixer.name : "NULL")}");
+
             if (_audioMixer == null)
                 _audioMixer = Resources.Load<AudioMixer>("Audio/MainMixer");
 

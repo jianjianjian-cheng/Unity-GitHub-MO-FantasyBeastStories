@@ -12,11 +12,10 @@ namespace Domain.Audio
         [SerializeField] private SoundDefinitionSO[] _sounds;
 
         private Dictionary<string, SoundDefinitionSO> _lookup;
-        private bool _initialized;
 
         private void EnsureInitialized()
         {
-            if (_initialized)
+            if (_lookup != null)
                 return;
 
             _lookup = new Dictionary<string, SoundDefinitionSO>();
@@ -42,8 +41,6 @@ namespace Domain.Audio
                     _lookup[sound.soundId] = sound;
                 }
             }
-
-            _initialized = true;
         }
 
         /// <summary>根据 soundId 获取音效定义（未找到时打印错误并返回 null）</summary>

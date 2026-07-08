@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Application;
 using Presentation.UI.Framework.Panel;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -29,6 +30,8 @@ namespace Presentation.Lobby
         /// </summary>
         public void Initilize()
         {
+            //播放大厅音乐
+            AudioManager.Instance.PlayBGM("bgm_main_menu");
             vcTimeLine = GameObject.Find("Director").GetComponent<PlayableDirector>();
             startButton = GameObject.Find("StartButton");
             exitButton = GameObject.Find("ExitButton");

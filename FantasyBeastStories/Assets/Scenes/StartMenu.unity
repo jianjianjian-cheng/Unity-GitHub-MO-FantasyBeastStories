@@ -9664,6 +9664,7 @@ GameObject:
   - component: {fileID: 1225074723}
   - component: {fileID: 1225074722}
   - component: {fileID: 1225074726}
+  - component: {fileID: 1225074727}
   m_Layer: 5
   m_Name: ExitButton
   m_TagString: Untagged
@@ -9809,6 +9810,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1225074727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1225074720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a627e6048dbfbb4eb59f7a786d16d9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverSoundId: sfx_btn_hover
+  clickSoundId: sfx_button_click
+  hoverCooldown: 0.1
 --- !u!1 &1234180820
 GameObject:
   m_ObjectHideFlags: 0
@@ -14572,6 +14588,7 @@ GameObject:
   - component: {fileID: 2041159846}
   - component: {fileID: 2041159845}
   - component: {fileID: 2041159849}
+  - component: {fileID: 2041159850}
   m_Layer: 5
   m_Name: OptionsButton
   m_TagString: Untagged
@@ -14717,6 +14734,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2041159850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2041159843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a627e6048dbfbb4eb59f7a786d16d9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverSoundId: sfx_btn_hover
+  clickSoundId: sfx_button_click
+  hoverCooldown: 0.1
 --- !u!1001 &2053187239
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15679,6 +15711,7 @@ GameObject:
   - component: {fileID: 4225605703764278724}
   - component: {fileID: 4225605703764278725}
   - component: {fileID: 4225605703764278728}
+  - component: {fileID: 4225605703764278729}
   m_Layer: 5
   m_Name: StartButton
   m_TagString: Untagged
@@ -15707,6 +15740,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4225605703764278729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4225605703764278727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a627e6048dbfbb4eb59f7a786d16d9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverSoundId: sfx_btn_hover
+  clickSoundId: sfx_button_click
+  hoverCooldown: 0.1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

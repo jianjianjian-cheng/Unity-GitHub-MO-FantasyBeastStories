@@ -373,6 +373,7 @@ GameObject:
   - component: {fileID: 5893561566495711271}
   - component: {fileID: 1674491429264028727}
   - component: {fileID: 4964424358676329221}
+  - component: {fileID: 6908251765174013129}
   m_Layer: 5
   m_Name: RuneSlot_1
   m_TagString: Untagged
@@ -509,3 +510,19 @@ MonoBehaviour:
   deselectedSprite: {fileID: 21300000, guid: 95d126cdbe8c34c69865caa6d7c8ecfd, type: 3}
   hoverSprite: {fileID: 21300000, guid: 0d5870e9a665e6040be57641ddb801ff, type: 3}
   equippedMarkObject: {fileID: 1569266250090922858}
+  dragGhostAlpha: 0.6
+--- !u!114 &6908251765174013129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6378762284851964525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a627e6048dbfbb4eb59f7a786d16d9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverSoundId: sfx_btn_hover
+  clickSoundId: sfx_button_click
+  hoverCooldown: 0.1

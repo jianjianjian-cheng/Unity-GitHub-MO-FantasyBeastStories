@@ -14,6 +14,7 @@ using Domain.Combat.FX;
 using Unity.VisualScripting;
 using UnityEngine;
 using Domain.Data;
+using Application;
 
 namespace Infrastructure.FX.ImpactCannon
 {
@@ -181,6 +182,7 @@ namespace Infrastructure.FX.ImpactCannon
         }
         else
         {
+          AudioManager.Instance.PlaySFX("sfx_wizard_hit", hitPoint);
           _networkCaster?.BroadcastDamage(
               other.gameObject,
               damage,
