@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Domain.Event;
+using Presentation.PlayerInput;
 
 namespace Presentation.Other
 {
@@ -22,19 +23,19 @@ namespace Presentation.Other
         void Update()
         {
             if (!canRotate) return;
-            if (Input.GetMouseButtonDown(0) && !isRotate)
+            if (MobileInputHelper.GetPointerDown() && !isRotate)
             {
-                startpoint = Input.mousePosition;
+                startpoint = MobileInputHelper.GetScreenPosition();
                 startAngle = modelTransform.eulerAngles;
                 isRotate = true;
             }
-            if (Input.GetMouseButtonUp(0))
+            if (MobileInputHelper.GetPointerUp())
             {
                 isRotate = false;
             }
             if (isRotate)
             {
-                var currentpoint = Input.mousePosition;
+                var currentpoint = MobileInputHelper.GetScreenPosition();
                 var x = startpoint.x - currentpoint.x;
                 modelTransform.eulerAngles = startAngle + new Vector3(0, x * rotationScale, 0);
             }

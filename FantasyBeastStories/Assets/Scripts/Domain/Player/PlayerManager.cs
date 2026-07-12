@@ -150,7 +150,8 @@ namespace Domain.Player
         {
             if (NetworkServiceLocator.PlayerService.IsConnectedAndInRoom)
             {
-                string nickName = NetworkServiceLocator.PlayerService.GetPlayerCustomProperty(actorNumber, "PlayerName") as string ?? "Player_" + actorNumber;
+                string nickName = NetworkServiceLocator.PlayerService.GetPlayerNickName(actorNumber)
+                                  ?? "Player_" + actorNumber;
                 AddPlayer(new PlayerData(userId, nickName));
             }
         }
@@ -183,12 +184,19 @@ namespace Domain.Player
 
             playerDataDict.Clear();
 
-            // 首先添加本地玩家
-            string localUserId = playerService.GetLocalUserId();
-            if (!string.IsNullOrEmpty(localUserId))
+            // 遍历房间内所有玩家，逐个添加（包括本地玩家和其他玩家）
+            int[] actorNumbers = playerService.GetAllActorNumbers();
+            foreach (int actorNumber in actorNumbers)
             {
-                PlayerData localData = new PlayerData(localUserId, "LocalPlayer");
-                AddPlayer(localData);
+                string userId = playerService.GetPlayerUserId(actorNumber);
+                if (string.IsNullOrEmpty(userId))
+                    continue;
+
+                string nickName = playerService.GetPlayerNickName(actorNumber)
+                                  ?? "Player_" + actorNumber;
+
+                var playerData = new PlayerData(userId, nickName);
+                AddPlayer(playerData);
             }
 
             Debug.Log($"[PlayerManager] 同步完成，当前玩家数量: {PlayerCount}");

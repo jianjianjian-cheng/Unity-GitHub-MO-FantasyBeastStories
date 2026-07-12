@@ -22,7 +22,13 @@ namespace Domain.Combat.Trigger
         [SerializeField] private AttackRangeData attackRangeData;
 
         protected AttributePlayerBase attributePlayerBase;
-        protected List<GameObject> gameObjects = new List<GameObject>();
+
+        // 使用 HashSet 替代 List，提供 O(1) 的增删查操作
+        protected readonly HashSet<GameObject> _enemySet = new HashSet<GameObject>();
+        // 缓存 EnemyBase 组件，避免重复 GetComponent
+        protected readonly Dictionary<GameObject, EnemyBase> _enemyCache = new Dictionary<GameObject, EnemyBase>();
+        // 脏标记：仅当列表发生变化时才重新计算目标
+        private bool _enemiesDirty;
         protected GameObject targetEnemy;
 
         /// <summary>是否正在连射中（连射期间不再触发新攻击）</summary>
@@ -61,20 +67,23 @@ namespace Domain.Combat.Trigger
             if (attributePlayerBase == null)
                 return;
 
-            // 每帧清理已死亡的敌人，确保怪物死亡后及时从列表移除
-            CleanupDeadEnemies();
-
             base.Update();
+
+            // 仅当敌人列表发生变化时才重新计算目标，避免每帧遍历
+            if (_enemiesDirty)
+            {
+                UpdateEnemyTarget();
+                _enemiesDirty = false;
+            }
+
             Attack();
         }
 
         /// <summary>
-        /// 攻击逻辑：基类负责更新目标和控制攻击间隔，具体攻击行为由子类实现
+        /// 攻击逻辑：基类负责控制攻击间隔，具体攻击行为由子类实现
         /// </summary>
         private void Attack()
         {
-            UpdateEnemyTarget();
-
             if (targetEnemy == null)
                 return;
 
@@ -127,58 +136,74 @@ namespace Domain.Combat.Trigger
         protected abstract void PerformAttack();
 
         /// <summary>
-        /// 清理已死亡的敌人，确保怪物死亡后及时从 gameObjects 移除
-        /// </summary>
-        private void CleanupDeadEnemies()
-        {
-            for (int i = gameObjects.Count - 1; i >= 0; i--)
-            {
-                var enemyGo = gameObjects[i];
-                if (enemyGo == null)
-                {
-                    gameObjects.RemoveAt(i);
-                    continue;
-                }
-
-                var enemyBase = enemyGo.GetComponent<EnemyBase>();
-                if (enemyBase == null || enemyBase.IsDeadOrDying())
-                {
-                    gameObjects.RemoveAt(i);
-                }
-            }
-        }
-
-        /// <summary>
-        /// 寻找最近的敌人
+        /// 寻找最近的敌人（使用 sqrMagnitude 避免开平方开销）
         /// </summary>
         protected virtual void UpdateEnemyTarget()
         {
             // 先清理已死亡的敌人
             CleanupDeadEnemies();
 
-            if (gameObjects.Count == 0)
+            if (_enemySet.Count == 0)
             {
                 targetEnemy = null;
                 return;
             }
 
-            float minDistance = float.MaxValue;
+            float minSqrDistance = float.MaxValue;
             GameObject closestEnemy = null;
+            Vector3 myPos = transform.position;
 
-            foreach (GameObject enemy in gameObjects)
+            foreach (GameObject enemy in _enemySet)
             {
                 if (enemy == null)
                     continue;
 
-                float distance = Vector3.Distance(transform.position, enemy.transform.position);
-                if (distance < minDistance)
+                // 使用 sqrMagnitude 替代 Vector3.Distance，避免 sqrt 计算
+                float sqrDist = (enemy.transform.position - myPos).sqrMagnitude;
+                if (sqrDist < minSqrDistance)
                 {
-                    minDistance = distance;
+                    minSqrDistance = sqrDist;
                     closestEnemy = enemy;
                 }
             }
 
             targetEnemy = closestEnemy;
+        }
+
+        /// <summary>
+        /// 清理已死亡的敌人，仅当 _enemiesDirty 时调用
+        /// </summary>
+        private void CleanupDeadEnemies()
+        {
+            if (_enemySet.Count == 0)
+                return;
+
+            List<GameObject> deadList = null;
+            foreach (var enemyGo in _enemySet)
+            {
+                if (enemyGo == null)
+                {
+                    deadList ??= new List<GameObject>();
+                    deadList.Add(enemyGo);
+                    continue;
+                }
+
+                // 从缓存中获取 EnemyBase，避免重复 GetComponent
+                if (!_enemyCache.TryGetValue(enemyGo, out var enemyBase) || enemyBase == null || enemyBase.IsDeadOrDying())
+                {
+                    deadList ??= new List<GameObject>();
+                    deadList.Add(enemyGo);
+                }
+            }
+
+            if (deadList != null)
+            {
+                foreach (var go in deadList)
+                {
+                    _enemySet.Remove(go);
+                    _enemyCache.Remove(go);
+                }
+            }
         }
 
         /// <summary>
@@ -210,54 +235,53 @@ namespace Domain.Combat.Trigger
         public override void OnTriggerEnter(Collider other)
         {
             base.OnTriggerEnter(other);
-            // 使用 GetComponentInParent 支持子物体 Collider 的情况
-            var enemyBase = other.gameObject.GetComponentInParent<EnemyBase>();
-            if (enemyBase != null && !enemyBase.IsDeadOrDying())
-            {
-                GameObject rootGo = enemyBase.gameObject;
-                // 去重：避免同一敌人因多个子 Collider 被重复添加
-                if (!gameObjects.Contains(rootGo))
-                {
-                    gameObjects.Add(rootGo);
-                }
-            }
+            AddEnemy(other);
         }
 
+        /// <summary>
+        /// 不再使用 OnTriggerStay —— 该函数每帧为每个碰撞体触发，开销极大。
+        /// 敌人进出范围由 OnTriggerEnter/OnTriggerExit 管理，死亡清理由每帧标记驱动。
+        /// </summary>
         public override void OnTriggerStay(Collider other)
         {
-            base.OnTriggerStay(other);
-            // 使用 GetComponentInParent 兼容子物体 Collider
-            var enemyBase = other.gameObject.GetComponentInParent<EnemyBase>();
-            if (enemyBase == null || enemyBase.IsDeadOrDying())
-            {
-                // 移除时也使用根 GameObject
-                if (enemyBase != null)
-                    gameObjects.Remove(enemyBase.gameObject);
-                else
-                    gameObjects.Remove(other.gameObject);
-            }
-            else
-            {
-                GameObject rootGo = enemyBase.gameObject;
-                if (!gameObjects.Contains(rootGo))
-                {
-                    gameObjects.Add(rootGo);
-                }
-            }
+            // 留空：所有逻辑由 Enter/Exit 和 Update 中的脏标记处理
         }
 
         public override void OnTriggerExit(Collider other)
         {
             base.OnTriggerExit(other);
-            // 使用 GetComponentInParent 支持子物体 Collider 的情况
+            RemoveEnemy(other);
+        }
+
+        /// <summary>
+        /// 添加敌人到 HashSet（O(1)），并缓存 EnemyBase 组件
+        /// </summary>
+        private void AddEnemy(Collider other)
+        {
             var enemyBase = other.gameObject.GetComponentInParent<EnemyBase>();
-            if (enemyBase != null)
+            if (enemyBase == null || enemyBase.IsDeadOrDying())
+                return;
+
+            GameObject rootGo = enemyBase.gameObject;
+            if (_enemySet.Add(rootGo)) // HashSet.Add 返回 false 表示已存在
             {
-                gameObjects.Remove(enemyBase.gameObject);
+                _enemyCache[rootGo] = enemyBase;
+                _enemiesDirty = true;
             }
-            else
+        }
+
+        /// <summary>
+        /// 从 HashSet 移除敌人（O(1)），同时清理缓存
+        /// </summary>
+        private void RemoveEnemy(Collider other)
+        {
+            var enemyBase = other.gameObject.GetComponentInParent<EnemyBase>();
+            GameObject rootGo = enemyBase != null ? enemyBase.gameObject : other.gameObject;
+
+            if (_enemySet.Remove(rootGo))
             {
-                gameObjects.Remove(other.gameObject);
+                _enemyCache.Remove(rootGo);
+                _enemiesDirty = true;
             }
         }
 

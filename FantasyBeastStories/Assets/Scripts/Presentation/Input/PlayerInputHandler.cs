@@ -27,24 +27,41 @@ namespace Presentation.PlayerInput
         public bool IsMouseButtonUp { get; private set; }
         public bool IsMouseHeld { get; private set; }
 
+        // ==================== 虚拟摇杆引用 ====================
+        /// <summary>
+        /// 设置当前激活的虚拟摇杆（由场景中的 VirtualJoystick 在 Awake/Start 时注册）
+        /// </summary>
+        public static VirtualJoystick ActiveJoystick { get; set; }
+
         /// <summary>
         /// 每帧更新所有输入状态，由持有者（如 PlayerController）调用
         /// </summary>
         public void Update()
         {
-            Horizontal = UnityEngine.Input.GetAxis("Horizontal");
-            Vertical = UnityEngine.Input.GetAxis("Vertical");
+            // 移动轴：优先使用虚拟摇杆，回退到键盘
+            if (ActiveJoystick != null && ActiveJoystick.IsActive)
+            {
+                Horizontal = ActiveJoystick.Direction.x;
+                Vertical = ActiveJoystick.Direction.y;
+            }
+            else
+            {
+                Horizontal = UnityEngine.Input.GetAxis("Horizontal");
+                Vertical = UnityEngine.Input.GetAxis("Vertical");
+            }
 
-            MousePosition = UnityEngine.Input.mousePosition;
+            // 使用统一输入工具类，自动兼容触摸/鼠标
+            MousePosition = MobileInputHelper.GetScreenPosition();
 
             IsEscapePressed = UnityEngine.Input.GetKeyDown(KeyCode.Escape);
             IsReturnPressed = UnityEngine.Input.GetKeyDown(KeyCode.Return);
             IsTabPressed = UnityEngine.Input.GetKeyDown(KeyCode.Tab);
             IsTabReleased = UnityEngine.Input.GetKeyUp(KeyCode.Tab);
 
-            IsMouseButtonDown = UnityEngine.Input.GetMouseButtonDown(0);
-            IsMouseButtonUp = UnityEngine.Input.GetMouseButtonUp(0);
-            IsMouseHeld = UnityEngine.Input.GetMouseButton(0);
+            // 使用统一输入工具类，自动兼容触摸/鼠标
+            IsMouseButtonDown = MobileInputHelper.GetPointerDown();
+            IsMouseButtonUp = MobileInputHelper.GetPointerUp();
+            IsMouseHeld = MobileInputHelper.GetPointerHeld();
         }
     }
 }

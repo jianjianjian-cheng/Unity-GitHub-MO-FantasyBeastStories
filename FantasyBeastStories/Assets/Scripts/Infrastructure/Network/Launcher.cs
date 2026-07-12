@@ -80,24 +80,39 @@ namespace Infrastructure.Network
         return;
       if (Input.GetKeyDown(KeyCode.Return))
       {
-        if (string.IsNullOrEmpty(nameUI.text))
-        {
-          Debug.LogError("Name is empty");
-          return;
-        }
-        else
-        {
-          PhotonNetwork.LocalPlayer.NickName = nameUI.text;
-          Debug.Log($"修改昵称成功: {PhotonNetwork.LocalPlayer.NickName}");
-          Debug.Log("修改昵称成功");
-        }
+        ConfirmNickname();
       }
       if (Input.GetKeyDown(KeyCode.Escape))
       {
-        TBGC.SetActive(false);
-        joinRoomButton.SetActive(false);
-        joinRoomInput.SetActive(false);
+        CloseJoinRoomPanel();
       }
+    }
+
+    /// <summary>
+    /// 确认昵称（供 UI 按钮调用）
+    /// </summary>
+    public void ConfirmNickname()
+    {
+      if (string.IsNullOrEmpty(nameUI.text))
+      {
+        Debug.LogError("Name is empty");
+        return;
+      }
+      else
+      {
+        PhotonNetwork.LocalPlayer.NickName = nameUI.text;
+        Debug.Log($"修改昵称成功: {PhotonNetwork.LocalPlayer.NickName}");
+      }
+    }
+
+    /// <summary>
+    /// 关闭加入房间面板（供 UI 按钮调用）
+    /// </summary>
+    public void CloseJoinRoomPanel()
+    {
+      if (TBGC != null) TBGC.SetActive(false);
+      if (joinRoomButton != null) joinRoomButton.SetActive(false);
+      if (joinRoomInput != null) joinRoomInput.SetActive(false);
     }
 
     public override void OnEnable()
@@ -185,10 +200,19 @@ namespace Infrastructure.Network
             {
               SwitchRoom(roomName);
             }
-            TBGC.SetActive(false);
-            joinRoomButton.SetActive(false);
-            joinRoomInput.SetActive(false);
+            CloseJoinRoomPanel();
           });
+
+      // 自动绑定 TBGC 下的关闭按钮（如果有）
+      if (TBGC != null)
+      {
+        Button closeBtn = TBGC.GetComponentInChildren<Button>(true);
+        // 排除 joinRoomButton 自身，避免循环
+        if (closeBtn != null && closeBtn.gameObject != joinRoomButton)
+        {
+          closeBtn.onClick.AddListener(CloseJoinRoomPanel);
+        }
+      }
     }
 
     private string pendingRoomName = "";

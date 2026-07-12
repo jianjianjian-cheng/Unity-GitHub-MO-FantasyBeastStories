@@ -116,7 +116,7 @@ namespace Domain.Combat.Trigger
 
         /// <summary>
         /// 重写目标更新：先让基类清理无效敌人并设置最近目标（targetEnemy），
-        /// 再从 gameObjects 中选取最多 MaxTargetCount 个目标存入 _targets
+        /// 再从 _enemySet 中选取最多 MaxTargetCount 个目标存入 _targets
         /// </summary>
         protected override void UpdateEnemyTarget()
         {
@@ -125,19 +125,21 @@ namespace Domain.Combat.Trigger
 
             // 清空并重新填充多目标列表
             _targets.Clear();
-            if (gameObjects.Count == 0)
+            if (_enemySet.Count == 0)
                 return;
 
             // 对范围内的敌人按距离排序，取前 MaxTargetCount 个
-            var sorted = new List<GameObject>(gameObjects);
+            // 使用 sqrMagnitude 避免 sqrt 计算
+            Vector3 myPos = transform.position;
+            var sorted = new List<GameObject>(_enemySet);
             sorted.Sort((a, b) =>
             {
                 if (a == null && b == null) return 0;
                 if (a == null) return 1;
                 if (b == null) return -1;
-                float distA = Vector3.Distance(transform.position, a.transform.position);
-                float distB = Vector3.Distance(transform.position, b.transform.position);
-                return distA.CompareTo(distB);
+                float sqrDistA = (a.transform.position - myPos).sqrMagnitude;
+                float sqrDistB = (b.transform.position - myPos).sqrMagnitude;
+                return sqrDistA.CompareTo(sqrDistB);
             });
 
             int count = Mathf.Min(MaxTargetCount, sorted.Count);

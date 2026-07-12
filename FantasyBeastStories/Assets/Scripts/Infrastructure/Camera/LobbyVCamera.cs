@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Domain.Event;
+using Presentation.PlayerInput;
 
 namespace Infrastructure.Camera
 {
@@ -57,18 +58,19 @@ namespace Infrastructure.Camera
       if (lookAt == null || blockRotation)
         return;
 
-      bool dragging = !requireMouseButton || Input.GetMouseButton(0);
+      bool dragging = !requireMouseButton || MobileInputHelper.GetPointerHeld();
 
       if (dragging)
       {
         if (!isDragging)
         {
           isDragging = true;
-          lastMousePosition = Input.mousePosition;
+          lastMousePosition = MobileInputHelper.GetScreenPosition();
         }
 
-        Vector3 delta = Input.mousePosition - lastMousePosition;
-        lastMousePosition = Input.mousePosition;
+        Vector3 currentPos = MobileInputHelper.GetScreenPosition();
+        Vector3 delta = currentPos - lastMousePosition;
+        lastMousePosition = MobileInputHelper.GetScreenPosition();
 
         currentAngle += delta.x * (rotationSpeed * Time.deltaTime);
         UpdateCameraTransform();

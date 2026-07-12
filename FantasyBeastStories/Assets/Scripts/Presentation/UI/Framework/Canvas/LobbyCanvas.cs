@@ -15,6 +15,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Presentation.PlayerInput;
 
 public class LobbyCanvas : UIScreen
 {
@@ -454,7 +455,7 @@ public class LobbyCanvas : UIScreen
 
         var pointerData = new PointerEventData(EventSystem.current)
         {
-            position = Input.mousePosition,
+            position = MobileInputHelper.GetScreenPosition(),
         };
 
         var results = new List<RaycastResult>();

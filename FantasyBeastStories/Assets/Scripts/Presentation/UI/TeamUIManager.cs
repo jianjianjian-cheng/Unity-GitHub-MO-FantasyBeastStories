@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Domain.Event;
+using Domain.Event.Channels.General;
 using Domain.Player;
 using Domain.Services;
 using UnityEngine;
@@ -61,13 +62,34 @@ namespace Presentation.UI
     void OnEnable()
     {
       EventChannelLocator.MainContainer.hpChangedChannel.RegisterListener(SetLocalPlayerSlider_HP);
+      EventChannelLocator.MainContainer.healthUpdateChannel.RegisterListener(OnHealthUpdate);
+      EventChannelLocator.MainContainer.gameActionChannel.RegisterListener(OnGameAction);
       SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     void OnDisable()
     {
       EventChannelLocator.MainContainer.hpChangedChannel.UnregisterListener(SetLocalPlayerSlider_HP);
+      EventChannelLocator.MainContainer.healthUpdateChannel.UnregisterListener(OnHealthUpdate);
+      EventChannelLocator.MainContainer.gameActionChannel.UnregisterListener(OnGameAction);
       SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnHealthUpdate(HealthUpdateData data)
+    {
+      if (!data.isLocalPlayer)
+      {
+        SetOtherPlayerSlider_HP(data.playerId, data.maxHp, data.currentHp);
+      }
+    }
+
+    private void OnGameAction(GameActionType actionType)
+    {
+      if (actionType == GameActionType.SyncAllPlayers)
+      {
+        // 玩家数据同步后刷新其他玩家的 UI
+        SetOtherTeamUI();
+      }
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -138,6 +160,10 @@ namespace Presentation.UI
     public void SetOtherTeamUI()
     {
       if (EventChannelLocator.MainContainer.gameSettings.IsTest)
+        return;
+
+      // 防止 SyncAllPlayers 事件在 Intilize() 之前触发导致空引用
+      if (player1 == null || player2 == null || player3 == null)
         return;
       #region  设置其他玩家的UI可见性
       switch (PlayerManager.instance.PlayerCount)

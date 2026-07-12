@@ -55,7 +55,7 @@ namespace Presentation.UI
 
         private void Update()
         {
-
+            // PC 键盘快捷键：Tab 按住显示，松开隐藏
             if (Input.GetKeyDown(KeyCode.Tab))
             {
                 holdCoroutine = StartCoroutine(HoldCoroutine());
@@ -72,6 +72,21 @@ namespace Presentation.UI
                 {
                     HidePanel();
                 }
+            }
+        }
+
+        /// <summary>
+        /// 供 UI 按钮调用的切换方法（手机端使用）
+        /// </summary>
+        public void TogglePanel()
+        {
+            if (isShow)
+            {
+                HidePanel();
+            }
+            else
+            {
+                ShowPanel();
             }
         }
 

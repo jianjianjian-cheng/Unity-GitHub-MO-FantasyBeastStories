@@ -1,4 +1,5 @@
 using System.Collections;
+using Presentation.PlayerInput;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -87,7 +88,11 @@ namespace Presentation.UI
                 GameObject canvasObj = new GameObject("TooltipCanvas");
                 canvas = canvasObj.AddComponent<Canvas>();
                 canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-                canvasObj.AddComponent<CanvasScaler>();
+                var scaler = canvasObj.AddComponent<CanvasScaler>();
+                scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+                scaler.referenceResolution = new Vector2(1920, 1080);
+                scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+                scaler.matchWidthOrHeight = 0.5f;
                 canvasObj.AddComponent<GraphicRaycaster>();
                 DontDestroyOnLoad(canvasObj);
             }
@@ -127,7 +132,7 @@ namespace Presentation.UI
                 Vector2 localPoint;
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(
                     tooltipPanel.transform.parent as RectTransform,
-                    Input.mousePosition,
+                    MobileInputHelper.GetScreenPosition(),
                     null,
                     out localPoint
                 );

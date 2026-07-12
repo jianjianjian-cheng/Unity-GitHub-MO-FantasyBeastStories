@@ -50,6 +50,18 @@ namespace Infrastructure.Network
             return PhotonNetwork.LocalPlayer.CustomProperties[key];
         }
 
+        public int[] GetAllActorNumbers()
+        {
+            if (!IsConnectedAndInRoom) return System.Array.Empty<int>();
+            var players = PhotonNetwork.PlayerList;
+            int[] actorNumbers = new int[players.Length];
+            for (int i = 0; i < players.Length; i++)
+            {
+                actorNumbers[i] = players[i].ActorNumber;
+            }
+            return actorNumbers;
+        }
+
         public object GetPlayerCustomProperty(int actorNumber, string key)
         {
             if (!IsConnectedAndInRoom) return null;
@@ -57,6 +69,28 @@ namespace Infrastructure.Network
             {
                 if (player.ActorNumber == actorNumber)
                     return player.CustomProperties[key];
+            }
+            return null;
+        }
+
+        public string GetPlayerUserId(int actorNumber)
+        {
+            if (!IsConnectedAndInRoom) return null;
+            foreach (var player in PhotonNetwork.PlayerList)
+            {
+                if (player.ActorNumber == actorNumber)
+                    return player.UserId;
+            }
+            return null;
+        }
+
+        public string GetPlayerNickName(int actorNumber)
+        {
+            if (!IsConnectedAndInRoom) return null;
+            foreach (var player in PhotonNetwork.PlayerList)
+            {
+                if (player.ActorNumber == actorNumber)
+                    return player.NickName;
             }
             return null;
         }

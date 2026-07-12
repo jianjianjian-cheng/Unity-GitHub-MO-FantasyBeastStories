@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Presentation.UI.Framework.Base;
+using Presentation.UI.Framework.Utils;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Presentation.UI.Framework.Manager
@@ -47,7 +49,20 @@ namespace Presentation.UI.Framework.Manager
 
     private void Initialize()
     {
+      CreateEventSystem();
       CreateLayerCanvases();
+    }
+
+    private void CreateEventSystem()
+    {
+      if (FindObjectOfType<EventSystem>() != null)
+        return;
+
+      GameObject esObj = new GameObject(UIConstants.EventSystemName);
+      esObj.AddComponent<EventSystem>();
+      esObj.AddComponent<StandaloneInputModule>();
+      esObj.transform.SetParent(transform);
+      Debug.Log("[UIManager] 自动创建 EventSystem");
     }
 
     private void CreateLayerCanvases()
@@ -63,6 +78,13 @@ namespace Presentation.UI.Framework.Manager
         Canvas canvas = canvasObj.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.sortingOrder = layer.ToSortingOrder();
+
+        // 添加 CanvasScaler 支持手机分辨率适配
+        CanvasScaler scaler = canvasObj.AddComponent<CanvasScaler>();
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920, 1080);
+        scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+        scaler.matchWidthOrHeight = 0.5f;
 
         canvasObj.AddComponent<GraphicRaycaster>();
 
