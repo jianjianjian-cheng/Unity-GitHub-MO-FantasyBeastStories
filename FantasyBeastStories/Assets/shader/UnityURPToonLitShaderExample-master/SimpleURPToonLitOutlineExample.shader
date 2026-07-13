@@ -205,11 +205,11 @@ Shader "SimpleURPToonLitExample(With Outline)"
         _OcclusionRemapEnd("        RemapEnd", Range(0,1)) = 1
 
         [Header(Indirect Light)]
-        _IndirectLightMinColor("Min Color", Color) = (0.1,0.1,0.1,1) // can prevent completely black if light prob is not baked
-        _IndirectLightMultiplier("Multiplier", Range(0,1)) = 1
-        
+        _IndirectLightMinColor("Min Color", Color) = (0.35,0.35,0.4,1) // can prevent completely black if light prob is not baked
+        _IndirectLightMultiplier("Multiplier", Range(0,2)) = 1.3
+
         [Header(Direct Light)]
-        _DirectLightMultiplier("Brightness", Range(0,1)) = 1
+        _DirectLightMultiplier("Brightness", Range(0,2)) = 1.15
         _CelShadeMidPoint("MidPoint", Range(-1,1)) = -0.5
         _CelShadeSoftness("Softness", Range(0,1)) = 0.05
         _MainLightIgnoreCelShade("Remove Shadow", Range(0,1)) = 0

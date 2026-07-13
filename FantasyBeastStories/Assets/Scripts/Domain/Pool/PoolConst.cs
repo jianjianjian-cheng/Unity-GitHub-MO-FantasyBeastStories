@@ -36,5 +36,8 @@ namespace Domain.Pool
         public const string GuiLingHitLightningPool = "GuiLingHitLightningPool";
         public const string GuiLingHitWinterPool = "GuiLingHitWinterPool";
         public const string GuiLingHitGrassPool = "GuiLingHitGrassPool";
+
+        // ====== PowerUp（道具系统） ======
+        public const string PowerUpItem = "PowerUpItemPool";
     }
 }

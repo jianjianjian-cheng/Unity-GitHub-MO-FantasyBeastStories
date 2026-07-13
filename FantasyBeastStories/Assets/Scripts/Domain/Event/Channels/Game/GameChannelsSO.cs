@@ -29,5 +29,8 @@ namespace Domain.Event.Channels.Game
 
         [Header("Boss事件")]
         public BossSpawnEventChannelSO bossSpawnChannel;
+
+        [Header("道具事件")]
+        public PowerUpCollectEventChannelSO powerUpCollectChannel;
     }
 }

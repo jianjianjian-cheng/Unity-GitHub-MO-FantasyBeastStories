@@ -25,3 +25,4 @@ MonoBehaviour:
   timeResetChannel: {fileID: 11400000, guid: dba502bc7a1a88c4296f25dfbcccf4e4, type: 2}
   timeQueryChannel: {fileID: 11400000, guid: 8d60ae4eed2020b4baf41c9dd968a472, type: 2}
   bossSpawnChannel: {fileID: 11400000, guid: a3c6c9c3ffe99a341aab042882f2a393, type: 2}
+  powerUpCollectChannel: {fileID: 11400000, guid: 4df9678e93d2c534d8a3260dcbbd9e52, type: 2}

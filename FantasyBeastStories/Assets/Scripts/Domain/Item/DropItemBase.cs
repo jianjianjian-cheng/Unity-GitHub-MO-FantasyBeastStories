@@ -13,7 +13,7 @@ namespace Domain.Item
     private DropItemData dropItemData;
 
     private Rigidbody rb;
-    private GameObject moveTarget;
+    public GameObject moveTarget;
     private Coroutine flyCoroutine;
 
     // ── 受保护的访问器，供子类使用 ──

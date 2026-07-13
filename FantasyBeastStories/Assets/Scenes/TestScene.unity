@@ -2667,9 +2667,9 @@ GameObject:
   - component: {fileID: 1239959445}
   - component: {fileID: 1239959444}
   - component: {fileID: 1239959443}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4341,6 +4341,67 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4ba95f1e657e3044a91a3c94c168e8bd, type: 3}
+--- !u!1001 &5690775701922486342
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1953115242945757804, guid: 3396ca5f12c9b7a41a86755fd762589d, type: 3}
+      propertyPath: sceneViewId
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622542398747158728, guid: 3396ca5f12c9b7a41a86755fd762589d, type: 3}
+      propertyPath: m_Name
+      value: PowerUp_ExperienceMagnet
+      objectReference: {fileID: 0}
+    - target: {fileID: 8738573991058948216, guid: 3396ca5f12c9b7a41a86755fd762589d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.773533
+      objectReference: {fileID: 0}
+    - target: {fileID: 8738573991058948216, guid: 3396ca5f12c9b7a41a86755fd762589d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6.17
+      objectReference: {fileID: 0}
+    - target: {fileID: 8738573991058948216, guid: 3396ca5f12c9b7a41a86755fd762589d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.1537123
+      objectReference: {fileID: 0}
+    - target: {fileID: 8738573991058948216, guid: 3396ca5f12c9b7a41a86755fd762589d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8738573991058948216, guid: 3396ca5f12c9b7a41a86755fd762589d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8738573991058948216, guid: 3396ca5f12c9b7a41a86755fd762589d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8738573991058948216, guid: 3396ca5f12c9b7a41a86755fd762589d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8738573991058948216, guid: 3396ca5f12c9b7a41a86755fd762589d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8738573991058948216, guid: 3396ca5f12c9b7a41a86755fd762589d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8738573991058948216, guid: 3396ca5f12c9b7a41a86755fd762589d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3396ca5f12c9b7a41a86755fd762589d, type: 3}
 --- !u!1 &6241948793103956857 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2154096349857787289, guid: b4046f1a1c994f44baacffb105302bd5, type: 3}
@@ -4426,3 +4487,4 @@ SceneRoots:
   - {fileID: 1800353922151608493}
   - {fileID: 1755282474}
   - {fileID: 6642332558259037407}
+  - {fileID: 5690775701922486342}

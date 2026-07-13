@@ -54,6 +54,7 @@ namespace Domain.Event.Channels
     public TimePausedEventChannelSO timePausedChannel => game != null ? game.timePausedChannel : null;
     public TimeResetEventChannelSO timeResetChannel => game != null ? game.timeResetChannel : null;
     public TimeQueryEventChannelSO timeQueryChannel => game != null ? game.timeQueryChannel : null;
+    public PowerUpCollectEventChannelSO powerUpCollectChannel => game != null ? game.powerUpCollectChannel : null;
     #endregion
 
     #region UI事件

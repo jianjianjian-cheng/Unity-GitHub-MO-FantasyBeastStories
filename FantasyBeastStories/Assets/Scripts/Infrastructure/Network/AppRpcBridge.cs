@@ -2,6 +2,7 @@ using System.Collections;
 using Application;
 using Domain.Event;
 using Domain.Event.Channels.Game;
+using Domain.PowerUp;
 using Domain.Services;
 using Photon.Pun;
 using Presentation.UI;
@@ -107,6 +108,17 @@ namespace Infrastructure.Network
         public void RPC_ExpBallCollected(int ballId)
         {
             ExperienceManager.HandleExpBallCollectedRPC((uint)ballId);
+        }
+
+        // ============================================================
+        // PowerUpManager RPC
+        // ============================================================
+
+        /// <summary>房主 → 所有人：道具已被拾取，隐藏它</summary>
+        [PunRPC]
+        public void RPC_CollectPowerUp(int viewId)
+        {
+            PowerUpManager.HandleCollectPowerUpRPC(viewId);
         }
 
         // ============================================================

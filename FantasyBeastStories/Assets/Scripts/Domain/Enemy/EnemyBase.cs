@@ -5,6 +5,7 @@ using Domain.Event;
 using Domain.Event.Channels.Combat;
 using Domain.Player;
 using Domain.Pool;
+using Domain.PowerUp;
 using Domain.Services;
 using Domain.Network;
 using UnityEngine;
@@ -43,6 +44,11 @@ namespace Domain.Enemy
       colliders = GetComponentsInChildren<Collider>();
       if (_network == null)
         _network = GetComponent<NetworkIdentityBase>();
+
+      if (rb == null)
+        rb = GetComponent<Rigidbody>();
+      if (animator == null)
+        animator = GetComponent<Animator>();
     }
 
     protected virtual void Start()
@@ -481,6 +487,13 @@ namespace Domain.Enemy
     protected virtual void DropExperience()
     {
       Debug.Log("敌人死亡，掉落经验");
+
+      // 10%概率掉落道具
+      if (Random.value <= 0.1f && PowerUpManager.Instance != null)
+      {
+        PowerUpManager.Instance.SpawnRandomPowerUp(transform.position);
+        Debug.Log("[PowerUp] 敌人掉落道具！");
+      }
     }
 
     // 重置状态（对象池回收时调用）
