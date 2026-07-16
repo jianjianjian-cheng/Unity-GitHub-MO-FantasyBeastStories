@@ -18,10 +18,8 @@ namespace Domain.Event
             {
                 if (_mainContainer == null)
                 {
-                    // 优先从 ServiceLocator 获取（由 InfrastructureRegistrar 预加载注册）
                     _mainContainer = ServiceLocator.Get<EventChannelContainerSO>();
 
-                    // 兜底：从 Resources 加载
                     if (_mainContainer == null)
                     {
                         _mainContainer = Resources.Load<EventChannelContainerSO>("EventChannels/MainEventChannels");

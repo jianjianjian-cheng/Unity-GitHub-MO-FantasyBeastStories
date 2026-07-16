@@ -293,6 +293,18 @@ namespace Infrastructure.Network
       PhotonNetwork.LocalPlayer.SetCustomProperties(props);
       Debug.Log($"[Launcher] 本地玩家准备状态: {ready} - {PhotonNetwork.LocalPlayer.NickName}");
 
+      // 显式通知本地玩家的属性变更，确保本地 WorldSpaceUI 头顶文字能收到更新
+      // （PUN2 的 OnPlayerPropertiesUpdate 不保证对本地客户端回调本地玩家的属性变更）
+      var playerService = NetworkServiceLocator.PlayerService as PhotonPlayerService;
+      if (playerService != null)
+      {
+        playerService.NotifyPropertyChanged(
+            PhotonNetwork.LocalPlayer.ActorNumber,
+            "PlayerReady",
+            ready
+        );
+      }
+
       // 移除房主检查，让所有玩家都能检查
       CheckAllPlayersReady();
     }
@@ -550,7 +562,19 @@ namespace Infrastructure.Network
     /// </summary>
     private GameObject SpawnPlayer()
     {
-      Transform spawnPoint = ServiceLocator.Get<GameManager>().GetEmptySpawnPoint()?.transform;
+      int localActorNumber = NetworkServiceLocator.PlayerService.GetLocalActorNumber();
+      var gameManager = ServiceLocator.Get<GameManager>();
+
+      // 根据 ActorNumber 确定性地选择生成点，避免多玩家同时抢占同一位置
+      ISpawnPoint sp = gameManager.GetSpawnPointForPlayer(localActorNumber);
+      Transform spawnPoint = (sp as MonoBehaviour)?.transform;
+
+      // 回退：若确定性分配的生成点已被占用，尝试获取任意空闲生成点
+      if (sp == null || !sp.IsEmpty())
+      {
+        sp = gameManager.GetEmptySpawnPoint()?.GetComponent<ISpawnPoint>();
+        spawnPoint = (sp as MonoBehaviour)?.transform;
+      }
 
       if (spawnPoint == null)
       {
@@ -559,10 +583,8 @@ namespace Infrastructure.Network
       }
 
       // ★ 立即标记生成点为占用状态并 RPC 同步，防止其他玩家也选到这个点
-      ISpawnPoint sp = spawnPoint.GetComponent<ISpawnPoint>();
       if (sp != null)
       {
-        int localActorNumber = NetworkServiceLocator.PlayerService.GetLocalActorNumber();
         sp.SetOccupied(true, localActorNumber);
       }
 

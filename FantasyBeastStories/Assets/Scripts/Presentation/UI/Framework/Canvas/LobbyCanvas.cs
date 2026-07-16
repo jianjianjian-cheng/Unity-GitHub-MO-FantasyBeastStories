@@ -22,6 +22,7 @@ public class LobbyCanvas : UIScreen
     private const string CharactorPanelId = "CharactorPanel";
     private const string RunePanelId = "RunePanel";
     private const string MassionPanelId = "MassionPanel";
+    private const string ShopPanelId = "ShopPanel";
 
     [Header("Lobby References")]
     [SerializeField] private Volume postProcessVolume;
@@ -35,6 +36,8 @@ public class LobbyCanvas : UIScreen
     private Button runeNavButton;
     [SerializeField]
     private Button missionNavButton;
+    [SerializeField]
+    private Button shopNavButton;
 
     // 功能按钮
     [SerializeField]
@@ -146,6 +149,31 @@ public class LobbyCanvas : UIScreen
         runeNavButton = GameObject.Find("RuneButton")?.GetComponent<Button>();
         missionNavButton = GameObject.Find("MassionButton")?.GetComponent<Button>();
 
+        // 尝试不同方式查找商店按钮
+        shopNavButton = GameObject.Find("ShopButton")?.GetComponent<Button>();
+        if (shopNavButton == null)
+        {
+            shopNavButton = GameObject.Find("StoreButton")?.GetComponent<Button>();
+            if (shopNavButton != null)
+            {
+                Debug.LogWarning("[LobbyCanvas] 找到StoreButton，重命名为ShopButton以避免后续问题");
+            }
+            else
+            {
+                // 查找所有Button组件，检查是否有商店相关按钮
+                Button[] allButtons = FindObjectsOfType<Button>();
+                foreach (Button btn in allButtons)
+                {
+                    if (btn.name.Contains("Shop") || btn.name.Contains("Store") || btn.name.Contains("商店"))
+                    {
+                        shopNavButton = btn;
+                        Debug.LogWarning("[LobbyCanvas] 找到商店按钮: " + btn.name);
+                        break;
+                    }
+                }
+            }
+        }
+
         // 查找功能按钮
         startButton = GameObject.Find("StartButton")?.GetComponent<Button>();
         exitRoomButton = GameObject.Find("ExitRoomButton")?.GetComponent<Button>();
@@ -166,6 +194,16 @@ public class LobbyCanvas : UIScreen
 
         // 绑定按钮事件
         BindButtonListeners();
+
+        // 调试：输出按钮绑定结果
+        Debug.Log("[LobbyCanvas] 按钮绑定结果:");
+        Debug.Log("  lobbyNavButton: " + (lobbyNavButton != null ? "成功" : "失败"));
+        Debug.Log("  characterNavButton: " + (characterNavButton != null ? "成功" : "失败"));
+        Debug.Log("  runeNavButton: " + (runeNavButton != null ? "成功" : "失败"));
+        Debug.Log("  missionNavButton: " + (missionNavButton != null ? "成功" : "失败"));
+        Debug.Log("  shopNavButton: " + (shopNavButton != null ? "成功" : "失败"));
+        Debug.Log("  startButton: " + (startButton != null ? "成功" : "失败"));
+        Debug.Log("  exitRoomButton: " + (exitRoomButton != null ? "成功" : "失败"));
 
         // 设置默认选中大厅
         SetButtonSelected(lobbyNavButton?.gameObject);
@@ -213,6 +251,9 @@ public class LobbyCanvas : UIScreen
         if (missionNavButton != null)
             missionNavButton.onClick.AddListener(OnOpenMassionPanel);
 
+        if (shopNavButton != null)
+            shopNavButton.onClick.AddListener(OnShopNavClicked);
+
     }
 
     // ──────────────────────────────────────────────
@@ -230,7 +271,10 @@ public class LobbyCanvas : UIScreen
         var massionPanel = UIManager.Instance.GetScreen(MassionPanelId);
         bool massionOpen = massionPanel != null && (massionPanel.IsOpen || massionPanel.IsAnimating);
 
-        return charactorOpen || runeOpen || massionOpen;
+        var shopPanel = UIManager.Instance.GetScreen(ShopPanelId);
+        bool shopOpen = shopPanel != null && (shopPanel.IsOpen || shopPanel.IsAnimating);
+
+        return charactorOpen || runeOpen || massionOpen || shopOpen;
     }
 
     /// <summary>直接设置模糊效果及相机旋转状态（不查询面板状态，用于主动打开/关闭时）</summary>
@@ -262,6 +306,7 @@ public class LobbyCanvas : UIScreen
     {
         CloseRunePanel();
         CloseMassionPanel();
+        CloseShopPanel();
         SetButtonSelected(characterNavButton?.gameObject);
         OpenCharactorPanel();
     }
@@ -270,8 +315,24 @@ public class LobbyCanvas : UIScreen
     {
         CloseCharactorPanel();
         CloseMassionPanel();
+        CloseShopPanel();
         SetButtonSelected(runeNavButton?.gameObject);
         OpenRunePanel();
+    }
+
+    private void OnShopNavClicked()
+    {
+        Debug.Log("[LobbyCanvas] 开始处理商店按钮点击");
+        CloseCharactorPanel();
+        Debug.Log("[LobbyCanvas] 已关闭角色面板");
+        CloseRunePanel();
+        Debug.Log("[LobbyCanvas] 已关闭符文面板");
+        CloseMassionPanel();
+        Debug.Log("[LobbyCanvas] 已关闭任务面板");
+        SetButtonSelected(shopNavButton?.gameObject);
+        Debug.Log("[LobbyCanvas] 已设置商店按钮为选中态");
+        OpenShopPanel();
+        Debug.Log("[LobbyCanvas] 已调用OpenShopPanel方法");
     }
 
     // ──────────────────────────────────────────────
@@ -333,11 +394,56 @@ public class LobbyCanvas : UIScreen
             SetBlurAndRotation(false);
             return;
         }
-
-        // 在关闭前先清除符文图标选中状态
-        DeselectRuneIcons();
-
         runePanel.Close();
+        SetBlurAndRotation(false);
+    }
+    // ──────────────────────────────────────────────
+    //  商店面板
+    // ──────────────────────────────────────────────
+
+    private void OpenShopPanel()
+    {
+        Debug.Log("[LobbyCanvas] 进入OpenShopPanel方法");
+        UIScreen panel = UIManager.Instance.GetScreen(ShopPanelId);
+        Debug.Log("[LobbyCanvas] 获取ShopPanel结果: " + (panel != null ? "成功" : "失败"));
+        if (panel == null)
+        {
+            Debug.LogError($"[LobbyCanvas] GetScreen(\"{ShopPanelId}\") 返回 null！请确认 ShopPanel 已注册");
+            // 恢复按钮状态，回到大厅选中态
+            Debug.Log("[LobbyCanvas] 准备恢复到大厅状态");
+            SetButtonSelected(lobbyNavButton?.gameObject);
+            Debug.Log("[LobbyCanvas] 已恢复到大厅选中态");
+            // 恢复模糊效果状态
+            SetBlurAndRotation(false);
+            Debug.Log("[LobbyCanvas] 已关闭模糊效果");
+            return;
+        }
+
+        Debug.Log("[LobbyCanvas] ShopPanel当前状态: IsOpen=" + panel.IsOpen + ", IsAnimating=" + (panel as UIScreen).IsAnimating);
+        if (panel.IsOpen)
+        {
+            Debug.Log("[LobbyCanvas] ShopPanel已经打开，直接返回");
+            return;
+        }
+
+        Debug.Log("[LobbyCanvas] 准备打开ShopPanel");
+        panel.Open();
+        Debug.Log("[LobbyCanvas] 已调用ShopPanel.Open()方法");
+        SetBlurAndRotation(true);
+        Debug.Log("[LobbyCanvas] 已设置模糊效果");
+    }
+
+    private void CloseShopPanel()
+    {
+        var panel = UIManager.Instance.GetScreen(ShopPanelId);
+        if (panel == null)
+        {
+            Debug.LogWarning($"[LobbyCanvas] CloseShopPanel: 未找到面板 {ShopPanelId}");
+            SetBlurAndRotation(false);
+            return;
+        }
+
+        panel.Close();
         // Close() 异步，直接主动关闭模糊
         SetBlurAndRotation(false);
     }
@@ -345,6 +451,7 @@ public class LobbyCanvas : UIScreen
     private void OnRuneSlot1Clicked()
     {
         CloseCharactorPanel();
+        CloseShopPanel();
 
         SetRuneIconSelected(runeSlot1Button?.gameObject);
 
@@ -359,6 +466,7 @@ public class LobbyCanvas : UIScreen
     private void OnRuneSlot2Clicked()
     {
         CloseCharactorPanel();
+        CloseShopPanel();
 
         SetRuneIconSelected(runeSlot2Button?.gameObject);
 
@@ -509,6 +617,7 @@ public class LobbyCanvas : UIScreen
         CloseCharactorPanel();
         CloseRunePanel();
         CloseMassionPanel();
+        CloseShopPanel();
     }
 
     private void HandleEscape()
@@ -531,6 +640,7 @@ public class LobbyCanvas : UIScreen
         SetNavButtonState(characterNavButton, button);
         SetNavButtonState(runeNavButton, button);
         SetNavButtonState(missionNavButton, button);
+        SetNavButtonState(shopNavButton, button);
     }
 
     private void SetNavButtonState(Button btn, GameObject selected)
@@ -587,6 +697,7 @@ public class LobbyCanvas : UIScreen
     {
         CloseCharactorPanel();
         CloseRunePanel();
+        CloseShopPanel();
         SetButtonSelected(missionNavButton?.gameObject);
         OpenMassionPanel();
     }

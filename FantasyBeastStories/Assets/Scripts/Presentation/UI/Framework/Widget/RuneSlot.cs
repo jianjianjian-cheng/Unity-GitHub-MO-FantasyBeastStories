@@ -118,10 +118,14 @@ namespace Presentation.UI.Framework
                     nameText = nameTr.GetComponent<Text>();
             }
 
-            // 确保自身 Image 可接收射线
+            // 确保自身 Image 可接收射线，避免 prefab 根节点没有 Image 时无法触发点击
             var image = GetComponent<Image>();
-            if (image != null)
-                image.raycastTarget = true;
+            if (image == null)
+            {
+                image = gameObject.AddComponent<Image>();
+                image.color = Color.clear;
+            }
+            image.raycastTarget = true;
 
             // 初始状态设为未选中图片
             if (bgcImage != null && deselectedSprite != null)

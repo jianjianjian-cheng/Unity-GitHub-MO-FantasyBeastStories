@@ -133,6 +133,18 @@ namespace Application
             return sp;
         }
 
+        // 根据 ActorNumber 确定性地分配生成点，避免多玩家抢占同一位置
+        public ISpawnPoint GetSpawnPointForPlayer(int actorNumber)
+        {
+            if (spawnPointDict.Count == 0) return null;
+
+            var sortedIds = new List<int>(spawnPointDict.Keys);
+            sortedIds.Sort();
+
+            int index = (actorNumber - 1) % sortedIds.Count;
+            return spawnPointDict[sortedIds[index]];
+        }
+
         // 生成点状态变化时的回调
         public void OnSpawnPointStateChanged()
         {

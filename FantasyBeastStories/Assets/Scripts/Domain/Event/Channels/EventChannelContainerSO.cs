@@ -2,6 +2,7 @@ using Domain.Event.Channels.Combat;
 using Domain.Event.Channels.Game;
 using Domain.Event.Channels.General;
 using Domain.Event.Channels.Player;
+using Domain.Event.Channels.Shop;
 using Domain.Event.Channels.Task;
 using Domain.Event.Channels.UI;
 using UnityEngine;
@@ -11,17 +12,21 @@ namespace Domain.Event.Channels
   [CreateAssetMenu(menuName = "Events/Event Channel Container")]
   public class EventChannelContainerSO : ScriptableObject
   {
-    [Header("子容器（在 Inspector 中将各 Channel 拖入对应子容器）")]
+    [Header("子容器（在 Inspector拖进去）")]
     public CombatChannelsSO combat;
     public PlayerChannelsSO player;
     public GameChannelsSO game;
     public UIChannelsSO ui;
 
+    [Header("商店事件")]
+    public ShopEventChannelSO shopEventChannel;
+
+
+    /// <summary>
+    /// 下面是快捷访问的
+    /// </summary>
     [Header("全局设置")]
     public GameSettingsSO gameSettings;
-
-    // ========== 向后兼容的直接访问属性 ==========
-    // 所有现有代码 EventChannelLocator.MainContainer.xxx 无需修改
 
     #region 战斗事件
     public DamageEventChannelSO damageEventChannel => combat != null ? combat.damageEventChannel : null;

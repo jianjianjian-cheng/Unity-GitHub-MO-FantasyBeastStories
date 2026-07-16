@@ -32,7 +32,7 @@ namespace Infrastructure.Network
         public bool IsOwnerOf(GameObject gameObject)
         {
             if (gameObject == null) return false;
-            PhotonView pv = gameObject.GetComponent<PhotonView>();
+            PhotonView pv = gameObject.GetComponentInParent<PhotonView>();
             return pv != null && pv.IsMine;
         }
 

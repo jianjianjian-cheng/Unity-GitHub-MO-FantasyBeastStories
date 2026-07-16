@@ -26,19 +26,13 @@ namespace Domain.Rune
             return ids;
         }
 
-        /// <summary>添加一个符文到背包（去重）</summary>
+        /// <summary>添加一个符文到背包（不去重，支持重复购买）</summary>
         public static void AddRune(int runeId)
         {
             var ids = GetAllRuneIds();
-            if (ids.Contains(runeId))
-            {
-                Debug.Log($"[RuneInventory] 符文 ID={runeId} 已在背包中，跳过");
-                return;
-            }
-
             ids.Add(runeId);
             Save(ids);
-            Debug.Log($"[RuneInventory] 收集符文 ID={runeId}，当前共 {ids.Count} 个");
+            Debug.Log($"[RuneInventory] 收集符文 ID={runeId}，当前背包共 {ids.Count} 个");
         }
 
         /// <summary>检查是否已拥有某个符文</summary>

@@ -13,9 +13,6 @@ namespace Domain.Event
         /// </summary>
         public DateTime Timestamp { get; protected set; }
 
-        /// <summary>
-        /// 事件类型名称，便于日志和调试。
-        /// </summary>
         public string EventType => GetType().Name;
 
         protected EventArgsBase()

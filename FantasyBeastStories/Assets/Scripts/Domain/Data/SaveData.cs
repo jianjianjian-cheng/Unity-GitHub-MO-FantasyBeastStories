@@ -33,6 +33,10 @@ namespace Domain.Data
         // key=任务ID, value=累计完成次数
         public Dictionary<int, int> taskProgress = new Dictionary<int, int>();
 
+        // ====== 商店系统 ======
+        // key=符文ID, value=已购买数量（用于限量商品库存管理）
+        public Dictionary<int, int> shopPurchaseRecords = new Dictionary<int, int>();
+
         // ====== 累计统计 ======
         public int lifetimeKills;            // 累计击杀（来自 MatchStatisticsManager）
         public int lifetimeDamage;           // 累计伤害

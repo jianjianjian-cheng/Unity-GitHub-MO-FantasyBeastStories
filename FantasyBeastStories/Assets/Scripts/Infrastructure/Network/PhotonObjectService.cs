@@ -55,14 +55,14 @@ namespace Infrastructure.Network
         public string GetOwnerNickname(MonoBehaviour source)
         {
             if (source == null) return "";
-            PhotonView pv = source.GetComponent<PhotonView>();
+            PhotonView pv = source.GetComponentInParent<PhotonView>();
             return pv != null && pv.Owner != null ? pv.Owner.NickName : "";
         }
 
         public int GetOwnerActorNumber(Component source)
         {
             if (source == null) return -1;
-            PhotonView pv = source.GetComponent<PhotonView>();
+            PhotonView pv = source.GetComponentInParent<PhotonView>();
             return pv != null && pv.Owner != null ? pv.Owner.ActorNumber : -1;
         }
 
