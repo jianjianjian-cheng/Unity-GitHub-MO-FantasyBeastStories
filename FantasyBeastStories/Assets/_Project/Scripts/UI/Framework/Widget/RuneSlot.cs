@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Controllers.Rune;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -51,22 +52,27 @@ namespace UI.Framework
         public int SlotId => slotId;
         public RuneDataSO RuneData => runeData;
 
-        /// <summary>向后兼容：从 runeData.powers 构建字典</summary>
+        /// <summary>获取热更新后的有效数值（优先 Lua，回退 SO 默认值）</summary>
         public Dictionary<int, string> RunePowers
         {
             get
             {
                 var dict = new Dictionary<int, string>();
                 if (runeData != null)
-                    foreach (var p in runeData.powers)
+                {
+                    var effectivePowers = RuneEffectApplier.GetEffectivePowers(runeData.runeId);
+                    foreach (var p in effectivePowers)
                         dict[p.value] = p.label;
+                }
                 return dict;
             }
         }
 
         public string RuneName => runeData != null ? runeData.runeName : string.Empty;
-        public string SpecialPowerName => runeData != null ? runeData.specialPowerName : string.Empty;
-        public string SpecialPowerDescription => runeData != null ? runeData.specialPowerDescription : string.Empty;
+        public string SpecialPowerName => runeData != null
+            ? RuneEffectApplier.GetEffectiveSpecialPowerName(runeData.runeId) : string.Empty;
+        public string SpecialPowerDescription => runeData != null
+            ? RuneEffectApplier.GetEffectiveSpecialPowerDescription(runeData.runeId) : string.Empty;
 
         // ── 外部注入 ──
 

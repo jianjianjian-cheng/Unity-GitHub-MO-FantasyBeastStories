@@ -265,7 +265,7 @@ namespace Controllers.Enemy
                 Vector3 diff = player.transform.position - enemyPos;
                 if (diff.sqrMagnitude <= sqrAttackRange)
                 {
-                    DamageEventArgs damageEventArgs = new DamageEventArgs(
+                    DamageEventArgs damageEventArgs = DamageEventArgs.GetShared(
                         Element.Common,
                         gameObject,
                         player,

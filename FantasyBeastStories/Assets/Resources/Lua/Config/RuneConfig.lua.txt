@@ -1,0 +1,29 @@
+-- RuneConfig.lua
+-- 符文数值热更新配置
+-- 如果此表中有对应 runeId，则覆盖 ScriptableObject 中的默认值
+-- 热更新时只需修改此文件，重新下发 AssetBundle 即可生效
+
+local RuneConfig = {
+    -- key = runeId（与 RuneDataSO.runeId 对应）
+    -- value = 覆盖的数值表
+
+    -- ID=0: 太炸裂啦！（默认: 基础伤害+20%, 暴击率+10%, 小法师专属）
+    [0] = {
+        powers = {
+            { label = "%基础伤害", value = 10 },
+            { label = "%暴击率",   value = 5 },
+        },
+        specialPowerName = "小法师专属：",
+        exclusiveCharacterType = "WizardBoy",
+    },
+
+    -- ID=1: 三维增幅（默认: 防御力+10%, 攻击速度+10%）
+    [1] = {
+        powers = {
+            { label = "%防御力",   value = 5 },
+            { label = "%攻击速度", value = 5 },
+        },
+    },
+}
+
+return RuneConfig

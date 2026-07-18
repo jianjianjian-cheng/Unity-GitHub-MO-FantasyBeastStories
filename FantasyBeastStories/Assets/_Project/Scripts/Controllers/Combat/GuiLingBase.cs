@@ -6,6 +6,7 @@ using Core;
 using Core;
 using Controllers.Network;
 using UnityEngine;
+using System;
 
 namespace Controllers.Combat
 {
@@ -32,7 +33,6 @@ namespace Controllers.Combat
 
         [Header("VFX 效果")]
         public GameObject hitVFX;
-        public GameObject flashVFX;
         public List<GameObject> trails;
 
         [Header("生命周期")]
@@ -97,9 +97,20 @@ namespace Controllers.Combat
         private CastNetwork _castNetwork;
         private bool _isTest;
 
+        // ===== GC 优化：缓存 List 和 Sort 委托，避免每次分裂时分配 =====
+        private List<Collider> _validTargetsCache = new List<Collider>(16);
+        private Vector3 _sortOrigin;
+        private Comparison<Collider> _sortByDistance;
+
         private void Awake()
         {
             _enemyLayerMask = LayerMask.GetMask("Enemy");
+            _sortByDistance = (a, b) =>
+            {
+                // 使用 _sortOrigin 成员变量，在排序前由调用方设置
+                return Vector3.Distance(_sortOrigin, a.transform.position)
+                    .CompareTo(Vector3.Distance(_sortOrigin, b.transform.position));
+            };
         }
 
         /// <summary>
@@ -149,12 +160,7 @@ namespace Controllers.Combat
                 }
             }
 
-            // 每次发射都播放发射特效（对象池复用后 Start() 不会再次调用）
-            var vfx = LaunchEffect(flashVFX, transform.position, Quaternion.identity);
-            if (vfx != null)
-            {
-                vfx.transform.forward = transform.forward;
-            }
+            
         }
 
         /// <summary>
@@ -260,23 +266,6 @@ namespace Controllers.Combat
             }
         }
 
-        private GameObject LaunchEffect(GameObject prefab, Vector3 position, Quaternion rotation, bool setCustomLayer = false)
-        {
-            if (prefab == null)
-                return null;
-
-            var vfx = Instantiate(prefab, position, rotation);
-            if (setCustomLayer)
-            {
-                SetLayerRecursively(vfx, GetLayerFromMask(_vfxLayer));
-            }
-
-            var ps = vfx.GetComponentInChildren<ParticleSystem>();
-            var waitUntilDestroy = ps != null ? ps.main.duration : maxDestroyTimeAfterHit;
-            Destroy(vfx, waitUntilDestroy);
-            return vfx;
-        }
-
         /// <summary>
         /// 从对象池播放击中特效
         /// </summary>
@@ -286,9 +275,7 @@ namespace Controllers.Combat
             if (string.IsNullOrEmpty(hitPoolName))
                 return;
 
-            GameObject hitEffect = null;
-            EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-                PoolOperationData.CreateGet(hitPoolName, position, (o) => hitEffect = o));
+            GameObject hitEffect = PoolHelper.Get(hitPoolName, position);
 
             if (hitEffect == null)
                 return;
@@ -389,8 +376,7 @@ namespace Controllers.Combat
             _rb.velocity = Vector3.zero;
             if (!string.IsNullOrEmpty(poolName))
             {
-                EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-                    PoolOperationData.CreateReturn(poolName, gameObject));
+                PoolHelper.Return(poolName, gameObject);
             }
             else
             {
@@ -444,12 +430,12 @@ namespace Controllers.Combat
             // ===== 伤害判定：只有发射者（_isMine）才处理伤害 =====
             if (_isMine)
             {
-                bool isCritical = Random.Range(0f, 1f) <= _criticalChance;
+                bool isCritical = UnityEngine.Random.Range(0f, 1f) <= _criticalChance;
 
                 if (_isTest)
                 {
                     // 测试模式：直接通过事件通道触发伤害
-                    var args = new DamageEventArgs(_element, gameObject, rootEnemy.gameObject, _damage * _damageMultiplier, isCritical, _criticalMultiplier);
+                    var args = DamageEventArgs.GetShared(_element, gameObject, rootEnemy.gameObject, _damage * _damageMultiplier, isCritical, _criticalMultiplier);
                     EventChannelLocator.MainContainer?.damageEventChannel?.Raise(args);
                 }
                 else
@@ -495,8 +481,7 @@ namespace Controllers.Combat
             _rb.velocity = Vector3.zero;
             if (!string.IsNullOrEmpty(poolName))
             {
-                EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-                PoolOperationData.CreateReturn(poolName, gameObject));
+                PoolHelper.Return(poolName, gameObject);
             }
             else
             {
@@ -522,7 +507,7 @@ namespace Controllers.Combat
 
             // 3. 按距离排序（排除已命中的敌人）
             //    注意：使用根 EnemyBase GameObject，兼容子物体 Collider
-            List<Collider> validTargets = new List<Collider>();
+            _validTargetsCache.Clear();
             foreach (var col in enemiesInRange)
             {
                 // 跳过已命中的敌人（使用根 GameObject 对比）
@@ -534,29 +519,19 @@ namespace Controllers.Combat
                 if (enemyBase.IsDeadOrDying())
                     continue;
 
-                validTargets.Add(col);
+                _validTargetsCache.Add(col);
             }
-            if (validTargets.Count == 0)
+            if (_validTargetsCache.Count == 0)
                 return;
 
-            // 按距离从近到远排序（使用根 Transform 的位置）
-            validTargets.Sort(
-                (a, b) =>
-                {
-                    var baseA = a.gameObject.GetComponentInParent<EnemyBase>();
-                    var baseB = b.gameObject.GetComponentInParent<EnemyBase>();
-                    Vector3 posA = baseA != null ? baseA.transform.position : a.transform.position;
-                    Vector3 posB = baseB != null ? baseB.transform.position : b.transform.position;
-                    return Vector3
-                        .Distance(hitPoint, posA)
-                        .CompareTo(Vector3.Distance(hitPoint, posB));
-                }
-            );
+            // 按距离从近到远排序（使用缓存的委托，避免 GC 分配）
+            _sortOrigin = hitPoint;
+            _validTargetsCache.Sort(_sortByDistance);
 
-            int actualSplitCount = Mathf.Min(_splitCount, validTargets.Count);
+            int actualSplitCount = Mathf.Min(_splitCount, _validTargetsCache.Count);
             for (int i = 0; i < actualSplitCount; i++)
             {
-                var enemyBase = validTargets[i].gameObject.GetComponentInParent<EnemyBase>();
+                var enemyBase = _validTargetsCache[i].gameObject.GetComponentInParent<EnemyBase>();
                 if (enemyBase == null) continue;
 
                 GameObject rootTarget = enemyBase.gameObject;
@@ -594,9 +569,7 @@ namespace Controllers.Combat
         private void FireSplitGuiLing(Vector3 spawnPos, Vector3 direction, GameObject targetEnemy)
         {
             // 1. 从对象池获取 GuiLing
-            GameObject splitGuiLing = null;
-            EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-                PoolOperationData.CreateGet(poolName, spawnPos, (o) => splitGuiLing = o));
+            GameObject splitGuiLing = PoolHelper.Get(poolName, spawnPos);
 
             if (splitGuiLing == null)
             {

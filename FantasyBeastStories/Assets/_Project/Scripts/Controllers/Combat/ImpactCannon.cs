@@ -15,6 +15,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Core;
 using Managers;
+using System;
 
 namespace Controllers.Combat.ImpactCannon
 {
@@ -67,6 +68,11 @@ namespace Controllers.Combat.ImpactCannon
       {
         Debug.LogWarning("[ImpactCannon] damageEventChannel 未配置，请在Inspector中赋值或检查 MainContainer 是否就绪");
       }
+
+      // GC 优化：缓存 Sort 委托
+      _sortByDistance = (a, b) =>
+          Vector3.Distance(_sortOrigin, a.transform.position)
+              .CompareTo(Vector3.Distance(_sortOrigin, b.transform.position));
     }
 
     public void OnEnable()
@@ -95,7 +101,6 @@ namespace Controllers.Combat.ImpactCannon
     void OnDisable()
     {
       transform.localScale = baseScale;
-      Debug.Log("冲击炮被禁用，返回对象池");
       rb.velocity = Vector3.zero;
       StopAllCoroutines();
     }
@@ -156,9 +161,7 @@ namespace Controllers.Combat.ImpactCannon
       // ===== 只有本地玩家创建的火球（包括分裂弹）才判定伤害 =====
       if (_isMyCast)
       {
-        Debug.Log("触发冲击炮击中效果");
-
-        // 只有初始火球才能分裂（分裂弹的 canSplit = false）
+        // ===== 只有初始火球才能分裂（分裂弹的 canSplit = false） =====
         if (canSplit)
         {
           SplitToNearestEnemies(hitPoint, other.gameObject);
@@ -168,7 +171,7 @@ namespace Controllers.Combat.ImpactCannon
         PlayHitEffect(hitPoint);
         attackCount++;
 
-        bool isCritical = Random.Range(0, 1f) <= attributePlayer.GetCriticalChance();
+        bool isCritical = UnityEngine.Random.Range(0, 1f) <= attributePlayer.GetCriticalChance();
         float damage = attributePlayer.GetAttackPower() * damageFalloff; // 分裂弹伤害减半
 
         if (isTest)
@@ -222,25 +225,20 @@ namespace Controllers.Combat.ImpactCannon
       );
 
       // 2. 按距离排序（排除已命中的敌人）
-      List<Collider> validTargets = new List<Collider>();
+      _validTargetsCache.Clear();
       foreach (var col in enemiesInRange)
       {
         if (col.gameObject != hitEnemy)
-          validTargets.Add(col);
+          _validTargetsCache.Add(col);
       }
 
-      Debug.LogWarning($"找到{validTargets.Count}个敌人");
-      // 按距离从近到远排序
-      validTargets.Sort(
-          (a, b) =>
-              Vector3
-                  .Distance(hitPoint, a.transform.position)
-                  .CompareTo(Vector3.Distance(hitPoint, b.transform.position))
-      );
-      int actualSplitCount = Mathf.Min(splitCount, validTargets.Count);
+      // 按距离从近到远排序（使用缓存的委托，避免 GC 分配）
+      _sortOrigin = hitPoint;
+      _validTargetsCache.Sort(_sortByDistance);
+      int actualSplitCount = Mathf.Min(splitCount, _validTargetsCache.Count);
       for (int i = 0; i < actualSplitCount; i++)
       {
-        Vector3 targetPos = validTargets[i].transform.position;
+        Vector3 targetPos = _validTargetsCache[i].transform.position;
 
         // 计算基础方向，只取xz轴方向
         Vector3 xzTargetPos = new Vector3(targetPos.x, hitPoint.y, targetPos.z);
@@ -249,7 +247,7 @@ namespace Controllers.Combat.ImpactCannon
         // 添加扇形偏移（让分裂弹看起来更自然）
         Vector3 splitDirection = GetSplitDirection(baseDirection, i, actualSplitCount);
 
-        CreateSplitBullet(hitPoint, splitDirection, validTargets[i].gameObject, hitEnemy);
+        CreateSplitBullet(hitPoint, splitDirection, _validTargetsCache[i].gameObject, hitEnemy);
       }
     }
 
@@ -301,23 +299,17 @@ namespace Controllers.Combat.ImpactCannon
       }
 
       // 1. 获取视觉特效
-      GameObject visualObj = null;
-      EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-          PoolOperationData.CreateGet(poolName, spawnPos, (o) => visualObj = o));
+      GameObject visualObj = PoolHelper.Get(poolName, spawnPos);
 
-      GameObject triggerObj = null;
-      EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-          PoolOperationData.CreateGet(ObjectPoolConst.ImpactCannonTriggerPool, spawnPos, (o) => triggerObj = o));
+      GameObject triggerObj = PoolHelper.Get(ObjectPoolConst.ImpactCannonTriggerPool, spawnPos);
 
       if (visualObj == null || triggerObj == null)
       {
         Debug.LogWarning("无法从对象池获取分裂弹组件");
         if (visualObj != null)
-          EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-              PoolOperationData.CreateReturn(poolName, visualObj));
+          PoolHelper.Return(poolName, visualObj);
         if (triggerObj != null)
-          EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-              PoolOperationData.CreateReturn(ObjectPoolConst.ImpactCannonTriggerPool, triggerObj));
+          PoolHelper.Return(ObjectPoolConst.ImpactCannonTriggerPool, triggerObj);
         return;
       }
 
@@ -383,9 +375,7 @@ namespace Controllers.Combat.ImpactCannon
           poolKey = ObjectPoolConst.ImpactCannonHitCommonPool;
           break;
       }
-      GameObject hitEffect = null;
-      EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-          PoolOperationData.CreateGet(poolKey, hitPosition, (o) => hitEffect = o));
+      GameObject hitEffect = PoolHelper.Get(poolKey, hitPosition);
       if (hitEffect != null)
       {
         hitEffect.GetComponentInChildren<ParticleSystem>()?.Play();
@@ -403,7 +393,7 @@ namespace Controllers.Combat.ImpactCannon
         Element element = Element.Common
     )
     {
-      DamageEventArgs damageEventArgs = new DamageEventArgs(
+      DamageEventArgs damageEventArgs = DamageEventArgs.GetShared(
           element,
           gameObject,
           enemyObj,
@@ -419,7 +409,6 @@ namespace Controllers.Combat.ImpactCannon
       {
         Debug.LogWarning($"[ImpactCannon] damageEventChannel 为空，无法发送伤害事件", this);
       }
-      Debug.Log($"[ImpactCannon] 通过事件通道触发伤害，目标: {enemyObj.name}");
     }
 
     public override void OnTriggerStay(Collider other)
@@ -442,12 +431,16 @@ namespace Controllers.Combat.ImpactCannon
     private IEnumerator DelayDestroySelf(float delay)
     {
       yield return new WaitForSeconds(delay);
-      EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-          PoolOperationData.CreateReturn(ObjectPoolConst.ImpactCannonTriggerPool, gameObject));
+      PoolHelper.Return(ObjectPoolConst.ImpactCannonTriggerPool, gameObject);
     }
 
     // 令牌 用于绑定特效
     private AttackToken token;
+
+    // ===== GC 优化：缓存 List 和 Sort 委托，避免每次分裂时分配 =====
+    private List<Collider> _validTargetsCache = new List<Collider>(16);
+    private Vector3 _sortOrigin;
+    private Comparison<Collider> _sortByDistance;
 
     public void SetToken(AttackToken newToken)
     {
@@ -466,8 +459,7 @@ namespace Controllers.Combat.ImpactCannon
       else
       {
         Debug.LogWarning("令牌丢失，无法回收所有特效");
-        EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-            PoolOperationData.CreateReturn(ObjectPoolConst.ImpactCannonTriggerPool, gameObject));
+        PoolHelper.Return(ObjectPoolConst.ImpactCannonTriggerPool, gameObject);
       }
     }
   }

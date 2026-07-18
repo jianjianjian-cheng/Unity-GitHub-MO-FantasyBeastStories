@@ -1,0 +1,12 @@
+-- Main.lua
+-- Lua 热更新入口，require 所有模块
+
+local RuneConfig = require("Config.RuneConfig")
+local RuneEffect = require("Logic.RuneEffect")
+local RuneSpecialPower = require("Logic.RuneSpecialPower")
+
+return {
+    RuneConfig = RuneConfig,
+    RuneEffect = RuneEffect,
+    RuneSpecialPower = RuneSpecialPower,
+}

@@ -493,7 +493,7 @@ namespace Controllers.Combat.FireBallBoss
       if (hitObject != null && hitObject.CompareTag("Player"))
       {
         Debug.Log($"火球命中玩家，造成 {damage} 点伤害");
-        DamageEventArgs damageEventArgs = new DamageEventArgs(
+        DamageEventArgs damageEventArgs = DamageEventArgs.GetShared(
         Element.Common,
         gameObject,
         hitObject,

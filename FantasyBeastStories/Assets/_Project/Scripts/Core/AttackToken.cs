@@ -13,11 +13,9 @@ namespace Core
         public void RecycleAll()
         {
             if (hitCollider != null)
-                EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-                    PoolOperationData.CreateReturn(ObjectPoolConst.ImpactCannonTriggerPool, hitCollider));
+                PoolHelper.Return(ObjectPoolConst.ImpactCannonTriggerPool, hitCollider);
             if (vfxEffect != null)
-                EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-                    PoolOperationData.CreateReturn(vfxPoolName, vfxEffect));
+                PoolHelper.Return(vfxPoolName, vfxEffect);
 
             hitCollider = null;
             vfxEffect = null;

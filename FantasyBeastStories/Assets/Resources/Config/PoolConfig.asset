@@ -21,58 +21,58 @@ MonoBehaviour:
     preloadCount: 10
   - poolName: ImpactCannonHitCommonPool
     prefab: {fileID: 5112403345868107898, guid: 6f34ef0d986e9db4199cf75805f79753, type: 3}
-    preloadCount: 20
+    preloadCount: 10
   - poolName: ImpactCannonLightenPool
     prefab: {fileID: 4717974646612442227, guid: de01ba9d2b8bef342b9068f5eb3264ab, type: 3}
     preloadCount: 10
   - poolName: ImpactCannonHitLightenPool
     prefab: {fileID: 743576573993576157, guid: 57a0a59dae22bbf46904ae8c7a63670d, type: 3}
-    preloadCount: 20
+    preloadCount: 10
   - poolName: ImpactCannonWinterPool
     prefab: {fileID: 6980703490817345712, guid: 577b09a2f221f0d45af3bbc26432a16b, type: 3}
     preloadCount: 10
   - poolName: ImpactCannonHitWinterPool
     prefab: {fileID: 450033167261818607, guid: 9fe86f2f5bb8d6449a5014493dd002c9, type: 3}
-    preloadCount: 20
+    preloadCount: 10
   - poolName: ImpactCannonGrassPool
     prefab: {fileID: 1259395337761259682, guid: 0266abb1138817747bcb23e85063a8d0, type: 3}
     preloadCount: 10
   - poolName: ImpactCannonHitGrassPool
     prefab: {fileID: 141618438410259909, guid: d82118f277b2b724a94d1620fa87ff5c, type: 3}
-    preloadCount: 20
+    preloadCount: 10
   - poolName: ImpactCannonTriggerPool
     prefab: {fileID: 2367065165679467529, guid: 2342899d2b649dd45bb301e1919c37e8, type: 3}
-    preloadCount: 20
+    preloadCount: 10
   - poolName: FireFirePool
     prefab: {fileID: 4717974646612442227, guid: de01ba9d2b8bef342b9068f5eb3264ab, type: 3}
     preloadCount: 0
   - poolName: DamageNumPool
     prefab: {fileID: 5479169006107287667, guid: 50bb26c31a111ad4397535e404c3b404, type: 3}
-    preloadCount: 100
+    preloadCount: 20
   - poolName: GuiLingFirePool
     prefab: {fileID: 1865212907280611922, guid: 1e362cb8ecc754f468b97c9635ea68f1, type: 3}
-    preloadCount: 50
+    preloadCount: 20
   - poolName: GuiLingLightningPool
     prefab: {fileID: 1084493295099975559, guid: efbbe76f14dacf446b9dd0a494771bd6, type: 3}
-    preloadCount: 50
+    preloadCount: 20
   - poolName: GuiLingWinterPool
     prefab: {fileID: 1316024693396300276, guid: 783b5a6ddad67ab43bd5968b4be24bcf, type: 3}
-    preloadCount: 50
+    preloadCount: 20
   - poolName: GuiLingGrassPool
     prefab: {fileID: 5630948002573865659, guid: 14bab58889d70614abe5345f193fddf7, type: 3}
-    preloadCount: 50
+    preloadCount: 20
   - poolName: ExperienceBall_Blue_LocalPool
     prefab: {fileID: 2943166597812424074, guid: 5337f55a35380bb46aabe1897116ff79, type: 3}
-    preloadCount: 500
+    preloadCount: 100
   - poolName: GuiLingHitFirePool
     prefab: {fileID: 2154096349857787289, guid: b4046f1a1c994f44baacffb105302bd5, type: 3}
-    preloadCount: 50
+    preloadCount: 20
   - poolName: GuiLingHitLightningPool
     prefab: {fileID: 1284574439593581784, guid: 58f2c80d5f672be4da4738cdad68b639, type: 3}
-    preloadCount: 50
+    preloadCount: 20
   - poolName: GuiLingHitWinterPool
     prefab: {fileID: 2386738666368680535, guid: 4ba95f1e657e3044a91a3c94c168e8bd, type: 3}
-    preloadCount: 50
+    preloadCount: 20
   - poolName: GuiLingHitGrassPool
     prefab: {fileID: 8625811315627341284, guid: 720b95ce4539ed745bfa246beaf35137, type: 3}
-    preloadCount: 50
+    preloadCount: 30

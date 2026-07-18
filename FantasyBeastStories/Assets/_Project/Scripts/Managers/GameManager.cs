@@ -38,11 +38,24 @@ namespace Managers
                 EventChannelLocator.MainContainer.gameSettings.IsStayLobby = isStayLobbyInspector;
                 EventChannelLocator.MainContainer.gameSettings.IsTest = isTestInspector;
                 DontDestroyOnLoad(gameObject);
+
+                // ── 初始化 Lua 热更新环境 ──
+                LuaEnvManager.Instance.Init();
+                StartCoroutine(InitHotfix());
             }
             else
             {
                 Destroy(gameObject);
             }
+        }
+
+        private IEnumerator InitHotfix()
+        {
+            var hotfix = GetComponent<HotfixManager>();
+            if (hotfix == null)
+                hotfix = gameObject.AddComponent<HotfixManager>();
+
+            yield return StartCoroutine(hotfix.DownloadAndLoad());
         }
 
         void OnEnable()

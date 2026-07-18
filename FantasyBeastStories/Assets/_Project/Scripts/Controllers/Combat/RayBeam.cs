@@ -24,7 +24,7 @@ namespace Controllers.Combat
                 if (owner != null)
                 {
                     Debug.Log("RayBeam Damage Player");
-                    DamageEventArgs damageEventArgs = new DamageEventArgs(
+                    DamageEventArgs damageEventArgs = DamageEventArgs.GetShared(
                     Element.Common,
                     owner,
                     other.gameObject,

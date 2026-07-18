@@ -13,6 +13,24 @@ namespace Core
         public Vector3 worldPosition;
         public bool isCritical;
 
+        // ===== GC 优化：共享实例，避免每次 new 分配 =====
+        private static DamageDisplayEventArgs _shared;
+
+        public static DamageDisplayEventArgs GetShared(float damageValue, Vector3 worldPosition, bool isCritical)
+        {
+            if (_shared == null)
+            {
+                _shared = new DamageDisplayEventArgs(damageValue, worldPosition, isCritical);
+            }
+            else
+            {
+                _shared.damageValue = damageValue;
+                _shared.worldPosition = worldPosition;
+                _shared.isCritical = isCritical;
+            }
+            return _shared;
+        }
+
         public DamageDisplayEventArgs(float damageValue, Vector3 worldPosition, bool isCritical)
         {
             this.damageValue = damageValue;

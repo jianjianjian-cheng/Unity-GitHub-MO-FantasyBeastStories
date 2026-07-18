@@ -12,6 +12,18 @@ namespace Core
         [SerializeField]
         private PoolConfigSO poolConfig;
 
+        // ===== GC 优化：使用 Queue 替代 List 线性查找，O(1) 获取/归还 =====
+        private class PoolData
+        {
+            public List<GameObject> allObjects = new List<GameObject>();
+            public Queue<GameObject> available = new Queue<GameObject>();
+        }
+
+        private Dictionary<string, PoolData> objectPools = new Dictionary<string, PoolData>();
+        private Dictionary<string, GameObject> prefabCache = new Dictionary<string, GameObject>();
+
+        private bool isPoolInitialized = false;
+
         void Awake()
         {
             ServiceLocator.Register(this);
@@ -48,12 +60,6 @@ namespace Core
                     break;
             }
         }
-
-        private Dictionary<string, List<GameObject>> objectPools =
-            new Dictionary<string, List<GameObject>>();
-        private Dictionary<string, GameObject> prefabCache = new Dictionary<string, GameObject>();
-
-        private bool isPoolInitialized = false;
 
         void Start()
         {
@@ -128,28 +134,32 @@ namespace Core
         /// </summary>
         public void ClearPool(string poolName)
         {
-            if (objectPools.ContainsKey(poolName))
+            if (objectPools.TryGetValue(poolName, out var poolData))
             {
-                foreach (var obj in objectPools[poolName])
+                foreach (var obj in poolData.allObjects)
                 {
                     if (obj != null)
                         Destroy(obj);
                 }
-                objectPools[poolName].Clear();
+                poolData.allObjects.Clear();
+                poolData.available.Clear();
             }
         }
 
         /// <summary>
-        /// 从对象池获取对象并激活
+        /// 从对象池获取对象并激活（O(1) Queue 操作）
         /// </summary>
         public GameObject GetFromPoolAndActivate(string poolName, Vector3? position = null)
         {
-            if (objectPools.TryGetValue(poolName, out List<GameObject> pool))
+            if (objectPools.TryGetValue(poolName, out PoolData poolData))
             {
-                // 先找未激活的对象
-                foreach (var obj in pool)
+                GameObject obj = null;
+
+                // 从可用队列中取（O(1)）
+                while (poolData.available.Count > 0)
                 {
-                    if (obj != null && !obj.activeSelf)
+                    obj = poolData.available.Dequeue();
+                    if (obj != null)
                     {
                         obj.SetActive(true);
                         if (position.HasValue)
@@ -164,11 +174,11 @@ namespace Core
                     GameObject newObj = CreateNewObject(poolName, prefab);
                     if (newObj != null)
                     {
-                        pool.Add(newObj);
+                        poolData.allObjects.Add(newObj);
                         newObj.SetActive(true);
                         if (position.HasValue)
                             newObj.transform.position = position.Value;
-                        Debug.Log($"对象池 '{poolName}' 动态扩容，当前数量: {pool.Count}");
+                        Debug.Log($"对象池 '{poolName}' 动态扩容，当前数量: {poolData.allObjects.Count}");
                         return newObj;
                     }
                 }
@@ -183,14 +193,14 @@ namespace Core
         }
 
         /// <summary>
-        /// 将对象返回对象池并禁用
+        /// 将对象返回对象池并禁用（O(1) Queue 操作）
         /// </summary>
         public void ReturnToPool(string poolName, GameObject obj)
         {
             if (obj == null)
                 return;
 
-            if (objectPools.TryGetValue(poolName, out var pool) && pool.Contains(obj))
+            if (objectPools.TryGetValue(poolName, out var poolData) && poolData.allObjects.Contains(obj))
             {
                 obj.SetActive(false);
                 obj.transform.SetParent(transform);
@@ -204,6 +214,9 @@ namespace Core
                     rb.velocity = Vector3.zero;
                     rb.angularVelocity = Vector3.zero;
                 }
+
+                // 放回可用队列
+                poolData.available.Enqueue(obj);
             }
             else
             {
@@ -226,8 +239,10 @@ namespace Core
 
             if (!objectPools.ContainsKey(poolName))
             {
-                objectPools[poolName] = new List<GameObject>();
+                objectPools[poolName] = new PoolData();
             }
+
+            var poolData = objectPools[poolName];
 
             for (int i = 0; i < count; i++)
             {
@@ -236,11 +251,12 @@ namespace Core
                 {
                     obj.transform.SetParent(transform);
                     obj.SetActive(false);
-                    objectPools[poolName].Add(obj);
+                    poolData.allObjects.Add(obj);
+                    poolData.available.Enqueue(obj);
                 }
             }
 
-            Debug.Log($"对象池 '{poolName}' 初始化完成，共 {objectPools[poolName].Count} 个对象");
+            Debug.Log($"对象池 '{poolName}' 初始化完成，共 {poolData.allObjects.Count} 个对象");
         }
 
         /// <summary>
@@ -266,9 +282,9 @@ namespace Core
         /// </summary>
         public int GetPoolCount(string poolName)
         {
-            if (objectPools.TryGetValue(poolName, out var pool))
+            if (objectPools.TryGetValue(poolName, out var poolData))
             {
-                return pool.Count;
+                return poolData.allObjects.Count;
             }
             return 0;
         }
@@ -278,10 +294,10 @@ namespace Core
         /// </summary>
         public int GetActiveCount(string poolName)
         {
-            if (objectPools.TryGetValue(poolName, out var pool))
+            if (objectPools.TryGetValue(poolName, out var poolData))
             {
                 int count = 0;
-                foreach (var obj in pool)
+                foreach (var obj in poolData.allObjects)
                 {
                     if (obj != null && obj.activeSelf)
                         count++;
@@ -293,12 +309,14 @@ namespace Core
 
         public void DestroyAllPools()
         {
-            foreach (var pool in objectPools.Values)
+            foreach (var poolData in objectPools.Values)
             {
-                foreach (var obj in pool)
+                foreach (var obj in poolData.allObjects)
                 {
                     Destroy(obj);
                 }
+                poolData.allObjects.Clear();
+                poolData.available.Clear();
             }
         }
 

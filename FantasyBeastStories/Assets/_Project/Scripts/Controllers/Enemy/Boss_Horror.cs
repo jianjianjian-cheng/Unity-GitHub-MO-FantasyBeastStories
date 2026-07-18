@@ -553,7 +553,7 @@ namespace Controllers.Enemy
             {
                 if (col.CompareTag("Player"))
                 {
-                    DamageEventArgs damageEventArgs = new DamageEventArgs(
+                    DamageEventArgs damageEventArgs = DamageEventArgs.GetShared(
                         Element.Common,
                         gameObject,
                         col.gameObject,

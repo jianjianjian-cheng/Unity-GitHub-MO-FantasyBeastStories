@@ -196,7 +196,7 @@ namespace Controllers.Network
       // - ImpactCannon: ImpactCannon.OnTriggerEnter → PlayHitEffect()
       // - GuiLing:      GuiLingBase.OnTriggerEnter → LaunchEffect(hitVFX)
       Element element = (Element)elementInt;
-      DamageEventArgs damageEventArgs = new DamageEventArgs(
+      DamageEventArgs damageEventArgs = DamageEventArgs.GetShared(
           element,
           gameObject,
           enemyView.gameObject,

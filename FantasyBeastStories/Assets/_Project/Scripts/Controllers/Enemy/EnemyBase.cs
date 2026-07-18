@@ -469,7 +469,7 @@ namespace Controllers.Enemy
       if (EventChannelLocator.MainContainer.gameSettings.IsTest)
       {
         EventChannelLocator.MainContainer.combat.damageDisplayChannel?.Raise(
-            new DamageDisplayEventArgs(
+            DamageDisplayEventArgs.GetShared(
                 damageEventArgs.finalDamageValue,
                 transform.position,
                 damageEventArgs.isCritical

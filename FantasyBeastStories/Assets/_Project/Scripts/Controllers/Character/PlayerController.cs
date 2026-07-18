@@ -70,15 +70,18 @@ namespace Controllers.Character
       attributePlayer = new AttributePlayerBase(playerAttributeConfig);
       attributePlayer.SetMoveSpeed(movementData.moveSpeed);
 
-      // 应用符文效果（仅在游戏场景，非大厅）
-      if (!isInLobby)
-        RuneEffectApplier.ApplyEquippedRunes(attributePlayer);
-
       playerInputHandler = new PlayerInputHandler();
     }
 
     protected virtual void Start()
     {
+      // 重新读取 IsStayLobby — Launcher.OnSceneLoaded 在 Awake 之后、Start 之前将其设为 false
+      isInLobby = EventChannelLocator.MainContainer.gameSettings.IsStayLobby;
+
+      // 应用符文效果（仅在游戏场景，非大厅）— 放在 Start 确保场景切换标志已更新
+      if (!isInLobby)
+        RuneEffectApplier.ApplyEquippedRunes(attributePlayer);
+
       if (!NetworkServiceLocator.PlayerService.IsOwnerOf(gameObject))
       {
         return; // 只处理本地玩家的输入和动画
