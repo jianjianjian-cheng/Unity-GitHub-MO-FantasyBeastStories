@@ -290,7 +290,7 @@ namespace Controllers.Network
 
         // ==================== 辅助方法 ====================
 
-        private void EnsurePlayerManagerExists()
+        public void EnsurePlayerManagerExists()
         {
             if (PlayerManager.instance == null)
             {
