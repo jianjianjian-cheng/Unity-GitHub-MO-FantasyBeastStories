@@ -91,10 +91,12 @@ namespace Controllers.Network
             int localActorNumber = NetworkServiceLocator.PlayerService.GetLocalActorNumber();
             var gameManager = ServiceLocator.Get<GameManager>();
 
+            // 根据 ActorNumber 确定性地分配生成点（不同玩家必然得到不同生成点）
             ISpawnPoint sp = gameManager.GetSpawnPointForPlayer(localActorNumber);
             Transform spawnPoint = (sp as MonoBehaviour)?.transform;
 
-            if (sp == null || !sp.IsEmpty())
+            // 仅当确定性分配的生成点被"其他"玩家占用时才回退（RPC 同步滞后期间 IsEmpty 可能误报）
+            if (sp != null && !sp.IsEmpty() && sp.GetOccupiedByPlayer() != localActorNumber)
             {
                 sp = gameManager.GetEmptySpawnPoint()?.GetComponent<ISpawnPoint>();
                 spawnPoint = (sp as MonoBehaviour)?.transform;

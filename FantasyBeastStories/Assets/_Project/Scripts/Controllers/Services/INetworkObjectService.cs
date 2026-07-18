@@ -11,7 +11,6 @@ namespace Controllers.Services
         int GetViewID(Component component);
         int GetViewID(GameObject gameObject);
         GameObject FindByViewID(int viewId);
-        void EnsureView(MonoBehaviour source);
         string GetOwnerNickname(MonoBehaviour source);
         int GetOwnerActorNumber(Component source);
     }

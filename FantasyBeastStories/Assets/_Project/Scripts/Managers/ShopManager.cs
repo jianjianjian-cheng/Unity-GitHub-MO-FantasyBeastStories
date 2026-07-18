@@ -57,6 +57,8 @@ namespace Managers
       RecordPurchase(runeId);
       RuneInventory.AddRune(runeId);
 
+      AudioManager.Instance?.PlayUI("sfx_Coin");
+
       var eventData = new RunePurchasedEventData
       {
         runeId = runeId,

@@ -5,6 +5,7 @@ using Controllers.Enemy;
 using Core;
 using Core;
 using Controllers.Network;
+using Managers;
 using UnityEngine;
 using System;
 
@@ -38,6 +39,9 @@ namespace Controllers.Combat
         [Header("生命周期")]
         [Min(1)]
         public float maxDestroyTimeAfterHit = 2f;
+
+        [Tooltip("投射物最大存活时间（秒），超时强制归池，防止卡在场景中")]
+        public float maxLifetime = 5f;
 
         [Header("丢失目标重寻")]
         [SerializeField]
@@ -213,6 +217,14 @@ namespace Controllers.Combat
             // 命中后已标记归池，不再更新速度（防止 FixedUpdate 在协程归池前覆盖速度导致卡住）
             if (_isReturning) return;
 
+            // 超时保护：超过最大存活时间仍未命中，强制归池
+            if (UnityEngine.Time.time - _spawnTime > maxLifetime)
+            {
+                _isReturning = true;
+                ReturnToPool();
+                return;
+            }
+
             var elapsed = UnityEngine.Time.time - _spawnTime;
             var time = Mathf.Clamp01(elapsed / animationDuration);
             var curveValue = speedOverTime.Evaluate(time);
@@ -364,6 +376,7 @@ namespace Controllers.Combat
             {
                 // 周围无存活敌人，直接归还池
                 _hasTarget = false;
+                _isReturning = true;
                 ReturnToPool();
             }
         }
@@ -409,6 +422,8 @@ namespace Controllers.Combat
 
             var isVisible = IsPointVisibleFromCamera(spawnPos);
             PlayHitEffectFromPool(spawnPos, Quaternion.FromToRotation(Vector3.up, normal), isVisible);
+
+            AudioManager.Instance?.PlaySFX("sfx_GuiLingHit", spawnPos);
 
             if (trails.Count > 0)
             {

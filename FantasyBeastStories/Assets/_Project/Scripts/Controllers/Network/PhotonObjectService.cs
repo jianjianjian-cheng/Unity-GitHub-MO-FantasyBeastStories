@@ -46,12 +46,6 @@ namespace Controllers.Network
             return photonView != null ? photonView.gameObject : null;
         }
 
-        public void EnsureView(MonoBehaviour source)
-        {
-            PhotonView pv = source.GetComponent<PhotonView>();
-            if (pv == null) pv = source.gameObject.AddComponent<PhotonView>();
-        }
-
         public string GetOwnerNickname(MonoBehaviour source)
         {
             if (source == null) return "";

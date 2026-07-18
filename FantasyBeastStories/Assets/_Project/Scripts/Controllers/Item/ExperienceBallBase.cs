@@ -31,6 +31,9 @@ namespace Controllers.Item
 
         protected override void OnReachPlayer()
         {
+            // 拾取音效
+            AudioManager.Instance?.PlaySFX("sfx_PickUp", transform.position);
+
             // 先触发经验获取事件（本地立刻生效，提升手感）
             EventChannelLocator.MainContainer.experienceChannel.Raise(ExperienceValue);
 

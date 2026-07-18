@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Managers; // TODO: GamePauseManager.isPaused 移到事件通道后移除
 using Core;
@@ -290,29 +290,17 @@ namespace Controllers.Enemy
             }
 
             // 获取当前游戏时间
+// 获取当前游戏时间
             var timeQuery = new TimeQueryData();
             EventChannelLocator.MainContainer.timeQueryChannel?.Query(timeQuery);
             float currentTime = timeQuery.currentTime;
 
-            // 获取玩家数量（单人模式=1，四人模式=4）
-            int playerCount = PlayerManager.instance != null ? PlayerManager.instance.PlayerCount : 1;
+            // 基础血量（与 EnemyBase.Awake 中一致）
+            const float baseMaxHealth = 500f;
 
-            // 根据玩家数量计算目标最大血量
-            // 1人→1000, 2人→1300, 3人→1600, 4人→2000
-            float targetMaxHealth = playerCount switch
-            {
-                1 => 1000f,
-                2 => 1300f,
-                3 => 1600f,
-                4 => 2000f,
-                _ => 1000f + (playerCount - 1) * 333f
-            };
-
-            // 基于时间的进度：8分钟（480s）达到最大值
-            float progress = Mathf.Clamp01(currentTime / 480f);
-
-            // 从基础血量（500）线性增长到目标血量
-            float newMaxHealth = Mathf.Lerp(500f, targetMaxHealth, progress);
+            // 根据游戏时间计算血量倍率（1x → 4x，Boss 出现后回落至 1x）
+            float hpMultiplier = EnemyScalingCalculator.GetHpMultiplier(currentTime);
+            float newMaxHealth = baseMaxHealth * hpMultiplier;
             enemyData.attribute.maxHealth = newMaxHealth;
             enemyData.attribute.currentHealth = newMaxHealth;
 

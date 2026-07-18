@@ -155,7 +155,7 @@ namespace Controllers.Network
 
         // ==================== 状态重置（场景切换时由 Launcher 调用） ====================
 
-        /// <summary>返回大厅场景时重置所有流程标志</summary>
+        /// <summary>重置所有流程标志（大厅和游戏场景切换时均由 Launcher 调用）</summary>
         public void ResetForLobby()
         {
             isRoomLoading = false;

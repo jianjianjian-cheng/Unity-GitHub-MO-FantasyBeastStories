@@ -31,15 +31,16 @@ namespace Controllers.Combat
                 _ps.Play();
             }
 
-            // 根据粒子系统时长延迟归还，保底 2s
+            // 根据粒子系统时长延迟归还，保底 2s，上限 3s（防止计算异常导致永久卡住）
             float duration = 2f;
             if (_ps != null)
             {
                 float mainDuration = _ps.main.duration;
                 float lifetime = _ps.main.startLifetime.constantMax;
-                duration = Mathf.Max(mainDuration + lifetime, 0.5f);
+                duration = Mathf.Clamp(Mathf.Max(mainDuration + lifetime, 0.5f), 0.5f, 3f);
             }
 
+            CancelInvoke(nameof(ReturnToPool));
             Invoke(nameof(ReturnToPool), duration);
         }
 

@@ -68,6 +68,9 @@ namespace Managers
         private Coroutine _duckJob;                 // Ducking 协程
         private float _bgmVolumeBeforeDuck = 1f;    // Ducking 前的 BGM 音量
 
+        // ——— 卡牌选择面板激活时跳过音频暂停 ———
+        private bool _skipAudioPause;
+
         /* ==================== PlayerPrefs 持久化键 ==================== */
 
         private const string PREF_MASTER = "Audio_Master";
@@ -175,15 +178,25 @@ namespace Managers
         private void OnEnable()
         {
             EventChannelLocator.MainContainer.pauseStateChannel?.RegisterListener(OnPauseStateChanged);
+            EventChannelLocator.MainContainer.magicUpgradeChannel?.RegisterListener(OnMagicUpgradeRequested);
         }
 
         private void OnDisable()
         {
             EventChannelLocator.MainContainer.pauseStateChannel?.UnregisterListener(OnPauseStateChanged);
+            EventChannelLocator.MainContainer.magicUpgradeChannel?.UnregisterListener(OnMagicUpgradeRequested);
+        }
+
+        private void OnMagicUpgradeRequested(bool isOpen)
+        {
+            _skipAudioPause = isOpen;
         }
 
         private void OnPauseStateChanged(bool isPaused)
         {
+            if (_skipAudioPause)
+                return;
+
             if (isPaused)
                 PauseAll();
             else

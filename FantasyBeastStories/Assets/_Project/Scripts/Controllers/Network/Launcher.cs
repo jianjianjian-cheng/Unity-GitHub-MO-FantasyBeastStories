@@ -231,13 +231,6 @@ namespace Controllers.Network
         );
         isAutoCreate = true;
       }
-
-      if (isJoiningRoom)
-      {
-        PhotonNetwork.JoinRoom(pendingRoomName);
-        Debug.Log("加入房间成功");
-        isJoiningRoom = false;
-      }
     }
 
     public override void OnCreatedRoom()
@@ -256,9 +249,12 @@ namespace Controllers.Network
         StartCoroutine(ShowAndLoadMainMenu());
         return;
       }
-      if (!string.IsNullOrEmpty(pendingRoomName))
+      // 切换房间：离开完成后安全地加入目标房间（OnLeftRoom 时已回到 Master 服务器）
+      if (isJoiningRoom && !string.IsNullOrEmpty(pendingRoomName))
       {
         Debug.Log($"正在加入房间: {pendingRoomName}");
+        PhotonNetwork.JoinRoom(pendingRoomName);
+        isJoiningRoom = false;
       }
     }
 
@@ -343,6 +339,13 @@ namespace Controllers.Network
       if (scene.buildIndex == 1)
       {
         EventChannelLocator.MainContainer.gameSettings.IsStayLobby = true;
+
+        // 场景切换时重置暂停状态（防止卡牌面板打开时返回大厅导致 isPaused 卡在 true）
+        if (Managers.GamePauseManager.isPaused)
+        {
+          EventChannelLocator.MainContainer.pauseChannel?.Raise(false);
+        }
+
         InitGetUI();
         _sceneFlow.ResetForLobby();
         _sceneFlow.ResetLocalReady();
@@ -371,6 +374,15 @@ namespace Controllers.Network
       {
         ServiceLocator.Get<GameManager>().isReady = false;
         EventChannelLocator.MainContainer.gameSettings.IsStayLobby = false;
+
+        // 场景切换时重置暂停状态（防止卡牌面板打开时切场景导致 isPaused 卡在 true）
+        if (Managers.GamePauseManager.isPaused)
+        {
+          EventChannelLocator.MainContainer.pauseChannel?.Raise(false);
+        }
+
+        // 进入游戏场景时重置流程标志（非 MasterClient 的 isRoomLoading/isLoadingScene 不会被 LoadLevel 隐式重置）
+        _sceneFlow.ResetForLobby();
 
         Hashtable loadProps = new Hashtable
             {

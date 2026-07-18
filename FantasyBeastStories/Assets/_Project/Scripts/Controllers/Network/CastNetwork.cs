@@ -127,7 +127,7 @@ namespace Controllers.Network
         return;
       }
 
-      // 发给所有玩家（RpcTarget.All）
+      // 发给所有玩家：每个客户端通过事件通道分发伤害，EnemyBase.OnDamageReceived 校验 damgeTarget==gameObject 去重
       photonView.RPC(
           "RPC_DealDamage",
           RpcTarget.All,

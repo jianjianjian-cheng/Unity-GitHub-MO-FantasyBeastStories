@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Core;
 using Core.Channels.General;
 using Controllers.Rune;
+using Managers;
 using UI.Framework;
 using UI.Framework.Base;
 using UI.Framework.Manager;
@@ -492,6 +493,8 @@ public class RunePanel : UIScreen
     int reward = duplicateCount * 30;
     if (Managers.CoinManager.Instance != null)
       Managers.CoinManager.Instance.AddCoins(reward);
+
+    AudioManager.Instance?.PlayUI("sfx_Coin");
 
     // 收集已装备的符文 ID（受保护）
     var equippedIds = new HashSet<int>();

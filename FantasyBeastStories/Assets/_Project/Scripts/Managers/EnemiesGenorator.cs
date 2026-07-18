@@ -22,6 +22,13 @@ namespace Managers
         [SerializeField, Tooltip("该生成器专属对象池的预创建数量（骷髅敌人数量多建议 20-30）")]
         private int poolPreloadCount = 25;
 
+        [Header("生成间隔设置")]
+        [SerializeField, Tooltip("初始生成间隔（秒）")]
+        private float baseSpawnInterval = 10f;
+
+        [SerializeField, Tooltip("最小生成间隔（秒），数量峰值时的最快频率")]
+        private float minSpawnInterval = 1.5f;
+
         private string actualPoolName;
         private bool isPoolRegistered = false;
         private bool isPhotonReady = false;
@@ -31,52 +38,23 @@ namespace Managers
         private float timer = 0f;
         bool canGenorate = false;
 
-        /// <summary>缓存的怪物数量监听器</summary>
+        /// <summary>缓存的怪物数量监控器</summary>
         private MonsterCountMonitor _countMonitor;
-
-        /// <summary>
-        /// 最低生成间隔（秒），在 10 分钟时达到此值
-        /// </summary>
-        private const float MinSpawnInterval = 1.5f;
-
-        /// <summary>
-        /// 初始生成间隔（秒）
-        /// </summary>
-        private const float BaseSpawnInterval = 10f;
-
-        /// <summary>
-        /// 达到最低生成间隔所需时间（秒）= 10 分钟
-        /// </summary>
-        private const float TimeToReachMin = 600f;
-
-        /// <summary>
-        /// 回到初始生成间隔所需时间（秒）= 15 分钟
-        /// </summary>
-        private const float TimeToReturnToBase = 900f;
-
-        private float QueryDifficultyCoefficient()
-        {
-            var query = new DifficultyCoefficientQueryData { queryType = DifficultyQueryType.GetDifficultyCoefficient };
-            EventChannelLocator.MainContainer.difficultyCoefficientQueryChannel.Raise(query);
-            return query.result;
-        }
 
         void Start()
         {
-            // 池名未设置时自动按 GameObject 名称生成，确保每个生成器拥有独立池
             if (string.IsNullOrEmpty(poolName))
                 actualPoolName = gameObject.name + "_Pool";
             else
                 actualPoolName = poolName;
 
-            // 在对象池管理器中注册专属池（已存在则跳过）
             if (NetworkObjectPoolManager.instance != null && testPrefab != null)
             {
                 NetworkObjectPoolManager.instance.RegisterPool(actualPoolName, testPrefab, poolPreloadCount);
                 isPoolRegistered = true;
             }
 
-            spawnInterval = BaseSpawnInterval;
+            spawnInterval = baseSpawnInterval;
         }
 
         void Update()
@@ -84,12 +62,12 @@ namespace Managers
             if (GamePauseManager.isPaused)
                 return;
             if (!NetworkServiceLocator.PlayerService.IsMasterClient)
-                return; // 只有房主执行生成逻辑
+                return;
             if (!isPhotonReady)
             {
                 if (EventChannelLocator.MainContainer.gameSettings.IsTest)
                 {
-                    canGenorate = true; // 测试模式：无条件允许
+                    canGenorate = true;
                 }
                 else
                 {
@@ -103,7 +81,6 @@ namespace Managers
             }
             if (canGenorate)
             {
-                // 定期根据游戏进度动态更新生成间隔
                 UpdateSpawnInterval();
 
                 if (timer >= spawnInterval)
@@ -119,9 +96,8 @@ namespace Managers
         }
 
         /// <summary>
-        /// 根据游戏已过时间动态更新生成间隔。
-        /// 曲线：0→10min 从 10s 降到 1.5s，10→15min 从 1.5s 回到 10s。
-        /// 不受难度影响。
+        /// 根据 EnemyScalingCalculator 的数量倍率动态更新生成间隔
+        /// 数量倍率越高 → 生成越快（间隔越短）
         /// </summary>
         private void UpdateSpawnInterval()
         {
@@ -129,25 +105,17 @@ namespace Managers
             if (updateSpawnIntervalCounter >= updateSpawnInterval)
             {
                 var timeManager = ServiceLocator.Get<SyncedGameTimeManager>();
-                float currentTime = timeManager.GetCurrentTime();
+                float currentTime = timeManager != null ? timeManager.GetCurrentTime() : 0f;
 
-                if (currentTime <= TimeToReachMin)
-                {
-                    // 0 → 10 分钟：从 10s 线性下降到 1.5s
-                    float progress = currentTime / TimeToReachMin;
-                    spawnInterval = Mathf.Lerp(BaseSpawnInterval, MinSpawnInterval, progress);
-                }
-                else if (currentTime <= TimeToReturnToBase)
-                {
-                    // 10 → 15 分钟：从 1.5s 线性回到 10s
-                    float progress = (currentTime - TimeToReachMin) / (TimeToReturnToBase - TimeToReachMin);
-                    spawnInterval = Mathf.Lerp(MinSpawnInterval, BaseSpawnInterval, progress);
-                }
-                else
-                {
-                    // 15 分钟后：保持初始值 10s
-                    spawnInterval = BaseSpawnInterval;
-                }
+                // 基础间隔 × 间隔倍率（1/数量倍率）
+                // 数量倍率 1x → 间隔倍率 1.0（10s）
+                // 数量倍率 2x → 间隔倍率 0.5（5s）
+                // 数量倍率 0.5x → 间隔倍率 2.0（20s，Boss出现后减速）
+                float intervalMultiplier = EnemyScalingCalculator.GetSpawnIntervalMultiplier(currentTime);
+                spawnInterval = baseSpawnInterval * intervalMultiplier;
+
+                // 确保不低于最小间隔
+                spawnInterval = Mathf.Max(spawnInterval, minSpawnInterval);
 
                 updateSpawnIntervalCounter = 0f;
             }
@@ -160,20 +128,25 @@ namespace Managers
             if (!NetworkServiceLocator.PlayerService.IsMasterClient)
                 return;
 
-            // 从 MonsterCountMonitor 读取该池的数量上限，达到上限则跳过生成
             if (_countMonitor == null)
                 _countMonitor = ServiceLocator.Get<MonsterCountMonitor>();
 
-            int maxCount = _countMonitor != null
+            // 获取当前数量倍率，动态调整 maxCount 上限
+            var timeManager = ServiceLocator.Get<SyncedGameTimeManager>();
+            float currentTime = timeManager != null ? timeManager.GetCurrentTime() : 0f;
+            float countMultiplier = EnemyScalingCalculator.GetCountMultiplier(currentTime);
+
+            int baseMaxCount = _countMonitor != null
                 ? _countMonitor.GetMaxCount(actualPoolName)
                 : -1;
 
-            if (maxCount > 0)
+            if (baseMaxCount > 0)
             {
+                // 动态上限 = 配置上限 × 数量倍率
+                int dynamicMaxCount = Mathf.RoundToInt(baseMaxCount * countMultiplier);
                 int currentCount = _countMonitor.GetCount(actualPoolName);
-                if (currentCount >= maxCount)
+                if (currentCount >= dynamicMaxCount)
                 {
-                    // 已达到上限，跳过本次生成
                     return;
                 }
             }
@@ -190,7 +163,6 @@ namespace Managers
                     return;
             }
 
-            // 使用专属对象池生成敌人，避免多个生成器竞争同一池
             EventChannelLocator.MainContainer.poolOperationChannel.Raise(
                 PoolOperationData.CreateSpawn(actualPoolName, transform.position, Quaternion.identity, null));
         }
