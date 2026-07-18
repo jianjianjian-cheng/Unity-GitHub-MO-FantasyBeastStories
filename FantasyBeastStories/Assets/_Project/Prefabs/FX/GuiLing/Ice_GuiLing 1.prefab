@@ -604,7 +604,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     gravitySource: 0
-    maxNumParticles: 1000
+    maxNumParticles: 300
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -4973,12 +4973,14 @@ MonoBehaviour:
   rotationSpeed: 360
   targetOffsetY: 0.5
   hitVFX: {fileID: 6607131677694251128, guid: 4f79fc6bb8502f94cb7913b2fc4d73f5, type: 3}
-  flashVFX: {fileID: 5401279347854834347, guid: f8b675516e564c04bbbd9429bd799e06, type: 3}
   trails:
   - {fileID: 3702292684563280765}
   maxDestroyTimeAfterHit: 2
   searchRadiusOnLost: 15
   searchInterval: 0.3
+  splitRange: 20
+  splitAngle: 30
+  splitDamageMultiplier: 0.5
 --- !u!1 &3548255592881844259
 GameObject:
   m_ObjectHideFlags: 0
@@ -5583,7 +5585,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     gravitySource: 0
-    maxNumParticles: 1000
+    maxNumParticles: 100
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -10558,7 +10560,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     gravitySource: 0
-    maxNumParticles: 1000
+    maxNumParticles: 150
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 1
     rotation3D: 0
@@ -15388,7 +15390,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     gravitySource: 0
-    maxNumParticles: 1000
+    maxNumParticles: 100
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -20281,7 +20283,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     gravitySource: 0
-    maxNumParticles: 1000
+    maxNumParticles: 200
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0

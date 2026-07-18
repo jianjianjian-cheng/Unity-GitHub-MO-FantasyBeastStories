@@ -52,8 +52,7 @@ namespace Controllers.Combat
         {
             if (!string.IsNullOrEmpty(poolName))
             {
-                EventChannelLocator.MainContainer?.poolOperationChannel?.Raise(
-                    PoolOperationData.CreateReturn(poolName, gameObject));
+                PoolHelper.Return(poolName, gameObject);
             }
             else
             {

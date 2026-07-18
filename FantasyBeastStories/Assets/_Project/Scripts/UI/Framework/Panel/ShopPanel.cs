@@ -155,8 +155,17 @@ public class ShopPanel : UIScreen
     if (coinText != null)
     {
       int coins = Managers.CoinManager.Instance.GetCoins();
-      coinText.text = $"金币: {coins}";
+      coinText.text = $"金币: {FormatCoins(coins)}";
     }
+  }
+
+  private static string FormatCoins(int amount)
+  {
+    if (amount < 1000)
+      return amount.ToString();
+    if (amount < 1000000)
+      return (amount / 1000f).ToString("0.#") + "K";
+    return (amount / 1000000f).ToString("0.#") + "M";
   }
 
   private void OnRuneSelected(ShopRuneConfigSO runeConfig, RuneSlot runeSlot)

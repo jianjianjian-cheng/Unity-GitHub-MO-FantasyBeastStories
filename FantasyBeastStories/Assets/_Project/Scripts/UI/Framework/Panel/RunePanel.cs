@@ -13,6 +13,7 @@ public class RunePanel : UIScreen
 {
   [Header("Rune Panel Buttons")]
   [SerializeField] private Button equipButton;
+  [SerializeField] private Button breakdownButton;
 
   [Header("符文列表（动态生成）")]
   [SerializeField] private GameObject runeSlotPrefab;       // 符文插槽预制体
@@ -70,6 +71,10 @@ public class RunePanel : UIScreen
     // 绑定装备按钮
     if (equipButton != null)
       equipButton.onClick.AddListener(OnEquipClicked);
+
+    // 绑定分解按钮
+    if (breakdownButton != null)
+      breakdownButton.onClick.AddListener(OnBreakdownClicked);
 
     // 动态生成符文列表（根据 ownedRuneIds 过滤 RuneDatabase）
     BuildRuneSlotList();
@@ -458,6 +463,80 @@ public class RunePanel : UIScreen
   private void ApplyEquipEffect(int runeId)
   {
     // TODO: 实际游戏效果在进入游戏时根据 EquippedRuneId 应用
+  }
+
+  // ──────────────────────────────────────────────
+  //  分解重复符文
+  // ──────────────────────────────────────────────
+
+  private void OnBreakdownClicked()
+  {
+    // 统计重复符文数量
+    var seen = new HashSet<int>();
+    int duplicateCount = 0;
+    foreach (int id in ownedRuneIds)
+    {
+      if (seen.Contains(id))
+        duplicateCount++;
+      else
+        seen.Add(id);
+    }
+
+    if (duplicateCount == 0)
+    {
+      Debug.Log("[RunePanel] 没有可分解的重复符文");
+      return;
+    }
+
+    // 每个分解的符文返还 30 金币
+    int reward = duplicateCount * 30;
+    if (Managers.CoinManager.Instance != null)
+      Managers.CoinManager.Instance.AddCoins(reward);
+
+    // 收集已装备的符文 ID（受保护）
+    var equippedIds = new HashSet<int>();
+    if (runeEquip1 != null && runeEquip1.EquippedRuneId != -1)
+      equippedIds.Add(runeEquip1.EquippedRuneId);
+    if (runeEquip2 != null && runeEquip2.EquippedRuneId != -1)
+      equippedIds.Add(runeEquip2.EquippedRuneId);
+
+    // 清理 RuneInventory 中的重复
+    RuneInventory.BreakdownDuplicates(equippedIds);
+
+    // 去重 DefaultRuneIds（防止下次 MergeInventoryRunes 又加回来）
+    var uniqueDefaults = new List<int>();
+    var defaultSeen = new HashSet<int>();
+    foreach (int id in DefaultRuneIds)
+    {
+      if (!defaultSeen.Contains(id))
+      {
+        defaultSeen.Add(id);
+        uniqueDefaults.Add(id);
+      }
+    }
+    // 静态字段无法直接赋值，通过反射修改
+    typeof(RunePanel).GetField("DefaultRuneIds",
+        System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)
+        .SetValue(null, uniqueDefaults);
+
+    // 重建符文列表
+    MergeInventoryRunes();
+    BuildRuneSlotList();
+    RestoreEquipReferences();
+    RefreshAllEquippedMarks();
+    ReorderEquippedToFront();
+
+    // 重新选中列表第一项
+    DeselectAllItems();
+    if (runeSlotList.Count > 0)
+      SetRuneSlotItemSelected(runeSlotList[0]);
+
+    Debug.Log($"[RunePanel] 分解完成：移除 {duplicateCount} 个重复符文，获得 {reward} 金币");
+
+    // 通知 TopNotice 显示分解成功
+    var topNotice = FindObjectOfType<UI.Framework.TopNotice>();
+    if (topNotice != null)
+      topNotice.Show("分解成功");
   }
 
   // ──────────────────────────────────────────────

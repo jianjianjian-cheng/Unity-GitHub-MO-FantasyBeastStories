@@ -83,13 +83,9 @@ namespace Controllers.Combat
           visualPool = ObjectPoolConst.ImpactCannonGrassPool;
           break;
       }
-      GameObject visualObj = null;
-      EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-          PoolOperationData.CreateGet(visualPool, spawnPos, (o) => visualObj = o));
+      GameObject visualObj = PoolHelper.Get(visualPool, spawnPos);
 
-      GameObject triggerObj = null;
-      EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-          PoolOperationData.CreateGet(triggerPool, spawnPos, (o) => triggerObj = o));
+      GameObject triggerObj = PoolHelper.Get(triggerPool, spawnPos);
 
       // Vector3 baseScale = visualObj.transform.localScale;
       // Vector3 triggerScale = triggerObj.transform.localScale;

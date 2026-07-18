@@ -80,9 +80,7 @@ namespace Controllers.Combat
     private void Attack()
     {
       if (targetEnemy == null) return;
-      GameObject fireBall = null;
-      EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-          PoolOperationData.CreateGet("FireBallPool", firePoint.position, (o) => fireBall = o));
+      GameObject fireBall = PoolHelper.Get("FireBallPool", firePoint.position);
       if (fireBall != null)
       {
         fireBall.transform.rotation = firePoint.rotation;

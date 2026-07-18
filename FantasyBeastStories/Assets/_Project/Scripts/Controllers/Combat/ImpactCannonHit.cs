@@ -16,8 +16,7 @@ namespace Controllers.Combat.ImpactCannon
 
         protected virtual void ReturnPool()
         {
-            EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-                PoolOperationData.CreateReturn(poolName, gameObject));
+            PoolHelper.Return(poolName, gameObject);
         }
     }
 }

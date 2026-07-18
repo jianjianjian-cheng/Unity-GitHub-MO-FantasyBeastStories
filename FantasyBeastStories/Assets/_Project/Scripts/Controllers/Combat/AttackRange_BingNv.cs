@@ -211,9 +211,7 @@ namespace Controllers.Combat
         {
             string poolName = GetGuiLingPoolByElement(element);
 
-            GameObject guiLing = null;
-            EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-                PoolOperationData.CreateGet(poolName, spawnPos, (o) => guiLing = o));
+            GameObject guiLing = PoolHelper.Get(poolName, spawnPos);
 
             if (guiLing == null)
             {

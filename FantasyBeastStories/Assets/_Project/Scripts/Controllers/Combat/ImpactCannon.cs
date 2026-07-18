@@ -59,7 +59,8 @@ namespace Controllers.Combat.ImpactCannon
     {
       isTest = EventChannelLocator.MainContainer != null && EventChannelLocator.MainContainer.gameSettings != null && EventChannelLocator.MainContainer.gameSettings.IsTest;
       rb = GetComponent<Rigidbody>();
-      _networkCaster = FindObjectOfType<CastNetwork>();
+      if (_networkCaster == null)
+        _networkCaster = FindObjectOfType<CastNetwork>();
       baseScale = transform.localScale;
 
       // [修复] 每次 Awake 都重新获取事件通道，避免缓存 null

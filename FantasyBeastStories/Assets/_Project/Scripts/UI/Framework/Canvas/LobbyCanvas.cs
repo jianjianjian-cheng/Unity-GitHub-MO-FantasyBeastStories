@@ -756,7 +756,9 @@ public class LobbyCanvas : UIScreen
   private void OnDestroy()
   {
     // 从 UIManager 取消注册，防止悬挂引用
-    UIManager.Instance.UnregisterScreen(this);
+    // 场景关闭时 EventChannelLocator.MainContainer 可能已销毁，需判空
+    if (UIManager.Instance != null)
+      UIManager.Instance.UnregisterScreen(this);
   }
 
   private void OnSceneUnloaded(Scene scene)

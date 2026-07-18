@@ -32,8 +32,7 @@ namespace Controllers.Combat.ImpactCannon
         {
             yield return new WaitForSeconds(delay);
             transform.localScale = baseScale;
-            EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-                PoolOperationData.CreateReturn(poolName, gameObject));
+            PoolHelper.Return(poolName, gameObject);
         }
     }
 }

@@ -604,7 +604,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     gravitySource: 0
-    maxNumParticles: 1000
+    maxNumParticles: 150
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -4973,12 +4973,14 @@ MonoBehaviour:
   rotationSpeed: 360
   targetOffsetY: 0.5
   hitVFX: {fileID: 5808954860498623517, guid: a866d0211e5733b429d1a4ea89ddf09f, type: 3}
-  flashVFX: {fileID: 1730099647526857888, guid: ccfc49614f6d1154b917df845d32ce92, type: 3}
   trails:
   - {fileID: 9013519481586400422}
   maxDestroyTimeAfterHit: 2
   searchRadiusOnLost: 15
   searchInterval: 0.3
+  splitRange: 20
+  splitAngle: 30
+  splitDamageMultiplier: 0.5
 --- !u!1 &3080503018035471989
 GameObject:
   m_ObjectHideFlags: 0
@@ -5583,7 +5585,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     gravitySource: 0
-    maxNumParticles: 1000
+    maxNumParticles: 100
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -10419,7 +10421,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     gravitySource: 0
-    maxNumParticles: 1000
+    maxNumParticles: 200
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -15249,7 +15251,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     gravitySource: 0
-    maxNumParticles: 1000
+    maxNumParticles: 100
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -20079,7 +20081,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     gravitySource: 0
-    maxNumParticles: 1000
+    maxNumParticles: 100
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -24967,7 +24969,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     gravitySource: 0
-    maxNumParticles: 1000
+    maxNumParticles: 150
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 1
     rotation3D: 0

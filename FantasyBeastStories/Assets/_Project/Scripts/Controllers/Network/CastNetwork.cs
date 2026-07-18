@@ -53,18 +53,14 @@ namespace Controllers.Network
     {
       // 1. 根据元素类型选择视觉特效池
       string visualPool = GetVisualPoolByElement(element);
-      GameObject visualObj = null;
-      EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-          PoolOperationData.CreateGet(visualPool, spawnPos, (o) => visualObj = o));
+      GameObject visualObj = PoolHelper.Get(visualPool, spawnPos);
       if (visualObj != null)
       {
         visualObj.GetComponentInChildren<ParticleSystem>()?.Play();
         visualObj.transform.rotation = Quaternion.LookRotation(direction);
       }
 
-      GameObject triggerObj = null;
-      EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-          PoolOperationData.CreateGet(ObjectPoolConst.ImpactCannonTriggerPool, spawnPos, (o) => triggerObj = o));
+      GameObject triggerObj = PoolHelper.Get(ObjectPoolConst.ImpactCannonTriggerPool, spawnPos);
       if (triggerObj != null)
       {
         ImpactCannon cannon = triggerObj.GetComponent<ImpactCannon>();
@@ -232,9 +228,7 @@ namespace Controllers.Network
       damageValue = Mathf.Ceil(damageValue);
       Vector3 spawnPos = position + Vector3.up * 0f;
       // 1. 从对象池获取伤害数字对象
-      GameObject damageNumObj = null;
-      EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-          PoolOperationData.CreateGet(ObjectPoolConst.DamageNumPool, spawnPos, (o) => damageNumObj = o));
+      GameObject damageNumObj = PoolHelper.Get(ObjectPoolConst.DamageNumPool, spawnPos);
       if (damageNumObj != null)
       {
         DamageNum damageNum = damageNumObj.GetComponent<DamageNum>();
@@ -285,9 +279,7 @@ namespace Controllers.Network
     {
       string poolName = GetGuiLingPoolByElement(element);
 
-      GameObject guiLing = null;
-      EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-          PoolOperationData.CreateGet(poolName, spawnPos, (o) => guiLing = o));
+      GameObject guiLing = PoolHelper.Get(poolName, spawnPos);
       if (guiLing == null)
       {
         Debug.LogWarning($"[CastNetwork] 从对象池 {poolName} 获取 GuiLing 失败");
@@ -387,9 +379,7 @@ namespace Controllers.Network
       if (string.IsNullOrEmpty(hitPoolName))
         return;
 
-      GameObject hitEffect = null;
-      EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-          PoolOperationData.CreateGet(hitPoolName, hitPos, (o) => hitEffect = o));
+      GameObject hitEffect = PoolHelper.Get(hitPoolName, hitPos);
       if (hitEffect == null)
         return;
 
@@ -437,9 +427,7 @@ namespace Controllers.Network
     {
       // 为其他玩家生成分裂弹（只负责视觉表现）
       string visualPool = GetVisualPoolByElement(element);
-      GameObject visualObj = null;
-      EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-          PoolOperationData.CreateGet(visualPool, spawnPos, (o) => visualObj = o));
+      GameObject visualObj = PoolHelper.Get(visualPool, spawnPos);
 
       if (visualObj != null)
       {
@@ -447,9 +435,7 @@ namespace Controllers.Network
         visualObj.transform.rotation = Quaternion.LookRotation(direction);
       }
 
-      GameObject triggerObj = null;
-      EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-          PoolOperationData.CreateGet(ObjectPoolConst.ImpactCannonTriggerPool, spawnPos, (o) => triggerObj = o));
+      GameObject triggerObj = PoolHelper.Get(ObjectPoolConst.ImpactCannonTriggerPool, spawnPos);
 
       if (triggerObj != null)
       {

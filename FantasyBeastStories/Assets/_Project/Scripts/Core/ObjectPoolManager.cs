@@ -16,11 +16,13 @@ namespace Core
         private class PoolData
         {
             public List<GameObject> allObjects = new List<GameObject>();
+            public HashSet<GameObject> allObjectsSet = new HashSet<GameObject>();
             public Queue<GameObject> available = new Queue<GameObject>();
         }
 
         private Dictionary<string, PoolData> objectPools = new Dictionary<string, PoolData>();
         private Dictionary<string, GameObject> prefabCache = new Dictionary<string, GameObject>();
+        private Dictionary<GameObject, Rigidbody> rigidbodyCache = new Dictionary<GameObject, Rigidbody>();
 
         private bool isPoolInitialized = false;
 
@@ -139,9 +141,13 @@ namespace Core
                 foreach (var obj in poolData.allObjects)
                 {
                     if (obj != null)
+                    {
+                        rigidbodyCache.Remove(obj);
                         Destroy(obj);
+                    }
                 }
                 poolData.allObjects.Clear();
+                poolData.allObjectsSet.Clear();
                 poolData.available.Clear();
             }
         }
@@ -175,10 +181,18 @@ namespace Core
                     if (newObj != null)
                     {
                         poolData.allObjects.Add(newObj);
+                        poolData.allObjectsSet.Add(newObj);
                         newObj.SetActive(true);
                         if (position.HasValue)
                             newObj.transform.position = position.Value;
+#if UNITY_EDITOR
                         Debug.Log($"对象池 '{poolName}' 动态扩容，当前数量: {poolData.allObjects.Count}");
+#endif
+
+                        var rb = newObj.GetComponent<Rigidbody>();
+                        if (rb != null)
+                            rigidbodyCache[newObj] = rb;
+
                         return newObj;
                     }
                 }
@@ -200,16 +214,15 @@ namespace Core
             if (obj == null)
                 return;
 
-            if (objectPools.TryGetValue(poolName, out var poolData) && poolData.allObjects.Contains(obj))
+            if (objectPools.TryGetValue(poolName, out var poolData) && poolData.allObjectsSet.Contains(obj))
             {
                 obj.SetActive(false);
                 obj.transform.SetParent(transform);
                 obj.transform.localPosition = Vector3.zero;
                 obj.transform.localRotation = Quaternion.identity;
 
-                // 重置 Rigidbody（如果有）
-                Rigidbody rb = obj.GetComponent<Rigidbody>();
-                if (rb != null)
+                // 重置 Rigidbody（如果有）— 使用缓存避免每次 GetComponent
+                if (rigidbodyCache.TryGetValue(obj, out Rigidbody rb))
                 {
                     rb.velocity = Vector3.zero;
                     rb.angularVelocity = Vector3.zero;
@@ -252,11 +265,18 @@ namespace Core
                     obj.transform.SetParent(transform);
                     obj.SetActive(false);
                     poolData.allObjects.Add(obj);
+                    poolData.allObjectsSet.Add(obj);
                     poolData.available.Enqueue(obj);
+
+                    var rb = obj.GetComponent<Rigidbody>();
+                    if (rb != null)
+                        rigidbodyCache[obj] = rb;
                 }
             }
 
+#if UNITY_EDITOR
             Debug.Log($"对象池 '{poolName}' 初始化完成，共 {poolData.allObjects.Count} 个对象");
+#endif
         }
 
         /// <summary>
@@ -313,11 +333,17 @@ namespace Core
             {
                 foreach (var obj in poolData.allObjects)
                 {
-                    Destroy(obj);
+                    if (obj != null)
+                    {
+                        rigidbodyCache.Remove(obj);
+                        Destroy(obj);
+                    }
                 }
                 poolData.allObjects.Clear();
+                poolData.allObjectsSet.Clear();
                 poolData.available.Clear();
             }
+            rigidbodyCache.Clear();
         }
 
         void OnDestroy()

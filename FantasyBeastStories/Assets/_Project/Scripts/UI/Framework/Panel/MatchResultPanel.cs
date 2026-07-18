@@ -122,7 +122,7 @@ public class MatchResultPanel : UIScreen
             int currentCoins = CoinManager.Instance != null
                 ? CoinManager.Instance.GetCoins()
                 : 0;
-            totalCoinText.text = currentCoins.ToString();
+            totalCoinText.text = FormatCoins(currentCoins);
         }
 
         // 自动打开结算面板
@@ -150,5 +150,23 @@ public class MatchResultPanel : UIScreen
         // 兜底：如果通过 ESC 关闭，也清除待结算标记
         if (MatchStatisticsManager.Instance != null && MatchStatisticsManager.Instance.HasPendingMatchResult)
             MatchStatisticsManager.Instance.ConsumeMatchResult();
+    }
+
+    /// <summary>
+    /// 金币格式化：<1000 原值，≥1000 X.XK，≥1000000 X.XM
+    /// </summary>
+    private static string FormatCoins(int amount)
+    {
+        if (amount < 1000)
+            return amount.ToString();
+
+        if (amount < 1000000)
+        {
+            float kValue = amount / 1000f;
+            return kValue.ToString("0.#") + "K";
+        }
+
+        float mValue = amount / 1000000f;
+        return mValue.ToString("0.#") + "M";
     }
 }

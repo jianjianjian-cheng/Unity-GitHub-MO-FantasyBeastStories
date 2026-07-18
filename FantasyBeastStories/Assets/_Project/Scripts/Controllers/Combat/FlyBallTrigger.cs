@@ -27,10 +27,8 @@ namespace Controllers.Combat
           ballBase.HandleEnemyCollisionEnter(other);
         }
       Vector3 hitPosition = other.ClosestPoint(transform.position);
-      EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-          PoolOperationData.CreateGet("FireBallHitEffectPool", hitPosition, null));
-      EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-          PoolOperationData.CreateReturn("FireBallPool", gameObject.transform.parent.gameObject));
+      PoolHelper.Get("FireBallHitEffectPool", hitPosition);
+      PoolHelper.Return("FireBallPool", gameObject.transform.parent.gameObject);
     }
     public override void OnTriggerStay(Collider other)
     {

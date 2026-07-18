@@ -11,10 +11,15 @@ namespace UI.Framework.Manager
   public class UIManager : MonoBehaviour
   {
     private static UIManager _instance;
+    private static bool _isQuitting;
+
     public static UIManager Instance
     {
       get
       {
+        if (_isQuitting)
+          return _instance;
+
         if (_instance == null)
         {
           GameObject go = new GameObject("UIManager");
@@ -377,6 +382,15 @@ namespace UI.Framework.Manager
       {
         _registeredScreens.Remove(screen.ScreenId);
         _navigationStack.Remove(screen);
+      }
+    }
+
+    private void OnDestroy()
+    {
+      if (_instance == this)
+      {
+        _isQuitting = true;
+        _instance = null;
       }
     }
   }

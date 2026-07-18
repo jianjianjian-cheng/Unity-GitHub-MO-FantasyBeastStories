@@ -10,8 +10,7 @@ namespace Controllers.Combat
         [SerializeField] private string poolName;
         void OnDisable()
         {
-            EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-                PoolOperationData.CreateReturn(poolName, gameObject));
+            PoolHelper.Return(poolName, gameObject);
         }
     }
 }
