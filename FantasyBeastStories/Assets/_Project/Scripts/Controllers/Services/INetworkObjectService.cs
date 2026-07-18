@@ -1,15 +1,8 @@
 using UnityEngine;
+using NetworkTarget = Controllers.Network.NetworkTarget;
 
 namespace Controllers.Services
 {
-    public enum NetworkTarget
-    {
-        All,
-        Others,
-        MasterClient,
-        AllBuffered
-    }
-
     public interface INetworkObjectService
     {
         GameObject Instantiate(string prefabName, Vector3 position, Quaternion rotation);

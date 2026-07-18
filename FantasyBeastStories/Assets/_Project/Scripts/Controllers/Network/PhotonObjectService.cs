@@ -24,7 +24,7 @@ namespace Controllers.Network
                 Debug.LogWarning($"[PhotonObjectService] {source.name} 上没有 PhotonView 组件，无法调用 RPC {methodName}");
                 return;
             }
-            photonView.RPC(methodName, MapTarget(target), parameters);
+            photonView.RPC(methodName, NetworkTargetMapper.ToRpcTarget(target), parameters);
         }
 
         public int GetViewID(Component component)
@@ -64,23 +64,6 @@ namespace Controllers.Network
             if (source == null) return -1;
             PhotonView pv = source.GetComponentInParent<PhotonView>();
             return pv != null && pv.Owner != null ? pv.Owner.ActorNumber : -1;
-        }
-
-        private static RpcTarget MapTarget(NetworkTarget target)
-        {
-            return target switch
-            {
-                NetworkTarget.All => RpcTarget.All,
-                NetworkTarget.Others => RpcTarget.Others,
-                NetworkTarget.MasterClient => RpcTarget.MasterClient,
-                NetworkTarget.AllBuffered => RpcTarget.AllBuffered,
-                _ => RpcTarget.All
-            };
-        }
-
-        public void InvokeRPC(MonoBehaviour source, string methodName, Services.NetworkTarget target, params object[] parameters)
-        {
-            InvokeRPC(source, methodName, (NetworkTarget)(int)target, parameters);
         }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using NetworkTarget = Controllers.Network.NetworkTarget;
 using Controllers.CardData;
 using Core;
 using Core.Channels.Player;

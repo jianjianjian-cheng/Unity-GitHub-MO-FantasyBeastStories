@@ -1,13 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using Core;
-using Core;
 using Controllers.Combat;
 using Controllers.Combat.ImpactCannon;
 using Photon.Pun;
-using Controllers.Combat;
 using UnityEngine;
-using Core;
 using Controllers.Network;
 using UI;
 
@@ -96,24 +93,6 @@ namespace Controllers.Network
           return ObjectPoolConst.ImpactCannonWinterPool;
         default:
           return ObjectPoolConst.ImpactCannonCommonPool;
-      }
-    }
-
-    /// <summary>
-    /// 根据元素类型获取击中特效池名
-    /// </summary>
-    private string GetHitPoolByElement(Element element)
-    {
-      switch (element)
-      {
-        case Element.Lightning:
-          return ObjectPoolConst.ImpactCannonHitLightenPool;
-        case Element.Winter:
-          return ObjectPoolConst.ImpactCannonHitWinterPool;
-        case Element.Grass:
-          return ObjectPoolConst.ImpactCannonHitGrassPool;
-        default:
-          return ObjectPoolConst.ImpactCannonHitCommonPool;
       }
     }
 

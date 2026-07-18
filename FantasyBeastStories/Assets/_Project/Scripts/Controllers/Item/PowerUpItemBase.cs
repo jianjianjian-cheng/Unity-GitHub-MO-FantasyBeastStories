@@ -6,7 +6,7 @@ using Controllers.PowerUp;
 using Core;
 using Managers;
 using Controllers.Services;
-using NetworkTarget = Controllers.Services.NetworkTarget;
+using NetworkTarget = Controllers.Network.NetworkTarget;
 using Controllers.Network;
 using Photon.Pun;
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Controllers.Character;
 using Core;
 using Controllers.Services;
-using NetworkTarget = Controllers.Services.NetworkTarget;
+using NetworkTarget = Controllers.Network.NetworkTarget;
 using UnityEngine;
 using Managers;
 using Controllers.Network;
@@ -167,12 +167,12 @@ namespace UI.Other
 
         private void UpdatePlayerSpawnPointProperty(int spawnPointId)
         {
-            NetworkServiceLocator.PlayerService.SetCustomProperty("CurrentSpawnPoint", spawnPointId);
+            NetworkServiceLocator.PlayerService.SetCustomProperty(PlayerPropertyKeys.SpawnPoint, spawnPointId);
         }
 
         private void ClearPlayerSpawnPointProperty()
         {
-            NetworkServiceLocator.PlayerService.SetCustomProperty("CurrentSpawnPoint", null);
+            NetworkServiceLocator.PlayerService.SetCustomProperty(PlayerPropertyKeys.SpawnPoint, null);
         }
 
         public bool IsEmpty()

@@ -19,6 +19,25 @@ namespace Controllers.Network
     {
         public static DomainRpcBridge Instance { get; private set; }
 
+        private SpiderBoss _spiderBossCache;
+
+        /// <summary>注册场景中的 SpiderBoss 引用，避免每次 RPC 都做 FindObjectsByType</summary>
+        public void RegisterSpiderBoss(SpiderBoss boss) => _spiderBossCache = boss;
+
+        /// <summary>清除 SpiderBoss 缓存（Boss 销毁时调用）</summary>
+        public void ClearSpiderBossCache() => _spiderBossCache = null;
+
+        private SpiderBoss GetSpiderBoss()
+        {
+            // Unity 的 == 重载会在对象销毁后返回 true，所以这里天然支持缓存失效
+            if (_spiderBossCache != null)
+                return _spiderBossCache;
+            var bosses = FindObjectsByType<SpiderBoss>(FindObjectsSortMode.None);
+            if (bosses.Length > 0)
+                _spiderBossCache = bosses[0];
+            return _spiderBossCache;
+        }
+
         void Awake()
         {
             if (Instance != null)
@@ -138,21 +157,20 @@ namespace Controllers.Network
         [PunRPC]
         public void RPC_SyncPlayerTarget(int targetViewID)
         {
-            // 场景中通常只有一个 SpiderBoss，直接查找
-            var spiderBosses = FindObjectsByType<SpiderBoss>(FindObjectsSortMode.None);
-            if (spiderBosses.Length > 0)
+            var boss = GetSpiderBoss();
+            if (boss != null)
             {
-                spiderBosses[0].HandleSyncPlayerTarget(targetViewID);
+                boss.HandleSyncPlayerTarget(targetViewID);
             }
         }
 
         [PunRPC]
         public void RPC_SyncTriggerAnim(string animName)
         {
-            var spiderBosses = FindObjectsByType<SpiderBoss>(FindObjectsSortMode.None);
-            if (spiderBosses.Length > 0)
+            var boss = GetSpiderBoss();
+            if (boss != null)
             {
-                spiderBosses[0].HandleSyncTriggerAnim(animName);
+                boss.HandleSyncTriggerAnim(animName);
             }
         }
 
@@ -226,27 +244,10 @@ namespace Controllers.Network
         {
             if (photonView == null)
             {
-                Debug.LogWarning($"[DomainRpcBridge] photonView 为空，无法发送 RPC {methodName}");
+                Debug.LogWarning($"[DomainRpcBridge] photonView is null, cannot send RPC {methodName}");
                 return;
             }
-            photonView.RPC(methodName, MapTarget(target), parameters);
-        }
-
-        private static RpcTarget MapTarget(NetworkTarget target)
-        {
-            return target switch
-            {
-                NetworkTarget.All => RpcTarget.All,
-                NetworkTarget.Others => RpcTarget.Others,
-                NetworkTarget.MasterClient => RpcTarget.MasterClient,
-                NetworkTarget.AllBuffered => RpcTarget.AllBuffered,
-                _ => RpcTarget.All
-            };
-        }
-
-        public void InvokeRPC(string methodName, Services.NetworkTarget target, params object[] parameters)
-        {
-            InvokeRPC(methodName, (NetworkTarget)(int)target, parameters);
+            photonView.RPC(methodName, NetworkTargetMapper.ToRpcTarget(target), parameters);
         }
     }
 }

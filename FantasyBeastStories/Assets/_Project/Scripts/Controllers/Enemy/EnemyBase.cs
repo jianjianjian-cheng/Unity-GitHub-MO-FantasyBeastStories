@@ -7,7 +7,7 @@ using Controllers.Player;
 using Core;
 using Controllers.PowerUp;
 using Controllers.Services;
-using NetworkTarget = Controllers.Services.NetworkTarget;
+using NetworkTarget = Controllers.Network.NetworkTarget;
 using Controllers.Network;
 using UnityEngine;
 using UnityEngine.AI;

@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using NetworkTarget = Controllers.Network.NetworkTarget;
+using Controllers.Network;
 using Controllers.Character;
 using Controllers.CardData;
 using Cinemachine;
@@ -269,7 +271,7 @@ namespace Controllers.Character
         Debug.LogWarning("[PlayerController] Photon 已断开连接，跳过清理生成点属性");
         return;
       }
-      object spawnPointObj = playerService.GetCustomProperty("CurrentSpawnPoint");
+      object spawnPointObj = playerService.GetCustomProperty(PlayerPropertyKeys.SpawnPoint);
       if (spawnPointObj != null)
       {
         int spawnPointId = (int)spawnPointObj;
@@ -283,7 +285,7 @@ namespace Controllers.Character
         }
 
         // 清除玩家属性
-        playerService.SetCustomProperty("CurrentSpawnPoint", null);
+        playerService.SetCustomProperty(PlayerPropertyKeys.SpawnPoint, null);
       }
     }
 

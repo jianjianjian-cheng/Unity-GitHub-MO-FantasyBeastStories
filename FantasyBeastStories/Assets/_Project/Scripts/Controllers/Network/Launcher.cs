@@ -289,7 +289,7 @@ namespace Controllers.Network
         return;
       }
 
-      Hashtable props = new Hashtable { { "PlayerReady", ready } };
+      Hashtable props = new Hashtable { { PlayerPropertyKeys.Ready, ready } };
       PhotonNetwork.LocalPlayer.SetCustomProperties(props);
       Debug.Log($"[Launcher] 本地玩家准备状态: {ready} - {PhotonNetwork.LocalPlayer.NickName}");
 
@@ -300,7 +300,7 @@ namespace Controllers.Network
       {
         playerService.NotifyPropertyChanged(
             PhotonNetwork.LocalPlayer.ActorNumber,
-            "PlayerReady",
+            PlayerPropertyKeys.Ready,
             ready
         );
       }
@@ -314,8 +314,8 @@ namespace Controllers.Network
       foreach (Photon.Realtime.Player player in PhotonNetwork.PlayerList)
       {
         if (
-            !player.CustomProperties.ContainsKey("PlayerReady")
-            || (bool)player.CustomProperties["PlayerReady"] == false
+            !player.CustomProperties.ContainsKey(PlayerPropertyKeys.Ready)
+            || (bool)player.CustomProperties[PlayerPropertyKeys.Ready] == false
         )
         {
           return false;
@@ -378,9 +378,9 @@ namespace Controllers.Network
       if (!PhotonNetwork.IsConnected || !PhotonNetwork.InRoom)
         return;
 
-      if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("CurrentSpawnPoint"))
+      if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey(PlayerPropertyKeys.SpawnPoint))
       {
-        int spawnPointId = (int)PhotonNetwork.LocalPlayer.CustomProperties["CurrentSpawnPoint"];
+        int spawnPointId = (int)PhotonNetwork.LocalPlayer.CustomProperties[PlayerPropertyKeys.SpawnPoint];
         ISpawnPoint sp = ServiceLocator.Get<GameManager>().GetSpawnPointById(spawnPointId);
         if (sp != null && (sp as MonoBehaviour) != null && sp.GetOccupiedByPlayer() == PhotonNetwork.LocalPlayer.ActorNumber)
         {
@@ -418,10 +418,10 @@ namespace Controllers.Network
         // 重置本地玩家的 PlayerReady 属性（关键修复）
         if (
             PhotonNetwork.IsConnected
-            && PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("PlayerReady")
+            && PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey(PlayerPropertyKeys.Ready)
         )
         {
-          Hashtable props = new Hashtable { { "PlayerReady", false } };
+          Hashtable props = new Hashtable { { PlayerPropertyKeys.Ready, false } };
           PhotonNetwork.LocalPlayer.SetCustomProperties(props);
           Debug.Log("[Launcher] 重置本地玩家就绪状态为 false");
         }
@@ -456,9 +456,9 @@ namespace Controllers.Network
         // 玩家进入游戏场景后标记已加载完成
         Hashtable loadProps = new Hashtable
             {
-                { "PlayerLevel", true },
-                { "PlayerLoaded", true },
-                { "playerName", localPlayer.NickName },
+                { PlayerPropertyKeys.Level, true },
+                { PlayerPropertyKeys.Loaded, true },
+                { PlayerPropertyKeys.PlayerName, localPlayer.NickName },
             };
 
         PhotonNetwork.LocalPlayer.SetCustomProperties(loadProps);
@@ -603,7 +603,7 @@ namespace Controllers.Network
       // 记录当前使用的生成点ID到玩家属性
       if (sp != null)
       {
-        var props = new Hashtable { { "CurrentSpawnPoint", sp.Id } };
+        var props = new Hashtable { { PlayerPropertyKeys.SpawnPoint, sp.Id } };
         PhotonNetwork.LocalPlayer.SetCustomProperties(props);
       }
 
@@ -617,10 +617,10 @@ namespace Controllers.Network
     {
       // 获取玩家当前使用的生成点ID
       int currentSpawnPointId = -1;
-      if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("CurrentSpawnPoint"))
+      if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey(PlayerPropertyKeys.SpawnPoint))
       {
         currentSpawnPointId = (int)
-            PhotonNetwork.LocalPlayer.CustomProperties["CurrentSpawnPoint"];
+            PhotonNetwork.LocalPlayer.CustomProperties[PlayerPropertyKeys.SpawnPoint];
       }
 
       // 销毁当前角色
@@ -682,9 +682,9 @@ namespace Controllers.Network
         return;
       }
       // 释放该玩家占用的生成点
-      if (otherPlayer.CustomProperties.ContainsKey("CurrentSpawnPoint"))
+      if (otherPlayer.CustomProperties.ContainsKey(PlayerPropertyKeys.SpawnPoint))
       {
-        int spawnPointId = (int)otherPlayer.CustomProperties["CurrentSpawnPoint"];
+        int spawnPointId = (int)otherPlayer.CustomProperties[PlayerPropertyKeys.SpawnPoint];
         ISpawnPoint sp = ServiceLocator.Get<GameManager>().GetSpawnPointById(spawnPointId);
         if (sp != null)
         {
@@ -702,27 +702,27 @@ namespace Controllers.Network
         Hashtable changedProps
     )
     {
-      if (changedProps.ContainsKey("PlayerLevel"))
+      if (changedProps.ContainsKey(PlayerPropertyKeys.Level))
       {
         Debug.Log(
-            $"玩家 {targetPlayer.NickName} 的 PlayerLevel 属性已更新: {changedProps["PlayerLevel"]}"
+            $"玩家 {targetPlayer.NickName} 的 PlayerLevel 属性已更新: {changedProps[PlayerPropertyKeys.Level]}"
         );
       }
 
-      if (changedProps.ContainsKey("PlayerReady"))
+      if (changedProps.ContainsKey(PlayerPropertyKeys.Ready))
       {
         CheckAllPlayersReady();
       }
 
-      if (changedProps.ContainsKey("PlayerLoaded"))
+      if (changedProps.ContainsKey(PlayerPropertyKeys.Loaded))
       {
         CheckAllPlayersLoaded();
       }
 
       // 处理生成点属性变化
-      if (changedProps.ContainsKey("CurrentSpawnPoint"))
+      if (changedProps.ContainsKey(PlayerPropertyKeys.SpawnPoint))
       {
-        object spawnPointValue = changedProps["CurrentSpawnPoint"];
+        object spawnPointValue = changedProps[PlayerPropertyKeys.SpawnPoint];
         Debug.Log($"玩家 {targetPlayer.NickName} 的生成点更新: {spawnPointValue}");
       }
     }
@@ -838,16 +838,27 @@ namespace Controllers.Network
 
     public GameObject GetInactiveObjectByName(string objectName)
     {
-      var allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
-      return System.Array.Find(
-          allObjects,
-          obj =>
-              obj != null
-              && // 过滤null对象
-              obj.name == objectName
-              && !obj.activeInHierarchy
-              && obj.scene.IsValid() // 确保是场景中的物体，不是预制体资源
-      );
+      // 只搜索当前场景的层级，避免 Resources.FindObjectsOfTypeAll 遍历所有预制体资源
+      foreach (var root in SceneManager.GetActiveScene().GetRootGameObjects())
+      {
+        if (root.name == objectName && !root.activeInHierarchy)
+          return root;
+        var found = FindChildRecursive(root.transform, objectName);
+        if (found != null) return found.gameObject;
+      }
+      return null;
+    }
+
+    private static Transform FindChildRecursive(Transform parent, string name)
+    {
+      for (int i = 0; i < parent.childCount; i++)
+      {
+        var child = parent.GetChild(i);
+        if (child.name == name) return child;
+        var result = FindChildRecursive(child, name);
+        if (result != null) return result;
+      }
+      return null;
     }
 
     private void ApplySavedCharacter()
@@ -891,8 +902,8 @@ namespace Controllers.Network
       foreach (Photon.Realtime.Player player in PhotonNetwork.PlayerList)
       {
         if (
-            !player.CustomProperties.ContainsKey("PlayerLoaded")
-            || (bool)player.CustomProperties["PlayerLoaded"] == false
+            !player.CustomProperties.ContainsKey(PlayerPropertyKeys.Loaded)
+            || (bool)player.CustomProperties[PlayerPropertyKeys.Loaded] == false
         )
         {
           Debug.Log($"等待玩家 {player.NickName} 加载场景...");
@@ -942,10 +953,10 @@ namespace Controllers.Network
       // 清理生成点占用
       if (PhotonNetwork.IsConnected && PhotonNetwork.InRoom)
       {
-        if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("CurrentSpawnPoint"))
+        if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey(PlayerPropertyKeys.SpawnPoint))
         {
           int spawnPointId = (int)
-              PhotonNetwork.LocalPlayer.CustomProperties["CurrentSpawnPoint"];
+              PhotonNetwork.LocalPlayer.CustomProperties[PlayerPropertyKeys.SpawnPoint];
           ISpawnPoint sp = ServiceLocator.Get<GameManager>().GetSpawnPointById(spawnPointId);
           if (sp != null && (sp as MonoBehaviour) != null)
           {

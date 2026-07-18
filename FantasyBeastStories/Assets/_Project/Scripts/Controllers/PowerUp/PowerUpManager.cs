@@ -147,20 +147,15 @@ namespace Controllers.PowerUp
                 return;
             }
 
-            // 通过PhotonView.ViewID查找对应的道具
-            PhotonView[] allViews = FindObjectsOfType<PhotonView>();
-            foreach (PhotonView pv in allViews)
+            PhotonView pv = PhotonView.Find(viewId);
+            if (pv != null)
             {
-                if (pv.ViewID == viewId)
+                var powerUp = pv.GetComponent<PowerUpItemBase>();
+                if (powerUp != null)
                 {
-                    var powerUp = pv.GetComponent<PowerUpItemBase>();
-                    if (powerUp != null)
-                    {
-                        Instance.activePowerUps.Remove(powerUp.gameObject);
-                        Instance.poolManager?.ReturnToPool(PoolConst.PowerUpItem, powerUp.gameObject);
-                        Debug.Log($"[PowerUpManager] RPC同步：道具已回收，ViewID={viewId}");
-                    }
-                    break;
+                    Instance.activePowerUps.Remove(powerUp.gameObject);
+                    Instance.poolManager?.ReturnToPool(PoolConst.PowerUpItem, powerUp.gameObject);
+                    Debug.Log($"[PowerUpManager] RPC同步：道具已回收，ViewID={viewId}");
                 }
             }
         }

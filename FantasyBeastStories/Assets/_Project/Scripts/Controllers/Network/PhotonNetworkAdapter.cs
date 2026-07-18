@@ -19,15 +19,7 @@ namespace Controllers.Network
 
     public override void RPC(string methodName, NetworkTarget target, params object[] args)
     {
-      RpcTarget photonTarget = target switch
-      {
-        NetworkTarget.All => RpcTarget.All,
-        NetworkTarget.Others => RpcTarget.Others,
-        NetworkTarget.MasterClient => RpcTarget.MasterClient,
-        NetworkTarget.AllBuffered => RpcTarget.AllBuffered,
-        _ => RpcTarget.All
-      };
-      _photonView.RPC(methodName, photonTarget, args);
+      _photonView.RPC(methodName, NetworkTargetMapper.ToRpcTarget(target), args);
     }
   }
 }

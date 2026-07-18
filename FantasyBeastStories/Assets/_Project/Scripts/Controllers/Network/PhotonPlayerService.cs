@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Controllers.Services;
 using Photon.Pun;
 using Photon.Realtime;
@@ -7,6 +8,8 @@ namespace Controllers.Network
 {
     public class PhotonPlayerService : INetworkPlayerService
     {
+        private readonly Dictionary<int, Photon.Realtime.Player> _playerCache = new();
+
         public event System.Action<int, string, object> OnPlayerPropertyChanged;
         public event System.Action<int, string> OnPlayerEnteredRoom;
         public event System.Action<int, string> OnPlayerLeftRoom;
@@ -65,34 +68,22 @@ namespace Controllers.Network
         public object GetPlayerCustomProperty(int actorNumber, string key)
         {
             if (!IsConnectedAndInRoom) return null;
-            foreach (var player in PhotonNetwork.PlayerList)
-            {
-                if (player.ActorNumber == actorNumber)
-                    return player.CustomProperties[key];
-            }
-            return null;
+            var player = FindPlayer(actorNumber);
+            return player != null ? player.CustomProperties[key] : null;
         }
 
         public string GetPlayerUserId(int actorNumber)
         {
             if (!IsConnectedAndInRoom) return null;
-            foreach (var player in PhotonNetwork.PlayerList)
-            {
-                if (player.ActorNumber == actorNumber)
-                    return player.UserId;
-            }
-            return null;
+            var player = FindPlayer(actorNumber);
+            return player != null ? player.UserId : null;
         }
 
         public string GetPlayerNickName(int actorNumber)
         {
             if (!IsConnectedAndInRoom) return null;
-            foreach (var player in PhotonNetwork.PlayerList)
-            {
-                if (player.ActorNumber == actorNumber)
-                    return player.NickName;
-            }
-            return null;
+            var player = FindPlayer(actorNumber);
+            return player != null ? player.NickName : null;
         }
 
         public bool AllPlayersHaveProperty(string key, object value)
@@ -135,6 +126,9 @@ namespace Controllers.Network
         /// </summary>
         public void NotifyPlayerEnteredRoom(int actorNumber, string userId)
         {
+            var player = FindPlayer(actorNumber);
+            if (player != null)
+                _playerCache[actorNumber] = player;
             OnPlayerEnteredRoom?.Invoke(actorNumber, userId);
         }
 
@@ -143,6 +137,7 @@ namespace Controllers.Network
         /// </summary>
         public void NotifyPlayerLeftRoom(int actorNumber, string userId)
         {
+            _playerCache.Remove(actorNumber);
             OnPlayerLeftRoom?.Invoke(actorNumber, userId);
         }
 
@@ -151,7 +146,25 @@ namespace Controllers.Network
         /// </summary>
         public void NotifyLocalJoinedRoom()
         {
+            _playerCache.Clear();
+            foreach (var player in PhotonNetwork.PlayerList)
+                _playerCache[player.ActorNumber] = player;
             OnLocalJoinedRoom?.Invoke();
+        }
+
+        private Photon.Realtime.Player FindPlayer(int actorNumber)
+        {
+            if (_playerCache.TryGetValue(actorNumber, out var cached))
+                return cached;
+            foreach (var player in PhotonNetwork.PlayerList)
+            {
+                if (player.ActorNumber == actorNumber)
+                {
+                    _playerCache[actorNumber] = player;
+                    return player;
+                }
+            }
+            return null;
         }
     }
 }

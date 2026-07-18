@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Controllers.Services;
 using Photon.Pun;
 using Photon.Realtime;
@@ -11,6 +12,7 @@ namespace Controllers.Network
     public class PhotonCallbackBridge : MonoBehaviourPunCallbacks
     {
         private static PhotonCallbackBridge _instance;
+        private static readonly List<PhotonView> _pendingBridgeViews = new();
 
         public static void EnsureExists()
         {
@@ -20,6 +22,13 @@ namespace Controllers.Network
                 DontDestroyOnLoad(go);
                 _instance = go.AddComponent<PhotonCallbackBridge>();
             }
+        }
+
+        /// <summary>注册 RPC Bridge 的 PhotonView，在 OnJoinedRoom 时统一分配 ViewID</summary>
+        public static void RegisterBridgeView(PhotonView pv)
+        {
+            if (pv != null && !_pendingBridgeViews.Contains(pv))
+                _pendingBridgeViews.Add(pv);
         }
 
         private PhotonPlayerService PlayerService
@@ -69,25 +78,19 @@ namespace Controllers.Network
         }
 
         /// <summary>
-        /// 为 AppRpcBridge / DomainRpcBridge / PresentationRpcBridge 分配 View ID
-        /// 使它们能通过 PhotonView.RPC() 正常调用
+        /// 为已注册的 RPC Bridge PhotonView 分配 View ID
         /// </summary>
         private static void AllocateBridgeViewIDs()
         {
-            string[] bridgeNames = { "AppRpcBridge", "DomainRpcBridge", "PresentationRpcBridge" };
-            foreach (var name in bridgeNames)
+            foreach (var pv in _pendingBridgeViews)
             {
-                var go = GameObject.Find(name);
-                if (go != null)
+                if (pv == null) continue;
+                if (pv.ViewID == 0)
                 {
-                    var pv = go.GetComponent<PhotonView>();
-                    if (pv != null && pv.ViewID == 0)
-                    {
-                        if (PhotonNetwork.AllocateViewID(pv))
-                            Debug.Log($"[PhotonCallbackBridge] 已为 {name} 分配 View ID: {pv.ViewID}");
-                        else
-                            Debug.LogWarning($"[PhotonCallbackBridge] 为 {name} 分配 View ID 失败");
-                    }
+                    if (PhotonNetwork.AllocateViewID(pv))
+                        Debug.Log($"[PhotonCallbackBridge] 已为 {pv.gameObject.name} 分配 View ID: {pv.ViewID}");
+                    else
+                        Debug.LogWarning($"[PhotonCallbackBridge] 为 {pv.gameObject.name} 分配 View ID 失败");
                 }
             }
         }

@@ -1,3 +1,5 @@
+using NetworkTarget = Controllers.Network.NetworkTarget;
+
 namespace Controllers.Services
 {
     /// <summary>

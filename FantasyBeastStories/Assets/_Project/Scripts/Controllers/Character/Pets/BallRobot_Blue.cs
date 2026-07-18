@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Controllers.Network;
 using Controllers.Services;
-using NetworkTarget = Controllers.Services.NetworkTarget;
+using NetworkTarget = Controllers.Network.NetworkTarget;
 
 namespace Controllers.Character.Pets
 {

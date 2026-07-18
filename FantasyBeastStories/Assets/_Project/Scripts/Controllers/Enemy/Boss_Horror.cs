@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using NetworkTarget = Controllers.Network.NetworkTarget;
 using UnityEngine;
-using UnityEngine.AI;
 using Core;
 using Controllers.Player;
 using Controllers.Combat;
@@ -45,7 +45,7 @@ namespace Controllers.Enemy
         [SerializeField] private GameObject fireballPrefab;
         [SerializeField] private GameObject fireballBurstPoint;
         [SerializeField] private GameObject rollCollider;
-        [SerializeField] private NavMeshAgent navMeshAgent;
+        [SerializeField] private UnityEngine.AI.NavMeshAgent navMeshAgent;
         #endregion
 
         #region 数据配置（ScriptableObject 驱动）
@@ -90,7 +90,7 @@ namespace Controllers.Enemy
 
             // 初始化 NavMeshAgent
             if (navMeshAgent == null)
-                navMeshAgent = GetComponent<NavMeshAgent>();
+                navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
 
             if (navMeshAgent != null)
             {
@@ -433,10 +433,10 @@ namespace Controllers.Enemy
             }
 
             // 验证目标点
-            if (!NavMesh.SamplePosition(targetPosition, out NavMeshHit hit, 5f, NavMesh.AllAreas))
+            if (!UnityEngine.AI.NavMesh.SamplePosition(targetPosition, out UnityEngine.AI.NavMeshHit hit, 5f, UnityEngine.AI.NavMesh.AllAreas))
             {
                 // 找不到有效NavMesh点，使用当前位置的最近NavMesh点
-                if (!NavMesh.SamplePosition(transform.position, out hit, 2f, NavMesh.AllAreas))
+                if (!UnityEngine.AI.NavMesh.SamplePosition(transform.position, out hit, 2f, UnityEngine.AI.NavMesh.AllAreas))
                 {
                     ForceStopAdjustment();
                     yield break;

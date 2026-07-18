@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Controllers.Services;
+using Controllers.Network;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -35,7 +36,7 @@ namespace UI
         // 在大厅中初始化就绪文字（处理 UI 创建时玩家已是就绪状态的情况）
         if (isInLobby && _ownerActorNumber >= 0)
         {
-          object readyValue = NetworkServiceLocator.PlayerService.GetPlayerCustomProperty(_ownerActorNumber, "PlayerReady");
+          object readyValue = NetworkServiceLocator.PlayerService.GetPlayerCustomProperty(_ownerActorNumber, PlayerPropertyKeys.Ready);
           bool isReady = readyValue is bool b && b;
           isReadyIcon.text = isReady ? "已就绪" : "未就绪";
         }
@@ -104,12 +105,12 @@ namespace UI
       if (actorNumber != _ownerActorNumber)
         return;
 
-      if (key == "PlayerName")
+      if (key == PlayerPropertyKeys.PlayerName)
       {
         string newName = value as string ?? "";
         UpDatePlayerName(newName);
       }
-      else if (key == "PlayerReady")
+      else if (key == PlayerPropertyKeys.Ready)
       {
         bool isReady = value is bool b && b;
         isReadyIcon.text = isReady ? "已就绪" : "未就绪";

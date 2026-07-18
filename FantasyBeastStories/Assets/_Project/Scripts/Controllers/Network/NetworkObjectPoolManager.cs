@@ -85,6 +85,7 @@ namespace Controllers.Network
     private Dictionary<string, Queue<GameObject>> pools =
         new Dictionary<string, Queue<GameObject>>();
     private Dictionary<string, GameObject> prefabs = new Dictionary<string, GameObject>();
+    private readonly Dictionary<string, HashSet<GameObject>> _activeObjects = new();
     private bool photonReady = false;
 
     // ===================== 初始化 =====================
@@ -185,24 +186,13 @@ namespace Controllers.Network
     {
       if (!EventChannelLocator.MainContainer.gameSettings.IsTest && !PhotonNetwork.IsMasterClient)
         return;
-      if (!prefabs.TryGetValue(poolName, out var prefab))
+      if (!_activeObjects.TryGetValue(poolName, out var active) || active.Count == 0)
         return;
 
-      // 尝试匹配怪物
-      foreach (var enemy in FindObjectsOfType<EnemyBase>())
+      foreach (var obj in new List<GameObject>(active))
       {
-        if (
-            enemy != null
-            && enemy.gameObject.activeSelf
-            && enemy.name.Contains(prefab.name)
-        )
-          DespawnNow(poolName, enemy.gameObject);
-      }
-      // 尝试匹配掉落物
-      foreach (var item in FindObjectsOfType<DropItemBase>())
-      {
-        if (item != null && item.gameObject.activeSelf && item.name.Contains(prefab.name))
-          DespawnNow(poolName, item.gameObject);
+        if (obj != null && obj.activeSelf)
+          DespawnNow(poolName, obj);
       }
     }
 
@@ -296,6 +286,7 @@ namespace Controllers.Network
             photonView.enabled = true;
           if (activateOnGet)
             obj.SetActive(true);
+          TrackActive(poolName, obj);
           return obj;
         }
       }
@@ -313,6 +304,7 @@ namespace Controllers.Network
           newObj.SetActive(true);
         else
           newObj.SetActive(false);
+        TrackActive(poolName, newObj);
         return newObj;
       }
 
@@ -324,6 +316,8 @@ namespace Controllers.Network
     {
       if (obj == null)
         return;
+
+      UntrackActive(poolName, obj);
 
       // 重置对应组件状态
       obj.GetComponent<EnemyBase>()?.ResetState();
@@ -378,6 +372,24 @@ namespace Controllers.Network
       return null;
     }
 
+    // ===================== 活跃对象追踪 =====================
+
+    private void TrackActive(string poolName, GameObject obj)
+    {
+      if (!_activeObjects.TryGetValue(poolName, out var set))
+      {
+        set = new HashSet<GameObject>();
+        _activeObjects[poolName] = set;
+      }
+      set.Add(obj);
+    }
+
+    private void UntrackActive(string poolName, GameObject obj)
+    {
+      if (_activeObjects.TryGetValue(poolName, out var set))
+        set.Remove(obj);
+    }
+
     // ===================== 调试工具 =====================
 
     public int GetPoolCount(string poolName) =>
@@ -397,6 +409,7 @@ namespace Controllers.Network
 
       pools.Clear();
       prefabs.Clear();
+      _activeObjects.Clear();
     }
   }
 

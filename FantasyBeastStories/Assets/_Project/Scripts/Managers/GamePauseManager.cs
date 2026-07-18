@@ -1,7 +1,7 @@
 using Core;
 using Core.Channels.Game;
 using Controllers.Services;
-using NetworkTarget = Controllers.Services.NetworkTarget;
+using NetworkTarget = Controllers.Network.NetworkTarget;
 using Controllers.Network;
 using UnityEngine;
 

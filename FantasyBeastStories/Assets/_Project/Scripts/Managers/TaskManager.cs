@@ -5,7 +5,7 @@ using Core.Channels.Combat;
 using Core.Channels.Player;
 using Core.Channels.Task;
 using Controllers.Services;
-using NetworkTarget = Controllers.Services.NetworkTarget;
+using NetworkTarget = Controllers.Network.NetworkTarget;
 using Controllers.Task;
 using Controllers.Network;
 using UI;

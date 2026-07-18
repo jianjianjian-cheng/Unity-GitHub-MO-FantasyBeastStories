@@ -7,7 +7,7 @@ using Core.Channels.Player;
 using Controllers.Item;
 using Core;
 using Controllers.Services;
-using NetworkTarget = Controllers.Services.NetworkTarget;
+using NetworkTarget = Controllers.Network.NetworkTarget;
 using Controllers.Network;
 using UI;
 using UnityEngine;

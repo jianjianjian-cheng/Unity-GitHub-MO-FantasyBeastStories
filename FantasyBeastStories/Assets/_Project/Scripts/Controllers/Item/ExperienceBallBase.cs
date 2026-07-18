@@ -5,7 +5,7 @@ using Core;
 using Core.Channels;
 using Core;
 using Controllers.Services;
-using NetworkTarget = Controllers.Services.NetworkTarget;
+using NetworkTarget = Controllers.Network.NetworkTarget;
 using Controllers.Network;
 using UnityEngine;
 

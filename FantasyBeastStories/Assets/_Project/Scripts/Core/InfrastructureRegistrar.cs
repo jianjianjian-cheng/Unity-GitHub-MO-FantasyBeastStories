@@ -18,6 +18,10 @@ namespace Core
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void RegisterFactories()
         {
+            // 全局网络配置，只设置一次（原先在 PlayerStateSync.Awake 中，每个玩家实例都会重复设置）
+            PhotonNetwork.SendRate = 30;
+            PhotonNetwork.SerializationRate = 30;
+
             // 注册网络服务（玩家身份 + 对象同步）
             NetworkServiceLocator.Register(
                 new PhotonPlayerService(),
@@ -74,25 +78,28 @@ namespace Core
         private static void EnsureAppRpcBridge()
         {
             var go = new GameObject("AppRpcBridge");
-            go.AddComponent<PhotonView>();
+            var pv = go.AddComponent<PhotonView>();
             go.AddComponent<AppRpcBridge>();
             Object.DontDestroyOnLoad(go);
+            PhotonCallbackBridge.RegisterBridgeView(pv);
         }
 
         private static void EnsureDomainRpcBridge()
         {
             var go = new GameObject("DomainRpcBridge");
-            go.AddComponent<PhotonView>();
+            var pv = go.AddComponent<PhotonView>();
             go.AddComponent<DomainRpcBridge>();
             Object.DontDestroyOnLoad(go);
+            PhotonCallbackBridge.RegisterBridgeView(pv);
         }
 
         private static void EnsurePresentationRpcBridge()
         {
             var go = new GameObject("PresentationRpcBridge");
-            go.AddComponent<PhotonView>();
+            var pv = go.AddComponent<PhotonView>();
             go.AddComponent<PresentationRpcBridge>();
             Object.DontDestroyOnLoad(go);
+            PhotonCallbackBridge.RegisterBridgeView(pv);
         }
     }
 }
