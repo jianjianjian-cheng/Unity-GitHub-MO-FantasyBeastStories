@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Core;
-using Core.Channels;
 using UI.Framework.Animation;
 using UI.Framework.Manager;
 using UnityEngine;
@@ -38,7 +36,6 @@ namespace UI.Framework.Base
       if (_canvasGroup == null)
         _canvasGroup = gameObject.AddComponent<CanvasGroup>();
 
-      gameObject.SetActive(false);
       CollectChildWidgets();
     }
 
@@ -128,18 +125,10 @@ namespace UI.Framework.Base
     protected virtual void SubscribeEvents() { }
     protected virtual void UnsubscribeEvents() { }
 
-    protected T GetChannel<T>() where T : ScriptableObject
+    protected virtual void OnDestroy()
     {
-      var container = EventChannelLocator.MainContainer;
-      var fields = typeof(EventChannelContainerSO).GetFields();
-      foreach (var field in fields)
-      {
-        if (field.FieldType == typeof(T))
-        {
-          return field.GetValue(container) as T;
-        }
-      }
-      return null;
+      if (UIManager.HasInstance && !string.IsNullOrEmpty(screenId))
+        UIManager.Instance.UnregisterScreen(this);
     }
 
     protected void CloseSelf() => UIManager.Instance.Close(screenId);

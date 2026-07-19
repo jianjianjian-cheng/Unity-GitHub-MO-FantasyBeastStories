@@ -1,12 +1,17 @@
-// 基类，放在 Domain.CardData 命名空间下
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
 namespace Controllers.CardData
 {
-    [System.Serializable]
     public class CardConfigBase
     {
         public string Name;
         public string Content;
         public int Value;
         public string Quality;
+
+        [SerializeReference]
+        public List<ICardEffect> Effects;
     }
 }

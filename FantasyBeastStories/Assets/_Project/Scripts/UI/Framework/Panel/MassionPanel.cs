@@ -143,6 +143,16 @@ public class MassionPanel : UIScreen
         // 等待一帧确保布局已刷新
         yield return null;
 
+        // 以进度变化最大的任务为基准，每 +1 播放一次拾取音效
+        int maxDelta = 0;
+        foreach (var kvp in settleResult.delta)
+        {
+            if (kvp.Value > maxDelta)
+                maxDelta = kvp.Value;
+        }
+        if (maxDelta > 0)
+            StartCoroutine(PlayProgressSFX(maxDelta));
+
         for (int i = 0; i < taskItems.Count; i++)
         {
             var item = taskItems[i];
@@ -164,6 +174,18 @@ public class MassionPanel : UIScreen
             item.AnimateToTarget(newVal, animateDuration);
 
             // 每个任务之间有 stagger 延迟
+            yield return new WaitForSeconds(staggerDelay);
+        }
+    }
+
+    /// <summary>
+    /// 每次播放拾取音效，间隔与动画 stagger 一致。
+    /// </summary>
+    private IEnumerator PlayProgressSFX(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            AudioManager.Instance?.PlaySFX("sfx_PickUp");
             yield return new WaitForSeconds(staggerDelay);
         }
     }

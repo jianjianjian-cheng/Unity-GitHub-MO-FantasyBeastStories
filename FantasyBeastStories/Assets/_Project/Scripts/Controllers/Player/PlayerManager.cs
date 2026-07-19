@@ -7,6 +7,7 @@ using Core.Channels;
 using Core.Channels.General;
 using Core.Channels.Player;
 using Controllers.Services;
+using Photon.Pun;
 using UnityEngine;
 
 namespace Controllers.Player
@@ -266,6 +267,59 @@ namespace Controllers.Player
         public List<string> GetOtherPlayersIds()
         {
             return playerDataDict.Keys.Where(p => !IsLocalPlayer(p)).ToList();
+        }
+
+        // ==================== 存活状态追踪 ====================
+
+        private HashSet<string> deadPlayerIds = new HashSet<string>();
+
+        /// <summary>标记玩家死亡</summary>
+        public void SetPlayerDead(string playerId)
+        {
+            deadPlayerIds.Add(playerId);
+        }
+
+        /// <summary>标记玩家复活（预留，当前不使用）</summary>
+        public void SetPlayerAlive(string playerId)
+        {
+            deadPlayerIds.Remove(playerId);
+        }
+
+        /// <summary>玩家是否存活</summary>
+        public bool IsPlayerAlive(string playerId)
+        {
+            return !deadPlayerIds.Contains(playerId);
+        }
+
+        /// <summary>
+        /// 获取所有存活队友的 Transform（排除死亡玩家和本地玩家自己）
+        /// </summary>
+        /// <param name="localActorNumber">本地玩家 ActorNumber</param>
+        public List<Transform> GetAliveTeammateTransforms(int localActorNumber)
+        {
+            var result = new List<Transform>();
+            foreach (var go in activePlayerObjects)
+            {
+                if (go == null) continue;
+
+                var pv = go.GetComponentInParent<PhotonView>();
+                if (pv == null) continue;
+
+                int ownerActor = pv.Owner != null ? pv.Owner.ActorNumber : -1;
+                if (ownerActor == localActorNumber) continue;
+                if (deadPlayerIds.Contains(ownerActor.ToString())) continue;
+
+                result.Add(go.transform);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 清除所有死亡状态（场景切换/重开时调用）
+        /// </summary>
+        public void ClearAllDeathState()
+        {
+            deadPlayerIds.Clear();
         }
 
         public AttributePlayerBase GetLocalPlayerAttribute(string key)

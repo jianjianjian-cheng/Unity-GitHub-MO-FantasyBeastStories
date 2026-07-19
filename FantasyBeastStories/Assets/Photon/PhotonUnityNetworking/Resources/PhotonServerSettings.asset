@@ -94,6 +94,10 @@ MonoBehaviour:
   - RPC_PlayGuiLingHitVFX
   - RPC_RequestEnemyDestroy
   - RPC_CollectPowerUp
+  - NoticePlayerDeath
+  - RPC_ReturnToLobby
+  - RPC_MagnetCollectExpBalls
+  - RPC_SpawnPowerUp
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

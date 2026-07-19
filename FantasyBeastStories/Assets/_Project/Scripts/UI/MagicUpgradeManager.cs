@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Controllers.CardData;
+using Controllers.Character;
+using Controllers.Player;
 using DG.Tweening;
 using Core;
 using Core.Channels.General;
@@ -894,8 +896,24 @@ namespace UI
 
     void OnMagicUpgradeRequested(bool isOpen)
     {
-      if (isOpen) OpenMagicUpgradePanel();
-      else CloseMagicUpgradePanel();
+      if (isOpen)
+      {
+        // 死亡玩家不参与卡牌选择，但仍然参与暂停/恢复循环
+        var localAttr = PlayerManager.instance?.GetLocalPlayerAttribute(AttributeKeyConst.Main);
+        if (localAttr != null && localAttr.GetIsDead())
+        {
+          // 同步暂停状态，确保 MasterClient 的 RPC 能发出
+          EventChannelLocator.MainContainer.pauseChannel?.Raise(true);
+          if (!EventChannelLocator.MainContainer.gameSettings.IsTest)
+            NetworkServiceLocator.PlayerService.SetCustomProperty(PLAYER_UPGRADE_READY_KEY, true);
+          return;
+        }
+        OpenMagicUpgradePanel();
+      }
+      else
+      {
+        CloseMagicUpgradePanel();
+      }
     }
 
 

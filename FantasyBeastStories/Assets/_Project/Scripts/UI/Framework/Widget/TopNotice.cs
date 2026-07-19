@@ -60,6 +60,13 @@ namespace UI.Framework
             if (_canvasGroup == null)
                 _canvasGroup = gameObject.AddComponent<CanvasGroup>();
 
+            // 添加独立 Canvas 覆盖排序，确保始终渲染在最高层
+            var canvas = GetComponent<Canvas>();
+            if (canvas == null)
+                canvas = gameObject.AddComponent<Canvas>();
+            canvas.overrideSorting = true;
+            canvas.sortingOrder = 9999;
+
             SetVisible(false);
         }
 

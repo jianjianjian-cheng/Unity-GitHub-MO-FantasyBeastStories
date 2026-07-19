@@ -422,7 +422,8 @@ namespace Controllers.Network
     // 掉落物
     public const string ExperienceBall_Blue = "ExperienceBall_BluePool";
 
-    // 怪物
-    public const string Skeleton = "SkeletonPool";
+    // 怪物（池名需与 Resources 路径一致，作为 PhotonNetwork.Instantiate 的 prefabId）
+    public const string Skeleton = "Enemies/SkeletonRoot";
+    public const string Dragon = "Enemies/DragonRoot";
   }
 }

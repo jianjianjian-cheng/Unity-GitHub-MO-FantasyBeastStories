@@ -1,10 +1,10 @@
 {
-  "unity_port": 64011,
+  "unity_port": -1,
   "stream_port": 60319,
   "created_date": "2026-07-18T04:32:23.909Z",
   "project_path": "G:/git/GitHUb/Unity-GitHub-MO-FantasyBeastStories/FantasyBeastStories/Assets",
   "reloading": false,
-  "reason": "ready",
-  "seq": 13010,
-  "last_heartbeat": "2026-07-19T04:13:32.576Z"
+  "reason": "unity_quit",
+  "seq": 74956,
+  "last_heartbeat": "2026-07-19T12:59:01.962Z"
 }

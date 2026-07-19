@@ -29,6 +29,8 @@ namespace Core
             new PoolInitializationEntry { poolName = PoolConst.DamageNumPool, preloadCount = 100 },
             // 本地经验球池（非网络对象）
             new PoolInitializationEntry { poolName = PoolConst.ExperienceBall_Blue_Local, preloadCount = 50 },
+            // 道具池（非网络对象，与经验球方案二一致）
+            new PoolInitializationEntry { poolName = PoolConst.PowerUpItem, preloadCount = 5 },
             //BingNv 角色专属对象池
             new PoolInitializationEntry { poolName = PoolConst.GuiLingFirePool, preloadCount = 20 },
             new PoolInitializationEntry { poolName = PoolConst.GuiLingLightningPool, preloadCount = 20 },

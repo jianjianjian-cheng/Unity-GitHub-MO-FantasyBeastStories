@@ -331,6 +331,7 @@ GameObject:
   - component: {fileID: 41352443}
   - component: {fileID: 41352445}
   - component: {fileID: 41352444}
+  - component: {fileID: 41352446}
   m_Layer: 5
   m_Name: Bottom
   m_TagString: Untagged
@@ -398,6 +399,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 41352442}
   m_CullTransparentMesh: 1
+--- !u!114 &41352446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 41352442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9752f777963c8ea4493fe01885d8b8f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoBind: 1
+  selectAnimation: {fileID: 0}
+  deselectAnimation: {fileID: 0}
+  hoverEnterAnimation: {fileID: 0}
+  hoverExitAnimation: {fileID: 0}
+  startButton: {fileID: 757708314}
+  exitRoomButton: {fileID: 1590593847}
 --- !u!1 &49682748
 GameObject:
   m_ObjectHideFlags: 0
@@ -3274,23 +3294,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 235cfce03ec8cfc49abd72c5cd87d5d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  screenId: LobbyCanvas
-  defaultLayer: 1
-  useMask: 1
-  closeOnEsc: 1
-  destroyOnClose: 0
-  openAnimation: {fileID: 0}
-  closeAnimation: {fileID: 0}
-  postProcessVolume: {fileID: 935035928}
-  lobbyNavButton: {fileID: 894045889}
-  characterNavButton: {fileID: 1469920214}
-  runeNavButton: {fileID: 1680512852}
-  missionNavButton: {fileID: 445362469}
-  shopNavButton: {fileID: 452560057}
-  startButton: {fileID: 0}
-  exitRoomButton: {fileID: 0}
-  runeSlot1Button: {fileID: 0}
-  runeSlot2Button: {fileID: 0}
 --- !u!1 &303464130
 GameObject:
   m_ObjectHideFlags: 0
@@ -8499,6 +8502,7 @@ GameObject:
   - component: {fileID: 643214212}
   - component: {fileID: 643214214}
   - component: {fileID: 643214213}
+  - component: {fileID: 643214215}
   m_Layer: 5
   m_Name: MiddleLeft
   m_TagString: Untagged
@@ -8565,6 +8569,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 643214211}
   m_CullTransparentMesh: 1
+--- !u!114 &643214215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 643214211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b4dcc1d8aeced84c81d0a3978b26e09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoBind: 1
+  selectAnimation: {fileID: 0}
+  deselectAnimation: {fileID: 0}
+  hoverEnterAnimation: {fileID: 0}
+  hoverExitAnimation: {fileID: 0}
+  runeSlot1Button: {fileID: 324550043}
+  runeSlot2Button: {fileID: 2064875337}
 --- !u!1001 &646692601
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16942,7 +16965,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -63.679977}
+  m_AnchoredPosition: {x: 0, y: -63.67993}
   m_SizeDelta: {x: 0, y: -127.36005}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1317640720
@@ -23875,6 +23898,7 @@ GameObject:
   - component: {fileID: 1866693209}
   - component: {fileID: 1866693211}
   - component: {fileID: 1866693210}
+  - component: {fileID: 1866693212}
   m_Layer: 5
   m_Name: Top
   m_TagString: Untagged
@@ -23947,6 +23971,29 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1866693208}
   m_CullTransparentMesh: 1
+--- !u!114 &1866693212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1866693208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 217abcf06e2d74a4ca393f5622a9f7e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoBind: 1
+  selectAnimation: {fileID: 0}
+  deselectAnimation: {fileID: 0}
+  hoverEnterAnimation: {fileID: 0}
+  hoverExitAnimation: {fileID: 0}
+  lobbyNavButton: {fileID: 894045889}
+  characterNavButton: {fileID: 1469920214}
+  runeNavButton: {fileID: 1680512852}
+  missionNavButton: {fileID: 445362469}
+  shopNavButton: {fileID: 452560057}
+  postProcessVolume: {fileID: 935035928}
 --- !u!1 &1870543358
 GameObject:
   m_ObjectHideFlags: 0
@@ -28412,6 +28459,18 @@ PrefabInstance:
     - target: {fileID: 1606770906126039627, guid: 4bae876e23948204281b1b794d9c5c36, type: 3}
       propertyPath: m_Name
       value: TopNotice
+      objectReference: {fileID: 0}
+    - target: {fileID: 8006957344723746705, guid: 4bae876e23948204281b1b794d9c5c36, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 5e9cda310c3b17442a2a43f27aaf2c27, type: 2}
+    - target: {fileID: 8006957344723746705, guid: 4bae876e23948204281b1b794d9c5c36, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 6767143914794686458, guid: 5e9cda310c3b17442a2a43f27aaf2c27, type: 2}
+    - target: {fileID: 8006957344723746705, guid: 4bae876e23948204281b1b794d9c5c36, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9098525616683525812, guid: 4bae876e23948204281b1b794d9c5c36, type: 3}
       propertyPath: m_Pivot.x

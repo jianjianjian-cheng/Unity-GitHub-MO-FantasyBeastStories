@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UI.Framework.Base;
 using UI.Framework.Utils;
 using UnityEngine;
@@ -11,39 +10,34 @@ namespace UI.Framework.Manager
   public class UIManager : MonoBehaviour
   {
     private static UIManager _instance;
-    private static bool _isQuitting;
 
     public static UIManager Instance
     {
       get
       {
-        if (_isQuitting)
-          return _instance;
-
         if (_instance == null)
         {
           GameObject go = new GameObject("UIManager");
           _instance = go.AddComponent<UIManager>();
-          DontDestroyOnLoad(go);
           _instance.Initialize();
         }
         return _instance;
       }
     }
 
+    /// <summary>安全判空：不触发自动创建</summary>
+    public static bool HasInstance => _instance != null;
+
     private UINavigationStack _navigationStack = new();
     private Dictionary<string, UIScreen> _registeredScreens = new();
     private Dictionary<UILayer, Canvas> _layerCanvases = new();
     private Dictionary<UILayer, GameObject> _layerMasks = new();
-
-    private const string MaskResourcePath = "UI/Mask";
 
     private void Awake()
     {
       if (_instance == null)
       {
         _instance = this;
-        DontDestroyOnLoad(gameObject);
         Initialize();
       }
       else if (_instance != this)
@@ -55,7 +49,29 @@ namespace UI.Framework.Manager
     private void Initialize()
     {
       CreateEventSystem();
-      CreateLayerCanvases();
+    }
+
+    private void EnsureLayerCanvas(UILayer layer)
+    {
+      if (_layerCanvases.ContainsKey(layer))
+        return;
+
+      GameObject canvasObj = new GameObject(layer.ToLayerName() + "Canvas");
+      canvasObj.transform.SetParent(transform);
+
+      Canvas canvas = canvasObj.AddComponent<Canvas>();
+      canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+      canvas.sortingOrder = layer.ToSortingOrder();
+
+      CanvasScaler scaler = canvasObj.AddComponent<CanvasScaler>();
+      scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+      scaler.referenceResolution = new Vector2(2560, 1440);
+      scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+      scaler.matchWidthOrHeight = 0.5f;
+
+      canvasObj.AddComponent<GraphicRaycaster>();
+
+      _layerCanvases[layer] = canvas;
     }
 
     private void CreateEventSystem()
@@ -70,37 +86,12 @@ namespace UI.Framework.Manager
       Debug.Log("[UIManager] 自动创建 EventSystem");
     }
 
-    private void CreateLayerCanvases()
-    {
-      foreach (UILayer layer in System.Enum.GetValues(typeof(UILayer)))
-      {
-        if (_layerCanvases.ContainsKey(layer))
-          continue;
-
-        GameObject canvasObj = new GameObject(layer.ToLayerName() + "Canvas");
-        canvasObj.transform.SetParent(transform);
-
-        Canvas canvas = canvasObj.AddComponent<Canvas>();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvas.sortingOrder = layer.ToSortingOrder();
-
-        // 添加 CanvasScaler 支持手机分辨率适配
-        CanvasScaler scaler = canvasObj.AddComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1920, 1080);
-        scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
-        scaler.matchWidthOrHeight = 0.5f;
-
-        canvasObj.AddComponent<GraphicRaycaster>();
-
-        _layerCanvases[layer] = canvas;
-      }
-    }
-
     private GameObject CreateMask(UILayer layer)
     {
       if (_layerMasks.TryGetValue(layer, out var existing))
         return existing;
+
+      EnsureLayerCanvas(layer);
 
       GameObject maskObj = new GameObject("Mask_" + layer.ToLayerName());
 
@@ -136,7 +127,10 @@ namespace UI.Framework.Manager
       }
 
       _registeredScreens[screen.ScreenId] = screen;
+      EnsureLayerCanvas(screen.DefaultLayer);
       screen.SetLayer(screen.DefaultLayer);
+      screen.transform.SetParent(_layerCanvases[screen.DefaultLayer].transform, false);
+      screen.gameObject.SetActive(false);
     }
 
     public void Open(string screenId)
@@ -232,76 +226,6 @@ namespace UI.Framework.Manager
       }
     }
 
-    public async Task OpenAsync(string screenId)
-    {
-      if (!_registeredScreens.TryGetValue(screenId, out var screen))
-      {
-        Debug.LogError($"UIManager: 未找到屏幕 {screenId}");
-        return;
-      }
-
-      await OpenAsync(screen);
-    }
-
-    public async Task OpenAsync(UIScreen screen)
-    {
-      if (screen == null)
-        return;
-
-      UIScreen current = _navigationStack.CurrentScreen;
-      if (current != null)
-      {
-        current.gameObject.SetActive(false);
-      }
-
-      _navigationStack.Push(screen);
-
-      if (screen.UseMask)
-      {
-        ShowMask(screen.CurrentLayer);
-      }
-
-      await Task.Run(() =>
-      {
-        screen.Open();
-      });
-    }
-
-    public async Task CloseAsync(string screenId)
-    {
-      if (!_registeredScreens.TryGetValue(screenId, out var screen))
-      {
-        Debug.LogError($"UIManager: 未找到屏幕 {screenId}");
-        return;
-      }
-
-      await CloseAsync(screen);
-    }
-
-    public async Task CloseAsync(UIScreen screen)
-    {
-      if (screen == null)
-        return;
-
-      await Task.Run(() =>
-      {
-        screen.Close();
-      });
-
-      _navigationStack.Remove(screen);
-
-      if (screen.UseMask)
-      {
-        HideMask(screen.CurrentLayer);
-      }
-
-      UIScreen current = _navigationStack.CurrentScreen;
-      if (current != null)
-      {
-        current.gameObject.SetActive(true);
-      }
-    }
-
     public void ClearAll()
     {
       foreach (var screen in _registeredScreens.Values)
@@ -388,10 +312,7 @@ namespace UI.Framework.Manager
     private void OnDestroy()
     {
       if (_instance == this)
-      {
-        _isQuitting = true;
         _instance = null;
-      }
     }
   }
 }

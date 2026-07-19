@@ -47,6 +47,7 @@ namespace UI
     //本地玩家的血条UI
     private Slider localPlayerSlider_HP;
     private Text localPlayer_HP_Text;
+    private GameObject localPlayerHP_Root;
 
     //退出游戏按钮
     private Button exitButton;
@@ -120,6 +121,9 @@ namespace UI
         Debug.LogError("LocalPlayerSlider_HP 未找到");
         return;
       }
+      localPlayerHP_Root = localPlayerSlider_HP.transform.parent != null
+          ? localPlayerSlider_HP.transform.parent.gameObject
+          : localPlayerSlider_HP.gameObject;
       localPlayer_HP_Text = localPlayerSlider_HP.GetComponentInChildren<Text>();
       if (localPlayer_HP_Text == null)
       {
@@ -222,6 +226,13 @@ namespace UI
           nameTexts[i].text = i < otherPlayers.Count ? "未命名" : "";
         }
       }
+    }
+
+    /// <summary>隐藏本地玩家血条UI（死亡时调用）</summary>
+    public void HideLocalPlayerHP()
+    {
+      if (localPlayerHP_Root != null)
+        localPlayerHP_Root.SetActive(false);
     }
 
     //设置UI血条的数值

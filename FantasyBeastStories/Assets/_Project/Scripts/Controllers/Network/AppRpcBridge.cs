@@ -6,7 +6,9 @@ using Controllers.PowerUp;
 using Controllers.Services;
 using Photon.Pun;
 using UI;
+using UI.Framework.Panel;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Controllers.Network
 {
@@ -114,11 +116,25 @@ namespace Controllers.Network
         // PowerUpManager RPC
         // ============================================================
 
-        /// <summary>房主 → 所有人：道具已被拾取，隐藏它</summary>
+        /// <summary>房主 → 所有人：在指定位置生成一个道具</summary>
         [PunRPC]
-        public void RPC_CollectPowerUp(int viewId)
+        public void RPC_SpawnPowerUp(int itemId, Vector3 pos, int itemIndex)
         {
-            PowerUpManager.HandleCollectPowerUpRPC(viewId);
+            PowerUpManager.HandleSpawnPowerUpRPC((uint)itemId, pos, itemIndex);
+        }
+
+        /// <summary>任意客户端 → 所有人：道具已被拾取，隐藏它</summary>
+        [PunRPC]
+        public void RPC_CollectPowerUp(int itemId)
+        {
+            PowerUpManager.HandleCollectPowerUpRPC((uint)itemId);
+        }
+
+        /// <summary>拾取者 → 所有人：经验磁铁启动，各客户端执行飞行动画</summary>
+        [PunRPC]
+        public void RPC_MagnetCollectExpBalls(int collectorActorNumber, float delay, float speed)
+        {
+            PowerUpManager.HandleMagnetCollectExpBallsRPC(collectorActorNumber, delay, speed);
         }
 
         // ============================================================
@@ -166,6 +182,36 @@ namespace Controllers.Network
         public void RPC_UpdateProgress(string taskId, int count, bool completed)
         {
             TaskManager.HandleUpdateProgressRPC(taskId, count, completed);
+        }
+
+        // ============================================================
+        // 返回大厅 RPC
+        // ============================================================
+
+        /// <summary>
+        /// 房主 → 所有人：播放加载动画并返回大厅
+        /// </summary>
+        [PunRPC]
+        public void RPC_ReturnToLobby()
+        {
+            StartCoroutine(ReturnToLobbyCoroutine());
+        }
+
+        private IEnumerator ReturnToLobbyCoroutine()
+        {
+            // 所有客户端都显示加载动画
+            if (Loading.Instance != null)
+                yield return Loading.Instance.Show();
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                PhotonNetwork.LoadLevel(1);
+                Debug.Log("[AppRpcBridge] 房主发起切换到大厅场景");
+            }
+            else
+            {
+                Debug.Log("[AppRpcBridge] 非主机等待房主同步场景...");
+            }
         }
     }
 }

@@ -21,8 +21,8 @@ namespace Controllers.Enemy
       base.DropExperience();
       Vector3 spawnPosition = transform.position + Vector3.up * 0.5f;
 
-      // 计算经验值（与 ExperienceBall_Blue.Start 中原有的随机值一致）
-      int expValue = Random.Range(50, 71);
+      // 经验值从 SO 配置读取
+      int expValue = GetExpValue();
 
       bool isTest = EventChannelLocator.MainContainer.gameSettings.IsTest;
       if (isTest)

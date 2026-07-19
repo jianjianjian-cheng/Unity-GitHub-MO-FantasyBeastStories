@@ -1,9 +1,6 @@
 using Controllers.PowerUp;
-using Controllers.PowerUp;
 using Core;
 using UnityEngine;
-using Controllers.PowerUp;
-using Core;
 using Managers;
 using Controllers.Services;
 using NetworkTarget = Controllers.Network.NetworkTarget;
@@ -14,9 +11,9 @@ namespace Controllers.Item
 {
     /// <summary>
     /// 道具基类 - 继承自DropItemBase，增加效果执行逻辑
-    /// 展示：继承 + 多态 + 组合模式
+    /// 联机模式下使用 itemId（非网络对象）进行同步，与经验球方案二一致
     /// </summary>
-    public class PowerUpItemBase : DropItemBase, IPunObservable
+    public class PowerUpItemBase : DropItemBase
     {
         [Header("道具配置")]
         [SerializeField] protected PowerUpDataSO powerUpData;
@@ -25,11 +22,13 @@ namespace Controllers.Item
         [SerializeField] protected MonoBehaviour effectComponent;
         protected IPowerUpEffect effect;
 
+        /// <summary>道具唯一标识，由房主在生成时分配</summary>
+        public uint PowerUpId { get; private set; }
+
         protected override void OnReachPlayer()
         {
             if (effect == null)
             {
-                // 尝试从effectComponent获取
                 if (effectComponent != null)
                 {
                     effect = effectComponent as IPowerUpEffect;
@@ -39,7 +38,6 @@ namespace Controllers.Item
                     }
                 }
 
-                // 自动查找
                 if (effect == null)
                 {
                     effect = GetComponent<IPowerUpEffect>();
@@ -67,7 +65,6 @@ namespace Controllers.Item
             Debug.Log($"[PowerUp] 玩家拾取道具: {powerUpData?.itemName ?? "未知"}");
             effect.Execute(player);
 
-            // 空值检查
             if (EventChannelLocator.MainContainer != null &&
                 EventChannelLocator.MainContainer.powerUpCollectChannel != null)
             {
@@ -91,19 +88,12 @@ namespace Controllers.Item
             bool isTest = EventChannelLocator.MainContainer?.gameSettings?.IsTest ?? true;
             if (isTest) return;
 
-            var photonView = gameObject.GetComponent<PhotonView>();
-            if (photonView != null)
-            {
-                NetworkServiceLocator.ObjectService?.InvokeRPC(
-                    AppRpcBridge.Instance, "RPC_CollectPowerUp",
-                    NetworkTarget.All, photonView.ViewID
-                );
-                Debug.Log($"[PowerUp] 已调用RPC_CollectPowerUp");
-            }
-            else
-            {
-                Debug.LogWarning($"[PowerUp] 未找到PhotonView组件，跳过网络同步");
-            }
+            // 广播 itemId 到所有客户端，各客户端隐藏对应的本地道具
+            NetworkServiceLocator.ObjectService?.InvokeRPC(
+                AppRpcBridge.Instance, "RPC_CollectPowerUp",
+                NetworkTarget.All, (int)PowerUpId
+            );
+            Debug.Log($"[PowerUp] 已调用RPC_CollectPowerUp, itemId={PowerUpId}");
         }
 
         protected virtual void ReturnToPool()
@@ -114,37 +104,34 @@ namespace Controllers.Item
             );
         }
 
+        /// <summary>原有 Setup 方法（测试模式 / 不需要网络同步时使用）</summary>
         public void Setup(PowerUpDataSO data)
         {
             powerUpData = data;
-
-            if (effect == null)
-            {
-                if (effectComponent != null)
-                {
-                    effect = effectComponent as IPowerUpEffect;
-                }
-                if (effect == null)
-                {
-                    effect = GetComponent<IPowerUpEffect>();
-                    if (effect == null)
-                        effect = GetComponentInChildren<IPowerUpEffect>();
-                }
-            }
+            EnsureEffect();
         }
 
-        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        /// <summary>带 itemId 的 Setup 方法（联机模式由 RPC_SpawnPowerUp 调用）</summary>
+        public void SetupWithId(uint id, PowerUpDataSO data)
         {
-            if (stream.IsWriting)
+            PowerUpId = id;
+            powerUpData = data;
+            EnsureEffect();
+        }
+
+        private void EnsureEffect()
+        {
+            if (effect != null) return;
+
+            if (effectComponent != null)
             {
-                // 发送数据到其他客户端（可选：同步道具状态）
-                stream.SendNext(gameObject.activeInHierarchy);
+                effect = effectComponent as IPowerUpEffect;
             }
-            else
+            if (effect == null)
             {
-                // 接收来自其他客户端的数据
-                bool isActive = (bool)stream.ReceiveNext();
-                gameObject.SetActive(isActive);
+                effect = GetComponent<IPowerUpEffect>();
+                if (effect == null)
+                    effect = GetComponentInChildren<IPowerUpEffect>();
             }
         }
     }

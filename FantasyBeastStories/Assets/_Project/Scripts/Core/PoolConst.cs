@@ -3,7 +3,9 @@ namespace Core
     public static class PoolConst
     {
         // 网络对象池常量（从 Infrastructure.Network.NetworkObjectPoolConst 合并）
-        public const string Skeleton = "SkeletonPool";
+        // 怪物池名同时作为 PhotonNetwork.Instantiate 的 prefabId，需与 Resources 路径一致
+        public const string Skeleton = "Enemies/SkeletonRoot";
+        public const string Dragon = "Enemies/DragonRoot";
         public const string ExperienceBall_Blue = "ExperienceBall_BluePool";
 
         // 本地对象池常量（经验球改为非网络对象后的本地池）

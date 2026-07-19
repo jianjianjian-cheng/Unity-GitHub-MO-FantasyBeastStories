@@ -101,40 +101,6 @@ namespace Controllers.Character
       base.SwitchElement(element);
     }
 
-    protected override void OnApplicationCard(CardConfigBase card)
-    {
-      base.OnApplicationCard(card);
-      switch (card.Name)
-      {
-        case "流光穿透":
-          attributePlayer.AddMaxAttackCount(1);
-          break;
-        case "流光连射":
-          attributePlayer.AddComboCount(1);
-          break;
-        case "惊鸿照影":
-          attributePlayer.SetCurrentElement(Element.Lightning);
-          SwitchElement(Element.Lightning);
-          attributePlayer.AddAttackPower(20);
-          break;
-        case "森芒初露":
-          attributePlayer.SetCurrentElement(Element.Grass);
-          SwitchElement(Element.Grass);
-          movementData.healthRecover += 2;
-          attributePlayer.SetHealthRecover(movementData.healthRecover);
-          break;
-        case "流光分裂":
-          attributePlayer.SetSplit(true);
-          attributePlayer.AddSplitCount(1);
-          break;
-        case "碎雪回风":
-          attributePlayer.SetCurrentElement(Element.Winter);
-          SwitchElement(Element.Winter);
-          attributePlayer.AddAttackPower(20);
-          break;
-      }
-    }
-
     /// <summary>
     /// 由 DomainRpcBridge.RPC_InitElementPool 调用 — 在其他客户端初始化元素对象池
     /// </summary>

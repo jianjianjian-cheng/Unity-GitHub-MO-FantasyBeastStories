@@ -17,60 +17,167 @@ MonoBehaviour:
     Content: "\u6D41\u5149\u5F15\u73B0\u5728\u53EF\u4EE5\u7A7F\u900F\uFF0C\u7A7F\u900F\u6B21\u6570\u589E\u52A0"
     Value: 1
     Quality: "\u4F20\u8BF4"
+    Effects:
+    - rid: 4210315237150425112
     Stackable: 1
   - Name: "\u6D41\u5149\u8FDE\u5C04"
     Content: "\u6D41\u5149\u5F15\u73B0\u5728\u53EF\u4EE5\u8FDE\u5C04\uFF0C\u8FDE\u5C04\u6B21\u6570\u589E\u52A0"
     Value: 1
     Quality: "\u4F20\u8BF4"
+    Effects:
+    - rid: 4210315237150425113
     Stackable: 1
   - Name: "\u60CA\u9E3F\u7167\u5F71"
     Content: "\u6D41\u5149\u5F15\u83B7\u5F97\u96F7\u5143\u7D20\u52A0\u6210\uFF0C\u83B7\u5F97\u8FDE\u9501\u4F24\u5BB3\uFF0C\u653B\u51FB\u529B\u589E\u52A0"
     Value: 20
     Quality: "\u4F20\u8BF4"
+    Effects:
+    - rid: 4210315237150425114
+    - rid: 4210315237150425115
     Stackable: 0
   - Name: "\u68EE\u8292\u521D\u9732"
     Content: "\u6D41\u5149\u5F15\u83B7\u5F97\u8349\u5143\u7D20\u52A0\u6210\uFF0C\u653B\u51FB\u654C\u4EBA\u53EF\u6062\u590D\u751F\u547D\uFF0C\u751F\u547D\u56DE\u590D\u589E\u52A0"
     Value: 2
     Quality: "\u4F20\u8BF4"
+    Effects:
+    - rid: 4210315237150425116
+    - rid: 4210315237150425117
     Stackable: 0
   - Name: "\u6D41\u5149\u5206\u88C2"
     Content: "\u6D41\u5149\u5F15\u547D\u4E2D\u9996\u4E2A\u654C\u4EBA\u65F6\u53EF\u5206\u88C2\uFF0C\u5206\u88C2\u6B21\u6570\u589E\u52A0"
     Value: 1
     Quality: "\u4F20\u8BF4"
+    Effects:
+    - rid: 4210315237150425118
     Stackable: 1
   - Name: "\u788E\u96EA\u56DE\u98CE"
     Content: "\u6D41\u5149\u5F15\u83B7\u5F97\u51B0\u5143\u7D20\u52A0\u6210\uFF0C\u53EF\u9020\u6210\u51CF\u901F\uFF0C\u653B\u51FB\u529B\u589E\u52A0"
     Value: 20
     Quality: "\u4F20\u8BF4"
+    Effects:
+    - rid: 4210315237150425119
+    - rid: 4210315237150425120
     Stackable: 0
   cardsEX_BingNv:
   - Name: "\u51E4\u7FBD\u6D41\u706B"
     Content: "\u5F52\u7FCE\u83B7\u5F97\u706B\u5143\u7D20\u52A0\u6210"
     Value: 20
     Quality: "\u4F20\u8BF4"
+    Effects:
+    - rid: 4210315237150425121
+    - rid: 4210315237150425122
     Stackable: 0
   - Name: "\u6728\u7FCE\u56DE\u6625"
     Content: "\u5F52\u7FCE\u83B7\u5F97\u8349\u5143\u7D20\u52A0\u6210"
     Value: 2
     Quality: "\u4F20\u8BF4"
+    Effects:
+    - rid: 4210315237150425123
+    - rid: 4210315237150425124
     Stackable: 0
   - Name: "\u96F7\u7FCE\u60CA\u9E3F"
     Content: "\u5F52\u7FCE\u83B7\u5F97\u7535\u5143\u7D20\u52A0\u6210"
     Value: 20
     Quality: "\u4F20\u8BF4"
+    Effects:
+    - rid: 4210315237150425125
+    - rid: 4210315237150425126
     Stackable: 0
   - Name: "\u53E0\u7FBD\u8FFD\u98CE"
     Content: "\u5F52\u7FCE\u73B0\u5728\u53EF\u4EE5\u8FDE\u5C04\uFF0C\u8FDE\u5C04\u6B21\u6570\u589E\u52A0"
     Value: 1
     Quality: "\u4F20\u8BF4"
+    Effects:
+    - rid: 4210315237150425127
     Stackable: 1
   - Name: "\u7A7F\u6797\u6253\u53F6"
     Content: "\u5F52\u7FCE\u9501\u5B9A\u76EE\u6807\u589E\u52A0"
     Value: 1
     Quality: "\u4F20\u8BF4"
+    Effects:
+    - rid: 4210315237150425128
     Stackable: 1
   - Name: "\u4E00\u7FBD\u5343\u7FCE"
     Content: "\u5F52\u7FCE\u73B0\u5728\u53EF\u4EE5\u5206\u88C2\uFF0C\u5206\u88C2\u6B21\u6570\u589E\u52A0"
     Value: 1
     Quality: "\u4F20\u8BF4"
+    Effects:
+    - rid: 4210315237150425129
     Stackable: 1
+  references:
+    version: 2
+    RefIds:
+    - rid: 4210315237150425112
+      type: {class: AddMaxAttackCountEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      data:
+        value: 1
+    - rid: 4210315237150425113
+      type: {class: AddComboCountEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      data:
+        value: 1
+    - rid: 4210315237150425114
+      type: {class: SwitchElementEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      data:
+        element: 1
+    - rid: 4210315237150425115
+      type: {class: AddAttackPowerEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      data:
+        value: 20
+    - rid: 4210315237150425116
+      type: {class: SwitchElementEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      data:
+        element: 3
+    - rid: 4210315237150425117
+      type: {class: AddHealthRecoverEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      data:
+        value: 2
+    - rid: 4210315237150425118
+      type: {class: SetSplitEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        splitCount: 1
+    - rid: 4210315237150425119
+      type: {class: SwitchElementEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      data:
+        element: 2
+    - rid: 4210315237150425120
+      type: {class: AddAttackPowerEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      data:
+        value: 20
+    - rid: 4210315237150425121
+      type: {class: AddAttackPowerEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      data:
+        value: 20
+    - rid: 4210315237150425122
+      type: {class: UnlockElementEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      data:
+        element: 4
+    - rid: 4210315237150425123
+      type: {class: AddHealthRecoverEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      data:
+        value: 2
+    - rid: 4210315237150425124
+      type: {class: UnlockElementEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      data:
+        element: 3
+    - rid: 4210315237150425125
+      type: {class: UnlockElementEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      data:
+        element: 1
+    - rid: 4210315237150425126
+      type: {class: AddAttackPowerEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      data:
+        value: 20
+    - rid: 4210315237150425127
+      type: {class: AddComboCountEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      data:
+        value: 1
+    - rid: 4210315237150425128
+      type: {class: AddMultiTargetCountEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      data:
+        value: 1
+    - rid: 4210315237150425129
+      type: {class: SetSplitEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        splitCount: 1

@@ -108,5 +108,25 @@ namespace Controllers.Enemy
 
         /// <summary>Boss 是否已出现</summary>
         public static bool IsBossPhase(float currentTime) => currentTime >= BossSpawnTime;
+
+        // ── Dragon 生成概率 ──
+        private const float DragonPeakTime = 480f;       // 8 分钟达到峰值
+        private const float DragonInitialProbability = 0.05f;  // 初始 5%
+        private const float DragonPeakProbability = 0.30f;     // 峰值 30%
+
+        /// <summary>
+        /// 根据当前游戏时间计算 Dragon 生成概率
+        /// 0s: 5%（初始）
+        /// 0~480s(8min): 5% → 30% 线性增长
+        /// 480s+: 维持 30%
+        /// </summary>
+        public static float GetDragonSpawnProbability(float currentTime)
+        {
+            if (currentTime >= DragonPeakTime)
+                return DragonPeakProbability;
+
+            float progress = currentTime / DragonPeakTime;
+            return Mathf.Lerp(DragonInitialProbability, DragonPeakProbability, progress);
+        }
     }
 }

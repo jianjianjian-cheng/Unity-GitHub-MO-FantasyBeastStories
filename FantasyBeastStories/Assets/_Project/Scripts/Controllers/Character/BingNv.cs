@@ -116,7 +116,7 @@ namespace Controllers.Character
         /// 解锁新元素（BingNv 可同时拥有多种元素，不同于 WizardBoy 的替换模式）
         /// 已解锁则跳过，未解锁则注册对象池 + 网络同步
         /// </summary>
-        private void UnlockElement(Element element)
+        protected override void UnlockElement(Element element)
         {
             if (!_unlockedElements.Add(element))
                 return; // 已解锁，跳过
@@ -163,41 +163,6 @@ namespace Controllers.Character
                     NetworkServiceLocator.ObjectService.GetViewID(gameObject),
                     (int)element
                 );
-            }
-        }
-
-        // ========== 卡牌效果 ==========
-
-        protected override void OnApplicationCard(CardConfigBase card)
-        {
-            base.OnApplicationCard(card);
-
-            // TODO: 冰女专属卡牌效果
-            switch (card.Name)
-            {
-                case "凤羽流火":
-                    attributePlayer.AddAttackPower(card.Value);
-                    UnlockElement(Element.Fire);
-                    break;
-                case "木翎回春":
-                    movementData.healthRecover += card.Value;
-                    attributePlayer.SetHealthRecover(movementData.healthRecover);
-                    UnlockElement(Element.Grass);
-                    break;
-                case "雷翎惊鸿":
-                    UnlockElement(Element.Lightning);
-                    attributePlayer.AddAttackPower(card.Value);
-                    break;
-                case "叠羽追风":
-                    attributePlayer.AddComboCount(card.Value);
-                    break;
-                case "穿林打叶":
-                    attributePlayer.AddMultiTargetCount(card.Value);
-                    break;
-                case "一羽千翎":
-                    attributePlayer.AddSplitCount(card.Value);
-                    attributePlayer.SetSplit(true);
-                    break;
             }
         }
 

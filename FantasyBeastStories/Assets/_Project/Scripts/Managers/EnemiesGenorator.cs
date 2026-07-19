@@ -22,6 +22,13 @@ namespace Managers
         [SerializeField, Tooltip("该生成器专属对象池的预创建数量（骷髅敌人数量多建议 20-30）")]
         private int poolPreloadCount = 25;
 
+        [Header("Dragon 生成设置")]
+        [SerializeField, Tooltip("Dragon 预制体（留空则不生成 Dragon）")]
+        private GameObject dragonPrefab;
+
+        [SerializeField, Tooltip("Dragon 对象池预创建数量")]
+        private int dragonPoolPreloadCount = 10;
+
         [Header("生成间隔设置")]
         [SerializeField, Tooltip("初始生成间隔（秒）")]
         private float baseSpawnInterval = 10f;
@@ -30,7 +37,9 @@ namespace Managers
         private float minSpawnInterval = 1.5f;
 
         private string actualPoolName;
+        private string dragonPoolName;
         private bool isPoolRegistered = false;
+        private bool isDragonPoolRegistered = false;
         private bool isPhotonReady = false;
         private float spawnInterval;
         private float updateSpawnInterval = 30f;
@@ -48,10 +57,19 @@ namespace Managers
             else
                 actualPoolName = poolName;
 
+            dragonPoolName = PoolConst.Dragon;
+
             if (NetworkObjectPoolManager.instance != null && testPrefab != null)
             {
                 NetworkObjectPoolManager.instance.RegisterPool(actualPoolName, testPrefab, poolPreloadCount);
                 isPoolRegistered = true;
+            }
+
+            // 注册 Dragon 池（如果配置了预制体且池尚未注册）
+            if (NetworkObjectPoolManager.instance != null && dragonPrefab != null)
+            {
+                NetworkObjectPoolManager.instance.RegisterPool(dragonPoolName, dragonPrefab, dragonPoolPreloadCount);
+                isDragonPoolRegistered = true;
             }
 
             spawnInterval = baseSpawnInterval;
@@ -108,9 +126,6 @@ namespace Managers
                 float currentTime = timeManager != null ? timeManager.GetCurrentTime() : 0f;
 
                 // 基础间隔 × 间隔倍率（1/数量倍率）
-                // 数量倍率 1x → 间隔倍率 1.0（10s）
-                // 数量倍率 2x → 间隔倍率 0.5（5s）
-                // 数量倍率 0.5x → 间隔倍率 2.0（20s，Boss出现后减速）
                 float intervalMultiplier = EnemyScalingCalculator.GetSpawnIntervalMultiplier(currentTime);
                 spawnInterval = baseSpawnInterval * intervalMultiplier;
 
@@ -131,29 +146,70 @@ namespace Managers
             if (_countMonitor == null)
                 _countMonitor = ServiceLocator.Get<MonsterCountMonitor>();
 
-            // 获取当前数量倍率，动态调整 maxCount 上限
+            // 获取当前游戏时间
             var timeManager = ServiceLocator.Get<SyncedGameTimeManager>();
             float currentTime = timeManager != null ? timeManager.GetCurrentTime() : 0f;
             float countMultiplier = EnemyScalingCalculator.GetCountMultiplier(currentTime);
 
+            // 决定生成 Skeleton 还是 Dragon
+            bool spawnDragon = false;
+            if (isDragonPoolRegistered || dragonPrefab != null)
+            {
+                float dragonProbability = EnemyScalingCalculator.GetDragonSpawnProbability(currentTime);
+                spawnDragon = Random.value <= dragonProbability;
+            }
+
+            string targetPoolName = spawnDragon ? dragonPoolName : actualPoolName;
+
+            // 检查目标池的数量上限
             int baseMaxCount = _countMonitor != null
-                ? _countMonitor.GetMaxCount(actualPoolName)
+                ? _countMonitor.GetMaxCount(targetPoolName)
                 : -1;
 
             if (baseMaxCount > 0)
             {
                 // 动态上限 = 配置上限 × 数量倍率
                 int dynamicMaxCount = Mathf.RoundToInt(baseMaxCount * countMultiplier);
-                int currentCount = _countMonitor.GetCount(actualPoolName);
+                int currentCount = _countMonitor.GetCount(targetPoolName);
                 if (currentCount >= dynamicMaxCount)
                 {
-                    return;
+                    // Dragon 池满了，尝试生成 Skeleton
+                    if (spawnDragon)
+                    {
+                        targetPoolName = actualPoolName;
+                        baseMaxCount = _countMonitor != null
+                            ? _countMonitor.GetMaxCount(targetPoolName)
+                            : -1;
+                        if (baseMaxCount > 0)
+                        {
+                            dynamicMaxCount = Mathf.RoundToInt(baseMaxCount * countMultiplier);
+                            currentCount = _countMonitor.GetCount(targetPoolName);
+                            if (currentCount >= dynamicMaxCount)
+                                return;
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
                 }
             }
 
-            if (!isPoolRegistered)
+            // 确保 Dragon 池已注册（延迟注册）
+            if (spawnDragon && !isDragonPoolRegistered)
             {
-                Debug.LogWarning($"[EnemiesGenorator] {gameObject.name} 对象池未注册，尝试延迟注册");
+                if (NetworkObjectPoolManager.instance != null && dragonPrefab != null)
+                {
+                    NetworkObjectPoolManager.instance.RegisterPool(dragonPoolName, dragonPrefab, dragonPoolPreloadCount);
+                    isDragonPoolRegistered = true;
+                }
+                else
+                    return;
+            }
+
+            // 确保 Skeleton 池已注册（延迟注册）
+            if (!spawnDragon && !isPoolRegistered)
+            {
                 if (NetworkObjectPoolManager.instance != null && testPrefab != null)
                 {
                     NetworkObjectPoolManager.instance.RegisterPool(actualPoolName, testPrefab, poolPreloadCount);
@@ -164,7 +220,7 @@ namespace Managers
             }
 
             EventChannelLocator.MainContainer.poolOperationChannel.Raise(
-                PoolOperationData.CreateSpawn(actualPoolName, transform.position, Quaternion.identity, null));
+                PoolOperationData.CreateSpawn(targetPoolName, transform.position, Quaternion.identity, null));
         }
     }
 }

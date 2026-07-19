@@ -242,10 +242,13 @@ namespace Controllers.Character
 
         public void Damage(float damage)
         {
+            if (isDead) return;
+
             currentHealth -= damage;
-            if (currentHealth < 0)
+            if (currentHealth <= 0)
             {
                 currentHealth = 0;
+                isDead = true;
             }
         }
 

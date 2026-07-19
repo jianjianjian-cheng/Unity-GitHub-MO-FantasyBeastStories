@@ -132,6 +132,12 @@ namespace Controllers.Network
             PlayerController.HandleSyncPlayerElement(actorNumber, elementInt);
         }
 
+        [PunRPC]
+        public void NoticePlayerDeath(int actorNumber)
+        {
+            PlayerController.HandlePlayerDeath(actorNumber);
+        }
+
         // ============================================================
         // WizardBoy RPC
         // ============================================================

@@ -76,3 +76,6 @@ MonoBehaviour:
   - poolName: GuiLingHitGrassPool
     prefab: {fileID: 8625811315627341284, guid: 720b95ce4539ed745bfa246beaf35137, type: 3}
     preloadCount: 30
+  - poolName: PowerUpItemPool
+    prefab: {fileID: 7622542398747158728, guid: 3396ca5f12c9b7a41a86755fd762589d, type: 3}
+    preloadCount: 5

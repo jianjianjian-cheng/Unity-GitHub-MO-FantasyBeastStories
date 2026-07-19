@@ -17,7 +17,7 @@ using Managers;
 
 namespace Controllers.Character
 {
-  public class PlayerController : MonoBehaviour
+  public class PlayerController : MonoBehaviour, ICardEffectContext
   {
     [Header("纯数据")]
     [SerializeField]
@@ -31,6 +31,12 @@ namespace Controllers.Character
 
     [SerializeField]
     protected GameObject virtualCamera; // 虚拟摄像机组件
+
+    [SerializeField]
+    protected SpectatorCameraController spectatorCameraController; // 观战摄像机控制器
+
+    [SerializeField]
+    protected GameObject deathEffectPrefab; // 死亡特效预制体
 
     [Header("移动设置")]
     [SerializeField]
@@ -127,6 +133,11 @@ namespace Controllers.Character
       {
         return; // 如果只显示角色，不处理输入
       }
+      // 死亡后不处理输入
+      if (attributePlayer.GetIsDead())
+      {
+        return;
+      }
       if (!NetworkServiceLocator.PlayerService.IsOwnerOf(gameObject) && !EventChannelLocator.MainContainer.gameSettings.IsTest)
       {
         return; // 只处理本地玩家的输入和动画
@@ -159,6 +170,9 @@ namespace Controllers.Character
       {
         return; // 只处理本地玩家的输入和动画
       }
+      // 死亡后停止物理移动
+      if (attributePlayer.GetIsDead())
+        return;
       // 物理移动
       MoveCharacter();
     }
@@ -330,6 +344,11 @@ namespace Controllers.Character
       attributePlayer.Damage(finalDamage);
       // 触发HP变化事件
       SetAndChangeHPUI();
+      // 检查死亡
+      if (attributePlayer.GetIsDead())
+      {
+        HandleDeath();
+      }
       // 通知其他玩家我受到了伤害
       if (EventChannelLocator.MainContainer.gameSettings.IsTest)
         return;
@@ -339,6 +358,145 @@ namespace Controllers.Character
     protected virtual int CalculateFinalDamage(int damage)
     {
       return damage - (int)attributePlayer.GetDefensePower();
+    }
+
+    // ==================== 死亡处理 ====================
+
+    /// <summary>
+    /// 本地玩家死亡处理：仅由拥有者客户端执行
+    /// </summary>
+    protected virtual void HandleDeath()
+    {
+      // 禁用输入和移动
+      movementData.movementDirection = Vector3.zero;
+      if (rb != null)
+      {
+        rb.velocity = Vector3.zero;
+        rb.isKinematic = true;
+      }
+
+      // 禁用碰撞器（敌人不再攻击尸体）
+      DisableColliders();
+
+      // 禁用攻击组件（停止攻击）
+      DisableAttackComponents();
+
+      // 生成死亡特效
+      if (deathEffectPrefab != null)
+      {
+        GameObject effect = Instantiate(deathEffectPrefab, transform.position, transform.rotation);
+        Destroy(effect, 5f);
+      }
+
+      // 立即隐藏角色可视网格
+      HideVisual();
+
+      // 隐藏本地玩家血条UI
+      if (UI.TeamUIManager.instance != null)
+        UI.TeamUIManager.instance.HideLocalPlayerHP();
+
+      // 从敌人目标列表中移除
+      if (PlayerManager.instance != null)
+      {
+        PlayerManager.instance.UnregisterPlayerObject(gameObject);
+        PlayerManager.instance.SetPlayerDead(
+            NetworkServiceLocator.ObjectService.GetOwnerActorNumber(this).ToString());
+      }
+
+      // 通知其他客户端该玩家死亡
+      if (!EventChannelLocator.MainContainer.gameSettings.IsTest)
+      {
+        NetworkServiceLocator.DomainRpcService?.InvokeRPC(
+            "NoticePlayerDeath",
+            NetworkTarget.Others,
+            NetworkServiceLocator.PlayerService.GetLocalActorNumber()
+        );
+      }
+
+      // 激活观战模式
+      spectatorCameraController?.ActivateSpectator();
+    }
+
+    protected virtual void DisableColliders()
+    {
+      var colliders = GetComponentsInChildren<Collider>();
+      foreach (var col in colliders)
+        col.enabled = false;
+    }
+
+    protected virtual void DisableAttackComponents()
+    {
+      // 禁用所有攻击范围组件，停止攻击
+      foreach (var mb in GetComponentsInChildren<MonoBehaviour>())
+      {
+        if (mb is Controllers.Combat.AttackRangeBase)
+          mb.enabled = false;
+      }
+    }
+
+    protected virtual void HideVisual()
+    {
+      foreach (var r in GetComponentsInChildren<SkinnedMeshRenderer>())
+        r.enabled = false;
+      // 隐藏世界空间 UI（玩家名字、准备图标等）
+      foreach (var canvas in GetComponentsInChildren<Canvas>())
+        canvas.enabled = false;
+    }
+
+    /// <summary>
+    /// 由 DomainRpcBridge.NoticePlayerDeath 调用
+    /// 在非拥有者客户端上标记该玩家死亡，并隐藏视觉、禁用碰撞器
+    /// </summary>
+    public static void HandlePlayerDeath(int actorNumber)
+    {
+      string playerId = actorNumber.ToString();
+
+      if (PlayerManager.instance != null)
+      {
+        PlayerManager.instance.SetPlayerDead(playerId);
+
+        // 从敌人目标列表中移除该玩家的 GameObject，并禁用碰撞器、隐藏视觉
+        foreach (var go in PlayerManager.instance.ActivePlayerObjects)
+        {
+          if (go == null) continue;
+          int ownerActor = NetworkServiceLocator.ObjectService.GetOwnerActorNumber(go.transform);
+          if (ownerActor == actorNumber)
+          {
+            PlayerManager.instance.UnregisterPlayerObject(go);
+
+            // 禁用碰撞器（敌人不再攻击/追踪尸体）
+            foreach (var col in go.GetComponentsInChildren<Collider>())
+              col.enabled = false;
+
+            // 隐藏角色可视网格
+            foreach (var r in go.GetComponentsInChildren<SkinnedMeshRenderer>())
+              r.enabled = false;
+
+            // 隐藏世界空间 UI（玩家名字等）
+            foreach (var canvas in go.GetComponentsInChildren<Canvas>())
+              canvas.enabled = false;
+
+            // 停止物理模拟
+            var rb = go.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+              rb.velocity = Vector3.zero;
+              rb.isKinematic = true;
+            }
+
+            break;
+          }
+        }
+      }
+
+      // 更新该玩家的 AttributePlayerBase.isDead
+      var query = new PlayerAttributeData(PlayerAttributeQueryType.GetAttributeById)
+      {
+        playerId = playerId,
+        attributeName = AttributeKeyConst.Main
+      };
+      EventChannelLocator.MainContainer.playerAttributeChannel.Raise(query);
+      query.attribute?.SetIsDead(true);
     }
 
     // ---- 静态 Handler 方法（供 DomainRpcBridge 调用） ----
@@ -407,6 +565,24 @@ namespace Controllers.Character
         );
     }
 
+    /// <summary>
+    /// 解锁元素 — 默认委托给 SwitchElement，子类（如 BingNv）可重写为多元素解锁逻辑
+    /// </summary>
+    protected virtual void UnlockElement(Element element)
+    {
+      SwitchElement(element);
+    }
+
+    // ==================== ICardEffectContext 显式实现 ====================
+
+    AttributePlayerBase ICardEffectContext.Attributes => attributePlayer;
+    PlayerMovementData ICardEffectContext.Movement => movementData;
+    void ICardEffectContext.SwitchElement(Element element) => SwitchElement(element);
+    void ICardEffectContext.UnlockElement(Element element) => UnlockElement(element);
+    void ICardEffectContext.RefreshHPUI() => SetAndChangeHPUI();
+    void ICardEffectContext.RaiseSkillQuery(SkillQueryData data)
+        => EventChannelLocator.MainContainer.skillQueryChannel.Raise(data);
+
     protected virtual void OnApplicationCard(CardConfigBase card)
     {
       if (!EventChannelLocator.MainContainer.gameSettings.IsTest)
@@ -418,90 +594,13 @@ namespace Controllers.Character
       }
       Debug.LogWarning("应用了卡牌效果：" + card.Name + ":" + card.Content + card.Value);
 
-      switch (card.Name)
+      if (card.Effects != null && card.Effects.Count > 0)
       {
-        //以下是所有角色公用的卡牌效果
-        //------普通品质-------
-        case "锋利的短剑":
-          attributePlayer.AddAttackPower(card.Value);
-          break;
-        case "饱满的生命":
-          attributePlayer.AddMaxHealth(card.Value);
-          SetAndChangeHPUI();
-          break;
-        case "温暖的篝火":
-          movementData.healthRecover += card.Value;
-          attributePlayer.SetHealthRecover(movementData.healthRecover);
-          break;
-        case "敏锐的直觉":
-          attributePlayer.AddCriticalChance(card.Value);
-          break;
-        case "坚韧的意志":
-          attributePlayer.AddDefensePower(card.Value);
-          break;
-        case "涌动的暗劲":
-          attributePlayer.AddCriticalMultiplier(card.Value);
-          break;
-        case "迅捷的手腕":
-          attributePlayer.ReduceAttackInterval(card.Value);
-          break;
-        case "稚嫩四叶草":
-          EventChannelLocator.MainContainer.skillQueryChannel.Raise(new SkillQueryData(SkillQueryType.AddLuckRate, card.Value));
-          break;
-        //------史诗品质-------
-        case "锐利的狼牙":
-          attributePlayer.AddAttackPower(card.Value);
-          break;
-        case "不朽的壁垒":
-          attributePlayer.AddDefensePower(card.Value);
-          break;
-        case "巨人的血脉":
-          attributePlayer.AddMaxHealth(card.Value);
-          SetAndChangeHPUI();
-          break;
-        case "涌动的生机":
-          movementData.healthRecover += card.Value;
-          attributePlayer.SetHealthRecover(movementData.healthRecover);
-          break;
-        case "鹰眼的凝视":
-          attributePlayer.AddCriticalChance(card.Value);
-          break;
-        case "断罪的裁决":
-          attributePlayer.AddCriticalMultiplier(card.Value);
-          break;
-        case "狂乱的舞步":
-          attributePlayer.ReduceAttackInterval(card.Value);
-          break;
-        case "青年四叶草":
-          EventChannelLocator.MainContainer.skillQueryChannel.Raise(new SkillQueryData(SkillQueryType.AddLuckRate, card.Value));
-          break;
-        //------传说品质-------
-        case "弑神的魔剑":
-          attributePlayer.AddAttackPower(card.Value);
-          break;
-        case "圣光的庇护":
-          attributePlayer.AddDefensePower(card.Value);
-          break;
-        case "永恒的生命":
-          attributePlayer.AddMaxHealth(card.Value);
-          SetAndChangeHPUI();
-          break;
-        case "神愈的圣光":
-          movementData.healthRecover += card.Value;
-          attributePlayer.SetHealthRecover(movementData.healthRecover);
-          break;
-        case "必然的邂逅":
-          attributePlayer.AddCriticalChance(card.Value);
-          break;
-        case "终末的号角":
-          attributePlayer.AddCriticalMultiplier(card.Value);
-          break;
-        case "极限的超越":
-          attributePlayer.ReduceAttackInterval(card.Value);
-          break;
-        case "幸运四叶草":
-          EventChannelLocator.MainContainer.skillQueryChannel.Raise(new SkillQueryData(SkillQueryType.AddLuckRate, card.Value));
-          break;
+        foreach (var effect in card.Effects)
+        {
+          if (effect != null)
+            effect.Apply(this);
+        }
       }
     }
 

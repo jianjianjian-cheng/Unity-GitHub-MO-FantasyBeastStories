@@ -181,27 +181,46 @@ namespace Managers
             StartCoroutine(DelayedLobbyTransition());
         }
 
-        private IEnumerator DelayedLobbyTransition()
+        /// <summary>
+        /// 公开入口：触发延迟返回大厅流程（供 SpectatorCameraController 全灭时调用）
+        /// </summary>
+        /// <param name="delay">延迟秒数，默认10秒</param>
+        public void TriggerLobbyTransition(float delay = 10f)
         {
-            // 延迟10秒，让玩家观看死亡演出 + 结算缓冲
-            yield return new WaitForSeconds(10f);
+            Debug.Log($"[GameManager] TriggerLobbyTransition 收到全灭信号，{delay}秒后返回大厅...");
+            StartCoroutine(DelayedLobbyTransition(delay));
+        }
+
+        private IEnumerator DelayedLobbyTransition(float delay = 10f)
+        {
+            // 延迟，让玩家观看死亡演出 + 结算缓冲
+            yield return new WaitForSeconds(delay);
 
             // ★ 返回大厅前自动保存（对局结算数据）
             if (SaveManager.Instance != null)
                 SaveManager.Instance.SaveGame();
 
             Debug.Log("[GameManager] 正在返回大厅...");
-            // 加载大厅场景（场景索引1）
+
             if (EventChannelLocator.MainContainer.gameSettings.IsTest)
             {
                 SceneManager.LoadScene(1);
             }
+            else if (NetworkServiceLocator.PlayerService.IsMasterClient)
+            {
+                // 房主通过 RPC 通知所有客户端播放加载动画并返回大厅
+                NetworkServiceLocator.ObjectService.InvokeRPC(
+                    AppRpcBridge.Instance,
+                    "RPC_ReturnToLobby",
+                    NetworkTarget.All
+                );
+            }
             else
             {
-                if (NetworkServiceLocator.PlayerService.IsMasterClient)
-                {
-                    NetworkServiceLocator.ObjectPoolService.ReturnToLobby();
-                }
+                // 非主机：播放加载动画，等待房主同步场景
+                if (Loading.Instance != null)
+                    yield return Loading.Instance.Show();
+                Debug.Log("[GameManager] 非主机等待房主同步场景...");
             }
         }
         #endregion

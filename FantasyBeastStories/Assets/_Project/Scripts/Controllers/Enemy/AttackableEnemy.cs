@@ -77,6 +77,14 @@ namespace Controllers.Enemy
         {
             base.Start();
             navMeshAgent = GetComponent<NavMeshAgent>();
+
+            // 从 SO 配置读取攻击参数
+            if (enemyConfig != null)
+            {
+                attackInterval = enemyConfig.attackInterval;
+                attackRange = enemyConfig.attackRange;
+            }
+
             if (navMeshAgent != null)
             {
                 navMeshAgent.speed = enemyData.attribute.moveSpeed;
@@ -295,8 +303,8 @@ namespace Controllers.Enemy
             EventChannelLocator.MainContainer.timeQueryChannel?.Query(timeQuery);
             float currentTime = timeQuery.currentTime;
 
-            // 基础血量（与 EnemyBase.Awake 中一致）
-            const float baseMaxHealth = 500f;
+            // 基础血量从 SO 配置读取
+            float baseMaxHealth = enemyConfig != null ? enemyConfig.maxHealth : 500f;
 
             // 根据游戏时间计算血量倍率（1x → 4x，Boss 出现后回落至 1x）
             float hpMultiplier = EnemyScalingCalculator.GetHpMultiplier(currentTime);
@@ -322,8 +330,19 @@ namespace Controllers.Enemy
 
         protected override void UpdateRun()
         {
+            // 重新评估目标，确保已被移除的死亡玩家不再被追踪
+            TrackPlayer();
+
             if (PlayerTarget == null)
+            {
+                // 所有玩家死亡：停止移动，保持在 Run 状态（不切换 Idle）
+                if (navMeshAgent != null && navMeshAgent.isActiveAndEnabled && navMeshAgent.isOnNavMesh)
+                {
+                    navMeshAgent.isStopped = true;
+                    navMeshAgent.velocity = Vector3.zero;
+                }
                 return;
+            }
 
             if (GamePauseManager.isPaused)
                 return;

@@ -5,6 +5,9 @@ using Core;
 using Controllers.Services;
 using Managers;
 using Controllers.Item;
+using Controllers.Player;
+using Controllers.Network;
+using NetworkTarget = Controllers.Network.NetworkTarget;
 using Photon.Pun;
 
 namespace Controllers.PowerUp
@@ -12,6 +15,8 @@ namespace Controllers.PowerUp
     /// <summary>
     /// 道具管理器 - 单例服务
     /// 职责：道具生成、生命周期管理、随机掉落
+    /// 联机模式下采用非网络化方案（与经验球一致）：
+    ///   房主生成 itemId → 广播 RPC → 各客户端本地生成 → 拾取时广播回收
     /// </summary>
     public class PowerUpManager : MonoBehaviour, IPowerUpService
     {
@@ -30,6 +35,13 @@ namespace Controllers.PowerUp
         private List<GameObject> activePowerUps = new List<GameObject>();
         private float spawnTimer;
         private ObjectPoolManager poolManager;
+
+        // ========== 道具非网络化（与经验球方案二一致） ==========
+        /// <summary>下一个可用的 itemId 自增计数器（仅房主使用）</summary>
+        private uint nextPowerUpId = 1;
+
+        /// <summary>当前活跃的本地道具映射 itemId → GameObject（所有客户端使用）</summary>
+        private Dictionary<uint, GameObject> activePowerUpsById = new Dictionary<uint, GameObject>();
 
         private void Awake()
         {
@@ -55,11 +67,17 @@ namespace Controllers.PowerUp
             if (!autoSpawn) return;
 
             spawnTimer += UnityEngine.Time.deltaTime;
-            if (spawnTimer >= spawnTimer && activePowerUps.Count < maxActivePowerUps)
+            if (spawnTimer >= spawnInterval && activePowerUps.Count < maxActivePowerUps)
             {
                 SpawnRandomPowerUp(GetRandomPosition());
                 spawnTimer = 0f;
             }
+        }
+
+        /// <summary>生成一个全局唯一的 itemId（仅房主调用）</summary>
+        public uint GeneratePowerUpId()
+        {
+            return nextPowerUpId++;
         }
 
         public void SpawnPowerUp(PowerUpDataSO data, Vector3 position)
@@ -70,18 +88,23 @@ namespace Controllers.PowerUp
                 return;
             }
 
-            var obj = poolManager?.GetFromPoolAndActivate(PoolConst.PowerUpItem, position);
-            if (obj == null)
+            bool isTest = EventChannelLocator.MainContainer?.gameSettings?.IsTest ?? true;
+
+            if (isTest)
             {
-                obj = Instantiate(powerUpPrefab, position, Quaternion.identity);
+                // 测试模式：直接本地生成
+                SpawnLocalPowerUp(0, position, data);
+                return;
             }
 
-            var powerUp = obj.GetComponent<PowerUpItemBase>();
-            if (powerUp != null)
+            // 联机模式：仅房主生成 itemId 并广播 RPC 到所有客户端
+            if (NetworkServiceLocator.PlayerService.IsMasterClient)
             {
-                powerUp.Setup(data);
-                activePowerUps.Add(obj);
-                Debug.Log($"[PowerUpManager] 生成道具: {data.itemName} at {position}");
+                uint itemId = GeneratePowerUpId();
+                int itemIndex = availablePowerUps.IndexOf(data);
+                NetworkServiceLocator.ObjectService.InvokeRPC(
+                    AppRpcBridge.Instance, "RPC_SpawnPowerUp",
+                    NetworkTarget.All, (int)itemId, position, itemIndex);
             }
         }
 
@@ -89,8 +112,26 @@ namespace Controllers.PowerUp
         {
             if (availablePowerUps.Count == 0) return;
 
-            var randomData = GetWeightedRandom();
-            SpawnPowerUp(randomData, position);
+            bool isTest = EventChannelLocator.MainContainer?.gameSettings?.IsTest ?? true;
+
+            if (isTest)
+            {
+                // 测试模式：直接本地生成
+                var randomData = GetWeightedRandom();
+                SpawnLocalPowerUp(0, position, randomData);
+                return;
+            }
+
+            // 联机模式：仅房主选择道具类型并广播
+            if (NetworkServiceLocator.PlayerService.IsMasterClient)
+            {
+                var randomData = GetWeightedRandom();
+                uint itemId = GeneratePowerUpId();
+                int itemIndex = availablePowerUps.IndexOf(randomData);
+                NetworkServiceLocator.ObjectService.InvokeRPC(
+                    AppRpcBridge.Instance, "RPC_SpawnPowerUp",
+                    NetworkTarget.All, (int)itemId, position, itemIndex);
+            }
         }
 
         public int GetActivePowerUpCount() => activePowerUps.Count;
@@ -103,7 +144,13 @@ namespace Controllers.PowerUp
                     poolManager?.ReturnToPool(PoolConst.PowerUpItem, obj);
             }
             activePowerUps.Clear();
+            activePowerUpsById.Clear();
             Debug.Log("[PowerUpManager] 清除所有道具");
+        }
+
+        public void RemoveFromActiveList(GameObject obj)
+        {
+            activePowerUps.Remove(obj);
         }
 
         private PowerUpDataSO GetWeightedRandom()
@@ -131,33 +178,112 @@ namespace Controllers.PowerUp
             return new Vector3(randomCircle.x, 0, randomCircle.y);
         }
 
-        public void RemoveFromActiveList(GameObject obj)
+        // ============================================================
+        // 道具非网络化 RPC 处理（与经验球方案二一致）
+        // ============================================================
+
+        /// <summary>
+        /// 由 AppRpcBridge.RPC_SpawnPowerUp 调用
+        /// 每个客户端在本地生成一个道具（非网络对象）
+        /// </summary>
+        public static void HandleSpawnPowerUpRPC(uint itemId, Vector3 position, int itemIndex)
         {
-            activePowerUps.Remove(obj);
+            if (Instance == null) return;
+            Instance.SpawnLocalPowerUp(itemId, position,
+                itemIndex >= 0 && itemIndex < Instance.availablePowerUps.Count
+                    ? Instance.availablePowerUps[itemIndex]
+                    : null);
         }
 
         /// <summary>
-        /// RPC回调：处理道具被拾取的网络同步
+        /// 由 AppRpcBridge.RPC_CollectPowerUp 调用
+        /// 所有客户端隐藏对应的本地道具
         /// </summary>
-        public static void HandleCollectPowerUpRPC(int viewId)
+        public static void HandleCollectPowerUpRPC(uint itemId)
         {
-            if (Instance == null)
+            if (Instance == null) return;
+            Instance.HideLocalPowerUp(itemId);
+        }
+
+        /// <summary>
+        /// RPC回调：所有客户端执行经验球飞向拾取者的动画
+        /// </summary>
+        public static void HandleMagnetCollectExpBallsRPC(int collectorActorNumber, float delay, float speed)
+        {
+            if (Instance == null) return;
+
+            GameObject collector = null;
+            if (PlayerManager.instance != null)
             {
-                Debug.LogWarning("[PowerUpManager] 实例不存在，无法处理RPC");
+                foreach (var go in PlayerManager.instance.ActivePlayerObjects)
+                {
+                    if (go == null) continue;
+                    int ownerActor = NetworkServiceLocator.ObjectService.GetOwnerActorNumber(go.transform);
+                    if (ownerActor == collectorActorNumber)
+                    {
+                        collector = go;
+                        break;
+                    }
+                }
+            }
+            if (collector == null)
+            {
+                Debug.LogWarning("[PowerUpManager] 经验磁铁：未找到拾取者 GameObject");
                 return;
             }
 
-            PhotonView pv = PhotonView.Find(viewId);
-            if (pv != null)
+            bool isCollector = collectorActorNumber == NetworkServiceLocator.PlayerService.GetLocalActorNumber();
+            Instance.StartCoroutine(
+                ExperienceMagnetEffect.FlyAllBallsToCollector(collector, isCollector, delay, speed));
+        }
+
+        // ── 实例方法 ──
+
+        private void SpawnLocalPowerUp(uint itemId, Vector3 position, PowerUpDataSO data)
+        {
+            if (data == null)
             {
-                var powerUp = pv.GetComponent<PowerUpItemBase>();
-                if (powerUp != null)
-                {
-                    Instance.activePowerUps.Remove(powerUp.gameObject);
-                    Instance.poolManager?.ReturnToPool(PoolConst.PowerUpItem, powerUp.gameObject);
-                    Debug.Log($"[PowerUpManager] RPC同步：道具已回收，ViewID={viewId}");
-                }
+                Debug.LogWarning("[PowerUpManager] 道具数据为空，跳过生成");
+                return;
             }
+
+            var obj = poolManager?.GetFromPoolAndActivate(PoolConst.PowerUpItem, position);
+            if (obj == null)
+            {
+                obj = Instantiate(powerUpPrefab, position, Quaternion.identity);
+            }
+
+            var powerUp = obj.GetComponent<PowerUpItemBase>();
+            if (powerUp != null)
+            {
+                powerUp.SetupWithId(itemId, data);
+                activePowerUps.Add(obj);
+                activePowerUpsById[itemId] = obj;
+                Debug.Log($"[PowerUpManager] 生成道具: {data.itemName} at {position}, itemId={itemId}");
+            }
+        }
+
+        private void HideLocalPowerUp(uint itemId)
+        {
+            if (!activePowerUpsById.TryGetValue(itemId, out var obj))
+            {
+                // 道具可能已被拾取者本地回收，属正常情况
+                return;
+            }
+
+            activePowerUpsById.Remove(itemId);
+            activePowerUps.Remove(obj);
+
+            if (poolManager != null)
+            {
+                poolManager.ReturnToPool(PoolConst.PowerUpItem, obj);
+            }
+            else
+            {
+                Destroy(obj);
+            }
+
+            Debug.Log($"[PowerUpManager] 道具已回收, itemId={itemId}");
         }
     }
 }

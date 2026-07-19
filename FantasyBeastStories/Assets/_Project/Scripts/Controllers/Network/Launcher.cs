@@ -220,10 +220,20 @@ namespace Controllers.Network
       base.OnConnectedToMaster();
       PhotonNetwork.AutomaticallySyncScene = true;
       Debug.Log("Connected to master");
-      string roomName = "Room_" + Random.Range(1000, 9999);
       SetDefaultName();
+
+      // 切换房间：从旧房间离开后回到 Master Server，此时加入目标房间
+      if (isJoiningRoom && !string.IsNullOrEmpty(pendingRoomName))
+      {
+        Debug.Log($"[OnConnectedToMaster] 正在加入目标房间: {pendingRoomName}");
+        PhotonNetwork.JoinRoom(pendingRoomName);
+        isJoiningRoom = false;
+        return;
+      }
+
       if (!isAutoCreate)
       {
+        string roomName = "Room_" + Random.Range(1000, 9999);
         PhotonNetwork.CreateRoom(
             roomName,
             new Photon.Realtime.RoomOptions() { MaxPlayers = 4, PublishUserId = true },
@@ -249,13 +259,33 @@ namespace Controllers.Network
         StartCoroutine(ShowAndLoadMainMenu());
         return;
       }
-      // 切换房间：离开完成后安全地加入目标房间（OnLeftRoom 时已回到 Master 服务器）
-      if (isJoiningRoom && !string.IsNullOrEmpty(pendingRoomName))
+      // 切换房间：不在此处直接 JoinRoom，等待 OnConnectedToMaster 回调后再加入
+      // （OnLeftRoom 时客户端仍在 DisconnectingFromGameServer 状态，尚未回到 Master Server）
+    }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+      // 房间不存在或已满，属于正常业务流程，不作为错误处理
+      // 重置标志
+      isJoiningRoom = false;
+      pendingRoomName = "";
+
+      // 显示顶部提示：房间不存在
+      var topNotice = FindObjectOfType<UI.Framework.TopNotice>();
+      if (topNotice != null)
       {
-        Debug.Log($"正在加入房间: {pendingRoomName}");
-        PhotonNetwork.JoinRoom(pendingRoomName);
-        isJoiningRoom = false;
+        topNotice.Show("房间不存在");
       }
+
+      // 已离开原房间，需创建新房间恢复可玩状态
+      SetDefaultName();
+      PhotonNetwork.CreateRoom(
+          "Room_" + Random.Range(1000, 9999),
+          new Photon.Realtime.RoomOptions() { MaxPlayers = 4, PublishUserId = true },
+          default
+      );
+      isAutoCreate = true;
+      Debug.Log("[Launcher] 加入房间失败，已自动创建新房间恢复");
     }
 
     /// <summary>

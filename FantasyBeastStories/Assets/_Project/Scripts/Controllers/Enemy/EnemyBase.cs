@@ -17,6 +17,10 @@ namespace Controllers.Enemy
 {
   public class EnemyBase : MonoBehaviour
   {
+    [Header("敌人配置")]
+    [SerializeField]
+    protected EnemyConfigSO enemyConfig;
+
     [Header("纯数据")]
     [SerializeField]
     protected EnemyData enemyData;
@@ -41,7 +45,10 @@ namespace Controllers.Enemy
 
     protected virtual void Awake()
     {
-      enemyData = new EnemyData(new AttributeEnemyBase(500, 500, 50, 2));
+      float hp = enemyConfig != null ? enemyConfig.maxHealth : 500f;
+      float atk = enemyConfig != null ? enemyConfig.attackPower : 50f;
+      float spd = enemyConfig != null ? enemyConfig.moveSpeed : 2f;
+      enemyData = new EnemyData(new AttributeEnemyBase(hp, hp, atk, spd));
       colliders = GetComponentsInChildren<Collider>();
       if (_network == null)
         _network = GetComponent<NetworkIdentityBase>();
@@ -218,6 +225,9 @@ namespace Controllers.Enemy
 
     protected virtual void UpdateRun()
     {
+      // 重新评估目标，确保已被移除的死亡玩家不再被追踪
+      TrackPlayer();
+
       if (!PlayerTarget)
       {
         TransitionToState(EnemyState.Idle);
@@ -389,7 +399,10 @@ namespace Controllers.Enemy
         // 确保属性不为 null（[NonSerialized] 字段在序列化后可能丢失）
         if (enemyData.attribute == null)
         {
-          enemyData.attribute = new AttributeEnemyBase(500, 500, 50, 2);
+          float hp = enemyConfig != null ? enemyConfig.maxHealth : 500f;
+          float atk = enemyConfig != null ? enemyConfig.attackPower : 50f;
+          float spd = enemyConfig != null ? enemyConfig.moveSpeed : 2f;
+          enemyData.attribute = new AttributeEnemyBase(hp, hp, atk, spd);
         }
 
         InitializeEnemy();
@@ -489,12 +502,31 @@ namespace Controllers.Enemy
     {
       Debug.Log("敌人死亡，掉落经验");
 
-      // 10%概率掉落道具
-      if (Random.value <= 0.1f && PowerUpManager.Instance != null)
+      // 道具掉落概率从 SO 配置读取
+      float dropChance = enemyConfig != null ? enemyConfig.powerUpDropChance : 0.1f;
+      if (Random.value <= dropChance && PowerUpManager.Instance != null)
       {
-        PowerUpManager.Instance.SpawnRandomPowerUp(transform.position);
+        bool isTest = EventChannelLocator.MainContainer.gameSettings.IsTest;
+        if (isTest)
+        {
+          // 测试模式：直接本地生成
+          PowerUpManager.Instance.SpawnRandomPowerUp(transform.position);
+        }
+        else if (NetworkServiceLocator.PlayerService.IsMasterClient)
+        {
+          // 联机模式：仅房主生成 itemId 并广播 RPC 到所有客户端
+          PowerUpManager.Instance.SpawnRandomPowerUp(transform.position);
+        }
         Debug.Log("[PowerUp] 敌人掉落道具！");
       }
+    }
+
+    /// <summary>从 SO 配置获取随机经验值（供子类 DropExperience 调用）</summary>
+    protected int GetExpValue()
+    {
+      if (enemyConfig != null)
+        return Random.Range(enemyConfig.expMin, enemyConfig.expMax + 1);
+      return Random.Range(50, 71);
     }
 
     // 重置状态（对象池回收时调用）

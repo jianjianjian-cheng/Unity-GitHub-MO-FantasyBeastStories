@@ -7,11 +7,14 @@ using Core;
 using Controllers.Services;
 using Managers;
 using Controllers.PowerUp;
+using NetworkTarget = Controllers.Network.NetworkTarget;
+using Controllers.Network;
 
 namespace Controllers.PowerUp
 {
     /// <summary>
     /// 经验磁铁效果 - 吸收地图上所有经验球
+    /// 联机模式下通过 RPC 广播到所有客户端，各自执行飞行动画
     /// </summary>
     public class ExperienceMagnetEffect : PowerUpEffectBase
     {
@@ -23,41 +26,52 @@ namespace Controllers.PowerUp
 
         public override void Execute(GameObject player)
         {
-            // 在持久对象上启动协程，避免被对象池回收时中断
-            if (PowerUpManager.Instance != null)
-                PowerUpManager.Instance.StartCoroutine(CollectAllExperienceBalls(player));
+            bool isTest = EventChannelLocator.MainContainer?.gameSettings?.IsTest ?? true;
+
+            if (isTest)
+            {
+                // 测试模式：本地直接执行
+                var host = PowerUpManager.Instance != null ? (MonoBehaviour)PowerUpManager.Instance : this;
+                host.StartCoroutine(FlyAllBallsToCollector(player, true, collectDelay, flySpeed));
+            }
             else
-                StartCoroutine(CollectAllExperienceBalls(player));
+            {
+                // 联机模式：广播 RPC 到所有客户端，各自执行飞行动画
+                int collectorActorNumber = NetworkServiceLocator.ObjectService.GetOwnerActorNumber(player.transform);
+                NetworkServiceLocator.ObjectService.InvokeRPC(
+                    AppRpcBridge.Instance, "RPC_MagnetCollectExpBalls",
+                    NetworkTarget.All, collectorActorNumber, collectDelay, flySpeed);
+            }
 
             PlayCollectEffects(player.transform.position);
         }
 
-        private System.Collections.IEnumerator CollectAllExperienceBalls(GameObject player)
+        /// <summary>
+        /// 所有客户端执行：经验球逐个飞向拾取者
+        /// </summary>
+        public static System.Collections.IEnumerator FlyAllBallsToCollector(GameObject collector, bool isCollector, float delay, float speed)
         {
-            // ★ 关键：在销毁前把值存到局部变量，避免访问已销毁的对象
-            float delay = collectDelay;
-            float speed = flySpeed;
-
             var allBalls = FindObjectsOfType<ExperienceBallBase>()
                 .Where(ball => ball != null && ball.gameObject.activeInHierarchy)
                 .ToList();
 
-            Debug.Log($"[PowerUp] 经验磁铁启动！发现 {allBalls.Count} 个经验球");
+            Debug.Log($"[PowerUp] 经验磁铁启动！发现 {allBalls.Count} 个经验球, isCollector={isCollector}");
 
             foreach (var ball in allBalls)
             {
                 if (ball == null || !ball.gameObject.activeInHierarchy) continue;
 
-                // 在PowerUpManager上启动子协程（避免this.StartCoroutine访问已销毁对象）
-                var host = PowerUpManager.Instance != null ? (MonoBehaviour)PowerUpManager.Instance : this;
-                host.StartCoroutine(FlyBallToPlayer(ball, player, speed));
+                var host = PowerUpManager.Instance;
+                if (host == null) continue;
+
+                host.StartCoroutine(FlyBallToCollector(ball, collector, speed, isCollector));
                 yield return new WaitForSeconds(delay);
             }
 
-            Debug.Log($"[PowerUp] 经验磁铁完成！共吸收所有经验球");
+            Debug.Log("[PowerUp] 经验磁铁完成！");
         }
 
-        private System.Collections.IEnumerator FlyBallToPlayer(ExperienceBallBase ball, GameObject player, float speed)
+        private static System.Collections.IEnumerator FlyBallToCollector(ExperienceBallBase ball, GameObject collector, float speed, bool isCollector)
         {
             if (ball == null) yield break;
 
@@ -67,32 +81,29 @@ namespace Controllers.PowerUp
 
             while (ball != null && ball.gameObject.activeInHierarchy && duration < 1f)
             {
-                if (player == null) yield break;
+                if (collector == null) yield break;
 
                 duration += UnityEngine.Time.deltaTime * speed * 0.1f;
-                ball.transform.position = Vector3.Lerp(startPos, player.transform.position, duration);
-                ball.transform.rotation = Quaternion.Slerp(startRot, player.transform.rotation, duration);
+                ball.transform.position = Vector3.Lerp(startPos, collector.transform.position, duration);
+                ball.transform.rotation = Quaternion.Slerp(startRot, collector.transform.rotation, duration);
 
                 yield return null;
             }
 
             if (ball != null && ball.gameObject.activeInHierarchy)
             {
-                var reflection = ball.GetType().GetField("ExperienceValue",
-                    System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-
-                if (reflection != null)
+                if (isCollector)
                 {
-                    int expValue = (int)reflection.GetValue(ball);
-
-                    EventChannelLocator.MainContainer.experienceChannel.Raise(expValue);
-                    Debug.Log($"[PowerUp] 吸收经验球 +{expValue}");
+                    // 拾取者客户端：走正常拾取流程（触发经验 → 上报房主 → 房主广播隐藏 → 本地回收）
+                    ball.Collect();
                 }
-
-                ServiceLocator.Get<ObjectPoolManager>()?.ReturnToPool(
-                    PoolConst.ExperienceBall_Blue_Local,
-                    ball.gameObject
-                );
+                else
+                {
+                    // 其他客户端：本地回收（拾取者的 Collect → 房主 RPC_ExpBallCollected 会做最终清理）
+                    ServiceLocator.Get<ObjectPoolManager>()?.ReturnToPool(
+                        PoolConst.ExperienceBall_Blue_Local, ball.gameObject);
+                }
+                Debug.Log("[PowerUp] 吸收经验球");
             }
         }
 

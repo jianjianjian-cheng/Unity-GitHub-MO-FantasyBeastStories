@@ -392,6 +392,7 @@ GameObject:
   - component: {fileID: 611914295489222022}
   - component: {fileID: 940049796925782615}
   - component: {fileID: 3408138645977921024}
+  - component: {fileID: 9029064799718909475}
   m_Layer: 0
   m_Name: VirtualCamera
   m_TagString: Untagged
@@ -489,6 +490,20 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &9029064799718909475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1547902573985025242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58d355c03c6c30e44bae6ff3662c9b28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deathDelay: 2
+  blendDuration: 1.5
 --- !u!1 &1584778810624859785
 GameObject:
   m_ObjectHideFlags: 0
@@ -2044,6 +2059,8 @@ MonoBehaviour:
   playerAttributeConfig: {fileID: 0}
   isOnlyShow: 0
   virtualCamera: {fileID: 1547902573985025242}
+  spectatorCameraController: {fileID: 9029064799718909475}
+  deathEffectPrefab: {fileID: 5642766282230003982, guid: b5c8ca7ed10b61e499cce8ec3b6e2e4c, type: 3}
   rb: {fileID: 6404800926616539602}
   animator: {fileID: 8692948142478180452}
   isInLobby: 0

@@ -134,6 +134,14 @@ namespace Controllers.Item
     public virtual void ResetState() { }
 
     /// <summary>
+    /// 触发到达玩家后的拾取流程（供外部调用，如经验磁铁）
+    /// </summary>
+    public void Collect()
+    {
+      OnReachPlayer();
+    }
+
+    /// <summary>
     /// 球到达玩家时调用（由子类 override 实现具体拾取逻辑）
     /// </summary>
     protected virtual void OnReachPlayer()

@@ -3010,7 +3010,7 @@ MonoBehaviour:
     m_GlyphPairAdjustmentRecords: []
   fallbackFontAssets: []
   m_FallbackFontAssetTable:
-  - {fileID: 11400000, guid: fa5157f2d65f82743b761c5d8ad21295, type: 2}
+  - {fileID: 0}
   m_CreationSettings:
     sourceFontFileName: 
     sourceFontFileGUID: d85f7bdc672520f41a7629bbfdd83981
