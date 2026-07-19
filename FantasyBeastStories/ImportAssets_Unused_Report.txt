@@ -1,0 +1,1861 @@
+ImportAssets 未使用资产报告 - 2026-07-19 23:22
+总计: 1858 个, 1.03 GB
+
+0 B	Assets/ImportAssets/_TerrainAutoUpgrade
+821 B	Assets/ImportAssets/_TerrainAutoUpgrade/layer_groundgrass01groundgrass01N2023054508611406.terrainlayer
+757 B	Assets/ImportAssets/_TerrainAutoUpgrade/layer_groundgrass029a44e6c3208a55fe.terrainlayer
+757 B	Assets/ImportAssets/_TerrainAutoUpgrade/layer_groundgrass0324a86cc2f692a338.terrainlayer
+755 B	Assets/ImportAssets/_TerrainAutoUpgrade/layer_groundmud11f050aca1187c1d2.terrainlayer
+749 B	Assets/ImportAssets/_TerrainAutoUpgrade/layer_groundmud1a94091e7652eba76.terrainlayer
+820 B	Assets/ImportAssets/_TerrainAutoUpgrade/layer_groundmud1groundgrass01N3d3aba195e4d26ee.terrainlayer
+820 B	Assets/ImportAssets/_TerrainAutoUpgrade/layer_groundmud3groundgrass01N3d3aba195e4d26ee.terrainlayer
+755 B	Assets/ImportAssets/_TerrainAutoUpgrade/layer_groundmud444b34198b3ee2b16.terrainlayer
+820 B	Assets/ImportAssets/_TerrainAutoUpgrade/layer_groundmud5groundgrass01N3d3aba195e4d26ee.terrainlayer
+751 B	Assets/ImportAssets/_TerrainAutoUpgrade/layer_groundsand012023054508611406.terrainlayer
+754 B	Assets/ImportAssets/_TerrainAutoUpgrade/layer_groundsand01c5e4ceae8be0a5d7.terrainlayer
+817 B	Assets/ImportAssets/_TerrainAutoUpgrade/layer_groundsand01rocktile03N2023054508611406.terrainlayer
+819 B	Assets/ImportAssets/_TerrainAutoUpgrade/layer_rocktile01AO_2rocktile01N2023054508611406.terrainlayer
+822 B	Assets/ImportAssets/_TerrainAutoUpgrade/layer_rocktile01AO_2rocktile01N9b0a8a26bbb7196a.terrainlayer
+819 B	Assets/ImportAssets/_TerrainAutoUpgrade/layer_rocktile01AO_2rocktile01Nb956af97c33fc3d7.terrainlayer
+819 B	Assets/ImportAssets/_TerrainAutoUpgrade/layer_rocktile02AO_2rocktile02N2023054508611406.terrainlayer
+819 B	Assets/ImportAssets/_TerrainAutoUpgrade/layer_rocktile02AO_2rocktile02N8c44e42493390d78.terrainlayer
+819 B	Assets/ImportAssets/_TerrainAutoUpgrade/layer_rocktile03AO_2rocktile03N2023054508611406.terrainlayer
+819 B	Assets/ImportAssets/_TerrainAutoUpgrade/layer_rocktile03AO_2rocktile03Nb3407d0e55802f81.terrainlayer
+822 B	Assets/ImportAssets/_TerrainAutoUpgrade/layer_rocktile03AO_2rocktile03Nddc8671642a7e46a.terrainlayer
+0 B	Assets/ImportAssets/Dreamscapes
+0 B	Assets/ImportAssets/Dreamscapes/Backgrounds
+20.8 KB	Assets/ImportAssets/Dreamscapes/Backgrounds/backgroundplane.FBX
+0 B	Assets/ImportAssets/Dreamscapes/Backgrounds/Materials
+3.0 KB	Assets/ImportAssets/Dreamscapes/Backgrounds/Materials/dreamy_01.mat
+328.1 KB	Assets/ImportAssets/Dreamscapes/Backgrounds/mountains.tga
+2.0 KB	Assets/ImportAssets/Dreamscapes/Backgrounds/mountains_1.controller
+1.9 KB	Assets/ImportAssets/Dreamscapes/Backgrounds/New Animation.anim
+0 B	Assets/ImportAssets/Dreamscapes/Backgrounds/Skyboxes
+3.9 KB	Assets/ImportAssets/Dreamscapes/Backgrounds/Skyboxes/Demo04Sky.mat
+3.6 KB	Assets/ImportAssets/Dreamscapes/Backgrounds/Skyboxes/skybox01.mat
+3.4 KB	Assets/ImportAssets/Dreamscapes/Backgrounds/Skyboxes/skybox03.mat
+0 B	Assets/ImportAssets/Dreamscapes/Backgrounds/Textures
+6.8 MB	Assets/ImportAssets/Dreamscapes/Backgrounds/Textures/background01.tga
+9.1 MB	Assets/ImportAssets/Dreamscapes/Backgrounds/Textures/background02.tga
+843 B	Assets/ImportAssets/Dreamscapes/Backgrounds/Textures/background03.mat
+6.2 MB	Assets/ImportAssets/Dreamscapes/Backgrounds/Textures/background03.tga
+9.7 MB	Assets/ImportAssets/Dreamscapes/Backgrounds/Textures/Reflection Probe-reflection.png
+41.9 MB	Assets/ImportAssets/Dreamscapes/Backgrounds/Textures/Reflection Probe-reflection.psd
+2.5 MB	Assets/ImportAssets/Dreamscapes/Backgrounds/Textures/skygradient01.tga
+4.2 MB	Assets/ImportAssets/Dreamscapes/Backgrounds/Textures/skygradient03.tga
+4.3 MB	Assets/ImportAssets/Dreamscapes/Backgrounds/Textures/skygradient04.tga
+0 B	Assets/ImportAssets/Dreamscapes/Grounds
+2.4 MB	Assets/ImportAssets/Dreamscapes/Grounds/groundmud3.tga
+3.9 MB	Assets/ImportAssets/Dreamscapes/Grounds/groundmud5.psd
+3.0 MB	Assets/ImportAssets/Dreamscapes/Grounds/groundmud5.tga
+8.2 MB	Assets/ImportAssets/Dreamscapes/Grounds/rocktile01AO.tga
+8.5 MB	Assets/ImportAssets/Dreamscapes/Grounds/rocktile02AO.tga
+9.9 MB	Assets/ImportAssets/Dreamscapes/Grounds/rocktile03AO.tga
+707 B	Assets/ImportAssets/Dreamscapes/info.txt
+0 B	Assets/ImportAssets/Dreamscapes/Materials
+3.7 KB	Assets/ImportAssets/Dreamscapes/Materials/pillar01EM.mat
+3.6 KB	Assets/ImportAssets/Dreamscapes/Materials/starfield02.mat
+3.8 KB	Assets/ImportAssets/Dreamscapes/Materials/starfield03.mat
+3.7 KB	Assets/ImportAssets/Dreamscapes/Materials/starfield04.mat
+0 B	Assets/ImportAssets/Dreamscapes/Nature
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Grass
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Mushrooms
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Mushrooms/Materials
+71.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Mushrooms/mushroom04.fbx
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Rocks
+62.3 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/lightline01.fbx
+62.2 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/lightline02.fbx
+63.2 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/lightline03.fbx
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Rocks/Materials
+3.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/Materials/pebbles01d.mat
+3.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/Materials/rock01d.mat
+3.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/Materials/rock02a.mat
+3.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/Materials/rock02c.mat
+3.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/Materials/rock02d.mat
+3.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/Materials/rock03b.mat
+3.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/Materials/rock03d.mat
+3.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/Materials/rock04a.mat
+3.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/Materials/rock04c.mat
+3.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/Materials/rock04d.mat
+3.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/Materials/rock05a.mat
+3.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/Materials/rock05c.mat
+3.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/Materials/rock06d.mat
+3.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/Materials/rock06d_big.mat
+3.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/pebbles01.prefab
+4.1 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/pebbles02.prefab
+4.2 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/pebbles03.prefab
+3.0 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/pebbles04.prefab
+2.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/pillar01.prefab
+2.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/pillar02.prefab
+2.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/pillar03.prefab
+2.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/pillar04.prefab
+3.1 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/rock02.prefab
+3.1 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/rock04.prefab
+3.1 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/rock05.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Rocks/RockOrigin
+63.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/RockOrigin/lightbeam01.fbx
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Rocks/RockOrigin/Materials
+3.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/RockOrigin/Materials/lightbeam.mat
+3.9 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/RockOrigin/Materials/pillar01A.mat
+65.2 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/RockOrigin/pillar01.fbx
+66.3 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/RockOrigin/pillar02.fbx
+65.6 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/RockOrigin/pillar03.fbx
+65.2 KB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/RockOrigin/pillar04.fbx
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Rocks/Textures
+12.0 MB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/Textures/detail01N.tga
+12.0 MB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/Textures/pillar01A.tga
+12.0 MB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/Textures/pillar01EM.tga
+12.0 MB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/Textures/pillar01N.tga
+12.0 MB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/Textures/pillar01N_detail.tga
+3.3 MB	Assets/ImportAssets/Dreamscapes/Nature/Rocks/Textures/rock02N.tga
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Materials
+3.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Materials/bark01.mat
+3.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Materials/bark02.mat
+3.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Materials/bark03.mat
+3.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Materials/bark04.mat
+3.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Materials/bark05.mat
+3.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Materials/bark06.mat
+3.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Materials/bark07.mat
+3.9 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Materials/branch01.mat
+3.9 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Materials/branch02.mat
+3.9 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Materials/branch03.mat
+3.9 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Materials/branch04.mat
+3.9 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Materials/branch05.mat
+3.9 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Materials/branch06.mat
+3.9 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Materials/branch07.mat
+3.9 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Materials/branch08.mat
+3.9 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Materials/bush01.mat
+3.9 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Materials/bush02.mat
+3.9 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Materials/bush03.mat
+3.9 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Materials/bush04.mat
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush01_Textures
+305.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush01_Textures/diffuse.png
+237.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush01_Textures/normal_specular.png
+87.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush01_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush01_Textures/translucency_gloss.png
+283.6 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush02.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush02_Textures
+310.2 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush02_Textures/diffuse.png
+237.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush02_Textures/normal_specular.png
+87.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush02_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush02_Textures/translucency_gloss.png
+355.0 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush03.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush03_Textures
+182.9 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush03_Textures/diffuse.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush03_Textures/normal_specular.png
+112.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush03_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush03_Textures/translucency_gloss.png
+102.0 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush04.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush04_Textures
+307.1 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush04_Textures/diffuse.png
+237.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush04_Textures/normal_specular.png
+87.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush04_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush04_Textures/translucency_gloss.png
+171.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush05.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush05_Textures
+304.9 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush05_Textures/diffuse.png
+237.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush05_Textures/normal_specular.png
+87.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush05_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush05_Textures/translucency_gloss.png
+180.9 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush06.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush06_Textures
+344.9 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush06_Textures/diffuse.png
+225.6 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush06_Textures/normal_specular.png
+151.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush06_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush06_Textures/translucency_gloss.png
+260.1 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush07.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush07_Textures
+344.2 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush07_Textures/diffuse.png
+225.6 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush07_Textures/normal_specular.png
+151.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush07_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush07_Textures/translucency_gloss.png
+275.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush08.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush08_Textures
+379.3 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush08_Textures/diffuse.png
+225.6 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush08_Textures/normal_specular.png
+151.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush08_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush08_Textures/translucency_gloss.png
+202.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush09.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush09_Textures
+373.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush09_Textures/diffuse.png
+225.6 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush09_Textures/normal_specular.png
+151.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush09_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush09_Textures/translucency_gloss.png
+164.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush10.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush10_Textures
+379.3 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush10_Textures/diffuse.png
+225.6 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush10_Textures/normal_specular.png
+151.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush10_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/bush10_Textures/translucency_gloss.png
+186.2 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/sapling01.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/sapling01_Textures
+382.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/sapling01_Textures/diffuse.png
+237.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/sapling01_Textures/normal_specular.png
+106.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/sapling01_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/sapling01_Textures/translucency_gloss.png
+233.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/sapling02.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/sapling02_Textures
+396.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/sapling02_Textures/diffuse.png
+237.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/sapling02_Textures/normal_specular.png
+106.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/sapling02_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/sapling02_Textures/translucency_gloss.png
+347.0 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/sapling03.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/sapling03_Textures
+363.9 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/sapling03_Textures/diffuse.png
+225.6 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/sapling03_Textures/normal_specular.png
+138.0 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/sapling03_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/sapling03_Textures/translucency_gloss.png
+378.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/sapling04.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/sapling04_Textures
+383.6 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/sapling04_Textures/diffuse.png
+237.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/sapling04_Textures/normal_specular.png
+138.0 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/sapling04_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/sapling04_Textures/translucency_gloss.png
+1.1 MB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree01.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree01_Textures
+340.2 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree01_Textures/diffuse.png
+237.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree01_Textures/normal_specular.png
+106.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree01_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree01_Textures/translucency_gloss.png
+636.2 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree02.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree02_Textures
+388.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree02_Textures/diffuse.png
+396.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree02_Textures/diffuse[Ütközés].png
+237.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree02_Textures/normal_specular.png
+106.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree02_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree02_Textures/translucency_gloss.png
+830.2 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree03.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree03_Textures
+363.9 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree03_Textures/diffuse.png
+225.6 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree03_Textures/normal_specular.png
+138.0 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree03_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree03_Textures/translucency_gloss.png
+426.3 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree04.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree04_Textures
+363.9 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree04_Textures/diffuse.png
+225.6 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree04_Textures/normal_specular.png
+138.0 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree04_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree04_Textures/translucency_gloss.png
+661.0 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree05.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree05_Textures
+396.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree05_Textures/diffuse.png
+237.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree05_Textures/normal_specular.png
+106.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree05_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree05_Textures/translucency_gloss.png
+1.7 MB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree06.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree06_Textures
+404.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree06_Textures/diffuse.png
+237.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree06_Textures/normal_specular.png
+106.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree06_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree06_Textures/translucency_gloss.png
+1.0 MB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree07.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree07_Textures
+355.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree07_Textures/diffuse.png
+225.6 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree07_Textures/normal_specular.png
+138.0 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree07_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree07_Textures/translucency_gloss.png
+935.1 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree08.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree08_Textures
+295.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree08_Textures/diffuse.png
+267.0 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree08_Textures/normal_specular.png
+74.6 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree08_Textures/shadow.png
+21.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree08_Textures/translucency_gloss.png
+1.5 MB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree09.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree09_Textures
+299.0 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree09_Textures/diffuse.png
+237.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree09_Textures/normal_specular.png
+133.3 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree09_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree09_Textures/translucency_gloss.png
+1.7 MB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree10.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree10_Textures
+303.1 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree10_Textures/diffuse.png
+237.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree10_Textures/normal_specular.png
+133.3 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree10_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree10_Textures/translucency_gloss.png
+872.1 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree11.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree11_Textures
+302.8 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree11_Textures/diffuse.png
+237.5 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree11_Textures/normal_specular.png
+133.1 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree11_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree11_Textures/translucency_gloss.png
+777.3 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree12.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree12_Textures
+326.9 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree12_Textures/diffuse.png
+225.6 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree12_Textures/normal_specular.png
+133.1 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree12_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree12_Textures/translucency_gloss.png
+681.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree13.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree13_Textures
+326.9 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree13_Textures/diffuse.png
+225.6 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree13_Textures/normal_specular.png
+133.1 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree13_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree13_Textures/translucency_gloss.png
+909.1 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree14.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree14_Textures
+326.9 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree14_Textures/diffuse.png
+225.6 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree14_Textures/normal_specular.png
+133.1 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree14_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree14_Textures/translucency_gloss.png
+689.7 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree15.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree15_Textures
+326.0 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree15_Textures/diffuse.png
+225.6 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree15_Textures/normal_specular.png
+133.1 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree15_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree15_Textures/translucency_gloss.png
+841.0 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree16.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree16_Textures
+326.0 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree16_Textures/diffuse.png
+225.6 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree16_Textures/normal_specular.png
+133.1 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree16_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree16_Textures/translucency_gloss.png
+961.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree17.prefab
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree17_Textures
+326.0 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree17_Textures/diffuse.png
+225.6 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree17_Textures/normal_specular.png
+133.1 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree17_Textures/shadow.png
+21.4 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Models/tree17_Textures/translucency_gloss.png
+0 B	Assets/ImportAssets/Dreamscapes/Nature/Trees/Textures
+1.1 MB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Textures/bark01.tga
+2.0 MB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Textures/bark01N.tga
+3.0 MB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Textures/bark02.tga
+1.4 MB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Textures/bark02N.tga
+922.9 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Textures/branch01.tga
+1.1 MB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Textures/branch02.tga
+748.3 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Textures/branch03.tga
+791.3 KB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Textures/bush01.tga
+1.1 MB	Assets/ImportAssets/Dreamscapes/Nature/Trees/Textures/bush02.tga
+0 B	Assets/ImportAssets/Dreamscapes/ParticleSystems
+33.3 KB	Assets/ImportAssets/Dreamscapes/ParticleSystems/dandelion02.prefab
+112.5 KB	Assets/ImportAssets/Dreamscapes/ParticleSystems/fireflies01.prefab
+113.8 KB	Assets/ImportAssets/Dreamscapes/ParticleSystems/Flare.prefab
+112.5 KB	Assets/ImportAssets/Dreamscapes/ParticleSystems/fog01.prefab
+0 B	Assets/ImportAssets/Dreamscapes/ParticleSystems/Materials
+3.2 KB	Assets/ImportAssets/Dreamscapes/ParticleSystems/Materials/dandelion02.mat
+3.2 KB	Assets/ImportAssets/Dreamscapes/ParticleSystems/Materials/leaf03.mat
+3.2 KB	Assets/ImportAssets/Dreamscapes/ParticleSystems/Materials/lightbeam.mat
+0 B	Assets/ImportAssets/Dreamscapes/ParticleSystems/Textures
+22.1 KB	Assets/ImportAssets/Dreamscapes/ParticleSystems/Textures/dandelion02.tga
+28.9 KB	Assets/ImportAssets/Dreamscapes/ParticleSystems/Textures/lightbeam.tga
+0 B	Assets/ImportAssets/Dreamscapes/Scenes
+306.8 KB	Assets/ImportAssets/Dreamscapes/Scenes/Demo01.unity
+1.8 KB	Assets/ImportAssets/Dreamscapes/Scenes/Demo01Settings.lighting
+1.8 KB	Assets/ImportAssets/Dreamscapes/Scenes/Demo04Settings.lighting
+0 B	Assets/ImportAssets/Dreamscapes/Scenes/SceneData
+0 B	Assets/ImportAssets/Dreamscapes/Scenes/SceneData/Demo01
+0 B	Assets/ImportAssets/Dreamscapes/Scenes/SceneData/Demo01/Animations
+3.1 KB	Assets/ImportAssets/Dreamscapes/Scenes/SceneData/Demo01/Animations/CameraAnimScene01.anim
+1.9 KB	Assets/ImportAssets/Dreamscapes/Scenes/SceneData/Demo01/Animations/Main Camera.controller
+43.4 MB	Assets/ImportAssets/Dreamscapes/Scenes/SceneData/Demo01/TerrainDemo01.asset
+0 B	Assets/ImportAssets/Dreamscapes/Scenes/SceneData/Demo02
+0 B	Assets/ImportAssets/Dreamscapes/Scenes/SceneData/Demo02/Animations
+3.1 KB	Assets/ImportAssets/Dreamscapes/Scenes/SceneData/Demo02/Animations/CamerAnimScene02.anim
+1.8 KB	Assets/ImportAssets/Dreamscapes/Scenes/SceneData/Demo02/Animations/Main Camera.controller
+0 B	Assets/ImportAssets/Dreamscapes/Scenes/SceneData/Demo03
+0 B	Assets/ImportAssets/Dreamscapes/Scenes/SceneData/Demo03/Animations
+0 B	Assets/ImportAssets/Dreamscapes/Scenes/SceneData/Demo04
+0 B	Assets/ImportAssets/Dreamscapes/Scenes/SceneData/Demo04/Animations
+14.6 KB	Assets/ImportAssets/Dreamscapes/Scenes/SceneData/Demo04/Animations/flyby_dr_update1.anim
+1.8 KB	Assets/ImportAssets/Dreamscapes/Scenes/SceneData/Demo04/Animations/Main Camera.controller
+5.9 KB	Assets/ImportAssets/Dreamscapes/Scenes/SceneData/Demo04/Animations/sprite01 rotation.anim
+1.8 KB	Assets/ImportAssets/Dreamscapes/Scenes/SceneData/Demo04/Animations/Sprite01 rotation.controller
+5.9 KB	Assets/ImportAssets/Dreamscapes/Scenes/SceneData/Demo04/Animations/sprite02 rotation.anim
+1.8 KB	Assets/ImportAssets/Dreamscapes/Scenes/SceneData/Demo04/Animations/Sprite02 rotation.controller
+5.9 KB	Assets/ImportAssets/Dreamscapes/Scenes/SceneData/Demo04/Animations/sprite03 rotation.anim
+1.8 KB	Assets/ImportAssets/Dreamscapes/Scenes/SceneData/Demo04/Animations/Sprite03 rotation.controller
+45.0 MB	Assets/ImportAssets/Dreamscapes/Scenes/SceneData/Demo04/TerrainDemo04.asset
+1.3 KB	Assets/ImportAssets/Dreamscapes/update2.0.txt
+0 B	Assets/ImportAssets/Hun0FX
+0 B	Assets/ImportAssets/Hun0FX/DemoScene
+5.7 KB	Assets/ImportAssets/Hun0FX/DemoScene/Floor.mat
+0 B	Assets/ImportAssets/Hun0FX/FX
+0 B	Assets/ImportAssets/Hun0FX/FX/BasicMaterial
+3.2 KB	Assets/ImportAssets/Hun0FX/FX/BasicMaterial/M_Fire_ground_01.mat
+3.2 KB	Assets/ImportAssets/Hun0FX/FX/BasicMaterial/M_Fire_ground_02.mat
+3.2 KB	Assets/ImportAssets/Hun0FX/FX/BasicMaterial/M_Fire_ground_04.mat
+3.2 KB	Assets/ImportAssets/Hun0FX/FX/BasicMaterial/M_Scroll_seq_01.mat
+0 B	Assets/ImportAssets/Hun0FX/FX/FireFX_vol1
+43.4 KB	Assets/ImportAssets/Hun0FX/FX/FireFX_vol1/FireFX_vol1_demo.unity
+0 B	Assets/ImportAssets/Hun0FX/FX/FireFX_vol1/Prefabs
+0 B	Assets/ImportAssets/Hun0FX/FX/FireFX_vol1/UniqueMaterials
+0 B	Assets/ImportAssets/Hun0FX/FX/SmokeFX
+0 B	Assets/ImportAssets/Hun0FX/FX/SmokeFX/Materials
+0 B	Assets/ImportAssets/Hun0FX/Meshes
+22.7 KB	Assets/ImportAssets/Hun0FX/Meshes/ME_Tornado_03.fbx
+0 B	Assets/ImportAssets/Hun0FX/Meshes/Prefabs
+2.4 KB	Assets/ImportAssets/Hun0FX/Meshes/Prefabs/ME_Curve_06_2.prefab
+2.4 KB	Assets/ImportAssets/Hun0FX/Meshes/Prefabs/ME_Cylinder_02.prefab
+2.4 KB	Assets/ImportAssets/Hun0FX/Meshes/Prefabs/ME_Cylinder_08.prefab
+2.4 KB	Assets/ImportAssets/Hun0FX/Meshes/Prefabs/ME_Sphere_04.prefab
+2.4 KB	Assets/ImportAssets/Hun0FX/Meshes/Prefabs/ME_Tornado_03.prefab
+2.4 KB	Assets/ImportAssets/Hun0FX/Meshes/Prefabs/ME_wind_03.prefab
+0 B	Assets/ImportAssets/Hun0FX/Shader
+0 B	Assets/ImportAssets/Hun0FX/Textures
+6.2 KB	Assets/ImportAssets/Hun0FX/Textures/Tx_Checker_01.png
+256.5 KB	Assets/ImportAssets/Hun0FX/Textures/Tx_Fire_ground_01.png
+428.9 KB	Assets/ImportAssets/Hun0FX/Textures/Tx_Fire_ground_02.png
+297.8 KB	Assets/ImportAssets/Hun0FX/Textures/Tx_Fire_ground_04.png
+681.7 KB	Assets/ImportAssets/Hun0FX/Textures/Tx_Scroll_seq_01.png
+0 B	Assets/ImportAssets/JMO Assets
+0 B	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster
+0 B	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets
+0 B	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Editor
+316 B	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Editor/CFXR Editor.asmdef
+7.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Editor/CFXR_ExpressionParser.cs
+19.8 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Editor/CFXR_MaterialInspector.cs
+1.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Editor/CFXR_ShaderPostProcessor.cs
+12.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Editor/CFXR_Styles.cs
+0 B	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics
+3.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr aura rays hdr ab nosp.mat
+86.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr aura rays.png
+3.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr aura runic hdr ab nosp.mat
+100.9 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr aura runic.png
+3.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr blood dissolve ab.mat
+244.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr blood dissolve.png
+3.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr blood splash dissolve ab.mat
+146.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr blood splash dissolve.png
+8.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr blood splash mesh.asset
+45.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr blood splash.png
+86.7 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr blood.png
+3.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr bubble 2 ab.mat
+183.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr bubble 2.png
+3.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr bubble ab.mat
+3.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr bubble hdr ab.mat
+75.7 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr bubble.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr card club ab.mat
+16.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr card club.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr card diamond ab.mat
+3.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr card diamond mesh.asset
+15.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr card diamond.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr card heart ab.mat
+14.7 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr card heart.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr card spade ab.mat
+15.9 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr card spade.png
+4.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr debris 3x3 ab lit emission.mat
+4.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr debris 3x3 ab lit.mat
+341.8 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr debris 3x3 normal.png
+67.8 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr debris 3x3.png
+4.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr debris flat unlit 3x3 ab hdr.mat
+4.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr debris flat unlit 3x3 ab.mat
+52.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr debris flat unlit 3x3.png
+4.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr debris ice 2x2 ab lit.mat
+74.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr debris ice 2x2 normal.png
+155.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr debris ice 2x2.png
+4.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr debris unlit 3x3 ab.mat
+108.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr debris unlit 3x3.png
+4.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr debris wood 3x3 ab.mat
+192.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr debris wood 3x3 normal.png
+22.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr debris wood 3x3.png
+4.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr debris wood unlit 3x3 ab.mat
+73.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr debris wood unlit 3x3.png
+4.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr electric arc anim x4.mat
+31.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr electric arc anim x4.png
+4.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr electric arcs fade x4 hdr ab.mat
+52.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr electric arcs fade x4.png
+4.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr electric arcs x4 hdr ab.mat
+82.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr electric arcs x4.png
+4.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr electric small anim 4x2 hdr.mat
+66.8 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr electric small anim 4x2.png
+3.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr electric small anim2 7x2 ab.mat
+4.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr electric small anim2 7x2 mesh.asset
+72.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr electric small anim2 7x2.png
+10.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr electric spark.png
+4.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr electric sparks ab.mat
+4.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr electric sparks hdr ab.mat
+4.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr ember blur hdr ab.mat
+5.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr ember blur.png
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fire blur fade hdr ab.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fire circle blur hdr ab.mat
+19.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fire circle blur.png
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fire circle crisp hdr ab.mat
+20.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fire circle crisp.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fire circle drawn blurred hdr ab.mat
+25.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fire circle drawn blurred.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fire circle drawn hdr ab.mat
+29.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fire circle drawn.png
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fire circle plain hdr ab.mat
+20.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fire circle plain.png
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fire crisp fade hdr ab.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fire crisp fade nosp hdr ab.mat
+52.9 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fire edge dissolve.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fire edge hdr ab.mat
+23.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fire edge.png
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fire full blurred fade hdr add.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fire plain fade hdr ab.mat
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fire small anim blurred hdr ab.mat
+57.9 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fire small anim blurred.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fire small anim hdr ab.mat
+44.7 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fire small anim.png
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fire stepped fade hdr ab.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme blur mid fine hdr ab.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme blur mid hdr ab.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme blur stable fine hdr ab.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme blur stable hdr ab.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme blur unstable fine hdr ab.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme blur unstable hdr ab.mat
+20.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme blur.png
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme candle hdr ab.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme candle unstable hdr ab.mat
+24.7 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme candle.png
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme crisp mid fine hdr ab.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme crisp mid hdr ab.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme crisp stable fine hdr ab.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme crisp stable hdr ab.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme crisp unstable fine hdr ab.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme crisp unstable hdr ab.mat
+21.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme crisp.png
+28.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme full blurred.png
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme plain mid fine hdr ab.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme plain mid hdr ab.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme plain stable fine hdr ab.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme plain stable hdr ab.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme plain unstable fine hdr ab.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme plain unstable hdr ab.mat
+20.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme plain.png
+11.8 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flamme stepped.png
+3.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flare add.mat
+17.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr flare.png
+33.8 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fly anim x4.png
+3.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr fly anim.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr heart break dissolve ab.mat
+10.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr heart break dissolve.png
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr heart break parts ab.mat
+20.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr heart break parts.png
+15.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr heart.png
+2.8 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr hidden.mat
+18.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr hit triangle 2.png
+17.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr hit triangle diamond dissolve.png
+3.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr leave a ab lit normal.mat
+208.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr leave a normal.png
+103.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr leave a.png
+3.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr leave b ab lit normal.mat
+192.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr leave b normal.png
+92.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr leave b.png
+4.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr line loop electric ab.mat
+4.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr line loop electric hdr ab.mat
+31.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr line loop electric.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr no texture hdr ab.mat
+37.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr noise clouds big.png
+277.7 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr perlin big.png
+245.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr perlin mid.png
+1.1 MB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr perlin smudge.png
+262.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr petal normal.png
+3.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr petal pink x4 ab lit normal.mat
+292.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr petal pink x4.png
+1.7 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr proc glow crisp ab.mat
+1.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr proc glow soft ab.mat
+1.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr proc glow soft ground nosp add.mat
+1.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr proc glow soft hdr ab.mat
+1.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr proc glow soft hdr p4 add.mat
+1.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr proc glow soft invert ab.mat
+1.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr proc glow soft invert add nosp.mat
+1.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr proc glow soft invert hdr ab.mat
+1.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr proc glow soft nosp add.mat
+1.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr proc glow soft p4 add nosp.mat
+1.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr proc glow soft p4 add.mat
+1.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr proc glow soft p8 add.mat
+1.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr proc ring ab.mat
+1.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr proc ring add.mat
+1.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr proc ring electric hdr ab.mat
+1.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr proc ring hdr ab.mat
+1.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr proc ring local space ab.mat
+1.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr proc ring local space add.mat
+1.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr proc ring local space hdr ab.mat
+1.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr proc ring local space partial ab.mat
+1.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr proc ring water ripple local space ab.mat
+1.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr proc ring water ripple local space arc ab.mat
+3.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr puddle dissolve ab.mat
+3.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr puddle dissolve soft ab.mat
+51.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr puddle dissolve.png
+5.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr puddle mesh.asset
+14.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr puddle.png
+4.8 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr ring arc.png
+18.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr ring electric.png
+17.7 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr ring ripple arc dissolve.png
+18.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr ring ripple dissolve.png
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr ring spikes revert hdr ab.mat
+9.9 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr ring spikes revert.png
+1.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr screen distortion debug.mat
+47.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr screen distortion debug.png
+1.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr screen distortion perlin.mat
+46.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr screen distortion perlin.png
+1.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr screen distortion ring nosp.mat
+1.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr screen distortion ring.mat
+58.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr screen distortion ring.png
+1.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr screen distortion sphere.mat
+41.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr screen distortion sphere.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr skull 2 dissolve ab.mat
+59.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr skull 2 dissolve.png
+37.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr skull 2.png
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr skull dissolve ab.mat
+88.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr skull dissolve alt.png
+60.8 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr skull dissolve.png
+3.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr skull distort hdr ab.mat
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr skull outer outline ab.mat
+34.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr skull outer outline.png
+20.8 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr skull.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smiley angry ab.mat
+23.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smiley angry.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smiley frown ab.mat
+22.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smiley frown.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smiley happy ab.mat
+22.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smiley happy.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smiley smile ab.mat
+22.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smiley smile.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smoke cloud corner ab.mat
+28.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smoke cloud corner dissolve.png
+22.9 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smoke cloud corner.png
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smoke cloud x4 ab blurred.mat
+3.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smoke cloud x4 ab lit crisp.mat
+3.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smoke cloud x4 ab lit normal.mat
+3.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smoke cloud x4 ab lit soft individual bright shadow.mat
+3.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smoke cloud x4 ab lit soft individual mid shadow.mat
+3.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smoke cloud x4 ab lit soft individual.mat
+3.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smoke cloud x4 ab lit soft.mat
+75.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smoke cloud x4 blurred.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smoke cloud x4 crisp dissolve ab.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smoke cloud x4 hdr ab.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smoke cloud x4 mult blurred.mat
+70.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smoke cloud x4 normal.png
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smoke cloud x4 second color underlit ab.mat
+30.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smoke cloud x4 second color.png
+19.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr smoke cloud x4 white.png
+43.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr spikes half impact gradient.png
+3.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr spikes half impact hdr ab.mat
+3.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr spikes impact ab.mat
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr spikes impact add.mat
+3.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr spikes impact dissolve ab.mat
+3.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr spikes impact dissolve invert ab.mat
+3.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr spikes impact hdr ab.mat
+3.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr star ab.mat
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr star blurred add.mat
+35.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr star blurred.png
+5.8 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr star mesh.asset
+15.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr star.png
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr steam blur dissolve hdr add.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch fire crisp fade hdr ab.mat
+22.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch flamme crisp dissolve.png
+21.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch flamme crisp.png
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch inv spike fade ab.mat
+3.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch rain blur ab nosp.mat
+3.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch rain blur ab.mat
+15.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch rain blur.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch ray blur add.mat
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch ray blur hdr ab.mat
+19.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch ray blur.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch rectangle ray ab.mat
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch rectangle ray blur add.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch rectangle ray blur hdr ab.mat
+28.9 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch rectangle ray blur.png
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch rectangle ray hdr ab.mat
+16.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch rectangle ray.png
+46.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch sipkes blur x2.png
+50.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch sipkes dissolve smooth x2.png
+35.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch sipkes dissolve x2.png
+9.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch sipkes x2 mesh.asset
+21.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch sipkes x2.png
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch skull dissolve ab.mat
+62.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch skull dissolve.png
+33.7 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch skull.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch smoke arc ab.mat
+22.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch smoke arc dissolve.png
+12.9 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch smoke arc.png
+3.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch smoke fume blur ab.mat
+23.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch smoke fume.png
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch spike fade add.mat
+27.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch spike fade.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch spikes smooth x2 hdr ab.mat
+3.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch spikes x2 hdr ab.mat
+20.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch steam blur distort.png
+2.9 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch trait ab.mat
+3.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch trait blur ab.mat
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch trait blur add.mat
+8.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch trait blur.png
+3.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch trait hdr ab nosp.mat
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch triangle add.mat
+2.9 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch triangle fade ab.mat
+7.8 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch triangle fade.png
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch triangle smooth nosp ab.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch triangle smooth nosp add.mat
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch triangle to diamond ab.mat
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr stretch triangle to diamond add.mat
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr sword trail bubbles hit.mat
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr sword trail bubbles.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr sword trail flames hit.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr sword trail flames.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr sword trail ice hit.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr sword trail ice thin.mat
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr sword trail ice.mat
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr sword trail light.mat
+29.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr sword trail mask light.png
+188.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr sword trail mask lines.png
+23.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr sword trail mask plain.png
+388.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr sword trail noise bubbles.png
+51.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr sword trail noise ice.png
+29.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr sword trail noise tech.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr sword trail plain.mat
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr sword trail slash.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr sword trail tech hit.mat
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr sword trail tech thin.mat
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr sword trail tech.mat
+52.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr uv distortion fire perlin.png
+51.8 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr uv distortion fire smudge.png
+4.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr water drop blur anim ab.mat
+4.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr water drop blur anim hdr ab.mat
+59.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr water drop blur anim.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr water foam ab.mat
+14.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr water foam.png
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr water small splash hollow stretch nosp ab.mat
+3.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr water small splash hollow stretch nosp hdr ab.mat
+44.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr water small splash hollow stretch.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr water small splash stretch nosp ab.mat
+3.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr water small splash stretch nosp hdr ab.mat
+17.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr water small splash stretch.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr ww smoke bright hdr ab.mat
+13.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr ww smoke bright.png
+10.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr ww smoke first color.png
+3.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr ww smoke glow ab.mat
+69.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr ww smoke glow.png
+3.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr ww smoke second color ab.mat
+12.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Graphics/cfxr ww smoke second color.png
+0 B	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Meshes
+11.7 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Meshes/cfxr electric_arc_circle.fbx
+21.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Meshes/cfxr electric_barrier.fbx
+11.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Meshes/cfxr mesh disk.fbx
+17.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Meshes/cfxr mesh donut.fbx
+19.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Meshes/cfxr mesh foam.fbx
+11.8 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Meshes/cfxr mesh leave.fbx
+13.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Meshes/cfxr mesh ring.fbx
+11.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Meshes/cfxr mesh star4.fbx
+11.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Meshes/cfxr mesh star6.fbx
+11.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Meshes/cfxr mesh star8.fbx
+47.9 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Meshes/cfxr mesh sword_slashes.fbx
+16.8 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Meshes/cfxr particle_electric_arc.fbx
+11.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Meshes/cfxr particle_electric_arc_2.fbx
+3.9 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Meshes/cfxr ring mesh half.asset
+7.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Meshes/cfxr ring mesh local space smoother.asset
+5.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Meshes/cfxr ring mesh local space.asset
+0 B	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Misc
+126.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Misc/cfxr font AmazGoDaBold.png
+105.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Misc/cfxr font WashYourHand.png
+3.9 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Misc/cfxr particle font.mat
+7.7 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Misc/cfxr ParticleFont AmazGoDaBold.asset
+7.7 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Misc/cfxr ParticleFont WashYourHand.asset
+0 B	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Scripts
+30 B	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Scripts/CFXR Runtime.asmdef
+7.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Scripts/CFXR_Effect.CameraShake.cs
+8.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Scripts/CFXR_EmissionBySurface.cs
+16.9 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Scripts/CFXR_ParticleText.cs
+3.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Scripts/CFXR_ParticleTextFontAsset.cs
+0 B	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Shaders
+5.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Shaders/CFXR Particle Distortion.cfxrshader
+12.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Shaders/CFXR.cginc
+34.8 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Shaders/CFXR_PASSES.cginc
+1.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Shaders/CFXR_SETTINGS.cginc
+11.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Assets/Shaders/CFXR_URP.cginc
+0 B	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Prefabs
+0 B	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Prefabs/Eerie
+110.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Prefabs/Eerie/CFXR2 Skull Head Alt.prefab
+811.7 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/CFXR Prefabs/Eerie/CFXR2 WW Enemy Explosion.prefab
+0 B	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets
+1.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/CFXR Demo Bloom Post Process.asset
+3.7 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/CFXR Demo Ground URP.mat
+3.7 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/CFXR Demo Ground.mat
+24.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/CFXR Demo Ground.png
+901 B	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/CFXR Demo Tonemapping Post Process.asset
+931 B	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/CFXR Demo.asmdef
+9.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/CFXR_Demo.cs
+618 B	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/CFXR_Demo_Rotate.cs
+984 B	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/CFXR_Demo_Translate.cs
+0 B	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/Kino Bloom
+7.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/Kino Bloom/Bloom.cs
+0 B	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/Kino Bloom/Editor
+3.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/Kino Bloom/Editor/BloomEditor.cs
+6.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/Kino Bloom/Editor/BloomGraphDrawer.cs
+365 B	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/Kino Bloom/Editor/KinoBloom.Editor.asmdef
+1.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/Kino Bloom/Kino Bloom License.txt
+36 B	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/Kino Bloom/KinoBloom.Runtime.asmdef
+0 B	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/Kino Bloom/Shader
+7.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/Kino Bloom/Shader/Bloom.cginc
+4.4 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/Kino Bloom/Shader/Bloom.shader
+0 B	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/UI
+2.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/UI/CFXR Demo Btn Arrow R.png
+2.0 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/UI/CFXR Demo Btn Arrow.png
+25.1 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/UI/CFXR Demo Btn Bloom H.png
+26.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/UI/CFXR Demo Btn Bloom.png
+12.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/UI/CFXR Demo Btn Camera H.png
+11.9 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/UI/CFXR Demo Btn Camera.png
+16.8 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/UI/CFXR Demo Btn CameraShake H.png
+15.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/UI/CFXR Demo Btn CameraShake.png
+10.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/UI/CFXR Demo Btn Ground H.png
+10.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/UI/CFXR Demo Btn Ground.png
+11.6 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/UI/CFXR Demo Btn Lights H.png
+11.2 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/UI/CFXR Demo Btn Lights.png
+16.3 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/UI/CFXR Demo Btn SlowMo H.png
+15.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/UI/CFXR Demo Btn SlowMo.png
+16.5 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Demo Assets/UI/CFXRF Demo Logo.png
+15.8 KB	Assets/ImportAssets/JMO Assets/Cartoon FX Remaster/Readme Cartoon FX Remaster FREE.html
+0 B	Assets/ImportAssets/JMO Assets/Welcome Screen
+373 B	Assets/ImportAssets/JMO Assets/Welcome Screen/CFXR.WelcomeScreen.asmdef
+3.4 KB	Assets/ImportAssets/JMO Assets/Welcome Screen/CFXR_WelcomeScreen.cs
+1.6 KB	Assets/ImportAssets/JMO Assets/Welcome Screen/CFXR_WelcomeScreen.uss
+2.2 KB	Assets/ImportAssets/JMO Assets/Welcome Screen/CFXR_WelcomeScreen.uxml
+0 B	Assets/ImportAssets/Magic Portals and Props
+0 B	Assets/ImportAssets/Magic Portals and Props/Materials
+0 B	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials
+3.6 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/particles_circle_thin_mat 1.mat
+3.6 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/particles_ngon_mat 1.mat
+3.4 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/particles_rectangle_mat 1.mat
+3.4 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/particles_ring_blue_mat 1.mat
+3.4 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/particles_ring_blue_mat 2.mat
+3.4 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/particles_ring_blue_mat 3.mat
+3.4 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/particles_ring_blue_mat 4.mat
+3.4 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/particles_ring_blue_mat 5.mat
+3.4 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/particles_ring_red_mat 1.mat
+3.6 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/particles_runes_circle_mat 1.mat
+3.4 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/particles_spark_blue_mat 1.mat
+3.4 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/particles_spark_orange_mat 1.mat
+3.4 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/particles_spark_orange_mat 2.mat
+3.4 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/particles_spark_runes_mat 1.mat
+3.4 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/particles_spark_soft_mat 1.mat
+3.6 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/particles_squares_mat 1.mat
+3.6 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/particles_star_mat 1.mat
+2.2 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/portal_1_mat 1.mat
+2.2 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/portal_1_mat 2.mat
+2.2 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/portal_1_mat 3.mat
+2.2 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/portal_1_mat 4.mat
+2.2 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/portal_1_mat 5.mat
+2.2 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/portal_1_mat 6.mat
+2.3 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/portal_1_mat 7.mat
+2.2 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/portal_2_mat 1.mat
+2.2 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/portal_3_mat 1.mat
+2.2 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/portal_4_mat 1.mat
+2.2 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/portal_4_mat 2.mat
+2.2 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/portal_5_mat 1.mat
+1.9 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/runes_mat 1.mat
+1.9 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/runes_mat 2.mat
+1.9 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/runes_mat 3.mat
+1.9 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/runes_mat 4.mat
+1.9 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/runes_mat 5.mat
+1.9 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/runes_mat 6.mat
+3.3 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/smoke_mat 1.mat
+3.3 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/smoke_mat 2.mat
+1.9 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/stone_mat 1.mat
+1.9 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/stone_mat 2.mat
+1.9 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/stone_mat 3.mat
+1.9 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/stone_mat 4.mat
+1.9 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/stone_mat 5.mat
+1.9 KB	Assets/ImportAssets/Magic Portals and Props/Materials/DemoScene_Materials/stone_mat 6.mat
+3.6 KB	Assets/ImportAssets/Magic Portals and Props/Materials/particles_circle_thin_mat.mat
+3.6 KB	Assets/ImportAssets/Magic Portals and Props/Materials/particles_ngon_mat.mat
+3.4 KB	Assets/ImportAssets/Magic Portals and Props/Materials/particles_rectangle_mat.mat
+3.4 KB	Assets/ImportAssets/Magic Portals and Props/Materials/particles_ring_blue_mat.mat
+3.4 KB	Assets/ImportAssets/Magic Portals and Props/Materials/particles_ring_red_mat.mat
+3.6 KB	Assets/ImportAssets/Magic Portals and Props/Materials/particles_runes_circle_mat.mat
+3.4 KB	Assets/ImportAssets/Magic Portals and Props/Materials/particles_spark_orange_mat.mat
+3.4 KB	Assets/ImportAssets/Magic Portals and Props/Materials/particles_spark_runes_mat.mat
+3.6 KB	Assets/ImportAssets/Magic Portals and Props/Materials/particles_squares_mat.mat
+3.6 KB	Assets/ImportAssets/Magic Portals and Props/Materials/particles_star_mat.mat
+2.2 KB	Assets/ImportAssets/Magic Portals and Props/Materials/portal_1_mat.mat
+2.2 KB	Assets/ImportAssets/Magic Portals and Props/Materials/portal_2_mat.mat
+2.2 KB	Assets/ImportAssets/Magic Portals and Props/Materials/portal_4_mat.mat
+2.2 KB	Assets/ImportAssets/Magic Portals and Props/Materials/portal_5_mat.mat
+1.9 KB	Assets/ImportAssets/Magic Portals and Props/Materials/runes_mat.mat
+3.3 KB	Assets/ImportAssets/Magic Portals and Props/Materials/smoke_mat.mat
+0 B	Assets/ImportAssets/Magic Portals and Props/Meshes
+19.8 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/grid_uv_mesh.fbx
+16.1 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Rune_letter_01_mesh.fbx
+16.1 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Rune_letter_02_mesh.fbx
+16.4 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Rune_letter_03_mesh.fbx
+15.5 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Rune_letter_04_mesh.fbx
+15.2 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Rune_letter_05_mesh.fbx
+15.0 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Rune_letter_06_mesh.fbx
+15.7 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Rune_letter_07_mesh.fbx
+15.9 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Rune_letter_08_mesh.fbx
+16.4 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Rune_letter_09_mesh.fbx
+16.0 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Rune_letter_10_mesh.fbx
+15.0 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Rune_letter_11_mesh.fbx
+15.6 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Rune_letter_12_mesh.fbx
+15.5 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Rune_letter_13_mesh.fbx
+16.1 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Rune_letter_14_mesh.fbx
+15.4 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Rune_letter_15_mesh.fbx
+19.3 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Runes_01_mesh.fbx
+19.0 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Runes_02_mesh.fbx
+398.2 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_diamond_01_mesh.fbx
+403.9 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_diamond_02_mesh.fbx
+410.0 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_diamond_03_mesh.fbx
+403.1 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_diamond_04_mesh.fbx
+411.1 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_diamond_05_mesh.fbx
+647.1 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_floating_01_mesh.fbx
+739.1 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_floating_02_mesh.fbx
+703.8 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_floating_03_mesh.fbx
+751.0 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_floating_04_mesh.fbx
+692.7 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_floating_05_mesh.fbx
+398.1 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_round_02_mesh.fbx
+391.8 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_round_03_mesh.fbx
+385.7 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_round_04_mesh.fbx
+391.6 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_round_05_mesh.fbx
+814.8 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_ruins_01_mesh.fbx
+941.0 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_ruins_02_mesh.fbx
+977.6 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_ruins_03_mesh.fbx
+1.0 MB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_ruins_04_mesh.fbx
+1.0 MB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_ruins_05_mesh.fbx
+365.8 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_square_01_mesh.fbx
+380.3 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_square_02_mesh.fbx
+380.1 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_square_03_mesh.fbx
+373.9 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_square_04_mesh.fbx
+369.5 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_square_05_mesh.fbx
+704.8 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_stonehedge_01_mesh.fbx
+761.7 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_stonehedge_02_mesh.fbx
+811.2 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_stonehedge_03_mesh.fbx
+890.3 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_stonehedge_04_mesh.fbx
+899.6 KB	Assets/ImportAssets/Magic Portals and Props/Meshes/Stylised_stonehedge_05_mesh.fbx
+0 B	Assets/ImportAssets/Magic Portals and Props/Prefabs
+112.7 KB	Assets/ImportAssets/Magic Portals and Props/Prefabs/Particles_rectangle_vfx_prefab.prefab
+568.9 KB	Assets/ImportAssets/Magic Portals and Props/Prefabs/Pentagram_vfx_prefab.prefab
+226.4 KB	Assets/ImportAssets/Magic Portals and Props/Prefabs/Portal_1_vfx_prefab.prefab
+339.4 KB	Assets/ImportAssets/Magic Portals and Props/Prefabs/Portal_2_vfx_prefab.prefab
+339.3 KB	Assets/ImportAssets/Magic Portals and Props/Prefabs/Portal_3_vfx_prefab.prefab
+339.5 KB	Assets/ImportAssets/Magic Portals and Props/Prefabs/Portal_4_vfx_prefab.prefab
+113.9 KB	Assets/ImportAssets/Magic Portals and Props/Prefabs/Portal_5_vfx_prefab.prefab
+2.7 KB	Assets/ImportAssets/Magic Portals and Props/Prefabs/Stylised_round_01_prefab.prefab
+2.7 KB	Assets/ImportAssets/Magic Portals and Props/Prefabs/Stylised_round_02_prefab.prefab
+2.7 KB	Assets/ImportAssets/Magic Portals and Props/Prefabs/Stylised_round_03_prefab.prefab
+2.7 KB	Assets/ImportAssets/Magic Portals and Props/Prefabs/Stylised_round_04_prefab.prefab
+2.7 KB	Assets/ImportAssets/Magic Portals and Props/Prefabs/Stylised_round_05_prefab.prefab
+0 B	Assets/ImportAssets/Magic Portals and Props/Shaders
+0 B	Assets/ImportAssets/Magic Portals and Props/Textures
+537.0 KB	Assets/ImportAssets/Magic Portals and Props/Textures/circle.png
+2.5 MB	Assets/ImportAssets/Magic Portals and Props/Textures/circle_distorted.png
+71.5 KB	Assets/ImportAssets/Magic Portals and Props/Textures/circle_thin.png
+3.0 MB	Assets/ImportAssets/Magic Portals and Props/Textures/drops.png
+3.7 MB	Assets/ImportAssets/Magic Portals and Props/Textures/drops_horiz.png
+291.7 KB	Assets/ImportAssets/Magic Portals and Props/Textures/gradient_center_vertical.png
+13.2 KB	Assets/ImportAssets/Magic Portals and Props/Textures/gradient_horizontal2.png
+3.9 MB	Assets/ImportAssets/Magic Portals and Props/Textures/lines_vert.png
+86.6 KB	Assets/ImportAssets/Magic Portals and Props/Textures/ngon.png
+4.8 MB	Assets/ImportAssets/Magic Portals and Props/Textures/noise2.png
+3.9 MB	Assets/ImportAssets/Magic Portals and Props/Textures/noise3.png
+4.3 MB	Assets/ImportAssets/Magic Portals and Props/Textures/noise4.png
+4.6 MB	Assets/ImportAssets/Magic Portals and Props/Textures/noise5.png
+165.7 KB	Assets/ImportAssets/Magic Portals and Props/Textures/runes_circle.png
+322.0 KB	Assets/ImportAssets/Magic Portals and Props/Textures/smoke_atlas.png
+32.8 KB	Assets/ImportAssets/Magic Portals and Props/Textures/squares.png
+87.7 KB	Assets/ImportAssets/Magic Portals and Props/Textures/star.png
+5.6 MB	Assets/ImportAssets/Magic Portals and Props/Textures/swirl.png
+784.6 KB	Assets/ImportAssets/Magic Portals and Props/Textures/swirl_small.png
+0 B	Assets/ImportAssets/Magic Portals and Props/URP Settings
+2.2 KB	Assets/ImportAssets/Magic Portals and Props/URP Settings/Camera Profile.asset
+3.6 KB	Assets/ImportAssets/Magic Portals and Props/URP Settings/UniversalRenderPipelineAsset.asset
+1.3 KB	Assets/ImportAssets/Magic Portals and Props/URP Settings/UniversalRenderPipelineAsset_Renderer.asset
+0 B	Assets/ImportAssets/Mini Simple Characters Skeleton Demo
+0 B	Assets/ImportAssets/Mini Simple Characters Skeleton Demo/Materials
+0 B	Assets/ImportAssets/Mini Simple Characters Skeleton Demo/Materials/Material Variations
+3.7 KB	Assets/ImportAssets/Mini Simple Characters Skeleton Demo/Materials/Material Variations/Mini Simple Characters Mat Red Eyes.mat
+3.7 KB	Assets/ImportAssets/Mini Simple Characters Skeleton Demo/Materials/Material Variations/Mini Simple Characters Mat Yellow Bones.mat
+3.7 KB	Assets/ImportAssets/Mini Simple Characters Skeleton Demo/Materials/Mini Simple Characters Demo Mat tertiary.mat
+0 B	Assets/ImportAssets/Mini Simple Characters Skeleton Demo/Models
+0 B	Assets/ImportAssets/Mini Simple Characters Skeleton Demo/Models/Animations
+218.4 KB	Assets/ImportAssets/Mini Simple Characters Skeleton Demo/Models/shield_wood.fbx
+219.1 KB	Assets/ImportAssets/Mini Simple Characters Skeleton Demo/Models/sword_wood.fbx
+0 B	Assets/ImportAssets/Mini Simple Characters Skeleton Demo/Prefabs
+0 B	Assets/ImportAssets/Mini Simple Characters Skeleton Demo/Prefabs/Characters
+43.1 KB	Assets/ImportAssets/Mini Simple Characters Skeleton Demo/Prefabs/Characters/mini simple skeleton demo.prefab
+43.1 KB	Assets/ImportAssets/Mini Simple Characters Skeleton Demo/Prefabs/Characters/mini simple skeleton demo_01.prefab
+43.0 KB	Assets/ImportAssets/Mini Simple Characters Skeleton Demo/Prefabs/Characters/mini simple skeleton demo_02.prefab
+0 B	Assets/ImportAssets/Mini Simple Characters Skeleton Demo/Prefabs/Props
+2.4 KB	Assets/ImportAssets/Mini Simple Characters Skeleton Demo/Prefabs/Props/shield_wood.prefab
+2.5 KB	Assets/ImportAssets/Mini Simple Characters Skeleton Demo/Prefabs/Props/sword_wood.prefab
+2.8 KB	Assets/ImportAssets/Mini Simple Characters Skeleton Demo/Readme.asset
+0 B	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series
+0 B	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series
+0 B	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/FBX
+41.2 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/FBX/Creeper.controller
+448.1 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/FBX/Creeper.FBX
+684.1 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/FBX/Creeper@Bite Attack In Place.FBX
+690.2 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/FBX/Creeper@Bite Attack W Root.FBX
+703.8 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/FBX/Creeper@Cast Spell.FBX
+784.5 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/FBX/Creeper@Die.FBX
+700.9 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/FBX/Creeper@Idle.FBX
+303.0 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/FBX/Creeper@Jump In Place.FBX
+303.2 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/FBX/Creeper@Jump W Root.FBX
+683.7 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/FBX/Creeper@Projectile Attack.FBX
+865.3 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/FBX/Creeper@Roll Attack In Place.FBX
+692.1 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/FBX/Creeper@Spawn.FBX
+662.4 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/FBX/Creeper@Take Damage.FBX
+683.8 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/FBX/Creeper@Trajectory Projectile Attack.FBX
+351.6 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/FBX/Creeper@Turn Left.FBX
+351.6 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/FBX/Creeper@Turn Right.FBX
+686.1 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/FBX/Creeper@Underground.FBX
+1002.8 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/FBX/Creeper@Walk Forward Fast In Place.FBX
+1002.7 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/FBX/Creeper@Walk Forward Fast W Root.FBX
+723.5 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/FBX/Creeper@Walk Forward In Place.FBX
+723.5 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/FBX/Creeper@Walk Forward W Root.FBX
+0 B	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/Materials
+3.7 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/Materials/Creeper.mat
+0 B	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/Prefabs
+26.1 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/Prefabs/Creeper.prefab
+0 B	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/Read Me
+89.9 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/Read Me/Evolve your monsters - Cute Series.pdf
+782.1 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/Read Me/General Introduction.pdf
+0 B	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/Scenes
+21.2 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/Scenes/Demo.unity
+0 B	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/Textures
+3.9 MB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Creeper Cute Series/Textures/Creeper.psd
+0 B	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series
+0 B	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/FBX
+4.7 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/FBX/Dragon Dusk.controller
+790.9 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/FBX/Dragon Dusk@Bite Attack Low.FBX
+791.1 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/FBX/Dragon Dusk@Bite Attack.FBX
+897.7 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/FBX/Dragon Dusk@Blast Attack.FBX
+817.8 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/FBX/Dragon Dusk@Cast Spell.FBX
+759.8 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/FBX/Dragon Dusk@Fly Forward In Place.FBX
+760.4 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/FBX/Dragon Dusk@Fly Forward W Root.FBX
+790.7 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/FBX/Dragon Dusk@Projectile Attack Low.FBX
+790.9 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/FBX/Dragon Dusk@Projectile Attack.FBX
+791.4 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/FBX/Dragon Dusk@Spawn.FBX
+763.0 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/FBX/Dragon Dusk@Take Damage.FBX
+1.2 MB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/FBX/Dragon Dusk@Turn Left.FBX
+1.2 MB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/FBX/Dragon Dusk@Turn Right.FBX
+792.0 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/FBX/Dragon Dusk@Underground.FBX
+762.8 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/FBX/Dragon Dusk@Wing Attack.FBX
+0 B	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/Materials
+4.8 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/Materials/Dragon Dusk.mat
+0 B	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/Prefabs
+33.6 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/Prefabs/Dragon Dusk.prefab
+0 B	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/Read Me
+89.9 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/Read Me/Evolve your monsters - Cute Series.pdf
+782.1 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/Read Me/General Introduction.pdf
+0 B	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/Scenes
+22.0 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/Scenes/Demo.unity
+0 B	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/Textures
+970.0 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Dragon Dusk Cute Series/Textures/Dragon Dusk Emission.psd
+0 B	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series
+0 B	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/FBX
+383.3 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/FBX/Die.anim
+45.1 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/FBX/Horror.controller
+308.8 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/FBX/Horror@Bite Attack.FBX
+321.0 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/FBX/Horror@Cast Spell.FBX
+318.6 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/FBX/Horror@Idle.FBX
+307.3 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/FBX/Horror@Jump In Place.FBX
+309.0 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/FBX/Horror@Jump W Root.FBX
+308.8 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/FBX/Horror@Projectile Attack.FBX
+321.8 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/FBX/Horror@Roll Attack In Place.FBX
+312.6 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/FBX/Horror@Spawn.FBX
+319.4 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/FBX/Horror@Spit Lurker.FBX
+296.7 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/FBX/Horror@Take Damage.FBX
+308.9 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/FBX/Horror@Trajectory Projectile Attack.FBX
+357.4 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/FBX/Horror@Turn Left.FBX
+357.4 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/FBX/Horror@Turn Right.FBX
+308.9 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/FBX/Horror@Underground.FBX
+1.1 MB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/FBX/Horror@Walk Forward Fast In Place.FBX
+1.1 MB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/FBX/Horror@Walk Forward Fast W Root.FBX
+795.8 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/FBX/Horror@Walk Forward In Place.FBX
+795.8 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/FBX/Horror@Walk Forward W Root.FBX
+269.5 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/FBX/Walk Forward Fast W Root.anim
+0 B	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/Materials
+0 B	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/Prefabs
+26.1 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/Prefabs/Horror.prefab
+0 B	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/Read Me
+89.9 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/Read Me/Evolve your monsters - Cute Series.pdf
+782.1 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/Read Me/General Introduction.pdf
+0 B	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/Scenes
+21.2 KB	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/Scenes/Demo.unity
+0 B	Assets/ImportAssets/Monsters Ultimate Pack 05 Cute Series/Horror Cute Series/Textures
+0 B	Assets/ImportAssets/Piloto Studio
+0 B	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1
+0 B	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Beams
+3.1 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Beams/Beam_Cast.prefab
+2.0 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Beams/Beam_Cast_Purple.prefab
+3.1 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Beams/Beam_Cast_Red.prefab
+3.2 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Beams/Beam_Cast_Yellow.prefab
+2.4 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Beams/BeamRay.prefab
+2.4 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Beams/BeamRay_Purple.prefab
+2.4 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Beams/BeamRay_Red.prefab
+2.4 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Beams/BeamRay_Yellow.prefab
+0 B	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Beams/Prefabs
+46.5 KB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Beams/Prefabs/RayBeam_Blue.prefab
+40.7 KB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Beams/Prefabs/RayBeam_Purple.prefab
+46.6 KB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Beams/Prefabs/RayBeam_Red.prefab
+47.3 KB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Beams/Prefabs/RayBeam_Yellow.prefab
+937.0 KB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Beams/Projectile.prefab
+937.0 KB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Beams/Projectile_Purple.prefab
+936.9 KB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Beams/Projectile_Red.prefab
+937.0 KB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Beams/Projectile_Yellow.prefab
+0 B	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/BigBombs
+11.5 KB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/BigBombs/BigBomTimeLine.playable
+0 B	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/BigBombs/Examples
+35.7 KB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/BigBombs/Examples/GreenBall.prefab
+33.1 KB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/BigBombs/Examples/PinkBall.prefab
+40.6 KB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/BigBombs/Examples/Spirit Bomb.prefab
+36.8 KB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/BigBombs/Examples/SuperNova.prefab
+2.2 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/BigBombs/SB_Impact_Blue.prefab
+2.1 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/BigBombs/SB_Impact_Green.prefab
+2.2 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/BigBombs/SB_Impact_Yellow.prefab
+2.7 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/BigBombs/SB_Loop_Blue.prefab
+2.4 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/BigBombs/SB_Loop_Green.prefab
+2.5 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/BigBombs/SB_Loop_Yellow.prefab
+2.0 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/BigBombs/SP_Impact_Pink.prefab
+2.3 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/BigBombs/SP_Loop_Pink.prefab
+0 B	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/DestructorDisk
+1.7 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/DestructorDisk/DestructorDisk_Pink.prefab
+1.7 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/DestructorDisk/DestructorDisk_Yellow.prefab
+0 B	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Hit
+1.0 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Hit/AnimePunch.prefab
+1.0 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Hit/AnimePunch_Blue.prefab
+1.0 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Hit/AnimePunch_Green.prefab
+1.0 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Hit/AnimePunch_Red.prefab
+1.0 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Hit/AnimePunch_White.prefab
+0 B	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Spheres
+154.5 KB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Spheres/AllSpheres.prefab
+1.4 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Spheres/D_Sphere_N1.prefab
+1.4 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Spheres/D_Sphere_N2.prefab
+1.4 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Spheres/D_Sphere_N3.prefab
+1.4 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Spheres/D_Sphere_N4.prefab
+1.4 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Spheres/D_Sphere_N5.prefab
+1.4 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Spheres/D_Sphere_N6.prefab
+1.4 MB	Assets/ImportAssets/Piloto Studio/Anime_VFX_Pack_Vol1/Spheres/D_Sphere_N7.prefab
+0 B	Assets/ImportAssets/Piloto Studio/Materials
+0 B	Assets/ImportAssets/Piloto Studio/Materials/Anime
+6.7 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/BigBomb_Rays.mat
+6.5 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/BigBomb_Spehere.mat
+6.5 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/BigBomb_Spehere_Green.mat
+6.5 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/BigBomb_Spehere_Yellow.mat
+6.5 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/BigBomb_Sphere_Texture_Magma.mat
+6.4 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/Cast_Ray.mat
+6.4 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/Cast_Ray_Center_2.mat
+6.5 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/Cast_Ray_Center_Blur.mat
+6.5 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/Cast_Ray_Center_Purple.mat
+11.8 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/DestructorDisk_Base.mat
+11.8 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/DestructorDisk_Variant.mat
+6.5 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/Hit_Punch_Burst.mat
+6.5 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/Hit_Punch_Center.mat
+7.2 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/HitPanner.mat
+6.4 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/Ki_Aura.mat
+11.2 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/kI_Circle.mat
+11.2 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/Ki_Egg.mat
+11.2 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/Ki_Flipbook.mat
+11.2 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/Ki_Flipbook_Desaturated.mat
+11.2 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/Ki_Panner.mat
+11.1 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/kI_Soft.mat
+6.4 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/LightPanner.mat
+6.4 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/Sphere.mat
+6.4 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/Sphere_Center_Noise.mat
+6.5 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/Sphere_Yellow.mat
+6.4 KB	Assets/ImportAssets/Piloto Studio/Materials/Anime/Star_Pointy_Alpha.mat
+0 B	Assets/ImportAssets/Piloto Studio/Materials/Fire
+0 B	Assets/ImportAssets/Piloto Studio/Materials/OverlyToony
+0 B	Assets/ImportAssets/Piloto Studio/Materials/Shared
+6.4 KB	Assets/ImportAssets/Piloto Studio/Materials/Shared/AlphaFuzzball_NoDarkSoft.mat
+21.4 KB	Assets/ImportAssets/Piloto Studio/Materials/Shared/Environment.mat
+6.7 KB	Assets/ImportAssets/Piloto Studio/Materials/Shared/Fire_Add_Soft.mat
+11.2 KB	Assets/ImportAssets/Piloto Studio/Materials/Shared/Flare.mat
+6.6 KB	Assets/ImportAssets/Piloto Studio/Materials/Shared/Flare_FatDot_Add_Soft.mat
+6.6 KB	Assets/ImportAssets/Piloto Studio/Materials/Shared/Flare_GlowdotPickbook_Strong.mat
+6.4 KB	Assets/ImportAssets/Piloto Studio/Materials/Shared/FleksSmall_Alpha.mat
+6.6 KB	Assets/ImportAssets/Piloto Studio/Materials/Shared/GlowdotPickbook_Alpha.mat
+6.6 KB	Assets/ImportAssets/Piloto Studio/Materials/Shared/ImpactLightrays_Blurry.mat
+6.4 KB	Assets/ImportAssets/Piloto Studio/Materials/Shared/ImpactRingSpiky_Blurry.mat
+11.0 KB	Assets/ImportAssets/Piloto Studio/Materials/Shared/Star_FourSides_Alpha.mat
+0 B	Assets/ImportAssets/Piloto Studio/Materials/Shock
+6.6 KB	Assets/ImportAssets/Piloto Studio/Materials/Shock/AnimeShock_Desat_ADD.mat
+6.6 KB	Assets/ImportAssets/Piloto Studio/Materials/Shock/AnimeShock_FlipbookADD.mat
+6.6 KB	Assets/ImportAssets/Piloto Studio/Materials/Shock/ShockBlue_Zap_4x4_Alpha_Desat.mat
+0 B	Assets/ImportAssets/Piloto Studio/Materials/Wind
+0 B	Assets/ImportAssets/Piloto Studio/Models
+35.2 KB	Assets/ImportAssets/Piloto Studio/Models/Aura_Ki_2.fbx
+17.2 KB	Assets/ImportAssets/Piloto Studio/Models/DestructorDisk_Mesh.fbx
+0 B	Assets/ImportAssets/Piloto Studio/Models/Elemental Pilar
+18.6 KB	Assets/ImportAssets/Piloto Studio/Models/Elemental Pilar/FloorCircle.fbx
+13.0 KB	Assets/ImportAssets/Piloto Studio/Models/InfiniteBackground_Better.fbx
+21.8 KB	Assets/ImportAssets/Piloto Studio/Models/Ki_Circle.fbx
+31.5 KB	Assets/ImportAssets/Piloto Studio/Models/Sphere_Pivot.fbx
+8.5 MB	Assets/ImportAssets/Piloto Studio/PILOTO README.pdf
+0 B	Assets/ImportAssets/Piloto Studio/Scripts
+3.0 KB	Assets/ImportAssets/Piloto Studio/Scripts/ParticleHandler.cs
+2.6 KB	Assets/ImportAssets/Piloto Studio/Scripts/ParticleShowcase.cs
+0 B	Assets/ImportAssets/Piloto Studio/Shaders_Reforged
+0 B	Assets/ImportAssets/Piloto Studio/Shaders_Reforged/Functions
+140.8 KB	Assets/ImportAssets/Piloto Studio/Shaders_Reforged/Gradient.png
+136.7 KB	Assets/ImportAssets/Piloto Studio/Shaders_Reforged/Piloto PBR Simple.shadergraph
+0 B	Assets/ImportAssets/Piloto Studio/Shaders_Reforged/SharedMaterials
+6.0 KB	Assets/ImportAssets/Piloto Studio/Shaders_Reforged/SharedMaterials/M_PBR_Gradient_1.mat
+0 B	Assets/ImportAssets/Piloto Studio/Textures
+432.9 KB	Assets/ImportAssets/Piloto Studio/Textures/Anime_Shock1.png
+410.9 KB	Assets/ImportAssets/Piloto Studio/Textures/Aura_3.png
+1.4 MB	Assets/ImportAssets/Piloto Studio/Textures/BigBomb_Lights.png
+60.9 KB	Assets/ImportAssets/Piloto Studio/Textures/DestructorDisk.png
+57.1 KB	Assets/ImportAssets/Piloto Studio/Textures/DestructorDisk_Variant.png
+42.8 KB	Assets/ImportAssets/Piloto Studio/Textures/Electricity.png
+351.0 KB	Assets/ImportAssets/Piloto Studio/Textures/Energy_Circle.png
+308.4 KB	Assets/ImportAssets/Piloto Studio/Textures/FireQuad_Stylized.png
+12.4 KB	Assets/ImportAssets/Piloto Studio/Textures/Flare_FatDot.png
+216.3 KB	Assets/ImportAssets/Piloto Studio/Textures/flare1_flare2.png
+3.0 KB	Assets/ImportAssets/Piloto Studio/Textures/FlecksPickbook_Small.png
+2.0 KB	Assets/ImportAssets/Piloto Studio/Textures/FuzzballNoDark.png
+768.0 KB	Assets/ImportAssets/Piloto Studio/Textures/Glint_HighRes.TGA
+79.3 KB	Assets/ImportAssets/Piloto Studio/Textures/Glowdots_Speckles.png
+3.9 KB	Assets/ImportAssets/Piloto Studio/Textures/gradient_horizontal_Simple.png
+239.1 KB	Assets/ImportAssets/Piloto Studio/Textures/HarshWind_Upwards.png
+71.4 KB	Assets/ImportAssets/Piloto Studio/Textures/Hit_Punch.png
+68.1 KB	Assets/ImportAssets/Piloto Studio/Textures/Hit_Punch_Center.png
+52.0 KB	Assets/ImportAssets/Piloto Studio/Textures/Impact_LightraysBlurry.png
+153.3 KB	Assets/ImportAssets/Piloto Studio/Textures/ImpactRing_SpikyBlurry.png
+106.3 KB	Assets/ImportAssets/Piloto Studio/Textures/Ki_Aura_Sof.png
+1.0 MB	Assets/ImportAssets/Piloto Studio/Textures/Ki_FlipBook.png
+53.5 KB	Assets/ImportAssets/Piloto Studio/Textures/Offset_Elemental_Pilar_Floor.png
+480.8 KB	Assets/ImportAssets/Piloto Studio/Textures/ShockBlue_Zap_4x4.png
+67.3 KB	Assets/ImportAssets/Piloto Studio/Textures/Sparks_Atlas.png
+24.2 KB	Assets/ImportAssets/Piloto Studio/Textures/Sphere_Panner.png
+50.5 KB	Assets/ImportAssets/Piloto Studio/Textures/Star_FourSide.png
+425.3 KB	Assets/ImportAssets/Piloto Studio/Textures/Stars_3X3.png
+128.7 KB	Assets/ImportAssets/Piloto Studio/Textures/Tx_Noise_10.png
+139.9 KB	Assets/ImportAssets/Piloto Studio/Textures/Tx_Noise_17.png
+123.3 KB	Assets/ImportAssets/Piloto Studio/Textures/Tx_Noise_34.png
+234.1 KB	Assets/ImportAssets/Piloto Studio/Textures/TX_Voronoi.png
+0 B	Assets/ImportAssets/Sci-Fi Ball Robot
+0 B	Assets/ImportAssets/Sci-Fi Ball Robot/Anim
+0 B	Assets/ImportAssets/Sci-Fi Ball Robot/Anim/Facial
+0 B	Assets/ImportAssets/Sci-Fi Ball Robot/Anim/TimeLine
+42.3 KB	Assets/ImportAssets/Sci-Fi Ball Robot/Anim/TimeLine/BallRobot_Facial_TimeLine.playable
+118.4 KB	Assets/ImportAssets/Sci-Fi Ball Robot/Anim/TimeLine/BallRobot_Timeline.playable
+0 B	Assets/ImportAssets/Sci-Fi Ball Robot/Material
+3.9 KB	Assets/ImportAssets/Sci-Fi Ball Robot/Material/Background_bowl.mat
+4.3 KB	Assets/ImportAssets/Sci-Fi Ball Robot/Material/BallRobot_body_gold.mat
+4.3 KB	Assets/ImportAssets/Sci-Fi Ball Robot/Material/BallRobot_body_red.mat
+2.8 KB	Assets/ImportAssets/Sci-Fi Ball Robot/Material/BallRobot_eye_red.mat
+2.8 KB	Assets/ImportAssets/Sci-Fi Ball Robot/Material/BallRobot_eye_yellow.mat
+3.8 KB	Assets/ImportAssets/Sci-Fi Ball Robot/Material/BallRobot_glass_red.mat
+3.9 KB	Assets/ImportAssets/Sci-Fi Ball Robot/Material/BallRobot_glass_yellow.mat
+4.6 KB	Assets/ImportAssets/Sci-Fi Ball Robot/Material/Flow_red.mat
+4.6 KB	Assets/ImportAssets/Sci-Fi Ball Robot/Material/Flow_yellow.mat
+0 B	Assets/ImportAssets/Sci-Fi Ball Robot/Mesh
+36.4 KB	Assets/ImportAssets/Sci-Fi Ball Robot/Mesh/Background_bowl.fbx
+0 B	Assets/ImportAssets/Sci-Fi Ball Robot/Prefab
+2.4 KB	Assets/ImportAssets/Sci-Fi Ball Robot/Prefab/Background_bowl.prefab
+71.0 KB	Assets/ImportAssets/Sci-Fi Ball Robot/Prefab/Ball Robot_Blue.prefab
+70.8 KB	Assets/ImportAssets/Sci-Fi Ball Robot/Prefab/Ball Robot_Gold.prefab
+70.8 KB	Assets/ImportAssets/Sci-Fi Ball Robot/Prefab/Ball Robot_Red.prefab
+0 B	Assets/ImportAssets/Sci-Fi Ball Robot/Shader
+117.2 KB	Assets/ImportAssets/Sci-Fi Ball Robot/Shader/BallRobot_eye_motion_description.png
+454.6 KB	Assets/ImportAssets/Sci-Fi Ball Robot/Shader/Shader Description.pdf
+0 B	Assets/ImportAssets/Sci-Fi Ball Robot/Texture
+2.8 MB	Assets/ImportAssets/Sci-Fi Ball Robot/Texture/BallRobot_blue_outline_emission-2.png
+1.9 MB	Assets/ImportAssets/Sci-Fi Ball Robot/Texture/BallRobot_gold_albedo.png
+327.3 KB	Assets/ImportAssets/Sci-Fi Ball Robot/Texture/BallRobot_gold_emission.png
+2.4 MB	Assets/ImportAssets/Sci-Fi Ball Robot/Texture/BallRobot_gold_outline_emission.png
+2.8 MB	Assets/ImportAssets/Sci-Fi Ball Robot/Texture/BallRobot_gold_outline_emission-2.png
+4.8 MB	Assets/ImportAssets/Sci-Fi Ball Robot/Texture/BallRobot_gold_specular.png
+2.2 MB	Assets/ImportAssets/Sci-Fi Ball Robot/Texture/BallRobot_gray_outline_emission.png
+2.5 MB	Assets/ImportAssets/Sci-Fi Ball Robot/Texture/BallRobot_gray_outline_emission-2.png
+2.9 MB	Assets/ImportAssets/Sci-Fi Ball Robot/Texture/BallRobot_red_basecolor.png
+320.4 KB	Assets/ImportAssets/Sci-Fi Ball Robot/Texture/BallRobot_red_emission.png
+252.6 KB	Assets/ImportAssets/Sci-Fi Ball Robot/Texture/ground_gradient.png
+61.4 KB	Assets/ImportAssets/Sci-Fi Ball Robot/Texture/ground_gradient_matall.png
+0 B	Assets/ImportAssets/SkySeries Freebie
+3.0 KB	Assets/ImportAssets/SkySeries Freebie/6sidedCosmicCoolCloud.mat
+3.0 KB	Assets/ImportAssets/SkySeries Freebie/6SidedFluffball.mat
+3.0 KB	Assets/ImportAssets/SkySeries Freebie/6SidedMegaSun.mat
+2.3 KB	Assets/ImportAssets/SkySeries Freebie/AmbienceExposure.mat
+2.2 KB	Assets/ImportAssets/SkySeries Freebie/CasualDay.mat
+2.9 KB	Assets/ImportAssets/SkySeries Freebie/CloudedSunGlow.mat
+2.3 KB	Assets/ImportAssets/SkySeries Freebie/Cloudymorning.mat
+1016 B	Assets/ImportAssets/SkySeries Freebie/CoriolisNight4k.mat
+2.2 KB	Assets/ImportAssets/SkySeries Freebie/CosmicCoolCloud_Eq.mat
+2.2 KB	Assets/ImportAssets/SkySeries Freebie/DarkStorm.mat
+2.2 KB	Assets/ImportAssets/SkySeries Freebie/DayInTheClouds.mat
+1.0 KB	Assets/ImportAssets/SkySeries Freebie/FluffballDay.mat
+0 B	Assets/ImportAssets/SkySeries Freebie/FreebieHdri
+14.7 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/AmbienceExposure4k.hdr
+20.6 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/CasualDay4K.hdr
+22.9 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/CloudedSunGlow4k.hdr
+20.0 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/Cloudymorning4k.hdr
+17.5 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/CoriolisNight4k.hdr
+8.6 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/CosmicCoolCloudBack.hdr
+9.2 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/CosmicCoolCloudBottom.hdr
+15.5 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/CosmicCoolCloudEQ_hdr.exr
+8.7 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/CosmicCoolCloudFront.hdr
+9.5 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/CosmicCoolCloudLeft.hdr
+9.1 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/CosmicCoolCloudRight.hdr
+9.2 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/CosmicCoolCloudTop.hdr
+17.5 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/DarkStorm4K.hdr
+22.5 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/DayInTheClouds4k.hdr
+6.9 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/FluffballDay4k.hdr
+1.1 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/FluffballDayBack.hdr
+480.4 KB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/FluffballDayBottom.hdr
+945.4 KB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/FluffballDayFront.hdr
+978.8 KB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/FluffballDayLeft.hdr
+849.0 KB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/FluffballDayRight.hdr
+1.3 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/FluffballDayTop.hdr
+9.0 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/MegaSun4k.hdr
+1.4 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/MegaSunBack.hdr
+297.7 KB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/MegaSunBottom.hdr
+1.1 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/MegaSunFront.hdr
+1.2 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/MegaSunLeft.hdr
+1.5 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/MegaSunRight.hdr
+2.6 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/MegaSunTop.hdr
+15.0 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/PlanetaryEarth4k.hdr
+25.3 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/SkyhighFluffycloudField4k.hdr
+17.0 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/SunlessCirruscover4k.hdr
+27.1 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/UnderTheSea4k.hdr
+27.2 MB	Assets/ImportAssets/SkySeries Freebie/FreebieHdri/UnearthlyRed4k.hdr
+623 B	Assets/ImportAssets/SkySeries Freebie/Hdri setup.txt
+1.0 KB	Assets/ImportAssets/SkySeries Freebie/MegaSun.mat
+2.3 KB	Assets/ImportAssets/SkySeries Freebie/PlanetaryEarth.mat
+1022 B	Assets/ImportAssets/SkySeries Freebie/SkyhighFluffycloudField.mat
+1.0 KB	Assets/ImportAssets/SkySeries Freebie/SunlessCirruscover.mat
+2.2 KB	Assets/ImportAssets/SkySeries Freebie/UnderTheSea4k.mat
+2.2 KB	Assets/ImportAssets/SkySeries Freebie/UnearthlyRed.mat
+0 B	Assets/ImportAssets/Vefects
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/_ READ ME
+56.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/_ READ ME/Vefects Top Secret.pdf
+49.3 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/_ READ ME/VFX Courses.pdf
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Materials
+1.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Materials/M_Vefects_Extra_Billboard_01.mat
+1.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Materials/M_Vefects_Extra_Billboard_02.mat
+1.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Materials/M_Vefects_Extra_Billboard_03.mat
+1.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Materials/M_Vefects_Extra_Billboard_04.mat
+1.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Materials/M_Vefects_Extra_Billboard_05.mat
+1.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Materials/M_Vefects_Extra_Billboard_06.mat
+1.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Materials/M_Vefects_Extra_Billboard_07.mat
+1.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Materials/M_Vefects_Extra_Billboard_08.mat
+1.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Materials/M_Vefects_Extra_Billboard_09.mat
+1.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Materials/M_Vefects_Extra_Billboard_10.mat
+1.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Materials/M_Vefects_Extra_Billboard_11.mat
+1.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Materials/M_Vefects_Extra_Billboard_12.mat
+1.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Materials/M_Vefects_Extra_Billboard_13.mat
+1.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Materials/M_Vefects_Extra_Billboard_14.mat
+1.6 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Materials/M_Vefects_Extra_Grid_01.mat
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Meshes
+11.4 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Meshes/SM_Extra_Billboard_01.fbx
+4.0 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Meshes/SM_Extra_Billboard_01.prefab
+16.3 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Meshes/SM_Extra_Billboard_Base_01.fbx
+4.2 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Meshes/SM_Extra_Billboard_Base_01.prefab
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Scenes
+133.8 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Scenes/Vefects Secret Extra Scene.unity
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Shaders
+107.7 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Shaders/SH_Vefects_Extra_Billboard_01.shader
+108.0 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Shaders/SH_Vefects_Extra_Grid_01.shader
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Textures
+385.3 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Textures/Vefects_Anime_Stylized_VFX_Extra_01.tga
+368.2 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Textures/Vefects_Anime_VFX_Extra_01.tga
+369.0 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Textures/Vefects_Essential_Trails_VFX_Extra_01.tga
+415.6 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Textures/Vefects_Explosions_VFX_Extra_01.tga
+468.8 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Textures/Vefects_Flipbook_VFX_Extra_01.tga
+436.6 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Textures/Vefects_Item_Pickup_VFX_Extra_01.tga
+504.0 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Textures/Vefects_Level_Up_VFX_Extra_01.tga
+523.1 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Textures/Vefects_Loot_VFX_Extra_01.tga
+287.4 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Textures/Vefects_Shots_VFX_Extra_01.tga
+554.3 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Textures/Vefects_Slime_VFX_Extra_01.tga
+377.9 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Textures/Vefects_Smoke_Bombs_VFX_Extra_01.tga
+573.1 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Textures/Vefects_Space_VFX_Extra_01.tga
+656.2 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Textures/Vefects_VFX_Mega_Bundle_Pack_Extra_01.tga
+312.4 KB	Assets/ImportAssets/Vefects/Trails VFX URP/_ Extra/Textures/Vefects_Vignette_VFX_Extra_01.tga
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/Demo
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Documentation
+47.7 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Documentation/Vefects Trails VFX URP Info Doc.pdf
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Character
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Character/Materials
+4.1 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Character/Materials/M_Character_Base_01.mat
+2.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Character/Materials/M_VFX_Character_Showoff_01.mat
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Character/Meshes
+2.1 MB	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Character/Meshes/SM_Vefects_Vexa_Unity_01.fbx
+2.6 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Character/Meshes/SM_Vefects_Vexa_Unity_01.prefab
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Character/Shaders
+124.4 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Character/Shaders/SH_Vefects_URP_VFX_Character_Showoff.shader
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Character/Textures
+192.0 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Character/Textures/T_VFX_Perlin_2_Octaves_Equalized.tga
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Environment
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Environment/Materials
+10.0 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Environment/Materials/M_Grid.mat
+4.4 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Environment/Materials/M_Sky.mat
+2.3 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Environment/Materials/M_Vefects_Grid_01.mat
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Environment/Meshes
+3.0 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Environment/Meshes/SM_VFX_Background_Plate_01.prefab
+12.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Environment/Meshes/SM_VFX_Background_Plate_Flat_01.fbx
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Environment/Settings
+23.2 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Environment/Settings/Vefects BIRP Postpro Profile.asset
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Environment/Shaders
+124.0 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Environment/Shaders/SH_Vefects_Grid_01.shader
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Environment/Textures
+5.1 MB	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Environment/Textures/T_VFX_Grid_01_Masks.tga
+10.8 MB	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Environment/Textures/T_VFX_Grid_01_Normal.tga
+12.0 MB	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Environment/Textures/T_VFX_Grid_01_Texture.tga
+3.0 MB	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Environment/Textures/T_VFX_Metrics_Grid_Base_Color.tga
+3.0 MB	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Environment/Textures/T_VFX_Metrics_Grid_Normal.tga
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Prefabs
+43.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Resources/Prefabs/VFX.prefab
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Scene
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Scene/Vefects Trails VFX Overview Scene
+3.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Demo/Scene/Vefects Trails VFX Overview Scene/Trails Postpro.asset
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/Scripts
+5.6 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Scripts/Demo_FreeCam.cs
+451 B	Assets/ImportAssets/Vefects/Trails VFX URP/Scripts/Demo_TurningAround.cs
+457 B	Assets/ImportAssets/Vefects/Trails VFX URP/Scripts/Demo_TurningAroundEffect.cs
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/Sounds
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/Sounds/WAV
+752.6 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Sounds/WAV/Vefects_SFX_Trail_Cosmos.wav
+752.6 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Sounds/WAV/Vefects_SFX_Trail_Dark.wav
+752.6 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Sounds/WAV/Vefects_SFX_Trail_Earth.wav
+752.6 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Sounds/WAV/Vefects_SFX_Trail_Electric.wav
+752.6 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Sounds/WAV/Vefects_SFX_Trail_Ice.wav
+752.6 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Sounds/WAV/Vefects_SFX_Trail_Nature.wav
+752.6 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Sounds/WAV/Vefects_SFX_Trail_Sound.wav
+752.6 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Sounds/WAV/Vefects_SFX_Trail_Void.wav
+752.6 KB	Assets/ImportAssets/Vefects/Trails VFX URP/Sounds/WAV/Vefects_SFX_Trail_Water.wav
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/VFX
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Materials
+10.7 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Materials/M_VFX_Beam_02.mat
+10.7 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Materials/M_VFX_Beam_03.mat
+5.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Materials/M_VFX_URP_Trail_Cosmos_01.mat
+5.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Materials/M_VFX_URP_Trail_Cosmos_02.mat
+5.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Materials/M_VFX_URP_Trail_Dark_01.mat
+5.4 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Materials/M_VFX_URP_Trail_Dark_02.mat
+5.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Materials/M_VFX_URP_Trail_Earth_01.mat
+5.4 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Materials/M_VFX_URP_Trail_Earth_02.mat
+5.4 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Materials/M_VFX_URP_Trail_Electric_01.mat
+5.4 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Materials/M_VFX_URP_Trail_Electric_02.mat
+5.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Materials/M_VFX_URP_Trail_Ice_01.mat
+5.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Materials/M_VFX_URP_Trail_Ice_02.mat
+5.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Materials/M_VFX_URP_Trail_Nature_01.mat
+5.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Materials/M_VFX_URP_Trail_Nature_02.mat
+5.3 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Materials/M_VFX_URP_Trail_Sound_01.mat
+5.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Materials/M_VFX_URP_Trail_Void_01.mat
+5.4 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Materials/M_VFX_URP_Trail_Void_02.mat
+5.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Materials/M_VFX_URP_Trail_Water_01.mat
+5.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Materials/M_VFX_URP_Trail_Water_02.mat
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Meshes
+3.2 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Meshes/SM_VFX_Cylinder_01.prefab
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Particles
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Particles/Trails
+577.4 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Particles/Trails/VFX_Item_Trail_Common.prefab
+1.4 MB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Particles/Trails/VFX_Item_Trail_Epic.prefab
+1.7 MB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Particles/Trails/VFX_Item_Trail_Legendary.prefab
+1.1 MB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Particles/Trails/VFX_Item_Trail_Rare.prefab
+692.3 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Particles/Trails/VFX_Item_Trail_Uncommon.prefab
+2.0 MB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Particles/Trails/VFX_Item_Trail_Unique.prefab
+578.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Particles/VFX_Item_Common.prefab
+1.7 MB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Particles/VFX_Item_Epic.prefab
+2.0 MB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Particles/VFX_Item_Legendary.prefab
+1.1 MB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Particles/VFX_Item_Rare.prefab
+693.6 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Particles/VFX_Item_Uncommon.prefab
+2.5 MB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Particles/VFX_Item_Unique.prefab
+13.3 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Particles/VFX_Trail_Cosmos.prefab
+13.4 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Particles/VFX_Trail_Dark.prefab
+13.4 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Particles/VFX_Trail_Earth.prefab
+13.3 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Particles/VFX_Trail_Electric.prefab
+13.4 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Particles/VFX_Trail_Fire.prefab
+13.3 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Particles/VFX_Trail_Ice.prefab
+13.3 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Particles/VFX_Trail_Nature.prefab
+9.9 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Particles/VFX_Trail_Sound.prefab
+13.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Particles/VFX_Trail_Void.prefab
+13.3 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Particles/VFX_Trail_Water.prefab
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Shaders
+0 B	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures
+325.3 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_Flare_03.png
+49.3 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_Glow_01.tga
+42.7 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_Gradient_01.png
+71.3 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_Gradient_01.tga
+61.5 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_Gradient_02.png
+42.4 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_Gradient_02.tga
+41.0 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_Gradient_03.png
+45.7 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_Gradient_03.tga
+3.9 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_Gradient_06.png
+57.1 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_Noise_01.png
+63.8 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_Noise_01.tga
+64.2 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_Noise_02.tga
+101.2 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_Noise_03.png
+66.2 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_Noise_03.tga
+64.1 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_Noise_05.tga
+63.3 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_Noise_06.tga
+60.0 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_Noise_07.tga
+181.6 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_Normal_Noise_01.tga
+66.2 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_Trail_02.tga
+49.7 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_Trail_03.tga
+57.3 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_Trail_05.tga
+17.6 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_Trail_06.tga
+68.8 KB	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_Trail_Mask_01.tga
+52 B	Assets/ImportAssets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_White_01.tga
+0 B	Assets/ImportAssets/特效
+0 B	Assets/ImportAssets/特效/Hovl Studio
+0 B	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3
+0 B	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Demo scene
+0 B	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Demo scene/Demo Glowing orbs 3
+64.2 KB	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Demo scene/Demo Glowing orbs 3.unity
+17.3 KB	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Demo scene/Demo Glowing orbs 3/LightingData.asset
+160.0 KB	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Demo scene/Demo Glowing orbs 3/ReflectionProbe-0.exr
+1.8 KB	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Demo scene/Demo Glowing orbs 3Settings.lighting
+112 B	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Demo scene/Readme.txt
+0 B	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Prefabs
+329.1 KB	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Prefabs/Glowing orb 21.prefab
+772.3 KB	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Prefabs/Glowing orb 22.prefab
+551.2 KB	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Prefabs/Glowing orb 23.prefab
+549.4 KB	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Prefabs/Glowing orb 24.prefab
+441.0 KB	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Prefabs/Glowing orb 25.prefab
+331.6 KB	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Prefabs/Glowing orb 26.prefab
+440.8 KB	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Prefabs/Glowing orb 27.prefab
+331.5 KB	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Prefabs/Glowing orb 28.prefab
+771.2 KB	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Prefabs/Glowing orb 29.prefab
+221.2 KB	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Prefabs/Glowing orb 30.prefab
+439.6 KB	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Prefabs/Glowing orb 31.prefab
+549.9 KB	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Prefabs/Glowing orb 32.prefab
+662.2 KB	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Prefabs/Glowing orb 33.prefab
+440.7 KB	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Prefabs/Glowing orb 34.prefab
+331.5 KB	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Prefabs/Glowing orb 35.prefab
+772.1 KB	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Prefabs/Glowing orb 36.prefab
+442.2 KB	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Prefabs/Glowing orb 37.prefab
+552.3 KB	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Prefabs/Glowing orb 38.prefab
+442.0 KB	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Prefabs/Glowing orb 39.prefab
+331.7 KB	Assets/ImportAssets/特效/Hovl Studio/Glowing orbs Vol 3/Prefabs/Glowing orb 40.prefab
+0 B	Assets/ImportAssets/特效/Hovl Studio/HSFiles
+0 B	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials
+6.4 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Circle102cg.mat
+2.9 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Circle116cg.mat
+6.3 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Circle120cg.mat
+6.3 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Circle122bcg.mat
+6.6 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Circle38cg.mat
+6.5 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/CircleRainbow10cg.mat
+6.4 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/CircleRainbow11cg.mat
+6.4 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Crack6bcg.mat
+6.4 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Feather3bcg.mat
+6.4 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Flare20cg.mat
+2.7 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Flare6cg.mat
+6.5 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Flash1cg.mat
+2.7 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Flash21bcg.mat
+6.4 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Flash5cg.mat
+6.4 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Lightning10bcg.mat
+6.3 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Mask50bcg.mat
+6.4 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Noise56bcg.mat
+2.8 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Point12cg.mat
+2.9 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Point19bcg.mat
+6.6 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Smoke12cg.mat
+6.4 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Smoke24bcg.mat
+6.3 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Star5bcg.mat
+6.3 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/SunShines4bcg.mat
+3.1 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Trail21bcg.mat
+6.5 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Trail21cg.mat
+6.4 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Trail64cg.mat
+6.8 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Waves21bcg.mat
+6.7 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Materials/Waves21cg2.mat
+0 B	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Models
+15.7 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Models/HalfRing2.fbx
+12.3 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Models/Petal.fbx
+18.3 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Models/QuadToCircle.fbx
+0 B	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Settings
+5.1 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Settings/VolumeURP.asset
+0 B	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Shaders
+0 B	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Shaders/Shader Graph
+0 B	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures
+217.1 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Circle102.png
+3.3 MB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Circle116.png
+164.3 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Circle120.png
+56.7 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Circle122.png
+53.3 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Circle38.png
+87.6 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/CircleRainbow10.png
+139.8 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/CircleRainbow11.png
+957.2 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Crack6.png
+114.7 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Feather3.png
+256.7 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Flare20.png
+77.9 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Flare6.png
+81.2 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Flash1.png
+347.9 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Flash21.png
+87.5 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Flash5.png
+17.5 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Gradient17.png
+1.4 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Gradient3t.png
+2.0 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Gradient8.png
+189.1 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Lightning10.png
+83.2 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Mask50.png
+49.3 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/MaskForShader.png
+381.3 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Noise28.png
+235.7 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Noise35.png
+276.7 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Noise56.png
+76.7 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Point12.png
+47.5 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Point19.png
+240.0 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Smoke12.png
+102.0 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Smoke24.png
+96.3 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Star5.png
+40.1 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/SunShines4.png
+56.4 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Trail21.png
+85.1 KB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Trail64.png
+4.7 MB	Assets/ImportAssets/特效/Hovl Studio/HSFiles/Textures/Waves21.png
+0 B	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2
+0 B	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Demo scene
+3.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Demo scene/DemoShooting.cs
+94 B	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Demo scene/HDRP and URP(LWRP).txt
+139.0 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Demo scene/LightingData.asset
+8.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Demo scene/Lightmap-0_comp_dir.png
+96.3 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Demo scene/Lightmap-0_comp_light.exr
+8.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Demo scene/Lightmap-1_comp_dir.png
+96.4 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Demo scene/Lightmap-1_comp_light.exr
+9.0 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Demo scene/Lightmap-2_comp_dir.png
+91.9 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Demo scene/Lightmap-2_comp_light.exr
+22.2 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Demo scene/PP low.asset
+1.6 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Demo scene/Readme.txt
+127.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Demo scene/ReflectionProbe-0.exr
+4.9 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Demo scene/Shake.anim
+39.9 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Demo scene/Toon projectiles 2.unity
+0 B	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials
+2.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Additive.mat
+1.4 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Arrow9.mat
+2.6 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Aura16bcg.mat
+763 B	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/DistortionCircle19.mat
+763 B	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/DistortionSmoke18.mat
+2.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Flare10cg.mat
+2.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Flare14bcg.mat
+2.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Flare15bcg.mat
+2.6 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Flare23cg.mat
+2.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Flare3cg.mat
+2.6 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Flash30bcg.mat
+2.6 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Flash31bcg.mat
+1.4 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Flash35bcg.mat
+1.4 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Flash36cg.mat
+2.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Flash7bcg.mat
+2.9 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/FlashGroundCG.mat
+4.0 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Floor2.mat
+2.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Glow1cg.mat
+1.4 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Glow2bcg.mat
+3.3 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Gradient17bcg2.mat
+3.6 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Gray.mat
+2.6 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/HPwater3bcg.mat
+3.3 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Impact1dn.mat
+2.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Leaf2bcg.mat
+2.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Lightning11cg.mat
+1.4 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Lightning17bcg.mat
+1.4 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Object7bcg.mat
+1.6 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Object8ts.mat
+2.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Point11cg.mat
+3.0 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Quad2ts.mat
+2.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Quad3bcg.mat
+3.0 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Quad3ts.mat
+2.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Romb3cg.mat
+2.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Smoke24cg.mat
+1.4 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Smoke34bcg.mat
+2.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Smoke3cg.mat
+2.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Snow3cg.mat
+2.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Snow4bcg.mat
+2.6 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Snow6bcg.mat
+2.6 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/SS2bcg.mat
+2.6 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Star12bcg.mat
+2.6 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Star4bcg.mat
+2.6 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Stone3bcg.mat
+2.6 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Stone4bcg.mat
+2.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Trail54bcg.mat
+2.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Trail5cg.mat
+2.6 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Trail65cg.mat
+3.0 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Trail68bcg.mat
+2.6 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Trail75bcg.mat
+2.6 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Trail79bcg.mat
+2.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Trail80bcg.mat
+1.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Trail81bcg.mat
+1.4 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Trail82bcg.mat
+3.3 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Trails65cg3.mat
+2.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Triangle1bcg.mat
+2.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/TwoSides11.mat
+2.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/TwoSides12.mat
+2.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/TwoSides14.mat
+2.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/TwoSides21.mat
+2.9 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/TwoSides38.mat
+2.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/TwoSides9.mat
+4.0 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Wall.mat
+2.9 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Materials/Waves22cg.mat
+0 B	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Models
+11.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Models/Cell.fbx
+17.4 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Models/Path2.fbx
+24.5 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Models/Path6.fbx
+22.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Models/ShellQuad.fbx
+11.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Models/Star1.fbx
+53.2 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Models/WaterSphere.fbx
+12.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Models/Сonstellation1.fbx
+14.6 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Models/СylindricalСone.fbx
+0 B	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs
+553.5 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Flash 1.prefab
+442.9 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Flash 10.prefab
+443.5 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Flash 11.prefab
+553.4 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Flash 12.prefab
+331.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Flash 13.prefab
+553.2 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Flash 14.prefab
+332.4 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Flash 15.prefab
+221.4 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Flash 2.prefab
+442.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Flash 3.prefab
+332.3 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Flash 4.prefab
+332.4 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Flash 5.prefab
+221.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Flash 6.prefab
+221.5 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Flash 7.prefab
+442.9 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Flash 8.prefab
+221.4 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Flash 9.prefab
+775.2 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Hit 1.prefab
+664.2 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Hit 10.prefab
+775.2 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Hit 11.prefab
+885.3 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Hit 12.prefab
+553.2 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Hit 13.prefab
+774.5 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Hit 14.prefab
+663.2 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Hit 15.prefab
+553.2 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Hit 2.prefab
+552.9 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Hit 3.prefab
+553.3 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Hit 4.prefab
+553.0 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Hit 5.prefab
+666.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Hit 6.prefab
+774.6 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Hit 7.prefab
+553.4 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Hit 8.prefab
+663.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Hit 9.prefab
+113.0 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Projectile 1.prefab
+235.0 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Projectile 10.prefab
+235.1 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Projectile 11.prefab
+235.0 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Projectile 12.prefab
+235.0 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Projectile 13.prefab
+235.1 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Projectile 14.prefab
+119.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Projectile 15.prefab
+442.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Projectile 2.prefab
+332.3 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Projectile 3.prefab
+222.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Projectile 4.prefab
+222.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Projectile 5.prefab
+222.1 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Projectile 6.prefab
+351.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Projectile 7.prefab
+234.9 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Projectile 8.prefab
+119.9 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Prefabs/Projectile 9.prefab
+0 B	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Scripts
+1.1 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Scripts/AutoDestroyPS.cs
+2.9 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Scripts/ProjectileMover.cs
+0 B	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Shaders
+13.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Shaders/Blend_TwoSides.shader
+18.3 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Shaders/DissolveNoise.shader
+6.9 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Shaders/Distortion.shader
+0 B	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures
+28.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Arrow9.png
+84.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Aura16.png
+88.9 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Circle19n.png
+6.8 MB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Concrete slab.png
+1.8 MB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Concrete slab_Height.png
+3.5 MB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Concrete slab_MetallicSmoothness.png
+7.9 MB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Concrete slab_Normal.png
+40.0 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Flare10.png
+78.5 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Flare14.png
+45.5 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Flare15.png
+53.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Flare23.png
+68.1 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Flare3.png
+139.5 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Flash30.png
+26.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Flash31.png
+77.9 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Flash35.png
+23.0 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Flash36.png
+52.3 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Flash7.png
+42.9 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Glow1.png
+3.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Glow2.png
+1.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Gradient11.png
+1.3 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Gradient12.png
+1.4 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Gradient15.png
+1.4 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Gradient3r.png
+50.0 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/HPwater3.png
+53.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Impact1.png
+45.0 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Leaf2.png
+119.6 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Lightning11.png
+61.4 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Lightning17.png
+238.2 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Mask53.png
+213.4 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Noise1.png
+25.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Noise13.png
+1.5 MB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Noise50.png
+266.2 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Noise69.png
+298.4 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Noise84.png
+45.2 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Object7.png
+78.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Object8.png
+35.6 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Object8Mask.png
+20.5 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Quad2.png
+40.3 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Quad3.png
+118.5 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Rays3b.png
+17.9 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Romb3.png
+2.9 MB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Smoke18n.png
+72.5 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Smoke3.png
+184.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Smoke34.png
+45.0 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Snow3.png
+89.2 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Snow4.png
+162.2 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Snow6.png
+142.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/SS2.png
+98.0 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Star12.png
+59.9 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Star4.png
+420.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Stone3.png
+293.3 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Stone4.png
+42.0 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Trail22.png
+33.3 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Trail25.png
+58.1 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Trail5.png
+64.1 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Trail54.png
+231.3 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Trail58.png
+56.5 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Trail65.png
+67.2 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Trail68.png
+212.0 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Trail70.png
+39.5 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Trail75.png
+83.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Trail79.png
+101.6 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Trail80.png
+49.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Trail81.png
+155.7 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Trail82.png
+2.8 KB	Assets/ImportAssets/特效/Hovl Studio/Toon Projectiles 2/Textures/Triangle1.png
+0 B	Assets/ImportAssets/特效/Portal Particle
+0 B	Assets/ImportAssets/特效/Portal Particle/Materials
+3.8 KB	Assets/ImportAssets/特效/Portal Particle/Materials/Background.mat
+2.1 KB	Assets/ImportAssets/特效/Portal Particle/Materials/Circle_1.mat
+2.1 KB	Assets/ImportAssets/特效/Portal Particle/Materials/Circle_12.mat
+2.1 KB	Assets/ImportAssets/特效/Portal Particle/Materials/Circle_14.mat
+2.1 KB	Assets/ImportAssets/特效/Portal Particle/Materials/Circle_15.mat
+785 B	Assets/ImportAssets/特效/Portal Particle/Materials/Circle_17.mat
+2.1 KB	Assets/ImportAssets/特效/Portal Particle/Materials/Circle_18.mat
+769 B	Assets/ImportAssets/特效/Portal Particle/Materials/Circle_19.mat
+2.1 KB	Assets/ImportAssets/特效/Portal Particle/Materials/Circle_20.mat
+823 B	Assets/ImportAssets/特效/Portal Particle/Materials/Circle_5.mat
+2.1 KB	Assets/ImportAssets/特效/Portal Particle/Materials/Circle_7.mat
+2.1 KB	Assets/ImportAssets/特效/Portal Particle/Materials/Circle_9.mat
+825 B	Assets/ImportAssets/特效/Portal Particle/Materials/Circle_Tex.mat
+2.1 KB	Assets/ImportAssets/特效/Portal Particle/Materials/Glow_11.mat
+764 B	Assets/ImportAssets/特效/Portal Particle/Materials/Glow_8.mat
+765 B	Assets/ImportAssets/特效/Portal Particle/Materials/Light_5.mat
+2.1 KB	Assets/ImportAssets/特效/Portal Particle/Materials/Light_6.mat
+783 B	Assets/ImportAssets/特效/Portal Particle/Materials/Light_8.mat
+798 B	Assets/ImportAssets/特效/Portal Particle/Materials/Light_9.mat
+0 B	Assets/ImportAssets/特效/Portal Particle/Mesh
+24.3 KB	Assets/ImportAssets/特效/Portal Particle/Mesh/Cylinder_2.FBX
+22.8 KB	Assets/ImportAssets/特效/Portal Particle/Mesh/funnel.FBX
+0 B	Assets/ImportAssets/特效/Portal Particle/Mesh/Materials
+3.6 KB	Assets/ImportAssets/特效/Portal Particle/Mesh/Materials/Fx_Object.mat
+0 B	Assets/ImportAssets/特效/Portal Particle/Prefab
+307.4 KB	Assets/ImportAssets/特效/Portal Particle/Prefab/Teleport_1.prefab
+306.3 KB	Assets/ImportAssets/特效/Portal Particle/Prefab/Teleport_14.prefab
+381.2 KB	Assets/ImportAssets/特效/Portal Particle/Prefab/Teleport_2.prefab
+615.4 KB	Assets/ImportAssets/特效/Portal Particle/Prefab/Teleport_4.prefab
+608.4 KB	Assets/ImportAssets/特效/Portal Particle/Prefab/Teleport_5.prefab
+225.1 KB	Assets/ImportAssets/特效/Portal Particle/Scene.unity
+0 B	Assets/ImportAssets/特效/Portal Particle/Scrpt
+2.4 KB	Assets/ImportAssets/特效/Portal Particle/Scrpt/CameraHolder.cs
+0 B	Assets/ImportAssets/特效/Portal Particle/Textures
+277.0 KB	Assets/ImportAssets/特效/Portal Particle/Textures/BackgroundAlbedo.tif
+53.2 KB	Assets/ImportAssets/特效/Portal Particle/Textures/Circle_1.png
+83.2 KB	Assets/ImportAssets/特效/Portal Particle/Textures/Circle_12.png
+81.1 KB	Assets/ImportAssets/特效/Portal Particle/Textures/Circle_14.png
+127.8 KB	Assets/ImportAssets/特效/Portal Particle/Textures/Circle_15.png
+124.2 KB	Assets/ImportAssets/特效/Portal Particle/Textures/Circle_17.png
+51.2 KB	Assets/ImportAssets/特效/Portal Particle/Textures/Circle_18.png
+33.0 KB	Assets/ImportAssets/特效/Portal Particle/Textures/Circle_19.png
+70.2 KB	Assets/ImportAssets/特效/Portal Particle/Textures/Circle_20.png
+83.1 KB	Assets/ImportAssets/特效/Portal Particle/Textures/Circle_5.png
+54.2 KB	Assets/ImportAssets/特效/Portal Particle/Textures/Circle_9.png
+63.1 KB	Assets/ImportAssets/特效/Portal Particle/Textures/Circle_Tex.png
+114.1 KB	Assets/ImportAssets/特效/Portal Particle/Textures/Citcle_7.png
+48.3 KB	Assets/ImportAssets/特效/Portal Particle/Textures/Glow_11.png
+50.1 KB	Assets/ImportAssets/特效/Portal Particle/Textures/Glow_8.png
+6.3 KB	Assets/ImportAssets/特效/Portal Particle/Textures/guang1.png
+85.1 KB	Assets/ImportAssets/特效/Portal Particle/Textures/Light_10.png
+37.7 KB	Assets/ImportAssets/特效/Portal Particle/Textures/Light_8.png
+240.4 KB	Assets/ImportAssets/特效/Portal Particle/Textures/Light_9.png
+0 B	Assets/ImportAssets/特效/Vefects
+0 B	Assets/ImportAssets/特效/Vefects/Item Pickup VFX URP
+0 B	Assets/ImportAssets/特效/Vefects/Item Pickup VFX URP/Scene
+0 B	Assets/ImportAssets/特效/Vefects/Item Pickup VFX URP/Scene/Materials
+10.0 KB	Assets/ImportAssets/特效/Vefects/Item Pickup VFX URP/Scene/Materials/M_Grid.mat
+0 B	Assets/ImportAssets/特效/Vefects/Item Pickup VFX URP/Scene/Meshes
+13.2 KB	Assets/ImportAssets/特效/Vefects/Item Pickup VFX URP/Scene/Meshes/SM_VFX_Background_Plate_01.fbx
+2.3 KB	Assets/ImportAssets/特效/Vefects/Item Pickup VFX URP/Scene/Meshes/SM_VFX_Background_Plate_01.prefab
+0 B	Assets/ImportAssets/特效/Vefects/Item Pickup VFX URP/Scene/Scene
+2.3 KB	Assets/ImportAssets/特效/Vefects/Item Pickup VFX URP/Scene/Scene/Postpro Profile.asset
+0 B	Assets/ImportAssets/特效/Vefects/Item Pickup VFX URP/Scene/Textures
+12.0 MB	Assets/ImportAssets/特效/Vefects/Item Pickup VFX URP/Scene/Textures/Metrics_Grid_Base_Color.TGA
+12.0 MB	Assets/ImportAssets/特效/Vefects/Item Pickup VFX URP/Scene/Textures/Metrics_Grid_Normal.TGA
