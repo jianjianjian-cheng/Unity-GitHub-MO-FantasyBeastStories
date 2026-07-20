@@ -212,7 +212,9 @@ namespace Controllers.Network
       if (prefabs.ContainsKey(prefabId))
         return GetFromPool(prefabId, position, rotation, activateOnGet: false);
 
-      // 非库内对象（如玩家）回退到默认 Resources 加载
+      // 非库内对象（如玩家）必须从 Resources 加载
+      // Photon PUN2 的 prefabId 是 Resources 路径，Photon prefabs 必须留在 Resources 中
+      // 不可使用 Addressables — Photon 序列化机制要求 prefabId 对应 Resources 路径
       var prefab = Resources.Load<GameObject>(prefabId);
       if (prefab != null)
         return Object.Instantiate(prefab, position, rotation);

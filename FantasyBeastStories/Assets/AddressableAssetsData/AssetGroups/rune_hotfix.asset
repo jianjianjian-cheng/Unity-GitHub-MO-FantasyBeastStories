@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: rune_hotfix
+  m_EditorClassIdentifier: 
+  m_GroupName: rune_hotfix
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 8f32c42804a5aeb42ab13222c9f8b260
+  m_SerializeEntries:
+  - m_GUID: 67628f21e4b9a2b458177da498d3aff3
+    m_Address: Assets/_Project/Art/Textures/UI/Rune/PowerGrowth.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eacf5cd5ee179ca40bcc141cbaa60aec
+    m_Address: Assets/_Project/Art/Textures/UI/Rune/suiyan.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fb99d6304baf1dc43b9033961371850c, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: de0b44687eb07884d9c85b0c4214f3e7, type: 2}
+    - {fileID: 11400000, guid: 7e50b5a7fef156249add740bbf45514f, type: 2}

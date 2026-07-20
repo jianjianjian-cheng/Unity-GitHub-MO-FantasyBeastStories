@@ -1,0 +1,295 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: ui_assets
+  m_EditorClassIdentifier: 
+  m_GroupName: ui_assets
+  m_Data:
+    m_SerializedData: []
+  m_GUID: bdcc62ab546aebb439064fb20059e702
+  m_SerializeEntries:
+  - m_GUID: 02f159f40a2666043bd3d095a23f9378
+    m_Address: UI/TopNotice/png/22
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 053339c266ce65a45bca82e0f52e6c9b
+    m_Address: UI/TopNotice/png/17
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0b1f868e0e600914ca05728b2446b9cc
+    m_Address: UI/CharactorInfo/CharacterInfoLibrarySO
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 103bff245473f5b45a73458ee1f1814c
+    m_Address: UI/CharactorInfo/Icon/BingNv
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 180a48a5e9f09a8439d01471ad7d4182
+    m_Address: UIAnim/Open_UISlideAnim
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 19d8f09dbcd58bf45b453badb1c76b43
+    m_Address: UI/DefaultButton
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1a3d49816e540734a9e3d83cbd37cf91
+    m_Address: "UI/Characters/jimeng-2026-04-18-1501-\u53C2\u8003@\u56FE\u72471\u4E2D\u7684\u53E4\u98CEQ\u7248\u5C0F\u5973\u5B69\u548C\u7EA2\u8272\u5C0F\u9F99\u5F62\u8C61\uFF0C\u6539\u4E3A\u6CB9\u753B\u4E8C\u6B21\u5143\u7F8E\u6F2B\u98CE\u683C\uFF0C\u6E38\u620F\u89D2\u8272\u7ACB..."
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1f4ecb0fb79f643409a6e83c642054c9
+    m_Address: UI/TopNotice/png/12
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2031ca785274ba64da16882692401733
+    m_Address: UI/TopNotice/png/10
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 20c46466d71ee0541b2abb08577bffcf
+    m_Address: UI/TopNotice/png/4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 215ccb0ce3b052344b69c68795099973
+    m_Address: UI/TopNotice/png/6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3b59e09efc19d12428516f29f908801b
+    m_Address: UI/TopNotice/png/20
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3c2992604c05de444aa7a4229f9ff69b
+    m_Address: UIAnim/Rune/RuneHoverEnterAnim
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 43308a003d6f599428404a177ba35e05
+    m_Address: UI/TopNotice/png/2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 43950611bce45094eaa5ac33a841a7d0
+    m_Address: UI/SelectedButton
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 45b46dd60ee52394f94b9133be58d382
+    m_Address: UI/Characters/0
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 462d062baec544946b05bea9892a0b21
+    m_Address: UI/TopNotice/png/15
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4bae876e23948204281b1b794d9c5c36
+    m_Address: UI/TopNotice/TopNotice
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5582927e13a75ed41a851d36bfbdfb78
+    m_Address: UIAnim/Loading/LoadingOpenAnim
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 582188b2361f00948aa81a98f45ba1db
+    m_Address: UIAnim/Rune/RuneDeSelectedAnim
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 591f610572472114f90e890af0eae335
+    m_Address: UI/Model/0
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6d6e608d3095cf14a8bb97342b28e34f
+    m_Address: UIAnim/Close_UISlideAnim 1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6fae4a39a33660541a61a9330c32319a
+    m_Address: UI/Model/2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7753df66ae90cc84793d34cf50639b92
+    m_Address: UI/TopNotice/png/13
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 77c6215af1caf534ebbde1443ead0d58
+    m_Address: UI/TopNotice/png/19
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7c0a3de308036194187548be9a7db945
+    m_Address: UI/TopNotice/png/5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e74fba55c5f93e4796d1209f59b3f20
+    m_Address: UI/Model/1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9287d83a106dbe84594362e33f42f78c
+    m_Address: UIAnim/Rune/RuneSelectedAnim
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 934b0e2260c14e84ebd449183800be30
+    m_Address: UI/TopNotice/png/7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9cf252f2445805c4594f04765e5da363
+    m_Address: UI/TopNotice/png/21
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ab2497c5c1472e94c99e7e8d3158f599
+    m_Address: UI/TopNotice/png/14
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: af5d9b9ab3fc24a30a9334b4576d5a04
+    m_Address: Icons/KillSacrifice
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b1cf1f6ad0471da44a7137c969ad44e5
+    m_Address: UI/TopNotice/png/8
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bd9a2c848289f864b97b53b8f1dc9d04
+    m_Address: UI/TopNotice/png/3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bf1128a57f1a94a458dd8673a9d99130
+    m_Address: UIAnim/Rune/RuneHoverExitAnim
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bfdb864115dd04df2b18cd36ec8d65d6
+    m_Address: Icons/EscortRobot
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c9bf3fc03d159484e969cb0c641aaadd
+    m_Address: UI/CharactorInfo/BingNv
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d153686760228ad47a26bfe2ed09c110
+    m_Address: UI/TopNotice/png/16
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d836e8058a3b98d45bc428d04a5c0821
+    m_Address: UI/TopNotice/png/1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e431699bc2e9d9a41ba02e3aa6fb9210
+    m_Address: UIAnim/UIFadeScaleAnimation
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e5b6d49c87a964a44bd98945c9ec53af
+    m_Address: UI/TopNotice/png/9
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e61a5af95da7df640b395b1cbe349ae0
+    m_Address: UI/TopNotice/png/18
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f2c564d0f2df1a141ab744af6df6d2ff
+    m_Address: UI/TopNotice/png/11
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fa9b4ba5e4a979f4ea6ff96818d8284e
+    m_Address: UI/CharactorInfo/WizardBoy
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: febf2b8e5d27dcd4ab82841aa43d4af4
+    m_Address: UIAnim/Loading/LoadingCloseAnim 1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fb99d6304baf1dc43b9033961371850c, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 0bc803f0d7395224abea7c4497e626c7, type: 2}
+    - {fileID: 11400000, guid: 97db36fd5fa53b242963696f11a9061d, type: 2}

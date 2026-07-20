@@ -1,3 +1,4 @@
+using Core;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -65,7 +66,7 @@ namespace UI
 
             if (indicatorImage != null)
             {
-                Sprite sprite = Resources.Load<Sprite>("Icons/" + imageName);
+                Sprite sprite = AssetLoader.LoadAsset<Sprite>("Icons/" + imageName);
                 if (sprite != null)
                 {
                     indicatorImage.sprite = sprite;

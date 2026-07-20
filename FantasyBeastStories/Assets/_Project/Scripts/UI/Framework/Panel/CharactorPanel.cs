@@ -135,7 +135,7 @@ public class CharactorPanel : UIScreen
   //切换角色
   private void SwitchCharactor(int charactorIndex)
   {
-    GameObject prefab = Resources.Load<GameObject>("UI/Model/" + charactorIndex);
+    GameObject prefab = AssetLoader.LoadAsset<GameObject>("UI/Model/" + charactorIndex);
     if (prefab == null)
     {
       Debug.LogWarning($"未找到角色模型资源: UI/Model/{charactorIndex}");

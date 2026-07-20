@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: lua_scripts
+  m_EditorClassIdentifier: 
+  m_GroupName: lua_scripts
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 358d16c1ce35baf418ceacd2f6d1ef0d
+  m_SerializeEntries:
+  - m_GUID: 04d8a18e20730d240a7f483cb4a1de7b
+    m_Address: Lua/Logic/RuneEffect
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 561e777d17020c3489a348ddab73945e
+    m_Address: Lua/Main
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 97dc7529d3e773f49afd6c6bba242867
+    m_Address: Lua/Config/RuneConfig
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c84b3b221ce44e441ac06e22b118e824
+    m_Address: Lua/Logic/RuneSpecialPower
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fb99d6304baf1dc43b9033961371850c, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: e606426ed27414c4080f355eb735a7a9, type: 2}
+    - {fileID: 11400000, guid: 7d000f888a836ff45905f5d811503415, type: 2}

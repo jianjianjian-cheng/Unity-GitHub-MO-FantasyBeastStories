@@ -74,7 +74,7 @@ namespace Controllers.Character
       movementData = new PlayerMovementData();
       isInLobby = EventChannelLocator.MainContainer.gameSettings.IsStayLobby;
       if (playerAttributeConfig == null)
-        playerAttributeConfig = Resources.Load<PlayerAttributeConfigSO>("Config/PlayerAttributeConfig");
+        playerAttributeConfig = AssetLoader.LoadAsset<PlayerAttributeConfigSO>("Config/PlayerAttributeConfig");
       attributePlayer = new AttributePlayerBase(playerAttributeConfig);
       attributePlayer.SetMoveSpeed(movementData.moveSpeed);
 

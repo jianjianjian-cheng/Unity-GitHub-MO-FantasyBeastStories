@@ -194,8 +194,8 @@ namespace Managers
             {
                 Instance.StartCountdownTime(limitTime);
             }
-            Instance.taskZone = Instantiate(
-                Resources.Load<GameObject>("TaskPrefab/" + taskId),
+            Instance.taskZone = AssetLoader.Instantiate(
+                "TaskPrefab/" + taskId,
                 zoneCenter,
                 Quaternion.identity
             );
@@ -225,8 +225,8 @@ namespace Managers
             {
                 Instance.StartCountdownTime(limitTime);
             }
-            Instance.taskZone = Instantiate(
-                Resources.Load<GameObject>("TaskPrefab/" + taskId),
+            Instance.taskZone = AssetLoader.Instantiate(
+                "TaskPrefab/" + taskId,
                 zoneCenter,
                 Quaternion.identity
             );

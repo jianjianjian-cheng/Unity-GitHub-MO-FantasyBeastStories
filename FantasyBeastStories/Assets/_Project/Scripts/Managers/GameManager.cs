@@ -39,14 +39,23 @@ namespace Managers
                 EventChannelLocator.MainContainer.gameSettings.IsTest = isTestInspector;
                 DontDestroyOnLoad(gameObject);
 
-                // ── 初始化 Lua 热更新环境 ──
-                LuaEnvManager.Instance.Init();
-                StartCoroutine(InitHotfix());
+                // ── 等待 Addressables 热更预下载完成后再初始化 ──
+                StartCoroutine(InitAfterUpdate());
             }
             else
             {
                 Destroy(gameObject);
             }
+        }
+
+        /// <summary>等待热更预下载完成，再初始化 Lua 和 Hotfix</summary>
+        private IEnumerator InitAfterUpdate()
+        {
+            // 等待 AddressablesUpdater 完成（devMode 下瞬间完成）
+            yield return new WaitUntil(() => AddressablesUpdater.IsUpdateComplete);
+
+            LuaEnvManager.Instance.Init();
+            StartCoroutine(InitHotfix());
         }
 
         private IEnumerator InitHotfix()

@@ -99,15 +99,15 @@ namespace Managers
         {
             // 从 Resources 加载配置（如果 Inspector 未赋值）
             if (_config == null)
-                _config = Resources.Load<AudioConfigSO>("Audio/Config/AudioConfig");
+                _config = AssetLoader.LoadAsset<AudioConfigSO>("Audio/Config/AudioConfig");
 
             if (_soundLibrary == null)
-                _soundLibrary = Resources.Load<SoundLibrarySO>("Audio/Libraries/MainSoundLibrary");
+                _soundLibrary = AssetLoader.LoadAsset<SoundLibrarySO>("Audio/Libraries/MainSoundLibrary");
 
             Debug.Log($"[AudioManager] 初始化: _soundLibrary={(_soundLibrary != null ? _soundLibrary.name : "NULL")}, _config={(_config != null ? _config.name : "NULL")}, _audioMixer={(_audioMixer != null ? _audioMixer.name : "NULL")}");
 
             if (_audioMixer == null)
-                _audioMixer = Resources.Load<AudioMixer>("Audio/MainMixer");
+                _audioMixer = AssetLoader.LoadAsset<AudioMixer>("Audio/MainMixer");
 
             // ——— 初始化 AudioMixer 控制器 ———
             _mixerController = new AudioMixerController(_audioMixer);

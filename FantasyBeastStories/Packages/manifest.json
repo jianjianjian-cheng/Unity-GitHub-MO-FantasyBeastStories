@@ -1,9 +1,13 @@
 {
   "dependencies": {
+    "cn.tuanjie.ai.generators": "file:../.codely-cli/extensions/TJGenerators/Packages/cn.tuanjie.ai.generators",
+    "cn.tuanjie.codely.bridge": "1.0.71",
+    "cn.unity.uos.launcher": "https://cnb.cool/unity/uos/UOSLauncher.git",
     "com.gamebooom.unity.mcp": "https://github.com/FunplayAI/funplay-unity-mcp.git",
     "com.tripo3d.unitybridge": "file:G:/插件/Tripo3d_Unity_Bridge",
     "com.unity.2d.animation": "9.2.2",
     "com.unity.2d.sprite": "1.0.0",
+    "com.unity.addressables": "1.22.3",
     "com.unity.ai.navigation": "1.1.7",
     "com.unity.cinemachine": "2.10.6",
     "com.unity.collab-proxy": "2.7.1",
@@ -50,8 +54,6 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0",
-    "cn.tuanjie.codely.bridge": "1.0.71",
-    "cn.tuanjie.ai.generators": "file:../.codely-cli/extensions/TJGenerators/Packages/cn.tuanjie.ai.generators"
+    "com.unity.modules.xr": "1.0.0"
   }
 }

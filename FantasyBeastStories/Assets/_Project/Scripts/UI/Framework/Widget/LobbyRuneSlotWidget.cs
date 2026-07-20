@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Core;
 using DG.Tweening;
 using UI.Framework.Base;
 using UI.Framework.Manager;
@@ -36,8 +37,8 @@ namespace UI.Framework.Widget
             if (runeSlot2Button != null)
                 _runeSlot2Icon = runeSlot2Button.transform.Find("Icon");
 
-            _selectedButtonImage = Resources.Load<Sprite>("UI/SelectedButton");
-            _defaultButtonImage = Resources.Load<Sprite>("UI/DefaultButton");
+            _selectedButtonImage = AssetLoader.LoadAsset<Sprite>("UI/SelectedButton");
+            _defaultButtonImage = AssetLoader.LoadAsset<Sprite>("UI/DefaultButton");
         }
 
         protected override void OnEnable()

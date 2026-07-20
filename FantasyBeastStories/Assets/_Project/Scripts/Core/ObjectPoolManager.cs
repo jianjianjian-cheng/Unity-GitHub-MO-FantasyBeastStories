@@ -67,7 +67,7 @@ namespace Core
         {
             if (poolConfig == null)
             {
-                poolConfig = Resources.Load<PoolConfigSO>("Config/PoolConfig");
+                poolConfig = AssetLoader.LoadAsset<PoolConfigSO>("Config/PoolConfig");
             }
 
             if (EventChannelLocator.MainContainer.gameSettings.IsTest)

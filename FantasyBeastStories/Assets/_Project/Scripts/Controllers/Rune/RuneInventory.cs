@@ -40,10 +40,9 @@ namespace Controllers.Rune
 
         /// <summary>
         /// 分解所有重复符文，每种只保留一个。
-        /// protectedIds 中的符文 ID 不会被删除（已装备的符文受保护）。
         /// </summary>
         /// <returns>被分解的符文数量</returns>
-        public static int BreakdownDuplicates(HashSet<int> protectedIds = null)
+        public static int BreakdownDuplicates()
         {
             var ids = GetAllRuneIds();
             var seen = new HashSet<int>();
@@ -52,15 +51,10 @@ namespace Controllers.Rune
 
             foreach (int id in ids)
             {
-                // 已保留过同类型 → 分解
-                if (seen.Contains(id))
-                {
+                if (seen.Add(id))
+                    kept.Add(id);
+                else
                     removed++;
-                    continue;
-                }
-
-                seen.Add(id);
-                kept.Add(id);
             }
 
             Save(kept);

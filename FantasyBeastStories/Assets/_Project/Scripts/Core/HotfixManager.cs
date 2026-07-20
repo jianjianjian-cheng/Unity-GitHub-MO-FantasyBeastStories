@@ -11,10 +11,10 @@ using UnityEngine.Networking;
 public class HotfixManager : MonoBehaviour
 {
   [Header("热更新配置")]
-  [SerializeField] private string hotfixUrl = "https://your-cdn.com/hotfix/rune_hotfix.ab";
+  [SerializeField] private string hotfixUrl = "https://a.unity.cn/client_api/v1/buckets/9a90add4-6c36-4796-a3ea-9114ea7561dc/release_by_badge/latest/content/rune_hotfix.ab";
   [SerializeField] private string bundleName = "rune_hotfix";
   [Tooltip("开发模式：直接从 Build/Hotfix/ 目录加载 AB，无需 CDN 下载")]
-  [SerializeField] private bool devMode = true;
+  [SerializeField] private bool devMode = false;
 
   public AssetBundle HotfixBundle { get; private set; }
 

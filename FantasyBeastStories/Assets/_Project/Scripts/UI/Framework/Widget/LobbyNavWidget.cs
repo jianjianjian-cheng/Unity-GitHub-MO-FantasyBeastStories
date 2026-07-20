@@ -36,8 +36,8 @@ namespace UI.Framework.Widget
 
         protected override void AutoBindComponents()
         {
-            _selectedButtonImage = Resources.Load<Sprite>("UI/SelectedButton");
-            _defaultButtonImage = Resources.Load<Sprite>("UI/DefaultButton");
+            _selectedButtonImage = AssetLoader.LoadAsset<Sprite>("UI/SelectedButton");
+            _defaultButtonImage = AssetLoader.LoadAsset<Sprite>("UI/DefaultButton");
         }
 
         protected override void SubscribeEvents()

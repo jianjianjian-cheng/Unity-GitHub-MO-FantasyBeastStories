@@ -19,6 +19,7 @@ public class RunePanel : UIScreen
   [Header("符文列表（动态生成）")]
   [SerializeField] private GameObject runeSlotPrefab;       // 符文插槽预制体
   [SerializeField] private GameObject runeSlotListPanel;    // 符文列表父级 Panel（生成的预制体挂在此 Panel 下）
+  [SerializeField] private RuneDatabaseSO runeDatabase;    // 符文数据库（直接引用，与 ShopPanel 一致）
 
   [Header("装备插槽")]
   [SerializeField] private RuneEquip runeEquip1;
@@ -38,7 +39,7 @@ public class RunePanel : UIScreen
   private List<int> ownedRuneIds = new List<int>();
 
   // 默认初始符文
-  private static readonly List<int> DefaultRuneIds = new List<int> { 0, 0, 1, 1, 1 };
+  private static List<int> DefaultRuneIds = new List<int> { 0, 0, 1, 1, 1 };
 
   /// <summary>玩家已拥有的符文 ID 列表</summary>
   public IReadOnlyList<int> OwnedRuneIds => ownedRuneIds;
@@ -65,6 +66,10 @@ public class RunePanel : UIScreen
 
   private void Initialize()
   {
+    // 将 RuneDatabase 引用注入 RuneEffectApplier（供游戏场景中使用）
+    if (runeDatabase != null)
+      RuneEffectApplier.SetDatabase(runeDatabase);
+
     // 初始化已拥有符文（默认符文 + RuneInventory 中已购买的符文）
     ownedRuneIds = new List<int>(DefaultRuneIds);
     MergeInventoryRunes();
@@ -111,7 +116,8 @@ public class RunePanel : UIScreen
     base.OnBeforeOpen();
 
     // 检查是否有新购买的符文，如有则重建列表
-    if (MergeInventoryRunes())
+    // 或首次加载失败（Addressables 未就绪）时重试
+    if (MergeInventoryRunes() || runeSlotList.Count == 0)
     {
       BuildRuneSlotList();
       RestoreEquipReferences();
@@ -155,7 +161,15 @@ public class RunePanel : UIScreen
     var newIds = new List<int>(DefaultRuneIds);
     newIds.AddRange(RuneInventory.GetAllRuneIds());
 
-    if (newIds.Count == ownedRuneIds.Count) return false;
+    if (newIds.Count == ownedRuneIds.Count)
+    {
+      bool same = true;
+      for (int i = 0; i < newIds.Count; i++)
+      {
+        if (newIds[i] != ownedRuneIds[i]) { same = false; break; }
+      }
+      if (same) return false;
+    }
 
     ownedRuneIds = newIds;
     Debug.Log($"[RunePanel] 符文列表更新：共 {ownedRuneIds.Count} 个（默认 {DefaultRuneIds.Count} + 购买 {newIds.Count - DefaultRuneIds.Count}）");
@@ -168,6 +182,9 @@ public class RunePanel : UIScreen
   /// </summary>
   private void RestoreEquipReferences()
   {
+    // 标记是否已重新关联了每个装备插槽
+    bool equip1Linked = false, equip2Linked = false;
+
     foreach (var go in runeSlotList)
     {
       if (go == null) continue;
@@ -176,13 +193,15 @@ public class RunePanel : UIScreen
 
       int runeId = slot.RuneData.runeId;
 
-      if (runeEquip1 != null && runeEquip1.EquippedRuneId == runeId && runeEquip1.EquippedRuneSlot == null)
+      if (!equip1Linked && runeEquip1 != null && runeEquip1.EquippedRuneId == runeId)
       {
         runeEquip1.Equip(runeId, slot.RuneData.icon, slot);
+        equip1Linked = true;
       }
-      else if (runeEquip2 != null && runeEquip2.EquippedRuneId == runeId && runeEquip2.EquippedRuneSlot == null)
+      else if (!equip2Linked && runeEquip2 != null && runeEquip2.EquippedRuneId == runeId)
       {
         runeEquip2.Equip(runeId, slot.RuneData.icon, slot);
+        equip2Linked = true;
       }
     }
   }
@@ -210,17 +229,16 @@ public class RunePanel : UIScreen
       return;
     }
 
-    // 从 Resources 加载符文数据库，构建 runeId → RuneDataSO 的快速查找
-    var database = Resources.Load<RuneDatabaseSO>("RuneData/RuneDatabase");
-    if (database == null || database.allRunes.Count == 0)
+    // 使用直接引用的符文数据库（与 ShopPanel 方式一致）
+    if (runeDatabase == null || runeDatabase.allRunes.Count == 0)
     {
-      Debug.LogWarning("[RunePanel] 未找到 RuneDatabase 或数据为空");
+      Debug.LogWarning("[RunePanel] runeDatabase 未赋值或数据为空");
       return;
     }
 
     // 构建 runeId → RuneDataSO 字典
     var runeDataMap = new Dictionary<int, RuneDataSO>();
-    foreach (var data in database.allRunes)
+    foreach (var data in runeDatabase.allRunes)
       if (data != null && !runeDataMap.ContainsKey(data.runeId))
         runeDataMap[data.runeId] = data;
 
@@ -472,69 +490,50 @@ public class RunePanel : UIScreen
 
   private void OnBreakdownClicked()
   {
-    // 统计重复符文数量
-    var seen = new HashSet<int>();
-    int duplicateCount = 0;
-    foreach (int id in ownedRuneIds)
-    {
-      if (seen.Contains(id))
-        duplicateCount++;
-      else
-        seen.Add(id);
-    }
+    int beforeCount = ownedRuneIds.Count;
 
-    if (duplicateCount == 0)
+    // 1. 去重 DefaultRuneIds（永久生效，分解后不再恢复重复）
+    var dedupedDefaults = new List<int>();
+    var seenDefaults = new HashSet<int>();
+    foreach (int id in DefaultRuneIds)
+    {
+      if (seenDefaults.Add(id))
+        dedupedDefaults.Add(id);
+    }
+    DefaultRuneIds = dedupedDefaults;
+
+    // 2. 去重 RuneInventory（PlayerPrefs 持久化）
+    RuneInventory.BreakdownDuplicates();
+
+    // 3. 重建 ownedRuneIds
+    MergeInventoryRunes();
+
+    int removedCount = beforeCount - ownedRuneIds.Count;
+    if (removedCount == 0)
     {
       Debug.Log("[RunePanel] 没有可分解的重复符文");
       return;
     }
 
     // 每个分解的符文返还 30 金币
-    int reward = duplicateCount * 30;
+    int reward = removedCount * 30;
     if (Managers.CoinManager.Instance != null)
       Managers.CoinManager.Instance.AddCoins(reward);
 
     AudioManager.Instance?.PlayUI("sfx_Coin");
 
-    // 收集已装备的符文 ID（受保护）
-    var equippedIds = new HashSet<int>();
-    if (runeEquip1 != null && runeEquip1.EquippedRuneId != -1)
-      equippedIds.Add(runeEquip1.EquippedRuneId);
-    if (runeEquip2 != null && runeEquip2.EquippedRuneId != -1)
-      equippedIds.Add(runeEquip2.EquippedRuneId);
-
-    // 清理 RuneInventory 中的重复
-    RuneInventory.BreakdownDuplicates(equippedIds);
-
-    // 去重 DefaultRuneIds（防止下次 MergeInventoryRunes 又加回来）
-    var uniqueDefaults = new List<int>();
-    var defaultSeen = new HashSet<int>();
-    foreach (int id in DefaultRuneIds)
-    {
-      if (!defaultSeen.Contains(id))
-      {
-        defaultSeen.Add(id);
-        uniqueDefaults.Add(id);
-      }
-    }
-    // 静态字段无法直接赋值，通过反射修改
-    typeof(RunePanel).GetField("DefaultRuneIds",
-        System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)
-        .SetValue(null, uniqueDefaults);
-
-    // 重建符文列表
-    MergeInventoryRunes();
+    // 4. 重建符文列表
     BuildRuneSlotList();
     RestoreEquipReferences();
     RefreshAllEquippedMarks();
     ReorderEquippedToFront();
 
-    // 重新选中列表第一项
+    // 5. 重新选中列表第一项
     DeselectAllItems();
     if (runeSlotList.Count > 0)
       SetRuneSlotItemSelected(runeSlotList[0]);
 
-    Debug.Log($"[RunePanel] 分解完成：移除 {duplicateCount} 个重复符文，获得 {reward} 金币");
+    Debug.Log($"[RunePanel] 分解完成：移除 {removedCount} 个重复符文，获得 {reward} 金币");
 
     // 通知 TopNotice 显示分解成功
     var topNotice = FindObjectOfType<UI.Framework.TopNotice>();

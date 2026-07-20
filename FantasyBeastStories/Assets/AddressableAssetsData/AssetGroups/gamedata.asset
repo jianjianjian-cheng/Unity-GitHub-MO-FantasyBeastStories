@@ -1,0 +1,229 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: gamedata
+  m_EditorClassIdentifier: 
+  m_GroupName: gamedata
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 637ad01d53507ac41a4eac851e91832e
+  m_SerializeEntries:
+  - m_GUID: 01102205f4b983643b96d74f0c4039d3
+    m_Address: Shop/2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 07f80b4d38e31244098c16b0ed43d8e8
+    m_Address: Config/BossConfigSO
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0b864cb2accee2a47acdd5287c84a8fc
+    m_Address: QuestTask/QuestTaskDatabase
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 26b7fd95b54a7ad44b80f2a2be25c8b1
+    m_Address: QuestTask/Massion/DamageGross_1500k 4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2e2a5fcc453c2d742b1d80cae7b61ac8
+    m_Address: CardData/CardDatabasePublic
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 30b6ae37fb3ff4045b06444887cdd4ac
+    m_Address: Config/EnemyConfigs/SkeletonConfig
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 33600b15c9d43bd4bab4cc96172821b0
+    m_Address: Json/UpgradeCard_WizardBoy
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3ca1ed470ed9ac142acaecbb11335849
+    m_Address: QuestTask/Massion/DamageGross_1000k
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4a46ea076e35e6241809874edb7f326a
+    m_Address: Config/PlayerConfig/BingNvAttr
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5212d3b8290103d4cbad750b2f61b446
+    m_Address: Json/PublicUpgradeCard_Normal
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 52519bc5f51a88c4a845c3da0074f6ca
+    m_Address: RuneData/Rune/RuneExplosion
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 62f2c5ee3681e8641bafb3cc674bfd38
+    m_Address: Json/PublicUpgradeCard_Special
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 65496e104399b644db2e6ad1d978de37
+    m_Address: Config/EnemyConfigs/DragonConfig
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6604ae41b96df604f85450fc5ef642f6
+    m_Address: Config/PlayerAttributeConfig
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6bdd09a23d026184bac66c8238ba2eed
+    m_Address: QuestTask/Massion/KillEnemies_500
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7e0aeaf763b611e4aaa94448bb8c4abe
+    m_Address: Shop/ShopRuneDatabase
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 87d136d76d1e05a46b45ece16f99dd55
+    m_Address: QuestTask/Massion/DamageGross_1500k 1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8bd242f922f482040b53d23439d99737
+    m_Address: PowerUpData/SO_ExperienceMagnet
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8c25fef75f1087940802335e7674491d
+    m_Address: Shop/ShopRuneConfig
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 91892447cc180f7448dc85f1f8aeb94e
+    m_Address: CardData/CardDatabaseWizardBoy
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9566d8175e533384590c7f5907b7f07a
+    m_Address: QuestTask/Massion/DamageGross_1500k 3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 99043395d6867194ba9a70e62516c0e7
+    m_Address: QuestTask/Massion/KillEnemies_1000 3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a66e3d360972efa458aa09a73c53288a
+    m_Address: QuestTask/Massion/KillEnemies_1000
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a9fcea25ad4aa2c4f97d84cec414532d
+    m_Address: QuestTask/Massion/KillEnemies_1000 2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b310d3a5d1e6b9d4297568841add8ac1
+    m_Address: DOTweenSettings
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bab64b815249de24e9287e71e68ae80c
+    m_Address: Json/PublicUpgradeCard_Legend
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bd166d9469a9a354fb450c62748238f6
+    m_Address: RuneData/RuneDatabase
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c28ae390d3c5e2a40a439c510098401f
+    m_Address: Json/PublicUpgradeCard_Epic
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c77eff1598e23584ca0d9c49dfbc4930
+    m_Address: QuestTask/Massion/DamageGross_1500k
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cae2c58e8ca02ef47a08475b703eb9dd
+    m_Address: RuneData/Rune/RuneTripleBoost
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd573bdd47555b94eb0ab7b078cd3753
+    m_Address: QuestTask/Massion/DamageGross_1500k 2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d56c05b4be2a3a54aa94f1674ae300da
+    m_Address: QuestTask/Massion/KillEnemies_1000 1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: db04ffc853ec0ee4889de3c69e3bfc87
+    m_Address: QuestTask/Massion/KillEnemies_1000 4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fdfb0200307230d47b608637357e1672
+    m_Address: Config/PoolConfig
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fb99d6304baf1dc43b9033961371850c, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 9136feac47b6d644a934c7352aafb0d4, type: 2}
+    - {fileID: 11400000, guid: 6861f983e27b3ea4ba1e715c728ed4b0, type: 2}

@@ -1,4 +1,5 @@
 using System.IO;
+using Core;
 using UnityEngine;
 using XLua;
 
@@ -51,11 +52,11 @@ public class LuaEnvManager
       return File.ReadAllBytes(hotfixPath);
     }
 
-    // 2. 回退到 Resources（包体内保底）
-    // .lua.txt 文件在 Unity 中 asset 名为 xxx.lua（.txt 被 Unity 截去）
-    var resAsset = Resources.Load<TextAsset>("Lua/" + relativePath + ".lua");
+    // 2. 回退到 Addressables（包体内保底）
+    // Addressable key 格式为 "Lua/Main"（不带 .lua 后缀），优先尝试
+    var resAsset = AssetLoader.TryLoadAsset<TextAsset>("Lua/" + relativePath);
     if (resAsset == null)
-      resAsset = Resources.Load<TextAsset>("Lua/" + relativePath);
+      resAsset = AssetLoader.TryLoadAsset<TextAsset>("Lua/" + relativePath + ".lua");
     if (resAsset != null)
     {
       Debug.Log($"[LuaEnvManager] 从 Resources 加载: {filePath}");

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Controllers.Character;
+using Core;
 using UnityEngine;
 using XLua;
 
@@ -16,10 +17,30 @@ namespace Controllers.Rune
         private static LuaTable _luaMain;
         private static bool _luaLoaded;
 
+        // RuneDatabase 缓存（由 RunePanel.Awake 设置，避免运行时通过 Addressables 加载）
+        private static RuneDatabaseSO _database;
+        private static bool _databaseLoaded;
+
+        /// <summary>由 RunePanel 在初始化时设置数据库引用</summary>
+        public static void SetDatabase(RuneDatabaseSO database)
+        {
+            _database = database;
+            _databaseLoaded = true;
+        }
+
+        /// <summary>获取 RuneDatabase（优先使用缓存引用，回退到 Addressables）</summary>
+        private static RuneDatabaseSO GetDatabase()
+        {
+            if (_databaseLoaded) return _database;
+            _database = AssetLoader.TryLoadAsset<RuneDatabaseSO>("RuneData/RuneDatabase");
+            _databaseLoaded = true;
+            return _database;
+        }
+
         /// <summary>将已装备符文的效果应用到玩家属性上</summary>
         public static void ApplyEquippedRunes(AttributePlayerBase attributes)
         {
-            var database = Resources.Load<RuneDatabaseSO>("RuneData/RuneDatabase");
+            var database = GetDatabase();
             if (database == null || database.allRunes == null || database.allRunes.Count == 0)
             {
                 Debug.LogWarning("[RuneEffectApplier] 未找到 RuneDatabase 或数据为空");
@@ -136,7 +157,7 @@ namespace Controllers.Rune
             }
 
             // 回退到 SO 默认值
-            var database = Resources.Load<RuneDatabaseSO>("RuneData/RuneDatabase");
+            var database = GetDatabase();
             return database?.GetRuneById(runeId)?.powers ?? new List<RunePower>();
         }
 
@@ -152,7 +173,7 @@ namespace Controllers.Rune
                 if (!string.IsNullOrEmpty(name)) return name;
             }
 
-            var database = Resources.Load<RuneDatabaseSO>("RuneData/RuneDatabase");
+            var database = GetDatabase();
             return database?.GetRuneById(runeId)?.specialPowerName ?? string.Empty;
         }
 
@@ -168,7 +189,7 @@ namespace Controllers.Rune
                 if (!string.IsNullOrEmpty(desc)) return desc;
             }
 
-            var database = Resources.Load<RuneDatabaseSO>("RuneData/RuneDatabase");
+            var database = GetDatabase();
             return database?.GetRuneById(runeId)?.specialPowerDescription ?? string.Empty;
         }
 

@@ -29,6 +29,7 @@ namespace Core
             );
 
             // 预加载事件通道容器并注册到 ServiceLocator
+            // EventChannels 必须用 Resources.Load — 在 BeforeSceneLoad 阶段 Addressables 尚未初始化
             var container = Resources.Load<EventChannelContainerSO>("EventChannels/MainEventChannels");
             if (container != null)
             {

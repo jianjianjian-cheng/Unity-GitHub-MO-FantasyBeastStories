@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Core;
 using Managers;
 using UI.Framework.Base;
 using UI.Framework.Manager;
@@ -67,7 +68,7 @@ public class MassionPanel : UIScreen
         Debug.Log($"[MassionPanel] 任务结算完成：{settleResult.delta.Count} 个任务有新增进度");
 
         // 2. 从 Resources 加载任务数据库
-        var database = Resources.Load<QuestTaskDatabaseSO>("QuestTask/QuestTaskDatabase");
+        var database = AssetLoader.LoadAsset<QuestTaskDatabaseSO>("QuestTask/QuestTaskDatabase");
         if (database == null || database.allTasks == null || database.allTasks.Count == 0)
         {
             Debug.LogWarning("[MassionPanel] 未找到 QuestTaskDatabase 或数据为空");
@@ -151,7 +152,7 @@ public class MassionPanel : UIScreen
                 maxDelta = kvp.Value;
         }
         if (maxDelta > 0)
-            StartCoroutine(PlayProgressSFX(maxDelta));
+            StartCoroutine(PlayProgressSFX(Mathf.Min(maxDelta, 5)));
 
         for (int i = 0; i < taskItems.Count; i++)
         {

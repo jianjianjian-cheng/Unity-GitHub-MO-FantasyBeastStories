@@ -58,7 +58,7 @@ namespace Managers
 
         void Start()
         {
-            taskDatabase = Resources.Load<QuestTaskDatabaseSO>("QuestTask/QuestTaskDatabase");
+            taskDatabase = AssetLoader.LoadAsset<QuestTaskDatabaseSO>("QuestTask/QuestTaskDatabase");
             if (taskDatabase == null)
                 Debug.LogWarning("[QuestTaskManager] 未找到 QuestTaskDatabase，请在 Resources/QuestTask/ 目录下创建");
         }
