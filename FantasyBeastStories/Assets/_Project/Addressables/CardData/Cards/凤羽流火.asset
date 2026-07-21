@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5cca440418683249a3b80fe5b389e02, type: 3}
+  m_Name: "\u51E4\u7FBD\u6D41\u706B"
+  m_EditorClassIdentifier: 
+  cardId: "\u51E4\u7FBD\u6D41\u706B"
+  cardName: "\u51E4\u7FBD\u6D41\u706B"
+  description: "\u5F52\u7FCE\u83B7\u5F97\u706B\u5143\u7D20\u52A0\u6210"
+  value: 20
+  quality: 2
+  scope: 1
+  characterType: OnReceiveCard_BingNv
+  stackable: 0
+  Effects:
+  - rid: 4210315273836167201
+  - rid: 4210315273836167202
+  references:
+    version: 2
+    RefIds:
+    - rid: 4210315273836167201
+      type: {class: AddAttackPowerEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      data:
+        value: 20
+    - rid: 4210315273836167202
+      type: {class: UnlockElementEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      data:
+        element: 4

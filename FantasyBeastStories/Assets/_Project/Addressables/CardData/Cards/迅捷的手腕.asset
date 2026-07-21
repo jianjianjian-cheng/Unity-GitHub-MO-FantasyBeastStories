@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5cca440418683249a3b80fe5b389e02, type: 3}
+  m_Name: "\u8FC5\u6377\u7684\u624B\u8155"
+  m_EditorClassIdentifier: 
+  cardId: "\u8FC5\u6377\u7684\u624B\u8155"
+  cardName: "\u8FC5\u6377\u7684\u624B\u8155"
+  description: "\u653B\u51FB\u901F\u5EA6\u589E\u52A0"
+  value: 5
+  quality: 0
+  scope: 0
+  characterType: 
+  stackable: 0
+  Effects:
+  - rid: 4210315273836167174
+  references:
+    version: 2
+    RefIds:
+    - rid: 4210315273836167174
+      type: {class: ReduceAttackIntervalEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      data:
+        value: 5

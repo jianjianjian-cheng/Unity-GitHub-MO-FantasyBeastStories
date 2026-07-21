@@ -583,7 +583,7 @@ namespace Controllers.Character
     void ICardEffectContext.RaiseSkillQuery(SkillQueryData data)
         => EventChannelLocator.MainContainer.skillQueryChannel.Raise(data);
 
-    protected virtual void OnApplicationCard(CardConfigBase card)
+    protected virtual void OnApplicationCard(CardConfigSO card)
     {
       if (!EventChannelLocator.MainContainer.gameSettings.IsTest)
       {
@@ -592,7 +592,7 @@ namespace Controllers.Character
           return;
         }
       }
-      Debug.LogWarning("应用了卡牌效果：" + card.Name + ":" + card.Content + card.Value);
+      Debug.LogWarning("应用了卡牌效果：" + card.cardName + ":" + card.description + card.value);
 
       if (card.Effects != null && card.Effects.Count > 0)
       {

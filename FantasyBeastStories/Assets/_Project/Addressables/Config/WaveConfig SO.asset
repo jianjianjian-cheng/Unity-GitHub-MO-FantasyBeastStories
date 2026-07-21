@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e83928a5ce970c498b73fdc56175589, type: 3}
   m_Name: WaveConfig SO
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 0}
-  poolName: 
+  enemyPrefab: {fileID: 3480699876331511206, guid: 57525729c06505546ae848045aa1dd19, type: 3}
+  poolName: Enemies/SkeletonRoot
   poolPreloadCount: 25
   dragonPrefab: {fileID: 1683610532524085646, guid: a49a796b1040e704aa26b030b40cb711, type: 3}
   dragonPoolPreloadCount: 20

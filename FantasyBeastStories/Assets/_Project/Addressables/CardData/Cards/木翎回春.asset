@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5cca440418683249a3b80fe5b389e02, type: 3}
+  m_Name: "\u6728\u7FCE\u56DE\u6625"
+  m_EditorClassIdentifier: 
+  cardId: "\u6728\u7FCE\u56DE\u6625"
+  cardName: "\u6728\u7FCE\u56DE\u6625"
+  description: "\u5F52\u7FCE\u83B7\u5F97\u8349\u5143\u7D20\u52A0\u6210"
+  value: 2
+  quality: 2
+  scope: 1
+  characterType: OnReceiveCard_BingNv
+  stackable: 0
+  Effects:
+  - rid: 4210315273836167203
+  - rid: 4210315273836167204
+  references:
+    version: 2
+    RefIds:
+    - rid: 4210315273836167203
+      type: {class: AddHealthRecoverEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      data:
+        value: 2
+    - rid: 4210315273836167204
+      type: {class: UnlockElementEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      data:
+        element: 3

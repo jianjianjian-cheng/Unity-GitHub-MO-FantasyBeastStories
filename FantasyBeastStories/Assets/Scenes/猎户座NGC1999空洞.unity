@@ -78068,14 +78068,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventNameToUse: 
-  cardDatabasePublic: {fileID: 11400000, guid: 2e2a5fcc453c2d742b1d80cae7b61ac8, type: 2}
-  cardDatabaseEX: {fileID: 11400000, guid: 91892447cc180f7448dc85f1f8aeb94e, type: 2}
-  cardsPublicNormal: []
-  cardsPublicEpic: []
-  cardsPublicLegend: []
-  references:
-    version: 2
-    RefIds: []
+  cardDatabase: {fileID: 11400000, guid: 13bc90740532c7f4792ef835fcfd67d6, type: 2}
 --- !u!1001 &687430390
 PrefabInstance:
   m_ObjectHideFlags: 0

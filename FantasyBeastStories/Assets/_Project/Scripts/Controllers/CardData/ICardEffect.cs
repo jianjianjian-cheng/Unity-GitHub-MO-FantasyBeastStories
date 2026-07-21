@@ -6,7 +6,7 @@ namespace Controllers.CardData
 {
     /// <summary>
     /// 卡牌效果接口 — 每种效果以独立 [Serializable] 类实现，
-    /// 通过 [SerializeReference] 内联在 CardConfigBase.Effects 列表中。
+    /// 通过 [SerializeReference] 内联在 CardConfigSO.Effects 列表中。
     /// </summary>
     public interface ICardEffect
     {

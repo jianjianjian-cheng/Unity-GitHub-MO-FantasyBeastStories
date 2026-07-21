@@ -25,8 +25,8 @@ namespace Core.Channels.Player
     public SkillQueryType queryType;
     public string cardType;
     public int intValue;
-    public CardConfigBase[] cardsResult;
-    public CardConfigBase cardResult;
+    public CardConfigSO[] cardsResult;
+    public CardConfigSO cardResult;
 
     public SkillQueryData(SkillQueryType queryType)
     {

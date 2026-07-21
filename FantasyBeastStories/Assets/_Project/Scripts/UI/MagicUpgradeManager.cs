@@ -103,7 +103,7 @@ namespace UI
 
     //当前选择的角色事件名，用于触发事件
     private string currentEventName;
-    private CardConfigBase[] cardData;
+    private CardConfigSO[] cardData;
 
     void Start()
     {
@@ -831,13 +831,13 @@ namespace UI
         {
           var exCardQuery = new SkillQueryData(SkillQueryType.GetRandomEXCard, currentEventName);
           EventChannelLocator.MainContainer.skillQueryChannel.Raise(exCardQuery);
-          CardConfigBase exCard = exCardQuery.cardResult;
+          CardConfigSO exCard = exCardQuery.cardResult;
           if (exCard != null && cardData != null)
           {
             // 随机替换一张公用卡牌
             int replaceIndex = Random.Range(0, cardData.Length);
             cardData[replaceIndex] = exCard;
-            Debug.Log($"触发专属卡牌！替换了第{replaceIndex}张卡牌为: {exCard.Name}");
+            Debug.Log($"触发专属卡牌！替换了第{replaceIndex}张卡牌为: {exCard.cardName}");
           }
           else
           {
@@ -854,7 +854,7 @@ namespace UI
       EventChannelLocator.MainContainer.pauseChannel.Raise(true);
     }
 
-    private void OpenPanelInit(CardConfigBase[] cardData)
+    private void OpenPanelInit(CardConfigSO[] cardData)
     {
       isConfirmed = false;
       NetworkServiceLocator.PlayerService.SetCustomProperty(PLAYER_UPGRADE_READY_KEY, false);
@@ -949,7 +949,7 @@ namespace UI
 
     #region 获取卡牌
 
-    private void SetCardData(CardConfigBase[] threeCards)
+    private void SetCardData(CardConfigSO[] threeCards)
     {
       if (threeCards == null || threeCards.Length < 3)
         return;
@@ -960,7 +960,7 @@ namespace UI
     }
 
     private void SetSingleCardData(
-        CardConfigBase cardData,
+        CardConfigSO cardData,
         TextMeshProUGUI nameText,
         TextMeshProUGUI contentText,
         TextMeshProUGUI qualityText,
@@ -970,37 +970,37 @@ namespace UI
       if (cardData == null)
         return;
 
-      nameText.text = cardData.Name;
-      string quality = cardData.Quality.ToString();
+      nameText.text = cardData.cardName;
+      string quality = cardData.quality.ToString();
 
       switch (quality)
       {
-        case "普通":
-          contentText.text = cardData.Content.Contains("生命")
+        case "Normal":
+          contentText.text = cardData.description.Contains("生命")
               ? contentText.text =
-                  $"{cardData.Content}<color=#CCCCCC>{cardData.Value}</color>"
+                  $"{cardData.description}<color=#CCCCCC>{cardData.value}</color>"
               : contentText.text =
-                  $"{cardData.Content}<color=#CCCCCC>{cardData.Value}</color>%";
+                  $"{cardData.description}<color=#CCCCCC>{cardData.value}</color>%";
 
-          qualityText.text = $"<color=#CCCCCC>{cardData.Quality}</color>";
+          qualityText.text = $"<color=#CCCCCC>普通</color>";
           SetEffectActive(effects, 0);
           break;
-        case "史诗":
-          contentText.text = cardData.Content.Contains("生命")
+        case "Epic":
+          contentText.text = cardData.description.Contains("生命")
               ? contentText.text =
-                  $"{cardData.Content}<color=#800080>{cardData.Value}</color>"
+                  $"{cardData.description}<color=#800080>{cardData.value}</color>"
               : contentText.text =
-                  $"{cardData.Content}<color=#800080>{cardData.Value}</color>%";
-          qualityText.text = $"<color=#800080>{cardData.Quality}</color>";
+                  $"{cardData.description}<color=#800080>{cardData.value}</color>%";
+          qualityText.text = $"<color=#800080>史诗</color>";
           SetEffectActive(effects, 1);
           break;
-        case "传说":
-          contentText.text = cardData.Content.Contains("生命")
+        case "Legend":
+          contentText.text = cardData.description.Contains("生命")
               ? contentText.text =
-                  $"{cardData.Content}<color=#FF4444>{cardData.Value}</color>"
+                  $"{cardData.description}<color=#FF4444>{cardData.value}</color>"
               : contentText.text =
-                  $"{cardData.Content}<color=#FF4444>{cardData.Value}</color>%";
-          qualityText.text = $"<color=#FF4444>{cardData.Quality}</color>";
+                  $"{cardData.description}<color=#FF4444>{cardData.value}</color>%";
+          qualityText.text = $"<color=#FF4444>传说</color>";
           SetEffectActive(effects, 2);
           break;
       }
@@ -1017,7 +1017,7 @@ namespace UI
       }
     }
 
-    private CardConfigBase[] GetCardData()
+    private CardConfigSO[] GetCardData()
     {
       if (isAllExCard)
       {
