@@ -26,6 +26,10 @@ namespace Controllers.Network
 
     [SerializeField]
     public GameObject currentlySelectedCharacter;
+
+    [SerializeField] private Core.SceneConfigSO sceneConfig;
+
+    [SerializeField] private Controllers.Character.CharacterInfoLibrarySO characterInfoLibrary;
     private Photon.Realtime.Player localPlayer;
     private InputField nameUI;
     private GameObject joinRoom;
@@ -57,10 +61,11 @@ namespace Controllers.Network
       }
 
       _sceneFlow = new NetworkSceneFlow(this);
-      _spawnPointManager = new SpawnPointManager(this, currentlySelectedCharacter);
+      _spawnPointManager = new SpawnPointManager(this, currentlySelectedCharacter, characterInfoLibrary);
 
-      // 只在大厅场景（场景索引1）初始化UI
-      if (SceneManager.GetActiveScene().buildIndex == 1)
+      // 只在大厅场景初始化UI
+      int lobbyIndex = sceneConfig != null ? sceneConfig.lobbySceneIndex : 1;
+      if (SceneManager.GetActiveScene().buildIndex == lobbyIndex)
       {
         InitGetUI();
       }
@@ -321,7 +326,7 @@ namespace Controllers.Network
       isJoiningRoom = false;
       isAutoCreate = false;
       PhotonNetwork.AutomaticallySyncScene = false;
-      SceneManager.LoadScene(0);
+      SceneManager.LoadScene(sceneConfig != null ? sceneConfig.mainMenuSceneIndex : 0);
     }
 
     // ==================== PUN 回调路由 ====================

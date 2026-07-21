@@ -45,10 +45,14 @@ namespace Controllers.Enemy
 
     protected virtual void Awake()
     {
-      float hp = enemyConfig != null ? enemyConfig.maxHealth : 500f;
-      float atk = enemyConfig != null ? enemyConfig.attackPower : 50f;
-      float spd = enemyConfig != null ? enemyConfig.moveSpeed : 2f;
-      enemyData = new EnemyData(new AttributeEnemyBase(hp, hp, atk, spd));
+      if (enemyConfig == null)
+      {
+        Debug.LogError($"[EnemyBase] {gameObject.name} 的 EnemyConfigSO 未配置！", this);
+        return;
+      }
+      enemyData = new EnemyData(new AttributeEnemyBase(
+          enemyConfig.maxHealth, enemyConfig.maxHealth,
+          enemyConfig.attackPower, enemyConfig.moveSpeed));
       colliders = GetComponentsInChildren<Collider>();
       if (_network == null)
         _network = GetComponent<NetworkIdentityBase>();
@@ -399,10 +403,9 @@ namespace Controllers.Enemy
         // 确保属性不为 null（[NonSerialized] 字段在序列化后可能丢失）
         if (enemyData.attribute == null)
         {
-          float hp = enemyConfig != null ? enemyConfig.maxHealth : 500f;
-          float atk = enemyConfig != null ? enemyConfig.attackPower : 50f;
-          float spd = enemyConfig != null ? enemyConfig.moveSpeed : 2f;
-          enemyData.attribute = new AttributeEnemyBase(hp, hp, atk, spd);
+          enemyData.attribute = new AttributeEnemyBase(
+              enemyConfig.maxHealth, enemyConfig.maxHealth,
+              enemyConfig.attackPower, enemyConfig.moveSpeed);
         }
 
         InitializeEnemy();
@@ -481,7 +484,7 @@ namespace Controllers.Enemy
       );
       if (EventChannelLocator.MainContainer.gameSettings.IsTest)
       {
-        EventChannelLocator.MainContainer.combat.damageDisplayChannel?.Raise(
+        EventChannelLocator.MainContainer.matchSystem.damageDisplayChannel?.Raise(
             DamageDisplayEventArgs.GetShared(
                 damageEventArgs.finalDamageValue,
                 transform.position,
@@ -503,7 +506,7 @@ namespace Controllers.Enemy
       Debug.Log("敌人死亡，掉落经验");
 
       // 道具掉落概率从 SO 配置读取
-      float dropChance = enemyConfig != null ? enemyConfig.powerUpDropChance : 0.1f;
+      float dropChance = enemyConfig.powerUpDropChance;
       if (Random.value <= dropChance && PowerUpManager.Instance != null)
       {
         bool isTest = EventChannelLocator.MainContainer.gameSettings.IsTest;
@@ -524,9 +527,7 @@ namespace Controllers.Enemy
     /// <summary>从 SO 配置获取随机经验值（供子类 DropExperience 调用）</summary>
     protected int GetExpValue()
     {
-      if (enemyConfig != null)
-        return Random.Range(enemyConfig.expMin, enemyConfig.expMax + 1);
-      return Random.Range(50, 71);
+      return Random.Range(enemyConfig.expMin, enemyConfig.expMax + 1);
     }
 
     // 重置状态（对象池回收时调用）

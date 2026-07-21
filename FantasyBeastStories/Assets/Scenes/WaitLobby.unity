@@ -1009,6 +1009,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentlySelectedCharacter: {fileID: 1635026141182953517, guid: e0452092d275907458a7cf6375ddd267, type: 3}
+  sceneConfig: {fileID: 11400000, guid: 24eefbcdd8e46254cb37086d5e7d22e8, type: 2}
+  characterInfoLibrary: {fileID: 11400000, guid: 0b1f868e0e600914ca05728b2446b9cc, type: 2}
 --- !u!4 &117669668
 Transform:
   m_ObjectHideFlags: 0
@@ -10293,6 +10295,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneIndex: 2
   isReady: 0
+  sceneConfig: {fileID: 11400000, guid: 24eefbcdd8e46254cb37086d5e7d22e8, type: 2}
   spawnPoints: []
   isStayLobbyInspector: 1
   isTestInspector: 0
@@ -16309,6 +16312,45 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2573433094056466404, guid: 0b33762022197774fb36c751518a3710, type: 3}
   m_PrefabInstance: {fileID: 1272022376}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1278687917 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1850715270903551798, guid: 4bae876e23948204281b1b794d9c5c36, type: 3}
+  m_PrefabInstance: {fileID: 6749937438152504280}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1278687921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1278687917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: d85f7bdc672520f41a7629bbfdd83981, type: 3}
+    m_FontSize: 100
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 100
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
+    m_LineSpacing: 1
+  m_Text: "\u8D2D\u4E70\u6210\u529F"
 --- !u!1001 &1281547704
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28461,6 +28503,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TopNotice
       objectReference: {fileID: 0}
+    - target: {fileID: 1850715270903551798, guid: 4bae876e23948204281b1b794d9c5c36, type: 3}
+      propertyPath: m_Name
+      value: 'Text '
+      objectReference: {fileID: 0}
     - target: {fileID: 8006957344723746705, guid: 4bae876e23948204281b1b794d9c5c36, type: 3}
       propertyPath: m_fontAsset
       value: 
@@ -28473,6 +28519,10 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8801087011009396379, guid: 4bae876e23948204281b1b794d9c5c36, type: 3}
+      propertyPath: messageText
+      value: 
+      objectReference: {fileID: 1278687921}
     - target: {fileID: 9098525616683525812, guid: 4bae876e23948204281b1b794d9c5c36, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -28553,10 +28603,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8006957344723746705, guid: 4bae876e23948204281b1b794d9c5c36, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1850715270903551798, guid: 4bae876e23948204281b1b794d9c5c36, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1278687921}
   m_SourcePrefab: {fileID: 100100000, guid: 4bae876e23948204281b1b794d9c5c36, type: 3}
 --- !u!65 &8076274315113826861
 BoxCollider:

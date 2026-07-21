@@ -59,7 +59,7 @@ namespace Controllers.PowerUp
         private void Start()
         {
             poolManager = ServiceLocator.Get<ObjectPoolManager>();
-            DomainServiceLocator.Register<IPowerUpService>(this);
+            ServiceLocator.Register<IPowerUpService>(this);
         }
 
         private void Update()

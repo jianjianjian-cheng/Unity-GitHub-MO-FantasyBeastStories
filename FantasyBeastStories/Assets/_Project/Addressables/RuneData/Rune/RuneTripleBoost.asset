@@ -15,11 +15,13 @@ MonoBehaviour:
   runeId: 1
   runeName: "\u4E09\u7EF4\u589E\u5E45"
   icon: {fileID: 21300000, guid: eacf5cd5ee179ca40bcc141cbaa60aec, type: 3}
+  iconName: 
   rarity: 1
   powers:
-  - value: 10
+  - value: 9
     label: "%\u9632\u5FA1\u529B"
-  - value: 10
+  - value: 3
     label: "%\u653B\u51FB\u901F\u5EA6"
   specialPowerName: ' '
   specialPowerDescription: ' '
+  exclusiveCharacterType: 

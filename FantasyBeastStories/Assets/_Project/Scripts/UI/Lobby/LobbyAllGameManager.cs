@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Core;
 using Managers;
 using UI.Framework.Panel;
 using Unity.VisualScripting;
@@ -15,6 +16,10 @@ namespace UI.Lobby
     {
         [SerializeField]
         private PlayableDirector vcTimeLine;
+
+        [SerializeField]
+        private SceneConfigSO sceneConfig;
+
         private GameObject startButton;
         private GameObject exitButton;
         private GameObject optionButton;
@@ -60,7 +65,7 @@ namespace UI.Lobby
 
         private void sceneChange()
         {
-            StartCoroutine(loadScene(1));
+            StartCoroutine(loadScene(sceneConfig != null ? sceneConfig.lobbySceneIndex : 1));
         }
 
         IEnumerator loadScene(int index)

@@ -81,15 +81,16 @@ public class CharactorPanel : UIScreen
         });
 
     // 添加下一个角色按钮的点击事件
+    int maxIndex = characterInfoLibrary != null ? characterInfoLibrary.Count - 1 : 1;
     nextCharacterButton
-        .GetComponent<Button>()
-        .onClick.AddListener(() =>
-        {
-          int newIndex = currentCharactorIndex + 1;
-          if (newIndex >= 2)
-            newIndex = 1;
-          SwitchCharactor(newIndex);
-        });
+    .GetComponent<Button>()
+    .onClick.AddListener(() =>
+    {
+      int newIndex = currentCharactorIndex + 1;
+      if (newIndex > maxIndex)
+        newIndex = maxIndex;
+      SwitchCharactor(newIndex);
+    });
 
     // 添加切换按钮的点击事件
     SwitchButton
@@ -203,18 +204,18 @@ public class CharactorPanel : UIScreen
     if (SaveManager.Instance != null)
       SaveManager.Instance.SaveGame();
 
-    switch (currentCharactorIndex)
+    // 从 SO 配置获取角色 Prefab 名称
+    string characterName = characterInfoLibrary != null
+        ? characterInfoLibrary.GetNameByIndex(currentCharactorIndex)
+        : string.Empty;
+
+    if (string.IsNullOrEmpty(characterName))
     {
-      case CharactorIndex.WiZardBoy:
-        Launcher.instance.SwitchCharacter(CharactorName.WiZardBoy);
-        break;
-      case CharactorIndex.BingNv:
-        Launcher.instance.SwitchCharacter(CharactorName.BingNv);
-        break;
-      default:
-        Debug.LogWarning($"[CharactorPanel] 未知角色索引: {currentCharactorIndex}");
-        break;
+      Debug.LogWarning($"[CharactorPanel] 未找到角色索引 {currentCharactorIndex} 对应的 Prefab 名称");
+      return;
     }
+
+    Launcher.instance.SwitchCharacter(characterName);
   }
   #endregion
 }

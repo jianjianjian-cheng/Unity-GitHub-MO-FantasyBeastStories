@@ -1,4 +1,3 @@
-using System.IO;
 using Core;
 using UnityEngine;
 using XLua;
@@ -11,10 +10,7 @@ public class LuaEnvManager
 
   public LuaEnv LuaEnv { get; private set; }
 
-  // 热更新 AssetBundle 引用（由 HotfixManager 设置）
-  private AssetBundle _hotfixBundle;
-
-  // 自定义 Loader：优先级 AB → persistentDataPath → Resources
+  // 自定义 Loader：通过 Addressables 加载 Lua 脚本（支持远程热更）
   public void Init()
   {
     LuaEnv = new LuaEnv();
@@ -27,39 +23,13 @@ public class LuaEnvManager
     // Lua require 用 . 分隔模块路径，需转换为目录分隔符
     string relativePath = filePath.Replace('.', '/');
 
-    // 0. 最高优先级：从热更新 AssetBundle 加载
-    if (_hotfixBundle != null)
-    {
-      // AB 中资源名为 "XxxLua.lua.txt"（取模块最后一段 + .lua.txt）
-      string fileName = relativePath.Contains("/")
-          ? relativePath.Substring(relativePath.LastIndexOf('/') + 1)
-          : relativePath;
-      string assetName = fileName + ".lua.txt";
-
-      var textAsset = _hotfixBundle.LoadAsset<TextAsset>(assetName);
-      if (textAsset != null)
-      {
-        Debug.Log($"[LuaEnvManager] 从 AB 加载: {filePath} → {assetName}");
-        return textAsset.bytes;
-      }
-    }
-
-    // 1. 从热更新下载目录加载
-    string hotfixPath = Path.Combine(Application.persistentDataPath, "Lua", relativePath + ".lua.txt");
-    if (File.Exists(hotfixPath))
-    {
-      Debug.Log($"[LuaEnvManager] 从热更新目录加载: {hotfixPath}");
-      return File.ReadAllBytes(hotfixPath);
-    }
-
-    // 2. 回退到 Addressables（包体内保底）
-    // Addressable key 格式为 "Lua/Main"（不带 .lua 后缀），优先尝试
+    // 通过 Addressables 加载（远程热更 bundle 优先于本地包体）
     var resAsset = AssetLoader.TryLoadAsset<TextAsset>("Lua/" + relativePath);
     if (resAsset == null)
       resAsset = AssetLoader.TryLoadAsset<TextAsset>("Lua/" + relativePath + ".lua");
     if (resAsset != null)
     {
-      Debug.Log($"[LuaEnvManager] 从 Resources 加载: {filePath}");
+      Debug.Log($"[LuaEnvManager] 从 Addressables 加载: {filePath}");
       return resAsset.bytes;
     }
 
@@ -67,19 +37,10 @@ public class LuaEnvManager
     return null;
   }
 
-  // 设置热更新 AssetBundle（由 HotfixManager 调用）
-  public void SetAssetBundleLoader(AssetBundle hotfixBundle)
-  {
-    if (hotfixBundle == null) return;
-    _hotfixBundle = hotfixBundle;
-    Debug.Log("[LuaEnvManager] 热更新 AssetBundle 已设置");
-  }
-
   public void Dispose()
   {
     LuaEnv?.Dispose();
     LuaEnv = null;
-    _hotfixBundle = null;
     _instance = null;
   }
 }

@@ -12,29 +12,9 @@ namespace Managers
 {
     public class EnemiesGenorator : MonoBehaviour
     {
-        [SerializeField]
-        GameObject testPrefab;
-
-        [Header("对象池设置")]
-        [SerializeField, Tooltip("专属对象池名称，多个生成器使用不同池名可避免竞争")]
-        private string poolName = "";
-
-        [SerializeField, Tooltip("该生成器专属对象池的预创建数量（骷髅敌人数量多建议 20-30）")]
-        private int poolPreloadCount = 25;
-
-        [Header("Dragon 生成设置")]
-        [SerializeField, Tooltip("Dragon 预制体（留空则不生成 Dragon）")]
-        private GameObject dragonPrefab;
-
-        [SerializeField, Tooltip("Dragon 对象池预创建数量")]
-        private int dragonPoolPreloadCount = 10;
-
-        [Header("生成间隔设置")]
-        [SerializeField, Tooltip("初始生成间隔（秒）")]
-        private float baseSpawnInterval = 10f;
-
-        [SerializeField, Tooltip("最小生成间隔（秒），数量峰值时的最快频率")]
-        private float minSpawnInterval = 1.5f;
+        [Header("生成配置")]
+        [SerializeField, Tooltip("波次配置 SO（预制体、池参数、生成间隔等）")]
+        private WaveConfigSO waveConfig;
 
         private string actualPoolName;
         private string dragonPoolName;
@@ -52,31 +32,39 @@ namespace Managers
 
         void Start()
         {
-            if (string.IsNullOrEmpty(poolName))
+            if (waveConfig == null)
+            {
+                Debug.LogError($"[EnemiesGenorator] {gameObject.name} 的 WaveConfigSO 未配置！", this);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(waveConfig.poolName))
                 actualPoolName = gameObject.name + "_Pool";
             else
-                actualPoolName = poolName;
+                actualPoolName = waveConfig.poolName;
 
             dragonPoolName = PoolConst.Dragon;
 
-            if (NetworkObjectPoolManager.instance != null && testPrefab != null)
+            if (NetworkObjectPoolManager.instance != null && waveConfig.enemyPrefab != null)
             {
-                NetworkObjectPoolManager.instance.RegisterPool(actualPoolName, testPrefab, poolPreloadCount);
+                NetworkObjectPoolManager.instance.RegisterPool(actualPoolName, waveConfig.enemyPrefab, waveConfig.poolPreloadCount);
                 isPoolRegistered = true;
             }
 
             // 注册 Dragon 池（如果配置了预制体且池尚未注册）
-            if (NetworkObjectPoolManager.instance != null && dragonPrefab != null)
+            if (NetworkObjectPoolManager.instance != null && waveConfig.dragonPrefab != null)
             {
-                NetworkObjectPoolManager.instance.RegisterPool(dragonPoolName, dragonPrefab, dragonPoolPreloadCount);
+                NetworkObjectPoolManager.instance.RegisterPool(dragonPoolName, waveConfig.dragonPrefab, waveConfig.dragonPoolPreloadCount);
                 isDragonPoolRegistered = true;
             }
 
-            spawnInterval = baseSpawnInterval;
+            spawnInterval = waveConfig.baseSpawnInterval;
         }
 
         void Update()
         {
+            if (waveConfig == null)
+                return;
             if (GamePauseManager.isPaused)
                 return;
             if (!NetworkServiceLocator.PlayerService.IsMasterClient)
@@ -127,10 +115,10 @@ namespace Managers
 
                 // 基础间隔 × 间隔倍率（1/数量倍率）
                 float intervalMultiplier = EnemyScalingCalculator.GetSpawnIntervalMultiplier(currentTime);
-                spawnInterval = baseSpawnInterval * intervalMultiplier;
+                spawnInterval = waveConfig.baseSpawnInterval * intervalMultiplier;
 
                 // 确保不低于最小间隔
-                spawnInterval = Mathf.Max(spawnInterval, minSpawnInterval);
+                spawnInterval = Mathf.Max(spawnInterval, waveConfig.minSpawnInterval);
 
                 updateSpawnIntervalCounter = 0f;
             }
@@ -153,7 +141,7 @@ namespace Managers
 
             // 决定生成 Skeleton 还是 Dragon
             bool spawnDragon = false;
-            if (isDragonPoolRegistered || dragonPrefab != null)
+            if (isDragonPoolRegistered || waveConfig.dragonPrefab != null)
             {
                 float dragonProbability = EnemyScalingCalculator.GetDragonSpawnProbability(currentTime);
                 spawnDragon = Random.value <= dragonProbability;
@@ -198,9 +186,9 @@ namespace Managers
             // 确保 Dragon 池已注册（延迟注册）
             if (spawnDragon && !isDragonPoolRegistered)
             {
-                if (NetworkObjectPoolManager.instance != null && dragonPrefab != null)
+                if (NetworkObjectPoolManager.instance != null && waveConfig.dragonPrefab != null)
                 {
-                    NetworkObjectPoolManager.instance.RegisterPool(dragonPoolName, dragonPrefab, dragonPoolPreloadCount);
+                    NetworkObjectPoolManager.instance.RegisterPool(dragonPoolName, waveConfig.dragonPrefab, waveConfig.dragonPoolPreloadCount);
                     isDragonPoolRegistered = true;
                 }
                 else
@@ -210,9 +198,9 @@ namespace Managers
             // 确保 Skeleton 池已注册（延迟注册）
             if (!spawnDragon && !isPoolRegistered)
             {
-                if (NetworkObjectPoolManager.instance != null && testPrefab != null)
+                if (NetworkObjectPoolManager.instance != null && waveConfig.enemyPrefab != null)
                 {
-                    NetworkObjectPoolManager.instance.RegisterPool(actualPoolName, testPrefab, poolPreloadCount);
+                    NetworkObjectPoolManager.instance.RegisterPool(actualPoolName, waveConfig.enemyPrefab, waveConfig.poolPreloadCount);
                     isPoolRegistered = true;
                 }
                 else

@@ -66,14 +66,12 @@ namespace Core
             State = UpdateState.Idle;
             TotalDownloadBytes = 0;
 
-            // 1. 初始化 Addressables
-            Debug.Log("[热更] 初始化 Addressables...");
-            var initHandle = Addressables.InitializeAsync();
-            yield return initHandle;
-
             // 开发模式：跳过远程检查
             if (devMode)
             {
+                Debug.Log("[热更] 开发模式：初始化 Addressables...");
+                var devInitHandle = Addressables.InitializeAsync();
+                yield return devInitHandle;
                 Debug.Log("[热更] 开发模式：跳过远程检查，使用本地 catalog");
                 State = UpdateState.Complete;
                 IsUpdateComplete = true;
@@ -81,32 +79,60 @@ namespace Core
                 yield break;
             }
 
-            // 2. 检查 catalog 是否有更新
+            // 1. 读取玩家包内置 catalog，计算其 MD5 hash
             State = UpdateState.Checking;
             DownloadStartTime = Time.time;
             Debug.Log("[热更] 检查 catalog 更新...");
-            var checkHandle = Addressables.CheckForCatalogUpdates(false);
-            yield return checkHandle;
 
+            string builtinHash = ComputeBuiltinCatalogHash();
+            Debug.Log($"[热更] 内置 catalog hash: {builtinHash}");
+
+            // 2. 下载远程 hash
+            string remoteHash = null;
+            var remoteHashPath = "https://a.unity.cn/client_api/v1/buckets/9a90add4-6c36-4796-a3ea-9114ea7561dc/release_by_badge/latest/content/catalog_0.1.hash";
+            using (var www = UnityEngine.Networking.UnityWebRequest.Get(remoteHashPath))
+            {
+                www.redirectLimit = 10;
+                yield return www.SendWebRequest();
+                if (www.result == UnityEngine.Networking.UnityWebRequest.Result.Success)
+                {
+                    remoteHash = www.downloadHandler.text.Trim();
+                    Debug.Log($"[热更] 远程 catalog hash: {remoteHash}");
+                }
+                else
+                {
+                    Debug.LogError($"[热更] 获取远程 hash 失败: {www.error}");
+                }
+            }
+
+            // 3. 对比：远程 hash ≠ 内置 hash → 需要更新
             bool needUpdate = false;
-
-            if (checkHandle.Status == AsyncOperationStatus.Succeeded && checkHandle.Result.Count > 0)
+            if (!string.IsNullOrEmpty(remoteHash) && !string.IsNullOrEmpty(builtinHash) && remoteHash != builtinHash)
             {
                 needUpdate = true;
                 HasRemoteUpdate = true;
-                Debug.Log($"[热更] 检测到 {checkHandle.Result.Count} 个 catalog 需要更新");
-
-                // 3. 更新 catalog
-                var updateCatalogHandle = Addressables.UpdateCatalogs(checkHandle.Result, false);
-                yield return updateCatalogHandle;
-                Addressables.Release(updateCatalogHandle);
-                Debug.Log("[热更] Catalog 更新完成");
+                Debug.Log("[热更] 检测到 catalog 需要更新（远程 hash ≠ 内置 hash）");
+            }
+            else if (string.IsNullOrEmpty(remoteHash))
+            {
+                Debug.LogWarning("[热更] 无法获取远程 hash，跳过更新");
             }
             else
             {
-                Debug.Log("[热更] Catalog 无需更新");
+                Debug.Log("[热更] Catalog 无需更新（远程 hash = 内置 hash）");
             }
-            Addressables.Release(checkHandle);
+
+            // 4. 初始化 Addressables
+            Debug.Log("[热更] 初始化 Addressables...");
+            var initHandle = Addressables.InitializeAsync();
+            yield return initHandle;
+
+            if (needUpdate)
+            {
+                // 手动下载远程 catalog 写入缓存，再重新初始化
+                Debug.Log("[热更] 正在下载远程 catalog...");
+                yield return DownloadRemoteCatalog(remoteHashPath);
+            }
 
             if (!needUpdate)
             {
@@ -165,6 +191,92 @@ namespace Core
             }
 
             Addressables.Release(downloadHandle);
+        }
+
+        /// <summary>
+        /// 手动下载远程 catalog 并写入缓存，绕过 CheckForCatalogUpdates 的缓存机制
+        /// </summary>
+        private IEnumerator DownloadRemoteCatalog(string hashUrl)
+        {
+            // 远程 catalog URL = 把 hash 文件 URL 中的 .hash 替换为 .json
+            string catalogUrl = hashUrl.Replace(".hash", ".json");
+
+            Debug.Log($"[热更] 下载远程 catalog: {catalogUrl}");
+            using (var www = UnityEngine.Networking.UnityWebRequest.Get(catalogUrl))
+            {
+                www.redirectLimit = 10;
+                yield return www.SendWebRequest();
+
+                if (www.result == UnityEngine.Networking.UnityWebRequest.Result.Success)
+                {
+                    string catalogJson = www.downloadHandler.text;
+
+                    // 写入缓存目录
+                    string cacheDir = System.IO.Path.Combine(UnityEngine.Application.persistentDataPath, "com.unity.addressables");
+                    System.IO.Directory.CreateDirectory(cacheDir);
+
+                    System.IO.File.WriteAllText(
+                        System.IO.Path.Combine(cacheDir, "catalog_0.1.json"),
+                        catalogJson);
+
+                    // 下载并写入 hash 文件
+                    using (var hashReq = UnityEngine.Networking.UnityWebRequest.Get(hashUrl))
+                    {
+                        hashReq.redirectLimit = 10;
+                        yield return hashReq.SendWebRequest();
+                        if (hashReq.result == UnityEngine.Networking.UnityWebRequest.Result.Success)
+                        {
+                            System.IO.File.WriteAllText(
+                                System.IO.Path.Combine(cacheDir, "catalog_0.1.hash"),
+                                hashReq.downloadHandler.text);
+                        }
+                    }
+
+                    Debug.Log("[热更] 远程 catalog 已下载并写入缓存，正在重新初始化...");
+
+                    // 重新初始化 Addressables 加载新 catalog
+                    var reinitHandle = Addressables.InitializeAsync();
+                    yield return reinitHandle;
+                    Debug.Log("[热更] 重新初始化完成，新 catalog 已加载");
+                }
+                else
+                {
+                    Debug.LogError($"[热更] 下载远程 catalog 失败: {www.error}");
+                }
+            }
+        }
+
+        /// <summary>
+        /// 计算玩家包内置 catalog 的 MD5 hash
+        /// catalog_0.1.hash 文件的内容就是 catalog_0.1.json 内容的 MD5
+        /// </summary>
+        private string ComputeBuiltinCatalogHash()
+        {
+            try
+            {
+                // 内置 catalog 路径：StreamingAssets/aa/catalog.json
+                string catalogPath = System.IO.Path.Combine(
+                    UnityEngine.Application.streamingAssetsPath, "aa", "catalog.json");
+
+                if (!System.IO.File.Exists(catalogPath))
+                {
+                    Debug.LogWarning($"[热更] 内置 catalog 不存在: {catalogPath}");
+                    return null;
+                }
+
+                string catalogContent = System.IO.File.ReadAllText(catalogPath);
+                using (var md5 = System.Security.Cryptography.MD5.Create())
+                {
+                    byte[] bytes = System.Text.Encoding.UTF8.GetBytes(catalogContent);
+                    byte[] hash = md5.ComputeHash(bytes);
+                    return System.BitConverter.ToString(hash).Replace("-", "").ToLower();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError($"[热更] 计算内置 catalog hash 失败: {ex.Message}");
+                return null;
+            }
         }
     }
 }

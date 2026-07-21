@@ -25,7 +25,7 @@ namespace UI
             else
             {
                 // 备用方案：从全局容器获取
-                var globalChannel = EventChannelLocator.MainContainer?.combat?.damageDisplayChannel;
+                var globalChannel = EventChannelLocator.MainContainer?.matchSystem?.damageDisplayChannel;
                 if (globalChannel != null)
                 {
                     globalChannel.RegisterListener(OnDamageDisplayRequested);

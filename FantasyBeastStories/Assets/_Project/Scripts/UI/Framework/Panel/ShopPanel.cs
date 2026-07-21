@@ -195,7 +195,16 @@ public class ShopPanel : UIScreen
     if (detailName != null)
       detailName.text = runeConfig.runeName;
     if (detailDescription != null)
-      detailDescription.text = runeConfig.description;
+    {
+      var effectivePowers = RuneEffectApplier.GetEffectivePowers(runeConfig.runeId);
+      var parts = new System.Text.StringBuilder();
+      foreach (var power in effectivePowers)
+        parts.AppendLine($"{(power.value > 0 ? "+" : "")}{power.value}{power.label}");
+      var specialDesc = RuneEffectApplier.GetEffectiveSpecialPowerDescription(runeConfig.runeId);
+      if (!string.IsNullOrEmpty(specialDesc))
+        parts.Append(specialDesc);
+      detailDescription.text = parts.ToString().TrimEnd();
+    }
     if (detailPrice != null)
       detailPrice.text = $"{runeConfig.price} ";
 
@@ -204,21 +213,14 @@ public class ShopPanel : UIScreen
     // 使用RuneInfoChannel展示详情信息，与RunePanel保持一致
     if (runeConfig.runeData != null)
     {
-      var runePowers = new Dictionary<int, string>();
-      if (runeConfig.runeData.powers != null)
-      {
-        foreach (var power in runeConfig.runeData.powers)
-        {
-          runePowers[power.value] = power.label;
-        }
-      }
+      var runePowers = RuneEffectApplier.GetEffectivePowers(runeConfig.runeId);
 
       var args = new Core.RuneEquipArgs(
           runeConfig.runeId,
           runeConfig.runeData.runeName,
           runePowers,
-          runeConfig.runeData.specialPowerName,
-          runeConfig.runeData.specialPowerDescription
+          RuneEffectApplier.GetEffectiveSpecialPowerName(runeConfig.runeId),
+          RuneEffectApplier.GetEffectiveSpecialPowerDescription(runeConfig.runeId)
       );
       EventChannelLocator.MainContainer.runeInfoChannel.Raise(args);
     }

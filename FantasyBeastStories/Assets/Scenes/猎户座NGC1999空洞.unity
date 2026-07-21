@@ -17531,13 +17531,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fc2806f9ce5ee64c8dd53a699dee363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testPrefab: {fileID: 3480699876331511206, guid: 57525729c06505546ae848045aa1dd19, type: 3}
-  poolName: Enemies/SkeletonRoot
-  poolPreloadCount: 100
-  dragonPrefab: {fileID: 1683610532524085646, guid: a49a796b1040e704aa26b030b40cb711, type: 3}
-  dragonPoolPreloadCount: 10
-  baseSpawnInterval: 10
-  minSpawnInterval: 1.5
+  waveConfig: {fileID: 11400000, guid: a76f51880ae98a249934a133f1be0357, type: 2}
 --- !u!1 &191178057
 GameObject:
   m_ObjectHideFlags: 0
@@ -34377,13 +34371,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fc2806f9ce5ee64c8dd53a699dee363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testPrefab: {fileID: 3480699876331511206, guid: 57525729c06505546ae848045aa1dd19, type: 3}
-  poolName: Enemies/SkeletonRoot
-  poolPreloadCount: 100
-  dragonPrefab: {fileID: 1683610532524085646, guid: a49a796b1040e704aa26b030b40cb711, type: 3}
-  dragonPoolPreloadCount: 10
-  baseSpawnInterval: 10
-  minSpawnInterval: 1.5
+  waveConfig: {fileID: 11400000, guid: a76f51880ae98a249934a133f1be0357, type: 2}
 --- !u!1 &366456654
 GameObject:
   m_ObjectHideFlags: 0
@@ -56669,6 +56657,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneIndex: 2
   isReady: 0
+  sceneConfig: {fileID: 0}
   spawnPoints: []
   isStayLobbyInspector: 0
   isTestInspector: 0
@@ -77631,13 +77620,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fc2806f9ce5ee64c8dd53a699dee363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testPrefab: {fileID: 3480699876331511206, guid: 57525729c06505546ae848045aa1dd19, type: 3}
-  poolName: Enemies/SkeletonRoot
-  poolPreloadCount: 100
-  dragonPrefab: {fileID: 1683610532524085646, guid: a49a796b1040e704aa26b030b40cb711, type: 3}
-  dragonPoolPreloadCount: 10
-  baseSpawnInterval: 10
-  minSpawnInterval: 1.5
+  waveConfig: {fileID: 11400000, guid: a76f51880ae98a249934a133f1be0357, type: 2}
 --- !u!1 &666345924
 GameObject:
   m_ObjectHideFlags: 0
@@ -78192,13 +78175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fc2806f9ce5ee64c8dd53a699dee363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testPrefab: {fileID: 3480699876331511206, guid: 57525729c06505546ae848045aa1dd19, type: 3}
-  poolName: Enemies/SkeletonRoot
-  poolPreloadCount: 100
-  dragonPrefab: {fileID: 1683610532524085646, guid: a49a796b1040e704aa26b030b40cb711, type: 3}
-  dragonPoolPreloadCount: 10
-  baseSpawnInterval: 10
-  minSpawnInterval: 1.5
+  waveConfig: {fileID: 11400000, guid: a76f51880ae98a249934a133f1be0357, type: 2}
 --- !u!1 &694361299
 GameObject:
   m_ObjectHideFlags: 0
@@ -84525,13 +84502,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fc2806f9ce5ee64c8dd53a699dee363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testPrefab: {fileID: 3480699876331511206, guid: 57525729c06505546ae848045aa1dd19, type: 3}
-  poolName: Enemies/SkeletonRoot
-  poolPreloadCount: 100
-  dragonPrefab: {fileID: 1683610532524085646, guid: a49a796b1040e704aa26b030b40cb711, type: 3}
-  dragonPoolPreloadCount: 10
-  baseSpawnInterval: 10
-  minSpawnInterval: 1.5
+  waveConfig: {fileID: 11400000, guid: a76f51880ae98a249934a133f1be0357, type: 2}
 --- !u!1 &772549381
 GameObject:
   m_ObjectHideFlags: 0
@@ -133989,13 +133960,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fc2806f9ce5ee64c8dd53a699dee363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testPrefab: {fileID: 3480699876331511206, guid: 57525729c06505546ae848045aa1dd19, type: 3}
-  poolName: Enemies/SkeletonRoot
-  poolPreloadCount: 100
-  dragonPrefab: {fileID: 1683610532524085646, guid: a49a796b1040e704aa26b030b40cb711, type: 3}
-  dragonPoolPreloadCount: 10
-  baseSpawnInterval: 10
-  minSpawnInterval: 1.5
+  waveConfig: {fileID: 11400000, guid: a76f51880ae98a249934a133f1be0357, type: 2}
 --- !u!1 &1150123688
 GameObject:
   m_ObjectHideFlags: 0
@@ -140516,13 +140481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fc2806f9ce5ee64c8dd53a699dee363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testPrefab: {fileID: 3480699876331511206, guid: 57525729c06505546ae848045aa1dd19, type: 3}
-  poolName: Enemies/SkeletonRoot
-  poolPreloadCount: 100
-  dragonPrefab: {fileID: 1683610532524085646, guid: a49a796b1040e704aa26b030b40cb711, type: 3}
-  dragonPoolPreloadCount: 10
-  baseSpawnInterval: 10
-  minSpawnInterval: 1.5
+  waveConfig: {fileID: 11400000, guid: a76f51880ae98a249934a133f1be0357, type: 2}
 --- !u!1001 &1259700234
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -140796,13 +140755,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fc2806f9ce5ee64c8dd53a699dee363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testPrefab: {fileID: 3480699876331511206, guid: 57525729c06505546ae848045aa1dd19, type: 3}
-  poolName: Enemies/SkeletonRoot
-  poolPreloadCount: 100
-  dragonPrefab: {fileID: 1683610532524085646, guid: a49a796b1040e704aa26b030b40cb711, type: 3}
-  dragonPoolPreloadCount: 10
-  baseSpawnInterval: 10
-  minSpawnInterval: 1.5
+  waveConfig: {fileID: 11400000, guid: a76f51880ae98a249934a133f1be0357, type: 2}
 --- !u!1001 &1299582253
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -178479,13 +178432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fc2806f9ce5ee64c8dd53a699dee363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testPrefab: {fileID: 3480699876331511206, guid: 57525729c06505546ae848045aa1dd19, type: 3}
-  poolName: Enemies/SkeletonRoot
-  poolPreloadCount: 100
-  dragonPrefab: {fileID: 1683610532524085646, guid: a49a796b1040e704aa26b030b40cb711, type: 3}
-  dragonPoolPreloadCount: 10
-  baseSpawnInterval: 10
-  minSpawnInterval: 1.5
+  waveConfig: {fileID: 11400000, guid: a76f51880ae98a249934a133f1be0357, type: 2}
 --- !u!1 &1553788895
 GameObject:
   m_ObjectHideFlags: 0
@@ -204030,13 +203977,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fc2806f9ce5ee64c8dd53a699dee363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testPrefab: {fileID: 3480699876331511206, guid: 57525729c06505546ae848045aa1dd19, type: 3}
-  poolName: Enemies/SkeletonRoot
-  poolPreloadCount: 100
-  dragonPrefab: {fileID: 1683610532524085646, guid: a49a796b1040e704aa26b030b40cb711, type: 3}
-  dragonPoolPreloadCount: 10
-  baseSpawnInterval: 10
-  minSpawnInterval: 1.5
+  waveConfig: {fileID: 11400000, guid: a76f51880ae98a249934a133f1be0357, type: 2}
 --- !u!1 &1904441481
 GameObject:
   m_ObjectHideFlags: 0
@@ -226746,13 +226687,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fc2806f9ce5ee64c8dd53a699dee363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testPrefab: {fileID: 3480699876331511206, guid: 57525729c06505546ae848045aa1dd19, type: 3}
-  poolName: Enemies/SkeletonRoot
-  poolPreloadCount: 100
-  dragonPrefab: {fileID: 1683610532524085646, guid: a49a796b1040e704aa26b030b40cb711, type: 3}
-  dragonPoolPreloadCount: 10
-  baseSpawnInterval: 10
-  minSpawnInterval: 1.5
+  waveConfig: {fileID: 11400000, guid: a76f51880ae98a249934a133f1be0357, type: 2}
 --- !u!1 &2098932720
 GameObject:
   m_ObjectHideFlags: 0
@@ -232051,13 +231986,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fc2806f9ce5ee64c8dd53a699dee363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testPrefab: {fileID: 3480699876331511206, guid: 57525729c06505546ae848045aa1dd19, type: 3}
-  poolName: Enemies/SkeletonRoot
-  poolPreloadCount: 100
-  dragonPrefab: {fileID: 1683610532524085646, guid: a49a796b1040e704aa26b030b40cb711, type: 3}
-  dragonPoolPreloadCount: 10
-  baseSpawnInterval: 10
-  minSpawnInterval: 1.5
+  waveConfig: {fileID: 11400000, guid: a76f51880ae98a249934a133f1be0357, type: 2}
 --- !u!1 &2115416452
 GameObject:
   m_ObjectHideFlags: 0

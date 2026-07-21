@@ -34,10 +34,10 @@ namespace Core
             }
         }
 
-        // ========== 领域子容器便捷访问 ==========
-        public static CombatChannelsSO Combat => MainContainer?.combat;
-        public static PlayerChannelsSO Player => MainContainer?.player;
-        public static GameChannelsSO Game => MainContainer?.game;
-        public static UIChannelsSO UI => MainContainer?.ui;
+        // ========== 功能系统子容器便捷访问 ==========
+        public static CombatChannelsSO MatchSystem => MainContainer?.matchSystem;
+        public static PlayerChannelsSO ProgressionSystem => MainContainer?.progressionSystem;
+        public static GameChannelsSO LobbySystem => MainContainer?.lobbySystem;
+        public static UIChannelsSO UISystem => MainContainer?.uiSystem;
     }
 }

@@ -66,7 +66,6 @@ namespace Controllers.Time
         {
             Instance = this;
             ServiceLocator.Register(this);
-            DomainServiceLocator.Register(this);
 
             // 从 ScriptableObject 加载事件列表副本
             if (timeEventList != null)

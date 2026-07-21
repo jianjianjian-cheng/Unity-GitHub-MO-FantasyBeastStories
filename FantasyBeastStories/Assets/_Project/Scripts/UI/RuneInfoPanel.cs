@@ -1,6 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using Core;
+using Controllers.Rune;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -88,14 +88,13 @@ namespace UI
 
     private void UpdateRuneInfo(
         string runeName,
-        Dictionary<int, string> runePowers,
+        List<RunePower> runePowers,
         string specialPowerName,
         string specialPowerDescription
     )
     {
       Debug.Log("UpdateRuneInfo");
 
-      // 逐一检查每个Text组件是否有效
       if (runeNameText != null)
         runeNameText.text = runeName;
 
@@ -105,24 +104,26 @@ namespace UI
       if (specialPowerDescriptionText != null)
         specialPowerDescriptionText.text = specialPowerDescription;
 
+      // 清空两个属性文本，防止上次残留
+      if (runePowers_1Text != null)
+        runePowers_1Text.text = string.Empty;
+      if (runePowers_2Text != null)
+        runePowers_2Text.text = string.Empty;
+
       if (runePowers == null)
         return;
 
-      int index = 1;
-      foreach (var power in runePowers)
+      for (int i = 0; i < runePowers.Count && i < 2; i++)
       {
-        string text =
-            power.Key > 0 ? $"+{power.Key}{power.Value}" : $"-{power.Key}{power.Value}";
+        var power = runePowers[i];
+        string text = power.value > 0
+            ? $"+{power.value}{power.label}"
+            : $"{power.value}{power.label}";
 
-        if (index == 1 && runePowers_1Text != null)
-        {
+        if (i == 0 && runePowers_1Text != null)
           runePowers_1Text.text = text;
-        }
-        else if (index == 2 && runePowers_2Text != null)
-        {
+        else if (i == 1 && runePowers_2Text != null)
           runePowers_2Text.text = text;
-        }
-        index++;
       }
     }
   }

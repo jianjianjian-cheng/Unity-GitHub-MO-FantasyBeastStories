@@ -53,18 +53,13 @@ namespace UI.Framework
         public RuneDataSO RuneData => runeData;
 
         /// <summary>获取热更新后的有效数值（优先 Lua，回退 SO 默认值）</summary>
-        public Dictionary<int, string> RunePowers
+        public List<RunePower> RunePowers
         {
             get
             {
-                var dict = new Dictionary<int, string>();
                 if (runeData != null)
-                {
-                    var effectivePowers = RuneEffectApplier.GetEffectivePowers(runeData.runeId);
-                    foreach (var p in effectivePowers)
-                        dict[p.value] = p.label;
-                }
-                return dict;
+                    return RuneEffectApplier.GetEffectivePowers(runeData.runeId);
+                return new List<RunePower>();
             }
         }
 

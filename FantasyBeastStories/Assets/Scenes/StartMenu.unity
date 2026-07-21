@@ -8042,6 +8042,7 @@ GameObject:
   - component: {fileID: 1088579247}
   - component: {fileID: 1088579246}
   - component: {fileID: 1088579251}
+  - component: {fileID: 1088579252}
   m_Layer: 5
   m_Name: StartMenuCanvas
   m_TagString: Untagged
@@ -8151,6 +8152,24 @@ MonoBehaviour:
   progressText: {fileID: 230878248}
   backgroundImage: {fileID: 1227359835}
   startButton: {fileID: 4225605703764278724}
+  minDisplayTime: 3
+--- !u!114 &1088579252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1088579245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f62ead19923b8c141b61f1077c49989d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  progressBar: {fileID: 0}
+  progressText: {fileID: 0}
+  backgroundImage: {fileID: 0}
+  startButton: {fileID: 0}
+  minDisplayTime: 2
 --- !u!1001 &1095569992
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9277,6 +9296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vcTimeLine: {fileID: 0}
+  sceneConfig: {fileID: 11400000, guid: 24eefbcdd8e46254cb37086d5e7d22e8, type: 2}
 --- !u!4 &1169086999
 Transform:
   m_ObjectHideFlags: 0
@@ -9321,7 +9341,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1188105241}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -10174,7 +10194,7 @@ GameObject:
   - component: {fileID: 1227359838}
   - component: {fileID: 1227359837}
   m_Layer: 5
-  m_Name: RawImage
+  m_Name: RawImage_BGCLoading
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

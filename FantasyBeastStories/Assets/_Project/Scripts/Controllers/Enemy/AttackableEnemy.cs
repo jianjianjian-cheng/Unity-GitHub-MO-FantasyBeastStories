@@ -20,13 +20,7 @@ namespace Controllers.Enemy
     /// </summary>
     public class AttackableEnemy : EnemyBase
     {
-        [Header("攻击设置")]
-        [SerializeField]
-        protected float attackDamage = 10f;
-
-        [SerializeField, Tooltip("攻击距离（怪物与玩家的距离小于此值时造成伤害）")]
-        protected float attackRange = 2f;
-
+        [Header("NavMesh 设置")]
         [SerializeField]
         protected float pathUpdateInterval = 0.3f; // NavMesh寻路更新间隔（秒）
 
@@ -52,7 +46,10 @@ namespace Controllers.Enemy
         private NavMeshAgent navMeshAgent;
         private float pathUpdateTimer;
 
-        protected float attackInterval = 0.7f;
+        // 从 EnemyConfigSO 读取的攻击参数（运行时缓存）
+        protected float attackDamage;
+        protected float attackRange;
+        protected float attackInterval;
         protected float attackCooldownTimer = 0f;
 
         // LOD 运行时状态
@@ -83,6 +80,7 @@ namespace Controllers.Enemy
             {
                 attackInterval = enemyConfig.attackInterval;
                 attackRange = enemyConfig.attackRange;
+                attackDamage = enemyConfig.attackDamage;
             }
 
             if (navMeshAgent != null)
@@ -277,7 +275,7 @@ namespace Controllers.Enemy
                         Element.Common,
                         gameObject,
                         player,
-                        enemyData.attribute.attackPower,
+                        attackDamage,
                         false,
                         0f
                     );
@@ -298,13 +296,12 @@ namespace Controllers.Enemy
             }
 
             // 获取当前游戏时间
-// 获取当前游戏时间
             var timeQuery = new TimeQueryData();
             EventChannelLocator.MainContainer.timeQueryChannel?.Query(timeQuery);
             float currentTime = timeQuery.currentTime;
 
             // 基础血量从 SO 配置读取
-            float baseMaxHealth = enemyConfig != null ? enemyConfig.maxHealth : 500f;
+            float baseMaxHealth = enemyConfig.maxHealth;
 
             // 根据游戏时间计算血量倍率（1x → 4x，Boss 出现后回落至 1x）
             float hpMultiplier = EnemyScalingCalculator.GetHpMultiplier(currentTime);

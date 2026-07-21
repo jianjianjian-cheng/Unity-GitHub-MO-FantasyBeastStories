@@ -8,6 +8,7 @@ using Managers;
 using Core;
 using Controllers.Services;
 using Controllers.Player;
+using Controllers.Character;
 using UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -21,6 +22,7 @@ namespace Controllers.Network
     {
         private readonly Launcher _launcher;
         private readonly GameObject _currentlySelectedCharacter;
+        private readonly CharacterInfoLibrarySO _characterInfoLibrary;
 
         private InputField _nameUI;
         private Photon.Realtime.Player _localPlayer;
@@ -29,10 +31,12 @@ namespace Controllers.Network
         public GameObject LocalPlayerObject => _localPlayerObject;
         public Photon.Realtime.Player LocalPlayer => _localPlayer;
 
-        public SpawnPointManager(Launcher launcher, GameObject currentlySelectedCharacter)
+        public SpawnPointManager(Launcher launcher, GameObject currentlySelectedCharacter,
+            CharacterInfoLibrarySO characterInfoLibrary = null)
         {
             _launcher = launcher;
             _currentlySelectedCharacter = currentlySelectedCharacter;
+            _characterInfoLibrary = characterInfoLibrary;
         }
 
         /// <summary>大厅 UI 初始化完成后延迟注入 nameUI</summary>
@@ -325,16 +329,18 @@ namespace Controllers.Network
         private void ApplySavedCharacter()
         {
             int savedIndex = SaveManager.SelectedCharacterIndex;
-            switch (savedIndex)
+
+            string characterName = _characterInfoLibrary != null
+                ? _characterInfoLibrary.GetNameByIndex(savedIndex)
+                : string.Empty;
+
+            if (string.IsNullOrEmpty(characterName))
             {
-                case CharactorIndex.BingNv:
-                    _currentlySelectedCharacter.name = CharactorName.BingNv;
-                    break;
-                case CharactorIndex.WiZardBoy:
-                default:
-                    _currentlySelectedCharacter.name = CharactorName.WiZardBoy;
-                    break;
+                Debug.LogWarning($"[SpawnPointManager] 未找到角色索引 {savedIndex} 对应的 Prefab 名称");
+                return;
             }
+
+            _currentlySelectedCharacter.name = characterName;
         }
 
         private void SetupRoomInfo()

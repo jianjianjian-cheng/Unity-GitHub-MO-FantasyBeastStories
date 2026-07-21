@@ -29,7 +29,6 @@ namespace Core
         void Awake()
         {
             ServiceLocator.Register(this);
-            DomainServiceLocator.Register(this);
         }
 
         void OnEnable()

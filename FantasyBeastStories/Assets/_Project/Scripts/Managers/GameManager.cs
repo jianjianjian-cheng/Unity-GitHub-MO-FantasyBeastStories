@@ -17,6 +17,9 @@ namespace Managers
         public int sceneIndex = 2;
         public bool isReady = false;
 
+        [Header("场景配置")]
+        [SerializeField] private SceneConfigSO sceneConfig;
+
         [SerializeField]
         public GameObject[] spawnPoints = { }; // 生成点列表
         private Dictionary<int, ISpawnPoint> spawnPointDict = new Dictionary<int, ISpawnPoint>();
@@ -33,8 +36,7 @@ namespace Managers
             {
                 instance = this;
                 ServiceLocator.Register(this);
-                DomainServiceLocator.Register(this);
-                DomainServiceLocator.Register<ISpawnPointService>(this);
+                ServiceLocator.Register<ISpawnPointService>(this);
                 EventChannelLocator.MainContainer.gameSettings.IsStayLobby = isStayLobbyInspector;
                 EventChannelLocator.MainContainer.gameSettings.IsTest = isTestInspector;
                 DontDestroyOnLoad(gameObject);
@@ -48,23 +50,13 @@ namespace Managers
             }
         }
 
-        /// <summary>等待热更预下载完成，再初始化 Lua 和 Hotfix</summary>
+        /// <summary>等待 Addressables 热更预下载完成后初始化 Lua 环境</summary>
         private IEnumerator InitAfterUpdate()
         {
             // 等待 AddressablesUpdater 完成（devMode 下瞬间完成）
             yield return new WaitUntil(() => AddressablesUpdater.IsUpdateComplete);
 
             LuaEnvManager.Instance.Init();
-            StartCoroutine(InitHotfix());
-        }
-
-        private IEnumerator InitHotfix()
-        {
-            var hotfix = GetComponent<HotfixManager>();
-            if (hotfix == null)
-                hotfix = gameObject.AddComponent<HotfixManager>();
-
-            yield return StartCoroutine(hotfix.DownloadAndLoad());
         }
 
         void OnEnable()
@@ -86,7 +78,7 @@ namespace Managers
             FindSpawnPoints();
 
             // 进入大厅时自动加载存档
-            if (scene.buildIndex == 1)
+            if (scene.buildIndex == sceneConfig.lobbySceneIndex)
             {
                 if (SaveManager.Instance != null)
                     SaveManager.Instance.LoadGame();
@@ -213,7 +205,7 @@ namespace Managers
 
             if (EventChannelLocator.MainContainer.gameSettings.IsTest)
             {
-                SceneManager.LoadScene(1);
+                SceneManager.LoadScene(sceneConfig.lobbySceneIndex);
             }
             else if (NetworkServiceLocator.PlayerService.IsMasterClient)
             {
@@ -258,12 +250,14 @@ namespace Managers
         }
     }
 
+    [System.Obsolete("使用 CharacterInfoLibrarySO.GetNameByIndex 替代")]
     public class CharactorIndex
     {
         public const int WiZardBoy = 0;
         public const int BingNv = 1;
     }
 
+    [System.Obsolete("使用 CharacterInfoLibrarySO.GetNameByIndex 替代")]
     public class CharactorName
     {
         public const string WiZardBoy = "WizardBoyRoot";

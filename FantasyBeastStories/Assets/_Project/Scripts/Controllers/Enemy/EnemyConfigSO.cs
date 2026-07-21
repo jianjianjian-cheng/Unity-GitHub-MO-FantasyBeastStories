@@ -16,6 +16,8 @@ namespace Controllers.Enemy
         public float moveSpeed = 2f;
 
         [Header("攻击参数")]
+        [Tooltip("攻击伤害（每次攻击对玩家造成的伤害值）")]
+        public float attackDamage = 10f;
         [Tooltip("攻击间隔（秒），两次攻击之间的冷却时间")]
         public float attackInterval = 0.7f;
         [Tooltip("攻击距离（怪物与玩家的距离小于此值时造成伤害）")]

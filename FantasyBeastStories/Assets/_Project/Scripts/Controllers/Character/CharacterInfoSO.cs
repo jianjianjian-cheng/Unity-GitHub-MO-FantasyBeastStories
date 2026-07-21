@@ -17,6 +17,9 @@ namespace Controllers.Character
         [Tooltip("角色图标")]
         public Sprite characterIcon;
 
+        [Tooltip("角色在场景中的 Prefab 根节点名称（用于 Launcher.SwitchCharacter）")]
+        public string characterPrefabName;
+
         [Header("能力介绍")]
         [Tooltip("角色能力介绍列表，每条为一段描述")]
         public List<string> abilityDescriptions = new List<string>();

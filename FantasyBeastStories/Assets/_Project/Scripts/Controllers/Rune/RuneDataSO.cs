@@ -1,4 +1,3 @@
-// Assets/Scripts/Domain/Rune/RuneDataSO.cs
 using System.Collections.Generic;
 using UnityEngine;
 

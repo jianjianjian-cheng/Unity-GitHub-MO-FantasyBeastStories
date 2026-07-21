@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 8e887aa1d6abd3147b8ad619cc3b6aeb
   m_currentHash:
     serializedVersion: 2
-    Hash: a9b4bcb17ae270f95ca8ecdda192d984
+    Hash: f941ed57a4d04cd01f83b6819c4eeba1
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 1
   m_BundleLocalCatalog: 0
@@ -41,7 +41,7 @@ MonoBehaviour:
   m_ContentStateBuildPathProfileVariableName: <default settings path>
   m_CustomContentStateBuildPath: 
   m_ContentStateBuildPath: 
-  m_BuildAddressablesWithPlayerBuild: 1
+  m_BuildAddressablesWithPlayerBuild: 0
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
   - {fileID: 11400000, guid: bbc65f076542af846afcb0df055555fa, type: 2}
@@ -81,7 +81,7 @@ MonoBehaviour:
       - m_Id: 3c1619a4dea1c51419a8d6e5673d237b
         m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
       - m_Id: 9836d420017851c438e054de97fdf37b
-        m_Value: Library/com.unity.addressables/aa/[BuildTarget]
+        m_Value: ServerData/[BuildTarget]
       - m_Id: c3d8d3023405db6449d53d33b094c366
         m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
       - m_Id: d10127f30f87a4c44bd546c7bdc169cb

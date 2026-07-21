@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Core;
 using Controllers.Rune;
 using UnityEngine;
@@ -119,6 +120,9 @@ namespace Managers
       // 版本兼容处理
       HandleVersionCompatibility();
 
+      // 校验存档数据（热更新后可能有 ID 被删除）
+      ValidateSaveData();
+
       // 分发数据
       DistributeDataToManagers();
 
@@ -191,6 +195,7 @@ namespace Managers
       // 符文系统
       currentSaveData.equippedRuneId1 = RuneEquipmentSnapshot.EquippedRuneId1;
       currentSaveData.equippedRuneId2 = RuneEquipmentSnapshot.EquippedRuneId2;
+      currentSaveData.ownedRuneIds = RuneInventory.GetAllRuneIds();
 
       // 任务进度（这是存档的核心用途——任务需要跨对局累积）
       if (QuestTaskManager.Instance != null)
@@ -225,6 +230,7 @@ namespace Managers
 
       // 符文系统
       RuneEquipmentSnapshot.SetBoth(currentSaveData.equippedRuneId1, currentSaveData.equippedRuneId2);
+      RuneInventory.RestoreFromSave(currentSaveData.ownedRuneIds);
 
       // 任务进度
       if (QuestTaskManager.Instance != null)
@@ -279,7 +285,48 @@ namespace Managers
     }
 
     // ──────────────────────────────────
-    //  游戏退出时自动存档
+    //  存档数据校验
+    // ──────────────────────────────────
+
+    /// <summary>
+    /// 热更新后部分 ID 可能已被移除，需校验存档引用的合法性。
+    /// 注意：不能在此处同步加载远程 SO（WaitForCompletion 会死锁主线程），
+    /// 只做基本合理性检查，数据库级校验由运行时自然处理（GetRuneById == null 时跳过）。
+    /// </summary>
+    private void ValidateSaveData()
+    {
+      // ── 符文装备槽：确保 ID 合法 ──
+      if (currentSaveData.equippedRuneId1 < -1)
+      {
+        Debug.LogWarning($"[SaveManager] 装备槽1 ID={currentSaveData.equippedRuneId1}非法，重置");
+        currentSaveData.equippedRuneId1 = -1;
+      }
+      if (currentSaveData.equippedRuneId2 < -1)
+      {
+        Debug.LogWarning($"[SaveManager] 装备槽2 ID={currentSaveData.equippedRuneId2}非法，重置");
+        currentSaveData.equippedRuneId2 = -1;
+      }
+
+      // ── 清理负数 ID ──
+      if (currentSaveData.ownedRuneIds != null)
+        currentSaveData.ownedRuneIds.RemoveAll(id => id < 0);
+
+      if (currentSaveData.taskProgress != null)
+      {
+        var invalidKeys = currentSaveData.taskProgress.Keys
+            .Where(id => id < 0).ToList();
+        foreach (var id in invalidKeys)
+          currentSaveData.taskProgress.Remove(id);
+      }
+
+      if (currentSaveData.shopPurchaseRecords != null)
+      {
+        var invalidKeys = currentSaveData.shopPurchaseRecords.Keys
+            .Where(id => id < 0).ToList();
+        foreach (var id in invalidKeys)
+          currentSaveData.shopPurchaseRecords.Remove(id);
+      }
+    }
     // ──────────────────────────────────
 
     void OnApplicationQuit()

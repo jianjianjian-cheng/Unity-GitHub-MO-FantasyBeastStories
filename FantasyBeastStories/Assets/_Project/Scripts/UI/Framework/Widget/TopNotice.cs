@@ -1,9 +1,9 @@
 using System.Collections;
 using Core;
 using DG.Tweening;
-using TMPro;
 using UI.Framework.Base;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Framework
 {
@@ -19,7 +19,7 @@ namespace UI.Framework
     public class TopNotice : UIWidget
     {
         [Header("TopNotice UI")]
-        [SerializeField] private TextMeshProUGUI messageText;
+        [SerializeField] private Text messageText;
         [SerializeField] private Animator animator;
 
         [Header("TopNotice 动画设置")]
@@ -48,7 +48,7 @@ namespace UI.Framework
         protected override void AutoBindComponents()
         {
             if (messageText == null)
-                messageText = FindComponentInChildren<TextMeshProUGUI>();
+                messageText = FindComponentInChildren<Text>();
 
             if (animator == null)
                 animator = GetComponentInChildren<Animator>();

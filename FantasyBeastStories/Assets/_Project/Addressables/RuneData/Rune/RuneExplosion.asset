@@ -15,11 +15,12 @@ MonoBehaviour:
   runeId: 0
   runeName: "\u592A\u70B8\u88C2\u5566\uFF01"
   icon: {fileID: 21300000, guid: 67628f21e4b9a2b458177da498d3aff3, type: 3}
+  iconName: 
   rarity: 3
   powers:
-  - value: 20
+  - value: 6
     label: "%\u57FA\u7840\u4F24\u5BB3"
-  - value: 10
+  - value: 7
     label: "%\u66B4\u51FB\u7387"
   specialPowerName: "\u5C0F\u6CD5\u5E08\u4E13\u5C5E\uFF1A"
   specialPowerDescription: "\u521D\u59CB\u7A7F\u900F\u6B21\u6570+1\n\u521D\u59CB\u8FDE\u5C04\u6570\u91CF+1"

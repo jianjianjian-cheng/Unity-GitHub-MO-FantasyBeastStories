@@ -289,7 +289,7 @@ namespace Controllers.Character
       if (spawnPointObj != null)
       {
         int spawnPointId = (int)spawnPointObj;
-        var spawnService = DomainServiceLocator.Get<ISpawnPointService>();
+        var spawnService = ServiceLocator.Get<ISpawnPointService>();
         ISpawnPoint sp = spawnService?.GetSpawnPointById(spawnPointId);
         // sp 可能已被场景卸载销毁（场景切换时 SpawnPoint 先于 DontDestroyOnLoad 对象销毁）
         // 对 Unity 对象必须用 MonoBehaviour 转换判断，不能用 Equals(null)

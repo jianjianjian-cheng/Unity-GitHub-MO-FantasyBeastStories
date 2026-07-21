@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using Core;
@@ -6,8 +7,8 @@ namespace UI
 {
     /// <summary>
     /// 热更新加载界面。
-    /// 挂在 StartMenuCanvas 上，显示下载进度条和背景图。
-    /// 仅在检测到更新时才显示，至少保持 3 秒，Slider 平滑过渡。
+    /// 游戏启动时显示进度条，等待 Addressables 热更下载完成（至少 2 秒），
+    /// 完成后隐藏 Slider 和背景图，启用开始按钮。
     /// </summary>
     public class HotfixLoadingUI : MonoBehaviour
     {
@@ -20,82 +21,67 @@ namespace UI
         [SerializeField] private Button startButton;
 
         [Header("最小显示时长（秒）")]
-        [SerializeField] private float minDisplayTime = 3f;
-
-        // 平滑过渡的当前进度值
-        private float _displayedProgress;
-        private bool _shown;
-        private bool _completed;
+        [SerializeField] private float minDisplayTime = 2f;
 
         private void Start()
         {
-            // 初始隐藏，等检测到更新再显示
-            SetVisible(false);
-            _displayedProgress = 0f;
-
+            // 初始状态：显示进度条和背景，禁用开始按钮
+            SetVisible(true);
             if (startButton != null)
                 startButton.interactable = false;
+            if (progressBar != null)
+                progressBar.value = 0f;
+
+            StartCoroutine(WaitForUpdateComplete());
         }
 
-        private void Update()
+        private IEnumerator WaitForUpdateComplete()
         {
-            if (!_shown)
+            float startTime = Time.time;
+
+            // 等待热更完成（devMode 下瞬间完成）
+            while (!AddressablesUpdater.IsUpdateComplete)
             {
-                // 检测到需要更新时才开始显示
-                if (AddressablesUpdater.HasRemoteUpdate ||
-                    AddressablesUpdater.State == AddressablesUpdater.UpdateState.Checking ||
-                    AddressablesUpdater.State == AddressablesUpdater.UpdateState.Downloading)
-                {
-                    _shown = true;
-                    SetVisible(true);
-                }
-                return;
+                float progress = AddressablesUpdater.DownloadProgress;
+                UpdateProgressUI(progress);
+                yield return null;
             }
 
-            if (_completed) return;
+            // 热更已完成，确保进度条显示 100%
+            UpdateProgressUI(1f);
 
-            // 平滑过渡 Slider：从当前值 lerp 到实际进度
-            float target = AddressablesUpdater.DownloadProgress;
-            _displayedProgress = Mathf.Lerp(_displayedProgress, target, Time.deltaTime * 5f);
-            // 确保不会倒退，且至少显示一点进度
-            if (_displayedProgress < target && target - _displayedProgress < 0.001f)
-                _displayedProgress = target;
+            // 保证最小显示时长（至少 2 秒）
+            float elapsed = Time.time - startTime;
+            if (elapsed < minDisplayTime)
+            {
+                yield return new WaitForSeconds(minDisplayTime - elapsed);
+            }
 
+            // 隐藏进度条和背景图，启用开始按钮
+            SetVisible(false);
+            if (startButton != null)
+                startButton.interactable = true;
+        }
+
+        private void UpdateProgressUI(float progress)
+        {
             if (progressBar != null)
-                progressBar.value = _displayedProgress;
+                progressBar.value = Mathf.Clamp01(progress);
 
-            // 更新文字
             if (progressText != null)
             {
-                switch (AddressablesUpdater.State)
+                if (AddressablesUpdater.State == AddressablesUpdater.UpdateState.Downloading)
                 {
-                    case AddressablesUpdater.UpdateState.Checking:
-                        progressText.text = "检查更新中...";
-                        break;
-                    case AddressablesUpdater.UpdateState.Downloading:
-                        var mb = AddressablesUpdater.TotalDownloadBytes / 1024f / 1024f;
-                        progressText.text = $"下载资源中 {mb:F1}MB  ({_displayedProgress * 100:F0}%)";
-                        break;
-                    default:
-                        progressText.text = "加载中...";
-                        break;
+                    var mb = AddressablesUpdater.TotalDownloadBytes / 1024f / 1024f;
+                    progressText.text = $"下载资源中 {mb:F1}MB  ({progress * 100:F0}%)";
                 }
-            }
-
-            // 下载完成 → 等待最小显示时长
-            if (AddressablesUpdater.IsUpdateComplete)
-            {
-                _displayedProgress = 1f;
-                if (progressBar != null)
-                    progressBar.value = 1f;
-                if (progressText != null)
-                    progressText.text = "加载完成";
-
-                float elapsed = Time.time - AddressablesUpdater.DownloadStartTime;
-                if (elapsed >= minDisplayTime)
+                else if (AddressablesUpdater.State == AddressablesUpdater.UpdateState.Complete)
                 {
-                    _completed = true;
-                    Hide();
+                    progressText.text = "加载完成";
+                }
+                else
+                {
+                    progressText.text = "加载中...";
                 }
             }
         }
@@ -106,13 +92,6 @@ namespace UI
                 progressBar.gameObject.SetActive(visible);
             if (backgroundImage != null)
                 backgroundImage.SetActive(visible);
-        }
-
-        private void Hide()
-        {
-            SetVisible(false);
-            if (startButton != null)
-                startButton.interactable = true;
         }
     }
 }

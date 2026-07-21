@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: "\u51B0\u5973"
   characterIcon: {fileID: 21300000, guid: 103bff245473f5b45a73458ee1f1814c, type: 3}
+  characterPrefabName: BingNvRoot
   abilityDescriptions:
   - "\u53D1\u5C04\u8FFD\u8E2A\u7BAD\u77E2"
   - "\u62E5\u6709\u66F4\u5FEB\u7684\u79FB\u901F"

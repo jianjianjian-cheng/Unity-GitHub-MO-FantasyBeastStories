@@ -20,12 +20,14 @@ MonoBehaviour:
   - m_GUID: 67628f21e4b9a2b458177da498d3aff3
     m_Address: Assets/_Project/Art/Textures/UI/Rune/PowerGrowth.png
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - remote_preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: eacf5cd5ee179ca40bcc141cbaa60aec
     m_Address: Assets/_Project/Art/Textures/UI/Rune/suiyan.png
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - remote_preload
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: fb99d6304baf1dc43b9033961371850c, type: 2}
