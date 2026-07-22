@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 795899938541442046}
   - component: {fileID: 715475321722489199}
   - component: {fileID: 4619800716812678555}
-  - component: {fileID: 4694133769030456864}
+  - component: {fileID: 826078798006117358}
   m_Layer: 0
   m_Name: GuiLingLauncher
   m_TagString: AttackTrigger
@@ -90,7 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06528250e4cd5494a9e8249b8239f92a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4694133769030456864
+--- !u!114 &826078798006117358
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 75792261154080188}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87b5ac4ba172f2c43b86e4400a098a6b, type: 3}
+  m_Script: {fileID: 11500000, guid: 827410ec4f017724da5512864fbac829, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _network: {fileID: 8134500079965625316}
@@ -111,10 +111,6 @@ MonoBehaviour:
     comboCounter: 1
     empowerChargeCounter: 1
     isCharged: 0
-  horizontalSpreadAngle: 45
-  verticalSpreadAngle: 20
-  launchOffsetY: 0.5
-  bingNv: {fileID: 4402439747038677942}
 --- !u!1 &139961061507672883
 GameObject:
   m_ObjectHideFlags: 0
@@ -787,7 +783,7 @@ GameObject:
   - component: {fileID: 5101101787222342505}
   - component: {fileID: 1915638820527352854}
   - component: {fileID: 552075044864449275}
-  - component: {fileID: 4402439747038677942}
+  - component: {fileID: 2437236010267820404}
   m_Layer: 6
   m_Name: bingnv
   m_TagString: Player
@@ -958,7 +954,7 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
---- !u!114 &4402439747038677942
+--- !u!114 &2437236010267820404
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -967,7 +963,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2346663181406404837}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1f4e0a31a21349499c5f9a99ebab342, type: 3}
+  m_Script: {fileID: 11500000, guid: af07935313b5e7d4bae9e3dcfe82856d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   movementData:
@@ -978,24 +974,15 @@ MonoBehaviour:
     spawnPointIndex: 0
     healthRecover: 0
     recoverInterval: 1
-  playerAttributeConfig: {fileID: 11400000, guid: 4a46ea076e35e6241809874edb7f326a, type: 2}
+  playerAttributeConfig: {fileID: 0}
   isOnlyShow: 0
   virtualCamera: {fileID: 3624956791697639742}
   spectatorCameraController: {fileID: 7169257647919527976}
-  deathEffectPrefab: {fileID: 5642766282230003982, guid: b5c8ca7ed10b61e499cce8ec3b6e2e4c, type: 3}
+  deathEffectPrefab: {fileID: 0}
   rb: {fileID: 4899305976579583883}
   animator: {fileID: 8771543960658206648}
   isInLobby: 0
   isReadyPanel: {fileID: 3938034492414468005}
-  testCardEffect: {fileID: 0}
-  guiLingWinterPrefab: {fileID: 1316024693396300276, guid: 783b5a6ddad67ab43bd5968b4be24bcf, type: 3}
-  guiLingFirePrefab: {fileID: 1865212907280611922, guid: 1e362cb8ecc754f468b97c9635ea68f1, type: 3}
-  guiLingLightningPrefab: {fileID: 1084493295099975559, guid: efbbe76f14dacf446b9dd0a494771bd6, type: 3}
-  guiLingGrassPrefab: {fileID: 5630948002573865659, guid: 14bab58889d70614abe5345f193fddf7, type: 3}
-  guiLingWinterHitPrefab: {fileID: 0}
-  guiLingFireHitPrefab: {fileID: 0}
-  guiLingLightningHitPrefab: {fileID: 0}
-  guiLingGrassHitPrefab: {fileID: 0}
 --- !u!1 &2349296607511021552
 GameObject:
   m_ObjectHideFlags: 0

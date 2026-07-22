@@ -19,7 +19,7 @@ public class RunePanel : UIScreen
   [Header("符文列表（动态生成）")]
   [SerializeField] private GameObject runeSlotPrefab;       // 符文插槽预制体
   [SerializeField] private GameObject runeSlotListPanel;    // 符文列表父级 Panel（生成的预制体挂在此 Panel 下）
-  [SerializeField] private RuneDatabaseSO runeDatabase;    // 符文数据库（直接引用，与 ShopPanel 一致）
+  private RuneDatabaseSO runeDatabase;                     // 符文数据库（运行时通过 Addressables 加载，确保热更生效）
 
   [Header("装备插槽")]
   [SerializeField] private RuneEquip runeEquip1;
@@ -66,9 +66,21 @@ public class RunePanel : UIScreen
 
   private void Initialize()
   {
-    // 将 RuneDatabase 引用注入 RuneEffectApplier（供游戏场景中使用）
+    // 通过 Addressables 加载 RuneDatabase（确保使用热更后的数据）
+    runeDatabase = AssetLoader.TryLoadAsset<RuneDatabaseSO>("RuneData/RuneDatabase");
     if (runeDatabase != null)
-      RuneEffectApplier.SetDatabase(runeDatabase);
+    {
+      Debug.Log($"[RunePanel] 通过 Addressables 加载 RuneDatabase 成功，符文数: {runeDatabase.allRunes.Count}");
+      foreach (var rune in runeDatabase.allRunes)
+      {
+        string powers = string.Join(", ", rune.powers.ConvertAll(p => $"{p.label}={p.value}"));
+        Debug.Log($"[RunePanel]   ID={rune.runeId} {rune.runeName} | powers: {powers} | special: {rune.specialPowerName}");
+      }
+    }
+    else
+    {
+      Debug.LogError("[RunePanel] 通过 Addressables 加载 RuneDatabase 失败！");
+    }
 
     // 初始化已拥有符文（默认符文 + RuneInventory 中已购买的符文）
     ownedRuneIds = new List<int>(DefaultRuneIds);

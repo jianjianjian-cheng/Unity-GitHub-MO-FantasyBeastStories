@@ -17,23 +17,29 @@ namespace Controllers.Rune
         private static LuaTable _luaMain;
         private static bool _luaLoaded;
 
-        // RuneDatabase 缓存（由 RunePanel.Awake 设置，避免运行时通过 Addressables 加载）
+        // RuneDatabase 缓存（通过 Addressables 加载，确保使用热更后的数据）
         private static RuneDatabaseSO _database;
         private static bool _databaseLoaded;
 
-        /// <summary>由 RunePanel 在初始化时设置数据库引用</summary>
-        public static void SetDatabase(RuneDatabaseSO database)
-        {
-            _database = database;
-            _databaseLoaded = true;
-        }
-
-        /// <summary>获取 RuneDatabase（优先使用缓存引用，回退到 Addressables）</summary>
+        /// <summary>获取 RuneDatabase（通过 Addressables 加载，确保热更生效）</summary>
         private static RuneDatabaseSO GetDatabase()
         {
             if (_databaseLoaded) return _database;
             _database = AssetLoader.TryLoadAsset<RuneDatabaseSO>("RuneData/RuneDatabase");
             _databaseLoaded = true;
+            if (_database != null)
+            {
+                Debug.Log($"[RuneEffectApplier] 通过 Addressables 加载 RuneDatabase 成功，符文数: {_database.allRunes.Count}");
+                foreach (var rune in _database.allRunes)
+                {
+                    string powers = string.Join(", ", rune.powers.ConvertAll(p => $"{p.label}={p.value}"));
+                    Debug.Log($"[RuneEffectApplier]   ID={rune.runeId} {rune.runeName} | powers: {powers} | special: {rune.specialPowerName}");
+                }
+            }
+            else
+            {
+                Debug.LogError("[RuneEffectApplier] 通过 Addressables 加载 RuneDatabase 失败！");
+            }
             return _database;
         }
 
@@ -265,7 +271,14 @@ namespace Controllers.Rune
                 return string.Empty;
             }
 
-            string typeName = player.GetType().Name;
+            string typeName = player.GetCharacterName();
+            if (string.IsNullOrEmpty(typeName))
+                typeName = player.GetType().Name;
+
+            // 去掉 "Root" 后缀，使 "WizardBoyRoot" → "WizardBoy"，与 RuneDataSO.exclusiveCharacterType 匹配
+            if (typeName.EndsWith("Root"))
+                typeName = typeName.Substring(0, typeName.Length - 4);
+
             Debug.Log($"[RuneEffectApplier] 检测到当前角色类型: {typeName}");
             return typeName;
         }

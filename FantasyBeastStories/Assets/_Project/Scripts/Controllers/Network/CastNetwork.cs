@@ -422,7 +422,7 @@ namespace Controllers.Network
         if (cannon != null)
         {
           cannon.StartShoot(direction, isMine: false);
-          cannon.canSplit = false;
+          cannon.SetCanSplit(false);
 
           AttackToken token = new AttackToken
           {
@@ -431,6 +431,99 @@ namespace Controllers.Network
             vfxPoolName = visualPool,
           };
         }
+      }
+    }
+
+    // ==================== 统一投射物 RPC（热更专用） ====================
+
+    /// <summary>
+    /// 统一投射物生成入口 — 供 SkillRpcProxy 调用，Lua 间接调用。
+    /// 所有客户端执行：从 Addressables 加载投射物并实例化。
+    /// 本地 owner (isMine=true) 负责伤害判定，远程客户端纯视觉。
+    /// </summary>
+    public void RequestSpawnProjectile(
+        int templateId,
+        Vector3 spawnPos,
+        Vector3 direction,
+        int targetViewId,
+        float damage,
+        float critChance,
+        float critMultiplier,
+        int elementInt,
+        bool canSplit,
+        int splitCount,
+        float splitDamageMultiplier)
+    {
+      if (photonView == null) return;
+
+      photonView.RPC(
+          "RPC_SpawnProjectile",
+          RpcTarget.All,
+          templateId, spawnPos, direction, targetViewId,
+          damage, critChance, critMultiplier, elementInt,
+          canSplit, splitCount, splitDamageMultiplier
+      );
+    }
+
+    [PunRPC]
+    void RPC_SpawnProjectile(
+        int templateId,
+        Vector3 spawnPos,
+        Vector3 direction,
+        int targetViewId,
+        float damage,
+        float critChance,
+        float critMultiplier,
+        int elementInt,
+        bool canSplit,
+        int splitCount,
+        float splitDamageMultiplier)
+    {
+      string prefabPath = ProjectileTemplateRegistry.GetName(templateId);
+      if (string.IsNullOrEmpty(prefabPath))
+      {
+        if (photonView.IsMine)
+          Debug.LogWarning($"[CastNetwork] 未注册投射物模板 ID: {templateId}");
+        return;
+      }
+
+      var prefab = AssetLoader.TryLoadAsset<GameObject>(prefabPath);
+      if (prefab == null)
+      {
+        if (photonView.IsMine)
+          Debug.LogWarning($"[CastNetwork] 无法加载投射物预制体: {prefabPath}");
+        return;
+      }
+
+      var go = Instantiate(prefab, spawnPos, Quaternion.LookRotation(direction));
+      var projectile = go.GetComponent<ProjectileBase>();
+      if (projectile == null)
+        projectile = ComponentFactory.GetOrCreateProjectile(go);
+
+      if (projectile == null)
+      {
+        if (photonView.IsMine)
+          Debug.LogWarning($"[CastNetwork] 投射物缺少 ProjectileBase 组件: {prefabPath}");
+        return;
+      }
+
+      bool isMine = photonView.IsMine;
+      projectile.Initialize(
+          spawnPos, direction, targetViewId,
+          damage, critChance, critMultiplier,
+          (Element)elementInt, canSplit, splitCount,
+          splitDamageMultiplier, isMine
+      );
+      projectile.SetCastNetwork(this);
+
+      if (isMine)
+      {
+        projectile.SetDamageCallback(
+            (enemy, dmg, isCrit, critMult, hitPoint, elem) =>
+            {
+              BroadcastDamage(enemy, dmg, isCrit, critMult, hitPoint, elem);
+            }
+        );
       }
     }
   }

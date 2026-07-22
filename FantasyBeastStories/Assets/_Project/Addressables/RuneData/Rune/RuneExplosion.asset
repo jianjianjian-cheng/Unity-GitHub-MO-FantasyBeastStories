@@ -18,9 +18,9 @@ MonoBehaviour:
   iconName: 
   rarity: 3
   powers:
-  - value: 6
+  - value: 15
     label: "%\u57FA\u7840\u4F24\u5BB3"
-  - value: 7
+  - value: 10
     label: "%\u66B4\u51FB\u7387"
   specialPowerName: "\u5C0F\u6CD5\u5E08\u4E13\u5C5E\uFF1A"
   specialPowerDescription: "\u521D\u59CB\u7A7F\u900F\u6B21\u6570+1\n\u521D\u59CB\u8FDE\u5C04\u6570\u91CF+1"

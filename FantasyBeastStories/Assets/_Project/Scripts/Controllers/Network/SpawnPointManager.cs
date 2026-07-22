@@ -24,6 +24,9 @@ namespace Controllers.Network
         private readonly GameObject _currentlySelectedCharacter;
         private readonly CharacterInfoLibrarySO _characterInfoLibrary;
 
+        // Phase 3: 当前选中的角色名（用于 PlayerCharacter 预制体 + instantiationData）
+        private string _selectedCharacterName;
+
         private InputField _nameUI;
         private Photon.Realtime.Player _localPlayer;
         private GameObject _localPlayerObject;
@@ -56,6 +59,8 @@ namespace Controllers.Network
             Debug.Log("[SpawnPointManager] 执行 CreatedOrJoinedRoom");
 
             EnsurePlayerManagerExists();
+
+            ApplySavedCharacter();
 
             GameObject player = SpawnPlayer();
 
@@ -119,10 +124,17 @@ namespace Controllers.Network
 
             Vector3 spawnPosition = CalculateSpawnPosition(spawnPoint);
 
+            // Phase 3: 使用角色名作为预制体名，角色名通过 instantiationData 传递
+            string prefabName = string.IsNullOrEmpty(_selectedCharacterName)
+                ? _currentlySelectedCharacter.name
+                : _selectedCharacterName;
+
             GameObject player = PhotonNetwork.Instantiate(
-                _currentlySelectedCharacter.name,
+                prefabName,
                 spawnPosition,
-                spawnPoint.rotation
+                spawnPoint.rotation,
+                0,
+                new object[] { _selectedCharacterName }
             );
 
             player.transform.rotation = Quaternion.Euler(0, spawnPoint.rotation.eulerAngles.y, 0);
@@ -178,10 +190,17 @@ namespace Controllers.Network
             Transform spawnTransform = ((MonoBehaviour)targetSpawnPoint).transform;
             Vector3 spawnPosition = CalculateSpawnPosition(spawnTransform);
 
+            // Phase 3: 使用角色名作为预制体名
+            string prefabName = string.IsNullOrEmpty(_selectedCharacterName)
+                ? _currentlySelectedCharacter.name
+                : _selectedCharacterName;
+
             GameObject player = PhotonNetwork.Instantiate(
-                _currentlySelectedCharacter.name,
+                prefabName,
                 spawnPosition,
-                spawnTransform.rotation
+                spawnTransform.rotation,
+                0,
+                new object[] { _selectedCharacterName }
             );
 
             player.transform.rotation = Quaternion.Euler(0, spawnTransform.rotation.eulerAngles.y, 0);
@@ -192,7 +211,8 @@ namespace Controllers.Network
 
         public void SwitchCharacter(string newCharacterName)
         {
-            _currentlySelectedCharacter.name = newCharacterName;
+            // Phase 3: 存储角色名，不再修改预制体 name
+            _selectedCharacterName = newCharacterName;
             RespawnCharacter();
         }
 
@@ -340,7 +360,9 @@ namespace Controllers.Network
                 return;
             }
 
-            _currentlySelectedCharacter.name = characterName;
+            // Phase 3: 存储角色名（如 "WizardBoyRoot"），用于 PlayerCharacter 预制体实例化
+            _selectedCharacterName = characterName;
+            Debug.Log($"[SpawnPointManager] 应用保存的角色: {characterName}");
         }
 
         private void SetupRoomInfo()

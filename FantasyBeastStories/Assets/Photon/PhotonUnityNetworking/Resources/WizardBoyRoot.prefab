@@ -610,8 +610,8 @@ GameObject:
   - component: {fileID: 4715905254602358297}
   - component: {fileID: 4187122166225685960}
   - component: {fileID: 2517744089765392115}
-  - component: {fileID: 5610470274412098157}
   - component: {fileID: 818041369873296124}
+  - component: {fileID: 7207222552642372840}
   m_Layer: 0
   m_Name: AttackRange
   m_TagString: AttackTrigger
@@ -677,28 +677,6 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &5610470274412098157
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1855102777801203766}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58554cfd483b0db4cba9bb3cfe2d2559, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _network: {fileID: 6805688692269431946}
-  attackRangeData:
-    offsetY: 0.5
-    attackInterval: 2
-    searchRadius: 5
-    attackTimer: 0
-    comboCounter: 1
-    empowerChargeCounter: 1
-    isCharged: 0
-  projectileSpeed: 10
 --- !u!114 &818041369873296124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -711,6 +689,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06528250e4cd5494a9e8249b8239f92a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7207222552642372840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855102777801203766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 827410ec4f017724da5512864fbac829, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _network: {fileID: 6805688692269431946}
+  attackRangeData:
+    offsetY: 0.5
+    attackInterval: 2
+    searchRadius: 5
+    attackTimer: 0
+    comboCounter: 1
+    empowerChargeCounter: 1
+    isCharged: 0
 --- !u!1 &2574463279488348108
 GameObject:
   m_ObjectHideFlags: 0
@@ -1891,9 +1890,9 @@ GameObject:
   - component: {fileID: 612545571310694128}
   - component: {fileID: 5044908271033428755}
   - component: {fileID: 7097122324707424375}
-  - component: {fileID: 3285774985444942947}
   - component: {fileID: 5871110717533689807}
   - component: {fileID: 6805688692269431946}
+  - component: {fileID: 3465344075522027730}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -2036,42 +2035,6 @@ CapsuleCollider:
   m_Height: 1.0708827
   m_Direction: 1
   m_Center: {x: -0.0114860535, y: 0.49801475, z: -0.05378914}
---- !u!114 &3285774985444942947
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7557579576971884266}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19262c0f6aea50d458c6db5f8fe39a0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movementData:
-    moveSpeed: 2.6
-    rotationSpeed: 6
-    movementDirection: {x: 0, y: 0, z: 0}
-    isRun: 0
-    spawnPointIndex: 0
-    healthRecover: 0
-    recoverInterval: 1
-  playerAttributeConfig: {fileID: 0}
-  isOnlyShow: 0
-  virtualCamera: {fileID: 1547902573985025242}
-  spectatorCameraController: {fileID: 9029064799718909475}
-  deathEffectPrefab: {fileID: 5642766282230003982, guid: b5c8ca7ed10b61e499cce8ec3b6e2e4c, type: 3}
-  rb: {fileID: 6404800926616539602}
-  animator: {fileID: 8692948142478180452}
-  isInLobby: 0
-  isReadyPanel: {fileID: 2768187980737792915}
-  testCardEffect: {fileID: 0}
-  impactCannonLightenPrefab: {fileID: 4717974646612442227, guid: de01ba9d2b8bef342b9068f5eb3264ab, type: 3}
-  impactCannonHitLightenPrefab: {fileID: 743576573993576157, guid: 57a0a59dae22bbf46904ae8c7a63670d, type: 3}
-  impactCannonWinterPrefab: {fileID: 6980703490817345712, guid: 577b09a2f221f0d45af3bbc26432a16b, type: 3}
-  impactCannonHitWinterPrefab: {fileID: 450033167261818607, guid: 9fe86f2f5bb8d6449a5014493dd002c9, type: 3}
-  impactCannonGrassPrefab: {fileID: 1259395337761259682, guid: 0266abb1138817747bcb23e85063a8d0, type: 3}
-  impactCannonHitGrassPrefab: {fileID: 141618438410259909, guid: d82118f277b2b724a94d1620fa87ff5c, type: 3}
 --- !u!114 &5871110717533689807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2100,6 +2063,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fd834580877fd343a090f570563013d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3465344075522027730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7557579576971884266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af07935313b5e7d4bae9e3dcfe82856d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementData:
+    moveSpeed: 2.6
+    rotationSpeed: 6
+    movementDirection: {x: 0, y: 0, z: 0}
+    isRun: 0
+    spawnPointIndex: 0
+    healthRecover: 0
+    recoverInterval: 1
+  playerAttributeConfig: {fileID: 0}
+  isOnlyShow: 0
+  virtualCamera: {fileID: 1547902573985025242}
+  spectatorCameraController: {fileID: 9029064799718909475}
+  deathEffectPrefab: {fileID: 0}
+  rb: {fileID: 6404800926616539602}
+  animator: {fileID: 8692948142478180452}
+  isInLobby: 0
+  isReadyPanel: {fileID: 2768187980737792915}
 --- !u!1 &8064835023674873072
 GameObject:
   m_ObjectHideFlags: 0

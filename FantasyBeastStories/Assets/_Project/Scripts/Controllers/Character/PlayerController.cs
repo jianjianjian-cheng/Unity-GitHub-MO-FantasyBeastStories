@@ -14,10 +14,11 @@ using UI.Input;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Managers;
+using Photon.Pun;
 
 namespace Controllers.Character
 {
-  public class PlayerController : MonoBehaviour, ICardEffectContext
+  public class PlayerController : MonoBehaviour, ICardEffectContext, IPunInstantiateMagicCallback
   {
     [Header("纯数据")]
     [SerializeField]
@@ -62,6 +63,12 @@ namespace Controllers.Character
 
     protected PlayerInputHandler playerInputHandler;
 
+    // ==================== Phase 3: Lua bridge ====================
+    private HeroLuaBridge _luaBridge;
+    private readonly HashSet<Element> _unlockedElements = new HashSet<Element>();
+    public IReadOnlyCollection<Element> GetUnlockedElements() => _unlockedElements;
+    public void AddUnlockedElement(Element element) => _unlockedElements.Add(element);
+
     // 公开属性：外部通过该属性访问生成点索引（底层数据存储在 movementData 中）
     public int spawnPointIndex
     {
@@ -73,8 +80,15 @@ namespace Controllers.Character
     {
       movementData = new PlayerMovementData();
       isInLobby = EventChannelLocator.MainContainer.gameSettings.IsStayLobby;
+
+      // Phase 3: 角色名未设置时使用默认配置（角色名在 OnPhotonInstantiate 中设置）
       if (playerAttributeConfig == null)
-        playerAttributeConfig = AssetLoader.LoadAsset<PlayerAttributeConfigSO>("Config/PlayerAttributeConfig");
+      {
+        if (!string.IsNullOrEmpty(_characterName))
+          playerAttributeConfig = AssetLoader.TryLoadAsset<PlayerAttributeConfigSO>($"Config/PlayerConfig/{_characterName}Attr");
+        if (playerAttributeConfig == null)
+          playerAttributeConfig = AssetLoader.LoadAsset<PlayerAttributeConfigSO>("Config/PlayerAttributeConfig");
+      }
       attributePlayer = new AttributePlayerBase(playerAttributeConfig);
       attributePlayer.SetMoveSpeed(movementData.moveSpeed);
 
@@ -83,6 +97,15 @@ namespace Controllers.Character
 
     protected virtual void Start()
     {
+      // 如果 OnPhotonInstantiate 未触发或在其后执行，从 PhotonView.InstantiationData 读取角色名
+      if (string.IsNullOrEmpty(_characterName))
+      {
+        var pv = GetComponent<Photon.Pun.PhotonView>();
+        var data = pv?.InstantiationData;
+        if (data != null && data.Length > 0)
+          InitializeCharacter((string)data[0]);
+      }
+
       // 重新读取 IsStayLobby — Launcher.OnSceneLoaded 在 Awake 之后、Start 之前将其设为 false
       isInLobby = EventChannelLocator.MainContainer.gameSettings.IsStayLobby;
 
@@ -122,6 +145,15 @@ namespace Controllers.Character
       }
       sceneIndex = SceneManager.GetActiveScene().buildIndex;
       SetAndChangeHPUI();
+
+      // Phase 3: 初始化 Lua 行为桥接器（如果 OnPhotonInstantiate 尚未初始化则在此补上）
+      if (_luaBridge == null && !string.IsNullOrEmpty(_characterName))
+      {
+        _luaBridge = new HeroLuaBridge(_characterName);
+        CharacterAssetLoader.LoadCharacterAssets(this, _characterName);
+      }
+
+      _luaBridge?.OnStart(this);
     }
 
     // Update is called once per frame
@@ -415,6 +447,9 @@ namespace Controllers.Character
 
       // 激活观战模式
       spectatorCameraController?.ActivateSpectator();
+
+      // Phase 3: 通知 Lua 做角色专属死亡处理
+      _luaBridge?.OnDeath(this);
     }
 
     protected virtual void DisableColliders()
@@ -549,6 +584,8 @@ namespace Controllers.Character
     {
       attributePlayer.SetCurrentElement(element);
       SyncElementToAll(element);
+      // Phase 3: 通知 Lua 做额外处理（VFX、对象池等）
+      _luaBridge?.OnSwitchElement(this, element);
     }
 
     // 同步元素到所有客户端
@@ -566,10 +603,12 @@ namespace Controllers.Character
     }
 
     /// <summary>
-    /// 解锁元素 — 默认委托给 SwitchElement，子类（如 BingNv）可重写为多元素解锁逻辑
+    /// 解锁元素 — 先走 Lua（如 BingNv 多元素解锁），未处理时走 C# 默认逻辑（SwitchElement）
     /// </summary>
     protected virtual void UnlockElement(Element element)
     {
+      if (_luaBridge != null && _luaBridge.OnUnlockElement(this, element))
+        return;
       SwitchElement(element);
     }
 
@@ -605,19 +644,85 @@ namespace Controllers.Character
     }
 
     /// <summary>
-    /// 技能查询回调（由子类重写处理角色专属的查询，如 GetMaxAttackCount）
+    /// 技能查询回调（先走 Lua，未处理时走 C# 子类 override）
     /// </summary>
-    protected virtual void OnSkillQuery(SkillQueryData data) { }
+    protected virtual void OnSkillQuery(SkillQueryData data)
+    {
+      _luaBridge?.OnSkillQuery(this, data);
+    }
 
     /// <summary>
-    /// 场景加载完成回调（由子类重写处理角色专属的场景加载逻辑）
+    /// 场景加载完成回调（先走 Lua，再走 C# 子类 override）
     /// </summary>
-    protected virtual void OnSceneLoaded(Scene scene, LoadSceneMode mode) { }
+    protected virtual void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+      _luaBridge?.OnSceneLoaded(this, scene.buildIndex);
+    }
 
     /// <summary>获取最大攻击次数</summary>
     protected int GetMaxAttackCount()
     {
       return attributePlayer.GetMaxAttackCount();
+    }
+
+    // ==================== Phase 2: Public API for Lua bridge ====================
+
+    private string _characterName;
+
+    public string GetCharacterName() => _characterName;
+    public void SetCharacterName(string name) => _characterName = name;
+
+    public AttributePlayerBase GetAttributeBase() => attributePlayer;
+    public Element GetCurrentElement() => attributePlayer?.GetCurrentElement() ?? Element.Common;
+    public Rigidbody GetRigidbody() => rb;
+    public Animator GetAnimator() => animator;
+    public Vector3 GetPosition() => transform.position;
+    public bool IsLocalPlayer() => NetworkServiceLocator.PlayerService.IsOwnerOf(gameObject);
+    public bool IsDead() => attributePlayer?.GetIsDead() ?? false;
+    public void SetAttributeConfig(PlayerAttributeConfigSO config) => playerAttributeConfig = config;
+
+    // ==================== Phase 3: PUN Instantiation + Lua bridge wiring ====================
+
+    /// <summary>
+    /// PUN 实例化回调：接收 instantiationData 中的角色名，初始化角色差异资源 + Lua 行为。
+    /// </summary>
+    public void OnPhotonInstantiate(PhotonMessageInfo info)
+    {
+      var data = info.photonView.InstantiationData;
+      if (data != null && data.Length > 0)
+      {
+        string characterName = (string)data[0];
+        InitializeCharacter(characterName);
+      }
+    }
+
+    /// <summary>
+    /// 初始化角色：设置角色名，加载差异资源，初始化 Lua 桥接器。
+    /// 由 OnPhotonInstantiate 调用（联机），或手动调用（测试）。
+    /// </summary>
+    public void InitializeCharacter(string characterName)
+    {
+      _characterName = characterName;
+      Debug.Log($"[PlayerController] InitializeCharacter: {characterName}");
+
+      // 如果 Awake 已执行但 playerAttributeConfig 仍为 null，按角色名重新加载
+      if (playerAttributeConfig == null && attributePlayer == null)
+      {
+        playerAttributeConfig = AssetLoader.TryLoadAsset<PlayerAttributeConfigSO>($"Config/PlayerConfig/{characterName}Attr");
+        if (playerAttributeConfig == null)
+          playerAttributeConfig = AssetLoader.LoadAsset<PlayerAttributeConfigSO>("Config/PlayerAttributeConfig");
+        attributePlayer = new AttributePlayerBase(playerAttributeConfig);
+        attributePlayer.SetMoveSpeed(movementData?.moveSpeed ?? 2.6f);
+      }
+    }
+
+    /// <summary>
+    /// 元素池初始化回调 — 由 DomainRpcBridge.RPC_InitElementPool 调用。
+    /// 委托到 Lua（对应原 WizardBoy/BingNv 的 HandleInitElementPool）。
+    /// </summary>
+    public void HandleInitElementPool(int elementInt)
+    {
+      _luaBridge?.OnInitElementPool(this, elementInt);
     }
   }
 }

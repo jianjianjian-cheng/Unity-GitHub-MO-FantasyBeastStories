@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 2
   m_EditorClassIdentifier: 
   runeData: {fileID: 11400000, guid: cae2c58e8ca02ef47a08475b703eb9dd, type: 2}
-  price: 5000
+  price: 2200
   isLimitedStock: 0
   maxStock: 30
   allowRepeatPurchase: 1

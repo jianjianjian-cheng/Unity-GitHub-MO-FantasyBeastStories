@@ -11,6 +11,7 @@ namespace Controllers.Combat
     {
         private static System.Func<GameObject, IImpactCannon> _impactCannonCreator;
         private static System.Func<GameObject, INetworkFireballCaster> _networkCasterCreator;
+        private static System.Func<GameObject, ProjectileBase> _projectileCreator;
 
         /// <summary>
         /// 注册 ImpactCannon 创建方法（由 Infrastructure 层调用）
@@ -62,6 +63,32 @@ namespace Controllers.Combat
             }
 
             return _networkCasterCreator(obj);
+        }
+
+        /// <summary>
+        /// 注册投射物创建方法（由 Infrastructure 层调用）
+        /// </summary>
+        public static void RegisterProjectileCreator(System.Func<GameObject, ProjectileBase> creator)
+        {
+            _projectileCreator = creator;
+        }
+
+        /// <summary>
+        /// 在目标 GameObject 上获取或创建 ProjectileBase 组件
+        /// </summary>
+        public static ProjectileBase GetOrCreateProjectile(GameObject obj)
+        {
+            var existing = obj.GetComponent<ProjectileBase>();
+            if (existing != null)
+                return existing;
+
+            if (_projectileCreator == null)
+            {
+                Debug.LogError("[ComponentFactory] ProjectileBase creator 未注册！");
+                return null;
+            }
+
+            return _projectileCreator(obj);
         }
     }
 }

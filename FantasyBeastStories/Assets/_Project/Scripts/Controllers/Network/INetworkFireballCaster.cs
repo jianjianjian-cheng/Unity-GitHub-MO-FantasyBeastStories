@@ -15,5 +15,22 @@ namespace Controllers.Network
         /// <param name="targetViewID">目标的 PhotonView.ViewID</param>
         /// <param name="elementInt">元素类型 int 值</param>
         void RequestGuiLingCast(Vector3 spawnPos, Vector3 direction, int targetViewID, int elementInt);
+
+        /// <summary>
+        /// 统一投射物生成 RPC — 新角色热更专用入口。
+        /// 所有客户端执行：从 Addressables 加载投射物并实例化，本地 owner 负责伤害判定。
+        /// </summary>
+        void RequestSpawnProjectile(
+            int templateId,
+            Vector3 spawnPos,
+            Vector3 direction,
+            int targetViewId,
+            float damage,
+            float critChance,
+            float critMultiplier,
+            int elementInt,
+            bool canSplit,
+            int splitCount,
+            float splitDamageMultiplier);
     }
 }

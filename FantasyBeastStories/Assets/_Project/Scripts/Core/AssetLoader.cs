@@ -51,12 +51,44 @@ namespace Core
         /// <summary>同步尝试加载资产（不打印错误日志，用于 fallback 探测）</summary>
         public static T TryLoadAsset<T>(string key) where T : Object
         {
-            var handle = Addressables.LoadAssetAsync<T>(key);
-            handle.WaitForCompletion();
-            if (handle.Status == AsyncOperationStatus.Succeeded)
-                return handle.Result;
-            Addressables.Release(handle);
-            return null;
+            if (!KeyExists(key, typeof(T)))
+                return null;
+
+            try
+            {
+                var handle = Addressables.LoadAssetAsync<T>(key);
+                handle.WaitForCompletion();
+                if (handle.Status == AsyncOperationStatus.Succeeded)
+                    return handle.Result;
+                Addressables.Release(handle);
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>检查 Addressable key 是否存在（不抛异常、不打日志）</summary>
+        public static bool KeyExists(string key, System.Type type = null)
+        {
+            if (string.IsNullOrEmpty(key)) return false;
+            try
+            {
+                var handle = type != null
+                    ? Addressables.LoadResourceLocationsAsync(key, type)
+                    : Addressables.LoadResourceLocationsAsync(key);
+                handle.WaitForCompletion();
+                bool exists = handle.Status == AsyncOperationStatus.Succeeded
+                              && handle.Result != null
+                              && handle.Result.Count > 0;
+                Addressables.Release(handle);
+                return exists;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         /// <summary>同步实例化 Prefab（阻塞，仅初始化阶段使用）</summary>

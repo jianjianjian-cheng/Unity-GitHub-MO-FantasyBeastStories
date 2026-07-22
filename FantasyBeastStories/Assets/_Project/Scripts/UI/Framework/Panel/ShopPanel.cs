@@ -25,7 +25,7 @@ public class ShopPanel : UIScreen
   [Header("金币显示")]
   [SerializeField] private TextMeshProUGUI coinText;
 
-  [SerializeField] private ShopRuneDatabaseSO shopDatabase;
+  private ShopRuneDatabaseSO shopDatabase;  // 运行时通过 Addressables 加载，确保热更生效
 
   private List<GameObject> shopRuneSlots = new List<GameObject>();
   private ShopRuneConfigSO selectedRune;
@@ -100,6 +100,26 @@ public class ShopPanel : UIScreen
   private void InitializeShop()
   {
     EnsureListenerInitialized();
+
+    // 通过 Addressables 加载 ShopRuneDatabase（确保使用热更后的数据）
+    shopDatabase = AssetLoader.TryLoadAsset<ShopRuneDatabaseSO>("Shop/ShopRuneDatabase");
+    if (shopDatabase != null)
+    {
+      Debug.Log($"[ShopPanel] 通过 Addressables 加载 ShopRuneDatabase 成功，商品数: {shopDatabase.shopRunes.Count}");
+      foreach (var runeConfig in shopDatabase.shopRunes)
+      {
+        var runeData = runeConfig.runeData;
+        if (runeData != null)
+        {
+          string powers = string.Join(", ", runeData.powers.ConvertAll(p => $"{p.label}={p.value}"));
+          Debug.Log($"[ShopPanel]   ID={runeData.runeId} {runeData.runeName} | powers: {powers} | price: {runeConfig.price}");
+        }
+      }
+    }
+    else
+    {
+      Debug.LogError("[ShopPanel] 通过 Addressables 加载 ShopRuneDatabase 失败！");
+    }
 
     if (detailPanel != null)
     {

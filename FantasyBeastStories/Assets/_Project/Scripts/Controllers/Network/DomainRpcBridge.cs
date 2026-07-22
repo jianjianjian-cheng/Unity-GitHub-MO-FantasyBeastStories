@@ -139,7 +139,7 @@ namespace Controllers.Network
         }
 
         // ============================================================
-        // WizardBoy RPC
+        // PlayerController RPC (原 WizardBoy RPC，Phase 3 通用化)
         // ============================================================
 
         [PunRPC]
@@ -148,10 +148,11 @@ namespace Controllers.Network
             var go = NetworkServiceLocator.ObjectService.FindByViewID(viewID);
             if (go != null)
             {
-                var wizardBoy = go.GetComponent<WizardBoy>();
-                if (wizardBoy != null)
+                // Phase 3: 改为通用 PlayerController，由 Lua 桥接器处理角色专属逻辑
+                var playerController = go.GetComponent<PlayerController>();
+                if (playerController != null)
                 {
-                    wizardBoy.HandleInitElementPool(elementInt);
+                    playerController.HandleInitElementPool(elementInt);
                 }
             }
         }

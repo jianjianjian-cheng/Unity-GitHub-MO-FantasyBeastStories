@@ -17,11 +17,36 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 358d16c1ce35baf418ceacd2f6d1ef0d
   m_SerializeEntries:
+  - m_GUID: 0266abb1138817747bcb23e85063a8d0
+    m_Address: ImpactCannon/ImpactCannonGrass
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 04d8a18e20730d240a7f483cb4a1de7b
     m_Address: Lua/Logic/RuneEffect
     m_ReadOnly: 0
     m_SerializedLabels:
     - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 14bab58889d70614abe5345f193fddf7
+    m_Address: GuiLing/GuiLingGrass
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1e362cb8ecc754f468b97c9635ea68f1
+    m_Address: GuiLing/GuiLingFire
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2342899d2b649dd45bb301e1919c37e8
+    m_Address: ImpactCannon/ImpactCannonTrigger
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4ba95f1e657e3044a91a3c94c168e8bd
+    m_Address: GuiLing/GuiLingHitWinter
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 561e777d17020c3489a348ddab73945e
     m_Address: Lua/Main
@@ -29,17 +54,97 @@ MonoBehaviour:
     m_SerializedLabels:
     - remote_preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 577b09a2f221f0d45af3bbc26432a16b
+    m_Address: ImpactCannon/ImpactCannonWinter
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 57a0a59dae22bbf46904ae8c7a63670d
+    m_Address: ImpactCannon/ImpactCannonHitLighten
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 58f2c80d5f672be4da4738cdad68b639
+    m_Address: GuiLing/GuiLingHitLightning
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6f34ef0d986e9db4199cf75805f79753
+    m_Address: ImpactCannon/ImpactCannonHitCommon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 720b95ce4539ed745bfa246beaf35137
+    m_Address: GuiLing/GuiLingHitGrass
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 97dc7529d3e773f49afd6c6bba242867
     m_Address: Lua/Config/RuneConfig
     m_ReadOnly: 0
     m_SerializedLabels:
     - remote_preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9ab6383e925fdfe4fb922aebc7ef65c4
+    m_Address: Lua/Heroes/BingNv
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9fe86f2f5bb8d6449a5014493dd002c9
+    m_Address: ImpactCannon/ImpactCannonHitWinter
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aa6126642be65b24991ec46c56fea309
+    m_Address: GuiLing/GuiLingWinter
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b4046f1a1c994f44baacffb105302bd5
+    m_Address: GuiLing/GuiLingHitFire
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b871e56a3d277c942a360caf1c06a2b2
+    m_Address: ImpactCannon/ImpactCannonCommon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ba8ee9fa8de2d4f4b881c8e08a98ba82
+    m_Address: Lua/Heroes/WizardBoy
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c84b3b221ce44e441ac06e22b118e824
     m_Address: Lua/Logic/RuneSpecialPower
     m_ReadOnly: 0
     m_SerializedLabels:
     - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d82118f277b2b724a94d1620fa87ff5c
+    m_Address: ImpactCannon/ImpactCannonHitGrass
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d8ccd6caeae44524aa0b308569b6b6cb
+    m_Address: Lua/Combat/WizardBoyAttack
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: de01ba9d2b8bef342b9068f5eb3264ab
+    m_Address: ImpactCannon/ImpactCannonLighten
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e30da6b8c55cf5e4db1b1eff72b3ba09
+    m_Address: Lua/Combat/BingNvAttack
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: efbbe76f14dacf446b9dd0a494771bd6
+    m_Address: GuiLing/GuiLingLightning
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: fb99d6304baf1dc43b9033961371850c, type: 2}

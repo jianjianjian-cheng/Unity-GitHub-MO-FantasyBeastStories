@@ -134,6 +134,34 @@ namespace Core
                 yield return DownloadRemoteCatalog(remoteHashPath);
             }
 
+            // 打印 catalog 中的资源信息，用于调试
+            Debug.Log("[热更] === 当前内存中的 Catalog 资源列表 ===");
+            foreach (var locator in UnityEngine.AddressableAssets.Addressables.ResourceLocators)
+            {
+                Debug.Log($"[热更] Locator: {locator.LocatorId}");
+                long count = 0;
+                foreach (var key in locator.Keys)
+                {
+                    var keyStr = key.ToString();
+                    if (keyStr.Contains("rune", System.StringComparison.OrdinalIgnoreCase) ||
+                        keyStr.Contains("shop", System.StringComparison.OrdinalIgnoreCase) ||
+                        keyStr.Contains("RuneExplosion", System.StringComparison.OrdinalIgnoreCase) ||
+                        keyStr.Contains("RuneTripleBoost", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (locator.Locate(key, typeof(UnityEngine.Object), out var locations))
+                        {
+                            foreach (var loc in locations)
+                            {
+                                Debug.Log($"[热更]   {keyStr} → {loc.InternalId}");
+                            }
+                        }
+                    }
+                    count++;
+                }
+                Debug.Log($"[热更] Locator 总资源数: {count}");
+            }
+            Debug.Log("[热更] === Catalog 资源列表结束 ===");
+
             if (!needUpdate)
             {
                 State = UpdateState.Complete;
@@ -143,7 +171,7 @@ namespace Core
                 yield break;
             }
 
-            // 4. 计算需要下载的大小（通过 Label 预下载）
+            // 5. 计算需要下载的大小（通过 Label 预下载）
             Debug.Log("[热更] 计算下载大小...");
             var sizeHandle = Addressables.GetDownloadSizeAsync(preloadLabels.AsReadOnly());
             yield return sizeHandle;
@@ -163,7 +191,7 @@ namespace Core
             float totalMB = TotalDownloadBytes / 1024f / 1024f;
             Debug.Log($"[热更] 需要下载 {totalMB:F1} MB");
 
-            // 5. 下载更新的 bundle
+            // 6. 下载更新的 bundle
             State = UpdateState.Downloading;
             var downloadHandle = Addressables.DownloadDependenciesAsync(
                 preloadLabels.AsReadOnly(),

@@ -11,9 +11,9 @@ using Managers;
 namespace Controllers.Combat
 {
     /// <summary>
-    /// 攻击范围基类：负责检测范围内的敌人，攻击逻辑由子类实现
+    /// 攻击范围基类：负责检测范围内的敌人，攻击逻辑由子类实现或 Lua 回调驱动
     /// </summary>
-    public abstract class AttackRangeBase : TriggerBase
+    public class AttackRangeBase : TriggerBase
     {
         protected INetworkFireballCaster _networkCaster;
         [SerializeField] protected NetworkIdentityBase _network;
@@ -34,6 +34,9 @@ namespace Controllers.Combat
         /// <summary>是否正在连射中（连射期间不再触发新攻击）</summary>
         private bool _isAttacking;
 
+        // ==================== Phase 3: Lua bridge ====================
+        private AttackLuaBridge _attackLuaBridge;
+
         public override void Start()
         {
             attackRangeData = new AttackRangeData();
@@ -45,6 +48,19 @@ namespace Controllers.Combat
 
             base.Start();
             attributePlayerBase = GetLocalPlayerAttribute();
+            _isTest = EventChannelLocator.MainContainer?.gameSettings?.IsTest ?? false;
+
+            // Phase 6: 初始化网络投射物广播器（原由子类 Start 中赋值）
+            _networkCaster = ComponentFactory.GetOrCreateNetworkCaster(gameObject);
+
+            // Phase 3: 按角色名加载攻击行为 Lua
+            var playerController = GetComponentInParent<PlayerController>();
+            if (playerController != null)
+            {
+                string charName = playerController.GetCharacterName();
+                if (!string.IsNullOrEmpty(charName))
+                    _attackLuaBridge = new AttackLuaBridge(charName);
+            }
         }
 
         private AttributePlayerBase GetLocalPlayerAttribute()
@@ -66,6 +82,18 @@ namespace Controllers.Combat
                 attributePlayerBase = GetLocalPlayerAttribute();
             if (attributePlayerBase == null)
                 return;
+
+            // 延迟加载攻击行为 Lua（OnPhotonInstantiate 可能晚于 Start 执行）
+            if (_attackLuaBridge == null)
+            {
+                var pc = GetComponentInParent<PlayerController>();
+                if (pc != null)
+                {
+                    string charName = pc.GetCharacterName();
+                    if (!string.IsNullOrEmpty(charName))
+                        _attackLuaBridge = new AttackLuaBridge(charName);
+                }
+            }
 
             base.Update();
 
@@ -131,15 +159,22 @@ namespace Controllers.Combat
         }
 
         /// <summary>
-        /// 由子类实现的具体攻击逻辑
+        /// 具体攻击逻辑。先走 Lua 回调，未处理时走 C# 子类 override。
         /// </summary>
-        protected abstract void PerformAttack();
+        protected virtual void PerformAttack()
+        {
+            _attackLuaBridge?.TryPerformAttack(this, targetEnemy);
+        }
 
         /// <summary>
         /// 寻找最近的敌人（使用 sqrMagnitude 避免开平方开销）
         /// </summary>
         protected virtual void UpdateEnemyTarget()
         {
+            // Phase 3: 先尝试 Lua 多目标逻辑（如 BingNv），未处理时走 C# 默认单目标逻辑
+            if (_attackLuaBridge != null && _attackLuaBridge.TryUpdateEnemyTarget(this))
+                return;
+
             // 先清理已死亡的敌人
             CleanupDeadEnemies();
 
@@ -299,6 +334,204 @@ namespace Controllers.Combat
                 {
                     Gizmos.color = Color.red;
                     Gizmos.DrawLine(GetSpawnPosition(), targetEnemy.transform.position);
+                }
+            }
+        }
+
+        // ==================== Phase 2: Public API for Lua bridge ====================
+
+        public GameObject CurrentTarget => targetEnemy;
+        public AttributePlayerBase AttributeSource => attributePlayerBase;
+        public Element CurrentElement => attributePlayerBase?.GetCurrentElement() ?? Element.Common;
+        public INetworkFireballCaster GetNetworkCaster() => _networkCaster;
+        public Vector3 GetMuzzlePosition() => GetSpawnPosition();
+        public Vector3 GetTargetDirectionPublic() => GetTargetDirection();
+        public bool IsCharged() => attackRangeData.isCharged;
+        public int GetComboCounter() => attackRangeData.comboCounter;
+        public AttackRangeData GetAttackRangeData() => attackRangeData;
+        public IReadOnlyCollection<GameObject> GetAllTargets() => _enemySet;
+
+        // ==================== Phase 4: Fireball spawn helpers for Lua ====================
+
+        private bool _isTest;
+
+        /// <summary>是否测试模式</summary>
+        public bool IsTest => _isTest;
+
+        /// <summary>根据元素获取 ImpactCannon 视觉池名</summary>
+        public static string GetImpactCannonPoolByElement(Element element)
+        {
+            switch (element)
+            {
+                case Element.Lightning: return PoolConst.ImpactCannonLightenPool;
+                case Element.Winter: return PoolConst.ImpactCannonWinterPool;
+                case Element.Grass: return PoolConst.ImpactCannonGrassPool;
+                default: return PoolConst.ImpactCannonCommonPool;
+            }
+        }
+
+        /// <summary>根据元素获取 ImpactCannon 击中特效池名</summary>
+        public static string GetImpactCannonHitPoolByElement(Element element)
+        {
+            switch (element)
+            {
+                case Element.Lightning: return PoolConst.ImpactCannonHitLightenPool;
+                case Element.Winter: return PoolConst.ImpactCannonHitWinterPool;
+                case Element.Grass: return PoolConst.ImpactCannonHitGrassPool;
+                default: return PoolConst.ImpactCannonHitCommonPool;
+            }
+        }
+
+        /// <summary>
+        /// 生成 ImpactCannon 火球（本地）— 供 Lua PerformAttack 调用。
+        /// 复刻原 AttackRange_WizardBoy.SpawnFireballLocal 的逻辑。
+        /// </summary>
+        public void SpawnImpactCannon(Vector3 spawnPos, Vector3 direction, bool isMine)
+        {
+            if (attributePlayerBase == null) return;
+
+            var element = attributePlayerBase.GetCurrentElement();
+            string visualPool = GetImpactCannonPoolByElement(element);
+            string triggerPool = PoolConst.ImpactCannonTriggerPool;
+
+            AudioManager.Instance?.PlaySFX("sfx_wizard_fire", spawnPos);
+
+            GameObject visualObj = PoolHelper.Get(visualPool, spawnPos);
+            GameObject triggerObj = PoolHelper.Get(triggerPool, spawnPos);
+
+            AttackToken token = new AttackToken
+            {
+                hitCollider = triggerObj,
+                vfxEffect = visualObj,
+                vfxPoolName = visualPool,
+            };
+
+            if (visualObj != null)
+            {
+                var particle = visualObj.GetComponentInChildren<ParticleSystem>();
+                particle?.Play();
+                visualObj.transform.rotation = Quaternion.LookRotation(direction);
+            }
+
+            if (triggerObj != null)
+            {
+                var cannon = triggerObj.GetComponent<IImpactCannon>();
+                if (cannon == null)
+                    cannon = ComponentFactory.GetOrCreateImpactCannon(triggerObj);
+                if (cannon != null)
+                {
+                    cannon.SetToken(token);
+                    cannon.SetAttributeFromPlayer(attributePlayerBase);
+                    cannon.StartShoot(direction, isMine);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 网络广播火球发射 — 供 Lua PerformAttack 调用。
+        /// </summary>
+        public void BroadcastFireball(Vector3 spawnPos, Vector3 direction, float speed)
+        {
+            if (_networkCaster == null) return;
+            _networkCaster.RequestFireball(spawnPos, direction, speed, attributePlayerBase.GetCurrentElement());
+        }
+
+        // ==================== Phase 5: GuiLing spawn helpers for Lua (BingNv) ====================
+
+        /// <summary>根据元素获取 GuiLing 投射物池名</summary>
+        public static string GetGuiLingPoolByElement(Element element)
+        {
+            switch (element)
+            {
+                case Element.Fire: return PoolConst.GuiLingFirePool;
+                case Element.Lightning: return PoolConst.GuiLingLightningPool;
+                case Element.Grass: return PoolConst.GuiLingGrassPool;
+                case Element.Winter:
+                default: return PoolConst.GuiLingWinterPool;
+            }
+        }
+
+        /// <summary>
+        /// 获取按距离排序的敌人列表（供 Lua 多目标逻辑调用）。
+        /// </summary>
+        public List<GameObject> GetSortedTargets()
+        {
+            CleanupDeadEnemies();
+
+            if (_enemySet.Count == 0)
+                return new List<GameObject>();
+
+            var sorted = new List<GameObject>(_enemySet);
+            Vector3 myPos = transform.position;
+            sorted.Sort((a, b) =>
+            {
+                if (a == null && b == null) return 0;
+                if (a == null) return 1;
+                if (b == null) return -1;
+                float distA = (a.transform.position - myPos).sqrMagnitude;
+                float distB = (b.transform.position - myPos).sqrMagnitude;
+                return distA.CompareTo(distB);
+            });
+
+            return sorted;
+        }
+
+        /// <summary>
+        /// 生成 GuiLing 追踪弹（本地）— 供 Lua PerformAttack 调用。
+        /// 复刻原 AttackRange_BingNv.FireSingleGuiLing 的逻辑。
+        /// </summary>
+        public void SpawnGuiLing(
+            Vector3 spawnPos, GameObject enemy, Element element,
+            float horizontalSpread, float verticalSpread)
+        {
+            if (attributePlayerBase == null || enemy == null) return;
+
+            string poolName = GetGuiLingPoolByElement(element);
+            GameObject guiLing = PoolHelper.Get(poolName, spawnPos);
+
+            if (guiLing == null)
+            {
+                Debug.LogError($"[AttackRangeBase] 从对象池 {poolName} 获取 GuiLing 失败", this);
+                return;
+            }
+
+            var direction = (enemy.transform.position - spawnPos).normalized;
+            float randomH = UnityEngine.Random.Range(-horizontalSpread, horizontalSpread);
+            float randomV = UnityEngine.Random.Range(-verticalSpread, verticalSpread);
+            direction = Quaternion.Euler(randomV, randomH, 0f) * direction;
+
+            var guiLingBase = guiLing.GetComponent<GuiLingBase>();
+            guiLingBase.poolName = poolName;
+            guiLingBase.SetTargetAndLaunch(enemy.transform, direction);
+
+            if (_networkCaster is CastNetwork castNetwork)
+            {
+                guiLingBase.SetCastNetwork(castNetwork);
+            }
+
+            bool isMine = _network != null && _network.IsMine;
+            guiLingBase.SetDamageData(
+                isMine,
+                attributePlayerBase.GetAttackPower(),
+                attributePlayerBase.GetCriticalChance(),
+                attributePlayerBase.GetCriticalMultiplier(),
+                element
+            );
+
+            guiLingBase.SetSplitData(
+                attributePlayerBase.GetSplit(),
+                attributePlayerBase.GetSplitCount()
+            );
+
+            // 网络同步
+            if (!_isTest)
+            {
+                var targetView = enemy.GetComponent<Photon.Pun.PhotonView>();
+                if (targetView != null && _networkCaster != null)
+                {
+                    _networkCaster.RequestGuiLingCast(
+                        spawnPos, direction, targetView.ViewID, (int)element
+                    );
                 }
             }
         }

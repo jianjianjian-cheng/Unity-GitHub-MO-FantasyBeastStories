@@ -16,7 +16,27 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 8e887aa1d6abd3147b8ad619cc3b6aeb
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 10d78078f680c6a4ca086f845088a2d0
+    m_Address: Characters/WizardBoy_Model
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 473bdc8891f686f4fb6818e12d02b7b4
+    m_Address: Characters/BingNv_Anim
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8c4d50de4d711c445b5c2838d8c4b648
+    m_Address: Characters/BingNv_Model
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cf0df028ee600884ea3fd48f896f4eb9
+    m_Address: Characters/WizardBoy_Anim
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: fb99d6304baf1dc43b9033961371850c, type: 2}
   m_SchemaSet:

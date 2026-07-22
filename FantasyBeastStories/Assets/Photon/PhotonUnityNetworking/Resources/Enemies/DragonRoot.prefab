@@ -87,9 +87,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.68937683
-  m_Height: 2.0289106
+  m_Height: 1.4722102
   m_Direction: 1
-  m_Center: {x: 0, y: 0.05704233, z: 0.18937683}
+  m_Center: {x: 0, y: 0.3353926, z: 0.18937683}
 --- !u!114 &476916540637937738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,8 +239,6 @@ MonoBehaviour:
   animator: {fileID: 8973249789513816642}
   rb: {fileID: 4139562674000432808}
   PlayerTarget: {fileID: 0}
-  attackDamage: 10
-  attackRange: 2
   pathUpdateInterval: 0.3
   lod0Distance: 10
   lod1Distance: 30
