@@ -33,41 +33,48 @@ function M.PerformAttack(range, target)
     local attr = range.AttributeSource
     if attr == nil then return end
 
-    local maxTargetCount = attr:GetMultiTargetCount()
-    local targetCount = math.min(maxTargetCount, sorted.Count)
+    -- MultiTargetCount: 锁定最近几个敌人
+    -- MaxAttackCount: 每次发射几颗 GuiLing
+    local maxTargets = attr:GetMultiTargetCount()
+    local maxAttacks = attr:GetMaxAttackCount()
+    local targetCount = math.min(maxTargets, sorted.Count)
+    local totalShots = maxAttacks
 
-    -- 从 PlayerController 获取已解锁元素列表
-    local playerController = range:GetComponentInParent(CS.Controllers.Character.PlayerController)
-    if playerController == nil then return end
-
-    local unlockedElements = playerController:GetUnlockedElements()
+    -- 从 AttackRangeBase 获取已解锁元素列表（避免在 Lua 中调用 C# 泛型方法）
+    local unlockedElements = range:GetUnlockedElementsForLua()
     if unlockedElements == nil or unlockedElements.Count == 0 then
         -- 没有已解锁元素，使用默认 Winter
-        M.FireAtTargets(range, sorted, targetCount, spawnPos, {CS.Element.Winter})
+        M.FireAtTargets(range, sorted, targetCount, totalShots, spawnPos, {CS.Element.Winter})
         return
     end
 
-    -- 将 ICollection 转为 Lua table
+    -- 将 List 转为 Lua table
     local elements = {}
-    for e in unlockedElements do
-        elements[#elements + 1] = e
+    for i = 0, unlockedElements.Count - 1 do
+        elements[#elements + 1] = unlockedElements[i]
     end
 
-    M.FireAtTargets(range, sorted, targetCount, spawnPos, elements)
+    M.FireAtTargets(range, sorted, targetCount, totalShots, spawnPos, elements)
 end
 
 -- 多目标分配 + 发射
-function M.FireAtTargets(range, sorted, targetCount, spawnPos, elements)
-    local attr = range.AttributeSource
+-- totalShots 颗 GuiLing 分配给 targetCount 个敌人，最近的敌人权重更高
+function M.FireAtTargets(range, sorted, targetCount, totalShots, spawnPos, elements)
+    if targetCount <= 0 or totalShots <= 0 then return end
 
-    -- 分配方案：先保证每个敌人至少 1 颗，剩余按距离追加
+    -- 分配方案：totalShots 颗分配给 targetCount 个敌人
+    -- 规则：最近的敌人优先多分，保证每个被分配的敌人至少 1 颗
+    -- 当 totalShots >= targetCount：每个敌人至少 1 颗，多余从近到远追加
+    -- 当 totalShots < targetCount：只给前 totalShots 个敌人各 1 颗
+    local actualTargets = math.min(targetCount, totalShots)
     local allocation = {}
-    for i = 0, targetCount - 1 do
+    for i = 0, actualTargets - 1 do
         allocation[i] = 1
     end
-    local remaining = targetCount - #allocation
-    if remaining > 0 then
-        for i = 0, targetCount - 1 do
+
+    local remaining = totalShots - actualTargets
+    while remaining > 0 do
+        for i = 0, actualTargets - 1 do
             if remaining <= 0 then break end
             allocation[i] = allocation[i] + 1
             remaining = remaining - 1

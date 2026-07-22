@@ -96,7 +96,7 @@ MonoBehaviour:
     - remote_preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6604ae41b96df604f85450fc5ef642f6
-    m_Address: Config/PlayerAttributeConfig
+    m_Address: Config/PlayerConfig/WizardBoyAttr
     m_ReadOnly: 0
     m_SerializedLabels:
     - remote_preload

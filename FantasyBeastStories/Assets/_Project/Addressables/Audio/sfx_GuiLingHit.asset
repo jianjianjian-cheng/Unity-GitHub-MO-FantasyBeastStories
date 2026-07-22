@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: sfx_GuiLingHit
   m_EditorClassIdentifier: 
   soundId: sfx_GuiLingHit
-  clip: {fileID: 8300000, guid: cf827e5391308a541a5f36e8cf108b2e, type: 3}
+  clip: {fileID: 8300000, guid: 54fd60d525b8bd8438276ac3104a46b0, type: 3}
   audioType: 1
   volume: 1
   pitch: 1

@@ -17,6 +17,24 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 09b50bec82d37e54dba459747f3ad49e
   m_SerializeEntries:
+  - m_GUID: 3396ca5f12c9b7a41a86755fd762589d
+    m_Address: PoolPrefabs/PowerUpItem
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 50bb26c31a111ad4397535e404c3b404
+    m_Address: PoolPrefabs/DamageNum
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5337f55a35380bb46aabe1897116ff79
+    m_Address: PoolPrefabs/ExperienceBall_Blue
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6c069b2d830a26d4394e6764c9be226b
     m_Address: TaskPrefab/EscortRobot
     m_ReadOnly: 0

@@ -67,7 +67,8 @@ namespace Controllers.Task
                 Debug.Log("机器人进入传送区域: " + other.gameObject.name);
                 currentObjects.Add(other.gameObject);
                 EventChannelLocator.MainContainer.enemyReportChannel.Raise(new EnemyReportData(other.gameObject.transform.position,
-                NetworkServiceLocator.ObjectService.GetViewID(other.gameObject)
+                NetworkServiceLocator.ObjectService.GetViewID(other.gameObject),
+                EnemyReportType.EscortArrive
                 ));
                 StopAllCoroutines();
                 StartCoroutine(StartTransfer());

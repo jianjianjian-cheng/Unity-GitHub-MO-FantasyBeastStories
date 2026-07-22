@@ -21,7 +21,18 @@ namespace Controllers.Combat
         [Header("纯数据")]
         [SerializeField] private AttackRangeData attackRangeData;
 
-        protected AttributePlayerBase attributePlayerBase;
+        private AttributePlayerBase _attributePlayerBase;
+        /// <summary>懒加载获取玩家属性（热更后 attributePlayer 可能延迟创建）</summary>
+        protected AttributePlayerBase attributePlayerBase
+        {
+            get
+            {
+                if (_attributePlayerBase == null)
+                    _attributePlayerBase = GetLocalPlayerAttribute();
+                return _attributePlayerBase;
+            }
+            set => _attributePlayerBase = value;
+        }
 
         // 使用 HashSet 替代 List，提供 O(1) 的增删查操作
         protected readonly HashSet<GameObject> _enemySet = new HashSet<GameObject>();
@@ -47,7 +58,7 @@ namespace Controllers.Combat
                 Debug.LogError("[AttackRangeBase] NetworkIdentityBase 未赋值，请在预制体 Inspector 中绑定或确保组件存在", this);
 
             base.Start();
-            attributePlayerBase = GetLocalPlayerAttribute();
+            // attributePlayerBase 改为懒加载，不再在 Start 中赋值（因为 PlayerController.attributePlayer 可能尚未创建）
             _isTest = EventChannelLocator.MainContainer?.gameSettings?.IsTest ?? false;
 
             // Phase 6: 初始化网络投射物广播器（原由子类 Start 中赋值）
@@ -97,7 +108,20 @@ namespace Controllers.Combat
 
             base.Update();
 
-            // 仅当敌人列表发生变化时才重新计算目标，避免每帧遍历
+            // 检查当前目标是否已失效（死亡/销毁/回收），如果是则标记需要重新选择目标
+            if (targetEnemy != null)
+            {
+                if (!_enemyCache.TryGetValue(targetEnemy, out var targetBase) || targetBase == null || targetBase.IsDeadOrDying())
+                {
+                    _enemiesDirty = true;
+                }
+            }
+            else if (_enemySet.Count > 0)
+            {
+                _enemiesDirty = true;
+            }
+
+            // 仅当敌人列表发生变化或目标失效时才重新计算目标
             if (_enemiesDirty)
             {
                 UpdateEnemyTarget();
@@ -112,8 +136,16 @@ namespace Controllers.Combat
         /// </summary>
         private void Attack()
         {
-            if (targetEnemy == null)
+            // 如果有 Lua 攻击行为（如 BingNv 的多目标逻辑），即使 targetEnemy 为 null 也允许攻击
+            // Lua 的 PerformAttack 会自己通过 GetSortedTargets 获取目标列表
+            if (_attackLuaBridge != null && _enemySet.Count > 0)
+            {
+                // Lua 模式：有敌人在范围内就可以攻击，不依赖 targetEnemy
+            }
+            else if (targetEnemy == null)
+            {
                 return;
+            }
 
             attackRangeData.attackInterval = attributePlayerBase.GetAttackInterval();
 
@@ -350,6 +382,16 @@ namespace Controllers.Combat
         public int GetComboCounter() => attackRangeData.comboCounter;
         public AttackRangeData GetAttackRangeData() => attackRangeData;
         public IReadOnlyCollection<GameObject> GetAllTargets() => _enemySet;
+
+        /// <summary>供 Lua 调用：获取 PlayerController 的已解锁元素列表</summary>
+        public System.Collections.Generic.List<Element> GetUnlockedElementsForLua()
+        {
+            var pc = GetComponentInParent<Controllers.Character.PlayerController>();
+            if (pc == null) return null;
+            var collection = pc.GetUnlockedElements();
+            if (collection == null) return null;
+            return new System.Collections.Generic.List<Element>(collection);
+        }
 
         // ==================== Phase 4: Fireball spawn helpers for Lua ====================
 

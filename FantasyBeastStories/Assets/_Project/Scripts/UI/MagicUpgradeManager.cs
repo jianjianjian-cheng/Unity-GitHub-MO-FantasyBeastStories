@@ -9,6 +9,7 @@ using Core;
 using Core.Channels.General;
 using Core.Channels.Player;
 using Controllers.Services;
+using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -351,6 +352,8 @@ namespace UI
       if (card == null)
         return;
 
+      AudioManager.Instance.PlayUI("sfx_card_deal");
+
       card.transform.DOKill();
       card.transform.DOScale(scaleMultiplier, duration).SetEase(Ease.OutBack);
 
@@ -417,6 +420,7 @@ namespace UI
     private void OnCardPointerClick(GameObject selectedCard, GameObject catcher)
     {
       Debug.Log("点击了卡片");
+      AudioManager.Instance.PlayUI("sfx_card_select");
       PlayClickFeedback(selectedCard);
       string cardName = selectedCard.gameObject.name;
       int index = 0;
@@ -614,6 +618,7 @@ namespace UI
       float moveTime = 0.3f;
 
       // ===== 第1步：发第1张牌 =====
+      seq.AppendCallback(() => AudioManager.Instance.PlayUI("sfx_card_deal"));
       seq.Append(Card_1.transform.DOMove(EndPoints[0].position, moveTime));
       seq.Join(
           Card_1Effect.transform.DOMove(
@@ -627,6 +632,7 @@ namespace UI
       );
 
       // ===== 第2步：发第2张牌 =====
+      seq.AppendCallback(() => AudioManager.Instance.PlayUI("sfx_card_deal"));
       seq.Append(Card_2.transform.DOMove(EndPoints[1].position, moveTime));
       seq.Join(
           Card_2Effect.transform.DOMove(
@@ -640,6 +646,7 @@ namespace UI
       );
 
       // ===== 第3步：发第3张牌 =====
+      seq.AppendCallback(() => AudioManager.Instance.PlayUI("sfx_card_deal"));
       seq.Append(Card_3.transform.DOMove(EndPoints[2].position, moveTime));
       seq.Join(
           Card_3Effect.transform.DOMove(
@@ -801,6 +808,15 @@ namespace UI
         Debug.LogWarning("MagicUpgradePanel 已打开，忽略重复请求");
         return;
       }
+
+      // 检查关键 UI 对象是否存活
+      if (GrossUpgradePanel == null)
+      {
+        Debug.LogWarning("[MagicUpgradeManager] GrossUpgradePanel 已销毁，无法打开升级面板");
+        _isPanelActive = false;
+        return;
+      }
+
       _isPanelActive = true;
       EventChannelLocator.MainContainer.bloomChannel.Raise(8f);
 
@@ -865,7 +881,7 @@ namespace UI
     public void CloseMagicUpgradePanel()
     {
       _isPanelActive = false;
-      EventChannelLocator.MainContainer.bloomChannel.Raise(5f);
+      EventChannelLocator.MainContainer?.bloomChannel?.Raise(5f);
 
       Debug.Log("关闭魔法升级面板");
 
@@ -873,11 +889,15 @@ namespace UI
       isConfirmed = false;
 
       // 重置网络属性
-      NetworkServiceLocator.PlayerService.SetCustomProperty(PLAYER_UPGRADE_READY_KEY, false);
+      if (NetworkServiceLocator.IsInitialized)
+        NetworkServiceLocator.PlayerService.SetCustomProperty(PLAYER_UPGRADE_READY_KEY, false);
 
-      StartCoroutine(AnimateShadowAlphaBack());
-      HideOrShowGrossUpgradePanel(true);
-      EventChannelLocator.MainContainer.pauseChannel.Raise(false);
+      if (GrossUpgradePanel != null)
+      {
+        StartCoroutine(AnimateShadowAlphaBack());
+        HideOrShowGrossUpgradePanel(true);
+      }
+      EventChannelLocator.MainContainer?.pauseChannel?.Raise(false);
     }
 
 
@@ -890,8 +910,16 @@ namespace UI
 
     void OnDisable()
     {
+      EventChannelLocator.MainContainer?.magicUpgradeChannel?.UnregisterListener(OnMagicUpgradeRequested);
       if (NetworkServiceLocator.IsInitialized)
         NetworkServiceLocator.PlayerService.OnPlayerPropertyChanged -= OnPlayerPropertyChanged;
+    }
+
+    void OnDestroy()
+    {
+      EventChannelLocator.MainContainer?.magicUpgradeChannel?.UnregisterListener(OnMagicUpgradeRequested);
+      if (instance == this)
+        instance = null;
     }
 
     void OnMagicUpgradeRequested(bool isOpen)
@@ -923,6 +951,12 @@ namespace UI
     /// <param name="duration">淡出时长，默认1.5秒</param>
     public void HideOrShowGrossUpgradePanel(bool isHide)
     {
+      if (GrossUpgradePanel == null)
+      {
+        Debug.LogWarning("[MagicUpgradeManager] GrossUpgradePanel 为 null，跳过");
+        return;
+      }
+
       // 获取或添加 CanvasGroup 组件
       CanvasGroup canvasGroup = GrossUpgradePanel.GetComponent<CanvasGroup>();
       if (canvasGroup == null)

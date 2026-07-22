@@ -59,10 +59,11 @@ end
 function M.OnUnlockElement(player, elementInt)
     local element = elementInt  -- int 值直接用作 table key
 
-    -- 检查是否已解锁
+    -- 检查是否已解锁（C# HashSet 需用枚举器遍历）
     local unlocked = player:GetUnlockedElements()
-    for e in unlocked do
-        if e == elementInt then return true end
+    local iter = unlocked:GetEnumerator()
+    while iter:MoveNext() do
+        if tonumber(iter.Current) == elementInt then return true end
     end
 
     M.UnlockElementInternal(player, elementInt)

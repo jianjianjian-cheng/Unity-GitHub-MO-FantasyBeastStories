@@ -20,7 +20,7 @@ MonoBehaviour:
   powers:
   - value: 10
     label: "%\u9632\u5FA1\u529B"
-  - value: 15
+  - value: 20
     label: "%\u653B\u51FB\u901F\u5EA6"
   specialPowerName: ' '
   specialPowerDescription: ' '

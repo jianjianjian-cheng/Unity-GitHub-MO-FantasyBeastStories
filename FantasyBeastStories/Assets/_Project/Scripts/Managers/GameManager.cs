@@ -82,6 +82,14 @@ namespace Managers
             {
                 if (SaveManager.Instance != null)
                     SaveManager.Instance.LoadGame();
+
+                // 大厅 BGM（与 LobbyAllGameManager/LobbyCanvas 中的调用去重）
+                AudioManager.Instance?.PlayBGM("bgm_main_menu");
+            }
+            else if (scene.buildIndex == sceneConfig.battleSceneIndex)
+            {
+                // 战斗场景 BGM
+                AudioManager.Instance?.PlayBGM("bgm_combat");
             }
         }
 

@@ -103,15 +103,15 @@ namespace UI
 
     public void Intilize()
     {
-      exitButton = GameObject.Find("ExitToLobby").GetComponent<Button>();
+      // exitButton = GameObject.Find("ExitToLobby").GetComponent<Button>();
 
-      exitButton.onClick.AddListener(() =>
-      {
-        if (NetworkServiceLocator.PlayerService.IsMasterClient)
-        {
-          NetworkServiceLocator.ObjectPoolService.ReturnToLobby();
-        }
-      });
+      // exitButton.onClick.AddListener(() =>
+      // {
+      //   if (NetworkServiceLocator.PlayerService.IsMasterClient)
+      //   {
+      //     NetworkServiceLocator.ObjectPoolService.ReturnToLobby();
+      //   }
+      // });
 
       localPlayerSlider_HP = GameObject
           .Find("LocalPlayerSlider_HP")

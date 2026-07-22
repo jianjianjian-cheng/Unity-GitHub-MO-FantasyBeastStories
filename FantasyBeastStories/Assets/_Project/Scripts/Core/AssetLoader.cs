@@ -51,8 +51,24 @@ namespace Core
         /// <summary>同步尝试加载资产（不打印错误日志，用于 fallback 探测）</summary>
         public static T TryLoadAsset<T>(string key) where T : Object
         {
-            if (!KeyExists(key, typeof(T)))
+            if (string.IsNullOrEmpty(key)) return null;
+
+            // 先用 LoadResourceLocationsAsync 检查 key 是否存在（不指定类型，避免类型过滤失败）
+            try
+            {
+                var checkHandle = Addressables.LoadResourceLocationsAsync(key);
+                checkHandle.WaitForCompletion();
+                if (checkHandle.Status != AsyncOperationStatus.Succeeded || checkHandle.Result == null || checkHandle.Result.Count == 0)
+                {
+                    Addressables.Release(checkHandle);
+                    return null;
+                }
+                Addressables.Release(checkHandle);
+            }
+            catch
+            {
                 return null;
+            }
 
             try
             {

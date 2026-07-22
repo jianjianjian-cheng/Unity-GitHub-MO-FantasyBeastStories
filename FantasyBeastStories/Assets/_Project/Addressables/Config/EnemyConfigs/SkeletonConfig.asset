@@ -18,6 +18,6 @@ MonoBehaviour:
   attackDamage: 50
   attackInterval: 0.7
   attackRange: 0.3
-  expMin: 50
-  expMax: 70
+  expMin: 30
+  expMax: 50
   powerUpDropChance: 0.1

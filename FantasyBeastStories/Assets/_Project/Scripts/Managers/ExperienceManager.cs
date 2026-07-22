@@ -15,22 +15,6 @@ using UnityEngine.SceneManagement;
 
 namespace Managers
 {
-    /// <summary>
-    /// 经验值/升级业务逻辑（Application 层）
-    ///
-    /// 职责：
-    /// - 管理经验值增减、升级计算
-    /// - 维护升级队列，逐级处理
-    /// - 通过 RPC 同步经验/等级到所有客户端
-    /// - 通过 EventChannel 与 Presentation 层通信
-    ///
-    /// 通信方式：
-    /// 输入 → experienceChannel（拾取经验球）
-    /// 输入 → gameActionChannel（升级确认操作）
-    /// 输入 → skillQueryChannel（升级经验查询）
-    /// 输出 → experienceUpdateChannel（更新 UI）
-    /// 输出 → magicUpgradeChannel（开关升级面板）
-    /// </summary>
     public class ExperienceManager : MonoBehaviour
     {
         public static ExperienceManager Instance { get; private set; }
@@ -125,7 +109,7 @@ namespace Managers
 
         private void Initialize()
         {
-            upgradeExperience = 100;
+            upgradeExperience = 150;
 
             // 重置经验球去重状态
             nextBallId = 1;
@@ -320,7 +304,7 @@ namespace Managers
             if (Instance == null) return;
             Instance.currentExperience -= requiredExp;
             Instance.currentLevel++;
-            Instance.upgradeExperience = (int)(Instance.upgradeExperience * 1.5);
+            Instance.upgradeExperience = (int)(Instance.upgradeExperience * 1.2);
 
             Instance.RaiseExperienceUpdate();
         }

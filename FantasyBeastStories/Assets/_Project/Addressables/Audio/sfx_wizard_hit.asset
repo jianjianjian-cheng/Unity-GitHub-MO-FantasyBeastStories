@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: sfx_wizard_hit
   m_EditorClassIdentifier: 
   soundId: sfx_wizard_hit
-  clip: {fileID: 8300000, guid: 0efdad8309531ef48a20703df91737bc, type: 3}
+  clip: {fileID: 8300000, guid: d5971d187e2c84d409cf74c11a47a8b5, type: 3}
   audioType: 1
   volume: 1
   pitch: 1

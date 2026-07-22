@@ -974,7 +974,6 @@ MonoBehaviour:
     spawnPointIndex: 0
     healthRecover: 0
     recoverInterval: 1
-  playerAttributeConfig: {fileID: 0}
   isOnlyShow: 0
   virtualCamera: {fileID: 3624956791697639742}
   spectatorCameraController: {fileID: 7169257647919527976}

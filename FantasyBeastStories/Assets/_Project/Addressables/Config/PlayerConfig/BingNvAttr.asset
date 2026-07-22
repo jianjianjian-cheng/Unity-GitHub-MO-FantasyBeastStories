@@ -23,6 +23,7 @@ MonoBehaviour:
   maxAttackInterval: 2
   baseHealthRecover: 0
   baseAttackSpeed: 100
-  baseMaxAttackCount: 1
+  baseMaxAttackCount: 2
   baseComboCount: 1
   baseEmpowerCharge: 1
+  baseMultiTargetCount: 2

@@ -72,7 +72,7 @@ namespace Managers
         private void OnEnemyReported(EnemyReportData data)
         {
             if (data == null) return;
-            NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "RPC_ReportCount", NetworkTarget.MasterClient, data.position, data.networkViewID);
+            NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "RPC_ReportCount", NetworkTarget.MasterClient, data.position, data.networkViewID, (int)data.reportType);
         }
 
         private void OnTaskNoticeReceived(TaskNoticeData data)
@@ -238,19 +238,21 @@ namespace Managers
                 TaskUIUpdateData.SetIndicator(zoneCenter, taskId));
         }
 
-        public void ReportCount(Vector3 killPosition, int enemyViewID)
+        public void ReportCount(Vector3 killPosition, int enemyViewID, int reportType)
         {
-            NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "RPC_ReportCount", NetworkTarget.MasterClient, killPosition, enemyViewID);
+            NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "RPC_ReportCount", NetworkTarget.MasterClient, killPosition, enemyViewID, reportType);
         }
 
         /// <summary>
         /// 由 AppRpcBridge 在收到 RPC 后调用：上报击杀计数
         /// </summary>
-        public static void HandleReportCountRPC(Vector3 killPosition, int enemyViewID)
+        public static void HandleReportCountRPC(Vector3 killPosition, int enemyViewID, int reportTypeInt)
         {
             if (Instance == null) return;
             if (!NetworkServiceLocator.PlayerService.IsMasterClient)
                 return;
+
+            EnemyReportType reportType = (EnemyReportType)reportTypeInt;
 
             if (Instance.reportedEnemies.Contains(enemyViewID))
             {
@@ -264,6 +266,9 @@ namespace Managers
 
                 if (task is KillTask killTask)
                 {
+                    if (reportType != EnemyReportType.Kill)
+                        continue;
+
                     KillTask kt = task as KillTask;
                     if (Vector3.Distance(killPosition, task.ZoneCenter) <= task.ZoneRadius)
                     {
@@ -291,6 +296,9 @@ namespace Managers
 
                 if (task is EscortTask escortTask)
                 {
+                    if (reportType != EnemyReportType.EscortArrive)
+                        continue;
+
                     if (Vector3.Distance(killPosition, task.ZoneCenter) <= task.ZoneRadius)
                     {
                         escortTask.currentEscorts++;

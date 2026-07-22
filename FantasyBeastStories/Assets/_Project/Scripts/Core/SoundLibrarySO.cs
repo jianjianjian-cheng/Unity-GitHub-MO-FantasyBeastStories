@@ -62,6 +62,12 @@ namespace Core
             return _lookup.TryGetValue(soundId, out sound);
         }
 
+        /// <summary>清除运行时缓存，下次访问时从 _sounds 重建字典（热更后调用）</summary>
+        public void ClearCache()
+        {
+            _lookup = null;
+        }
+
 #if UNITY_EDITOR
         /// <summary>Editor 工具方法：更新音效列表</summary>
         public void Editor_SetSounds(SoundDefinitionSO[] sounds) => _sounds = sounds;

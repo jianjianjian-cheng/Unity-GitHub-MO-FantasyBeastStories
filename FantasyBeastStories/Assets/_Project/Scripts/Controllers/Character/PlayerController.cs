@@ -24,8 +24,7 @@ namespace Controllers.Character
     [SerializeField]
     protected PlayerMovementData movementData;
 
-    [SerializeField]
-    protected PlayerAttributeConfigSO playerAttributeConfig;
+    protected PlayerAttributeConfigSO playerAttributeConfig;  // 运行时通过 Addressables 加载，确保热更生效
 
     [SerializeField]
     protected bool isOnlyShow = false; // 是否只为显示角色而不用于其他操作
@@ -81,16 +80,8 @@ namespace Controllers.Character
       movementData = new PlayerMovementData();
       isInLobby = EventChannelLocator.MainContainer.gameSettings.IsStayLobby;
 
-      // Phase 3: 角色名未设置时使用默认配置（角色名在 OnPhotonInstantiate 中设置）
-      if (playerAttributeConfig == null)
-      {
-        if (!string.IsNullOrEmpty(_characterName))
-          playerAttributeConfig = AssetLoader.TryLoadAsset<PlayerAttributeConfigSO>($"Config/PlayerConfig/{_characterName}Attr");
-        if (playerAttributeConfig == null)
-          playerAttributeConfig = AssetLoader.LoadAsset<PlayerAttributeConfigSO>("Config/PlayerAttributeConfig");
-      }
-      attributePlayer = new AttributePlayerBase(playerAttributeConfig);
-      attributePlayer.SetMoveSpeed(movementData.moveSpeed);
+      // playerAttributeConfig 延迟到 InitializeCharacter 中按角色名通过 Addressables 加载
+      // Awake 时角色名尚未设置，无法确定使用哪个角色配置
 
       playerInputHandler = new PlayerInputHandler();
     }
@@ -705,14 +696,37 @@ namespace Controllers.Character
       _characterName = characterName;
       Debug.Log($"[PlayerController] InitializeCharacter: {characterName}");
 
-      // 如果 Awake 已执行但 playerAttributeConfig 仍为 null，按角色名重新加载
-      if (playerAttributeConfig == null && attributePlayer == null)
+      // 通过 Addressables 按角色名加载角色配置（确保热更生效）
+      // characterName 形如 "BingNvRoot"，去掉 "Root" 后缀拼接 Addressables key
+      if (playerAttributeConfig == null)
       {
-        playerAttributeConfig = AssetLoader.TryLoadAsset<PlayerAttributeConfigSO>($"Config/PlayerConfig/{characterName}Attr");
+        string configName = characterName;
+        if (configName.EndsWith("Root"))
+          configName = configName.Substring(0, configName.Length - 4);
+        Debug.Log($"[PlayerController] InitializeCharacter: {configName}");
+        playerAttributeConfig = AssetLoader.TryLoadAsset<PlayerAttributeConfigSO>($"Config/PlayerConfig/{configName}Attr");
         if (playerAttributeConfig == null)
-          playerAttributeConfig = AssetLoader.LoadAsset<PlayerAttributeConfigSO>("Config/PlayerAttributeConfig");
+        {
+          Debug.LogError(configName + ":不存在");
+        }
+        else
+        {
+          Debug.Log(configName + ":存在" + ":" + playerAttributeConfig);
+        }
+      }
+
+      // Awake 中延迟了 attributePlayer 的创建，在此补上
+      if (attributePlayer == null)
+      {
         attributePlayer = new AttributePlayerBase(playerAttributeConfig);
         attributePlayer.SetMoveSpeed(movementData?.moveSpeed ?? 2.6f);
+
+        // OnEnable 在此之前执行，注册了 null 到 PlayerManager，现在重新注册正确的 attributePlayer
+        int ownerActorNumber = NetworkServiceLocator.ObjectService.GetOwnerActorNumber(this);
+        EventChannelLocator.MainContainer.playerAttributeChannel.Raise(
+            new PlayerAttributeData(PlayerAttributeQueryType.RegisterAttribute, AttributeKeyConst.Main, attributePlayer)
+            { playerId = ownerActorNumber.ToString(), attributeName = AttributeKeyConst.Main }
+        );
       }
     }
 

@@ -173,9 +173,9 @@ namespace Controllers.Network
         }
 
         [PunRPC]
-        public void RPC_ReportCount(Vector3 killPosition, int enemyViewID)
+        public void RPC_ReportCount(Vector3 killPosition, int enemyViewID, int reportType)
         {
-            TaskManager.HandleReportCountRPC(killPosition, enemyViewID);
+            TaskManager.HandleReportCountRPC(killPosition, enemyViewID, reportType);
         }
 
         [PunRPC]

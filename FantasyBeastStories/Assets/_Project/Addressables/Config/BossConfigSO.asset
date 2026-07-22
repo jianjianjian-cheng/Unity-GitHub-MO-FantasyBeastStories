@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: BossConfigSO
   m_EditorClassIdentifier: 
   bossName: "\u86DB\u738B\u83F2\u529B\u752B\u65AF"
-  maxHealth: 700000
+  maxHealth: 400000
   attackPower: 20
   biteRange: 2
   biteDamage: 3
   biteWindUp: 0.4
   biteCooldown: 2
   rayBeamSpeed: 8
-  rayBeamDamageMultiplier: 5
+  rayBeamDamageMultiplier: 2
   rayBeamWindUp: 0.5
   rayBeamCooldown: 12
   fireballSpeed: 2
@@ -36,6 +36,7 @@ MonoBehaviour:
   rollWindUp: 0.6
   rollCooldown: 10
   rollTurnSpeed: 120
+  rollRotationDeadZone: 3.5
   phase2HealthPercent: 0.5
   phase1MoveSpeed: 2
   phase1PreferredDistance: 5

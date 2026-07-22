@@ -119,6 +119,7 @@ namespace Controllers.Combat
         {
             _canSplit = isSplit;
             _splitCount = splitCount;
+            _splitDamageMultiplier = 0.6f;  // 分裂弹伤害衰减为 60%
         }
 
         public void SetVfxLayer(LayerMask vfxLayer)
@@ -192,9 +193,11 @@ namespace Controllers.Combat
 
         public override void OnTriggerEnter(Collider other)
         {
-            base.OnTriggerEnter(other);
+            // 不调用 base.OnTriggerEnter — GuiLingBase 有自己的命中/分裂/回收逻辑
+            // ProjectileBase.OnTriggerEnter 会提前执行分裂和回收，导致子类逻辑无法执行
 
             if (!other.CompareTag("Enemy")) return;
+            if (_isReturning) return;
 
             Transform rootEnemy = GetRootEnemyTransform(other);
             if (rootEnemy == null || rootEnemy.GetInstanceID() != _targetInstanceId) return;
@@ -212,7 +215,9 @@ namespace Controllers.Combat
                 foreach (var trail in trails)
                 {
                     if (trail == null) continue;
-                    trail.GetComponent<ParticleSystem>()?.Stop();
+                    var ps = trail.GetComponent<ParticleSystem>();
+                    if (ps != null)
+                        ps.Stop();
                     trail.SetActive(false);
                 }
             }
@@ -243,7 +248,10 @@ namespace Controllers.Combat
             }
 
             _isReturning = true;
-            StartCoroutine(DelayedReturnToPool(0f));
+            if (gameObject.activeInHierarchy)
+                StartCoroutine(DelayedReturnToPool(0f));
+            else
+                ReturnToPool();
         }
 
         protected override void SplitToNearestEnemies(Vector3 hitPoint, GameObject hitEnemy)

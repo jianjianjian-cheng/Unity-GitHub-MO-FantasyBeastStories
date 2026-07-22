@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BGM_MainMenu
   m_EditorClassIdentifier: 
   soundId: bgm_main_menu
-  clip: {fileID: 8300000, guid: 3f9990ea6b615f4418534accc5a465e5, type: 3}
+  clip: {fileID: 8300000, guid: 818d98554e761c44a9631709db9a83bd, type: 3}
   audioType: 0
   volume: 0.176
   pitch: 1

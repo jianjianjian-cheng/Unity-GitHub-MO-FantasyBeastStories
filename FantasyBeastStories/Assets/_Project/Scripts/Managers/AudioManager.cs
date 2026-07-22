@@ -34,12 +34,11 @@ namespace Managers
             }
         }
 
-        /* ==================== Inspector 配置 ==================== */
+        /* ==================== 配置资源（通过 Addressables 加载，确保热更生效） ==================== */
 
-        [Header("配置资源")]
-        [SerializeField] private SoundLibrarySO _soundLibrary;
-        [SerializeField] private AudioConfigSO _config;
-        [SerializeField] private AudioMixer _audioMixer;
+        private SoundLibrarySO _soundLibrary;
+        private AudioConfigSO _config;
+        private AudioMixer _audioMixer;
 
         /* ==================== 运行时组件 ==================== */
 
@@ -97,17 +96,14 @@ namespace Managers
 
         private void Initialize()
         {
-            // 从 Resources 加载配置（如果 Inspector 未赋值）
-            if (_config == null)
-                _config = AssetLoader.LoadAsset<AudioConfigSO>("Audio/Config/AudioConfig");
+            // 通过 Addressables 加载配置（确保热更后使用最新数据）
+            _config = AssetLoader.LoadAsset<AudioConfigSO>("Audio/Config/AudioConfig");
 
-            if (_soundLibrary == null)
-                _soundLibrary = AssetLoader.LoadAsset<SoundLibrarySO>("Audio/Libraries/MainSoundLibrary");
+            _soundLibrary = AssetLoader.LoadAsset<SoundLibrarySO>("Audio/Libraries/MainSoundLibrary");
 
             Debug.Log($"[AudioManager] 初始化: _soundLibrary={(_soundLibrary != null ? _soundLibrary.name : "NULL")}, _config={(_config != null ? _config.name : "NULL")}, _audioMixer={(_audioMixer != null ? _audioMixer.name : "NULL")}");
 
-            if (_audioMixer == null)
-                _audioMixer = AssetLoader.LoadAsset<AudioMixer>("Audio/MainMixer");
+            _audioMixer = AssetLoader.LoadAsset<AudioMixer>("Audio/MainMixer");
 
             // ——— 初始化 AudioMixer 控制器 ———
             _mixerController = new AudioMixerController(_audioMixer);
@@ -152,6 +148,31 @@ namespace Managers
             }
 
             Debug.Log("[AudioManager] 初始化完成" + (_useMixer ? "（AudioMixer 模式）" : "（基础模式）"));
+        }
+
+        /// <summary>热更后重新加载 SoundLibrary（清除缓存 + 重新通过 Addressables 加载）</summary>
+        public void ReloadSoundLibrary()
+        {
+            if (_soundLibrary != null)
+            {
+                _soundLibrary.ClearCache();
+                Debug.Log("[AudioManager] 已清除旧 SoundLibrary 缓存");
+            }
+
+            _soundLibrary = AssetLoader.LoadAsset<SoundLibrarySO>("Audio/Libraries/MainSoundLibrary");
+
+            if (_soundLibrary != null)
+            {
+                Debug.Log($"[AudioManager] 热更后重载 SoundLibrary 成功: {_soundLibrary.name}");
+                if (_soundLibrary.TryGetSound("sfx_wizard_hit", out var wizardHit))
+                    Debug.Log($"[AudioManager]   sfx_wizard_hit → {(wizardHit.clip != null ? wizardHit.clip.name : "NULL")}");
+                if (_soundLibrary.TryGetSound("sfx_GuiLingHit", out var guiLingHit))
+                    Debug.Log($"[AudioManager]   sfx_GuiLingHit → {(guiLingHit.clip != null ? guiLingHit.clip.name : "NULL")}");
+            }
+            else
+            {
+                Debug.LogError("[AudioManager] 热更后重载 SoundLibrary 失败！");
+            }
         }
 
         /// <summary>创建并配置一个 AudioSource，自动分配到对应的 Mixer Group</summary>

@@ -210,6 +210,12 @@ namespace Core
                 State = UpdateState.Complete;
                 IsUpdateComplete = true;
                 Debug.Log("[热更] 资源下载完成");
+
+                // 热更后重新加载音频库（确保使用更新后的音效资源）
+                if (Managers.AudioManager.Instance != null)
+                {
+                    Managers.AudioManager.Instance.ReloadSoundLibrary();
+                }
             }
             else
             {

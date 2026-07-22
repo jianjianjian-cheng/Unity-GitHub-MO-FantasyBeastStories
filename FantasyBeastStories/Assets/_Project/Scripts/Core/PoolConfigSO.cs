@@ -6,7 +6,9 @@ namespace Core
     public class PoolInitializationEntry
     {
         public string poolName;
-        public GameObject prefab;
+        public GameObject prefab;          // 兼容旧数据，运行时优先使用 addressableKey
+        [Tooltip("Addressables 地址 key，运行时通过此 key 加载预制体（热更生效）")]
+        public string addressableKey;
         public int preloadCount = 10;
     }
 
@@ -15,32 +17,28 @@ namespace Core
     {
         public PoolInitializationEntry[] pools = new PoolInitializationEntry[]
         {
-            new PoolInitializationEntry { poolName = PoolConst.TestPool, preloadCount = 0 },
-            new PoolInitializationEntry { poolName = PoolConst.ImpactCannonCommonPool, preloadCount = 20 },
-            new PoolInitializationEntry { poolName = PoolConst.ImpactCannonHitCommonPool, preloadCount = 40 },
-            new PoolInitializationEntry { poolName = PoolConst.ImpactCannonLightenPool, preloadCount = 20 },
-            new PoolInitializationEntry { poolName = PoolConst.ImpactCannonHitLightenPool, preloadCount = 40 },
-            new PoolInitializationEntry { poolName = PoolConst.ImpactCannonWinterPool, preloadCount = 20 },
-            new PoolInitializationEntry { poolName = PoolConst.ImpactCannonHitWinterPool, preloadCount = 40 },
-            new PoolInitializationEntry { poolName = PoolConst.ImpactCannonGrassPool, preloadCount = 20 },
-            new PoolInitializationEntry { poolName = PoolConst.ImpactCannonHitGrassPool, preloadCount = 40 },
-            new PoolInitializationEntry { poolName = PoolConst.ImpactCannonTriggerPool, preloadCount = 20 },
-            new PoolInitializationEntry { poolName = PoolConst.FireFirePool, preloadCount = 20 },
-            new PoolInitializationEntry { poolName = PoolConst.DamageNumPool, preloadCount = 100 },
-            // 本地经验球池（非网络对象）
-            new PoolInitializationEntry { poolName = PoolConst.ExperienceBall_Blue_Local, preloadCount = 50 },
-            // 道具池（非网络对象，与经验球方案二一致）
-            new PoolInitializationEntry { poolName = PoolConst.PowerUpItem, preloadCount = 5 },
-            //BingNv 角色专属对象池
-            new PoolInitializationEntry { poolName = PoolConst.GuiLingFirePool, preloadCount = 20 },
-            new PoolInitializationEntry { poolName = PoolConst.GuiLingLightningPool, preloadCount = 20 },
-            new PoolInitializationEntry { poolName = PoolConst.GuiLingWinterPool, preloadCount = 20 },
-            new PoolInitializationEntry { poolName = PoolConst.GuiLingGrassPool, preloadCount = 20 },
-            //GuiLing 击中特效池
-            new PoolInitializationEntry { poolName = PoolConst.GuiLingHitFirePool, preloadCount = 40 },
-            new PoolInitializationEntry { poolName = PoolConst.GuiLingHitLightningPool, preloadCount = 40 },
-            new PoolInitializationEntry { poolName = PoolConst.GuiLingHitWinterPool, preloadCount = 40 },
-            new PoolInitializationEntry { poolName = PoolConst.GuiLingHitGrassPool, preloadCount = 40 },
+            new PoolInitializationEntry { poolName = PoolConst.TestPool, addressableKey = "ImpactCannon/ImpactCannonWinter", preloadCount = 0 },
+            new PoolInitializationEntry { poolName = PoolConst.ImpactCannonCommonPool, addressableKey = "ImpactCannon/ImpactCannonCommon", preloadCount = 20 },
+            new PoolInitializationEntry { poolName = PoolConst.ImpactCannonHitCommonPool, addressableKey = "ImpactCannon/ImpactCannonHitCommon", preloadCount = 40 },
+            new PoolInitializationEntry { poolName = PoolConst.ImpactCannonLightenPool, addressableKey = "ImpactCannon/ImpactCannonLighten", preloadCount = 20 },
+            new PoolInitializationEntry { poolName = PoolConst.ImpactCannonHitLightenPool, addressableKey = "ImpactCannon/ImpactCannonHitLighten", preloadCount = 40 },
+            new PoolInitializationEntry { poolName = PoolConst.ImpactCannonWinterPool, addressableKey = "ImpactCannon/ImpactCannonWinter", preloadCount = 20 },
+            new PoolInitializationEntry { poolName = PoolConst.ImpactCannonHitWinterPool, addressableKey = "ImpactCannon/ImpactCannonHitWinter", preloadCount = 40 },
+            new PoolInitializationEntry { poolName = PoolConst.ImpactCannonGrassPool, addressableKey = "ImpactCannon/ImpactCannonGrass", preloadCount = 20 },
+            new PoolInitializationEntry { poolName = PoolConst.ImpactCannonHitGrassPool, addressableKey = "ImpactCannon/ImpactCannonHitGrass", preloadCount = 40 },
+            new PoolInitializationEntry { poolName = PoolConst.ImpactCannonTriggerPool, addressableKey = "ImpactCannon/ImpactCannonTrigger", preloadCount = 20 },
+            new PoolInitializationEntry { poolName = PoolConst.FireFirePool, addressableKey = "ImpactCannon/ImpactCannonLighten", preloadCount = 20 },
+            new PoolInitializationEntry { poolName = PoolConst.DamageNumPool, addressableKey = "PoolPrefabs/DamageNum", preloadCount = 100 },
+            new PoolInitializationEntry { poolName = PoolConst.ExperienceBall_Blue_Local, addressableKey = "PoolPrefabs/ExperienceBall_Blue", preloadCount = 50 },
+            new PoolInitializationEntry { poolName = PoolConst.PowerUpItem, addressableKey = "PoolPrefabs/PowerUpItem", preloadCount = 5 },
+            new PoolInitializationEntry { poolName = PoolConst.GuiLingFirePool, addressableKey = "GuiLing/GuiLingFire", preloadCount = 20 },
+            new PoolInitializationEntry { poolName = PoolConst.GuiLingLightningPool, addressableKey = "GuiLing/GuiLingLightning", preloadCount = 20 },
+            new PoolInitializationEntry { poolName = PoolConst.GuiLingWinterPool, addressableKey = "GuiLing/GuiLingWinter", preloadCount = 20 },
+            new PoolInitializationEntry { poolName = PoolConst.GuiLingGrassPool, addressableKey = "GuiLing/GuiLingGrass", preloadCount = 20 },
+            new PoolInitializationEntry { poolName = PoolConst.GuiLingHitFirePool, addressableKey = "GuiLing/GuiLingHitFire", preloadCount = 40 },
+            new PoolInitializationEntry { poolName = PoolConst.GuiLingHitLightningPool, addressableKey = "GuiLing/GuiLingHitLightning", preloadCount = 40 },
+            new PoolInitializationEntry { poolName = PoolConst.GuiLingHitWinterPool, addressableKey = "GuiLing/GuiLingHitWinter", preloadCount = 40 },
+            new PoolInitializationEntry { poolName = PoolConst.GuiLingHitGrassPool, addressableKey = "GuiLing/GuiLingHitGrass", preloadCount = 40 },
         };
     }
 }

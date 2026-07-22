@@ -9,8 +9,7 @@ namespace Core
 {
     public class ObjectPoolManager : MonoBehaviour
     {
-        [SerializeField]
-        private PoolConfigSO poolConfig;
+        private PoolConfigSO poolConfig;  // 运行时通过 Addressables 加载，确保热更生效
 
         // ===== GC 优化：使用 Queue 替代 List 线性查找，O(1) 获取/归还 =====
         private class PoolData
@@ -64,10 +63,7 @@ namespace Core
 
         void Start()
         {
-            if (poolConfig == null)
-            {
-                poolConfig = AssetLoader.LoadAsset<PoolConfigSO>("Config/PoolConfig");
-            }
+            poolConfig = AssetLoader.LoadAsset<PoolConfigSO>("Config/PoolConfig");
 
             if (EventChannelLocator.MainContainer.gameSettings.IsTest)
             {
@@ -107,17 +103,38 @@ namespace Core
 
             foreach (var entry in poolConfig.pools)
             {
-                if (entry == null || entry.prefab == null)
+                if (entry == null || string.IsNullOrEmpty(entry.poolName))
                 {
-                    Debug.LogWarning($"[ObjectPoolManager] 跳过无效的池配置: {entry?.poolName ?? "null"}");
+                    Debug.LogWarning("[ObjectPoolManager] 跳过无效的池配置");
                     continue;
                 }
 
-                CachePrefab(entry.poolName, entry.prefab);
+                // 优先通过 Addressables 加载预制体（确保热更生效）
+                GameObject prefab = null;
+                if (!string.IsNullOrEmpty(entry.addressableKey))
+                {
+                    prefab = AssetLoader.TryLoadAsset<GameObject>(entry.addressableKey);
+                }
+
+                // 回退到 Inspector 引用
+                if (prefab == null)
+                {
+                    prefab = entry.prefab;
+                }
+
+                if (prefab == null)
+                {
+                    Debug.LogWarning($"[ObjectPoolManager] 跳过无法加载的池配置: {entry.poolName} (key={entry.addressableKey})");
+                    continue;
+                }
+
+                Debug.Log($"[ObjectPoolManager] 初始化池: {entry.poolName} → {prefab.name} (key={entry.addressableKey})");
+
+                CachePrefab(entry.poolName, prefab);
 
                 if (entry.preloadCount > 0)
                 {
-                    AddMultipleToPool(entry.poolName, entry.prefab, entry.preloadCount);
+                    AddMultipleToPool(entry.poolName, prefab, entry.preloadCount);
                 }
             }
         }

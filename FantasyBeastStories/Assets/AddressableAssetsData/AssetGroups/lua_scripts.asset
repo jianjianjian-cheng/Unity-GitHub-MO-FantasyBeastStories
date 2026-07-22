@@ -79,6 +79,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 783b5a6ddad67ab43bd5968b4be24bcf
+    m_Address: GuiLing/GuiLingWinter
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 97dc7529d3e773f49afd6c6bba242867
     m_Address: Lua/Config/RuneConfig
     m_ReadOnly: 0
@@ -92,11 +98,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9fe86f2f5bb8d6449a5014493dd002c9
     m_Address: ImpactCannon/ImpactCannonHitWinter
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: aa6126642be65b24991ec46c56fea309
-    m_Address: GuiLing/GuiLingWinter
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
