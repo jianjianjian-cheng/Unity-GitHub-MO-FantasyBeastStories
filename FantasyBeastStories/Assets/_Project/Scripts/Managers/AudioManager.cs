@@ -273,6 +273,9 @@ namespace Managers
             incoming.pitch = def.pitch;
             incoming.spatialBlend = 0f;
             incoming.volume = 0f;
+
+            // 等待一帧再 Play，避免在 sceneLoaded 回调（首帧之前）调用 Play 无效
+            yield return null;
             incoming.Play();
 
             // 同步交叉淡入淡出
@@ -302,8 +305,12 @@ namespace Managers
             }
 
             // 交换：新源成为主源，旧源变为备用
+            // 必须保存旧的 _bgmSource 引用，否则当 outgoing 为 null 时
+            // _bgmSource2 会指向 incoming（与 _bgmSource 相同），导致下次切换时
+            // incoming 和 outgoing 是同一个 AudioSource，Play 后立即被 Stop
+            AudioSource oldPrimary = _bgmSource;
             _bgmSource = incoming;
-            _bgmSource2 = outgoing ?? _bgmSource2; // 如果 outgoing 为 null，保留 _bgmSource2
+            _bgmSource2 = oldPrimary;
 
             _bgmFadeJob = null;
         }

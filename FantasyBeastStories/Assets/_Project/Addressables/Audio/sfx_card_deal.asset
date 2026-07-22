@@ -15,7 +15,7 @@ MonoBehaviour:
   soundId: sfx_card_deal
   clip: {fileID: 8300000, guid: 9fa40e47ec2c51a42aaabc50f508b3b9, type: 3}
   audioType: 2
-  volume: 0.407
+  volume: 0.248
   pitch: 1
   loop: 0
   spatialBlend: 0

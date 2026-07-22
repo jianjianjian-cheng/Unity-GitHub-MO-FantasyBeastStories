@@ -2429,7 +2429,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _network: {fileID: 5611741840487045725}
-  moveDistance: 3
+  moveDistance: 6
   moveSpeed: 2
   turnSpeed: 5
   pushForceThreshold: 0.5

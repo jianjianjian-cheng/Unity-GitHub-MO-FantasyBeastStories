@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BingNvAttr
   m_EditorClassIdentifier: 
   baseAttackPower: 125
-  baseDefensePower: 0
+  baseDefensePower: 10
   baseMaxHealth: 300
   baseMoveSpeed: 6.5
   baseCriticalMultiplier: 1.2

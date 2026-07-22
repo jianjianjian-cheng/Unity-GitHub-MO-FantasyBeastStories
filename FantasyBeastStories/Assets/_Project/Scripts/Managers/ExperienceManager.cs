@@ -304,7 +304,7 @@ namespace Managers
             if (Instance == null) return;
             Instance.currentExperience -= requiredExp;
             Instance.currentLevel++;
-            Instance.upgradeExperience = (int)(Instance.upgradeExperience * 1.2);
+            Instance.upgradeExperience = (int)(Instance.upgradeExperience * 1.5);
 
             Instance.RaiseExperienceUpdate();
         }

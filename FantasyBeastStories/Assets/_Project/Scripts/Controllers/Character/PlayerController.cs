@@ -36,7 +36,8 @@ namespace Controllers.Character
     protected SpectatorCameraController spectatorCameraController; // 观战摄像机控制器
 
     [SerializeField]
-    protected GameObject deathEffectPrefab; // 死亡特效预制体
+    private string deathEffectAddress = "Player/PlayerDeath"; // 死亡特效 Addressables 地址
+    private GameObject _deathEffectPrefab; // 运行时通过 Addressables 加载
 
     [Header("移动设置")]
     [SerializeField]
@@ -96,6 +97,10 @@ namespace Controllers.Character
         if (data != null && data.Length > 0)
           InitializeCharacter((string)data[0]);
       }
+
+      // 通过 Addressables 加载死亡特效预制体
+      if (!string.IsNullOrEmpty(deathEffectAddress))
+        _deathEffectPrefab = Core.AssetLoader.TryLoadAsset<GameObject>(deathEffectAddress);
 
       // 重新读取 IsStayLobby — Launcher.OnSceneLoaded 在 Awake 之后、Start 之前将其设为 false
       isInLobby = EventChannelLocator.MainContainer.gameSettings.IsStayLobby;
@@ -405,9 +410,9 @@ namespace Controllers.Character
       DisableAttackComponents();
 
       // 生成死亡特效
-      if (deathEffectPrefab != null)
+      if (_deathEffectPrefab != null)
       {
-        GameObject effect = Instantiate(deathEffectPrefab, transform.position, transform.rotation);
+        GameObject effect = Instantiate(_deathEffectPrefab, transform.position, transform.rotation);
         Destroy(effect, 5f);
       }
 

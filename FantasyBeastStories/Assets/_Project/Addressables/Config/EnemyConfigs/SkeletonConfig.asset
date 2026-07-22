@@ -17,7 +17,7 @@ MonoBehaviour:
   moveSpeed: 2
   attackDamage: 50
   attackInterval: 0.7
-  attackRange: 0.3
+  attackRange: 0.6
   expMin: 30
   expMax: 50
   powerUpDropChance: 0.1

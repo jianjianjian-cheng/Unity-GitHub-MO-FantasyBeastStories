@@ -106,6 +106,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b5c8ca7ed10b61e499cce8ec3b6e2e4c
+    m_Address: Player/PlayerDeath
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b871e56a3d277c942a360caf1c06a2b2
     m_Address: ImpactCannon/ImpactCannonCommon
     m_ReadOnly: 0

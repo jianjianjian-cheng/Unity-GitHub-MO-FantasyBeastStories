@@ -64,7 +64,7 @@ MonoBehaviour:
   cardsPublicEpic:
   - Name: "\u9510\u5229\u7684\u72FC\u7259"
     Content: "\u653B\u51FB\u529B\u63D0\u5347"
-    Value: 20
+    Value: 15
     Quality: "\u53F2\u8BD7"
     Effects:
     - rid: 4210315237150425096
@@ -94,7 +94,7 @@ MonoBehaviour:
     - rid: 4210315237150425100
   - Name: "\u65AD\u7F6A\u7684\u88C1\u51B3"
     Content: "\u66B4\u51FB\u4F24\u5BB3\u63D0\u5347"
-    Value: 20
+    Value: 15
     Quality: "\u53F2\u8BD7"
     Effects:
     - rid: 4210315237150425101
@@ -113,7 +113,7 @@ MonoBehaviour:
   cardsPublicLegend:
   - Name: "\u5F11\u795E\u7684\u9B54\u5251"
     Content: "\u653B\u51FB\u529B\u6781\u5927\u63D0\u5347"
-    Value: 40
+    Value: 25
     Quality: "\u4F20\u8BF4"
     Effects:
     - rid: 4210315237150425104
@@ -143,7 +143,7 @@ MonoBehaviour:
     - rid: 4210315237150425108
   - Name: "\u7EC8\u672B\u7684\u53F7\u89D2"
     Content: "\u66B4\u51FB\u4F24\u5BB3\u63D0\u5347"
-    Value: 50
+    Value: 30
     Quality: "\u4F20\u8BF4"
     Effects:
     - rid: 4210315237150425109

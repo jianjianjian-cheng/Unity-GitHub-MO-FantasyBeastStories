@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WizardBoyAttr
   m_EditorClassIdentifier: 
   baseAttackPower: 300
-  baseDefensePower: 0
+  baseDefensePower: 10
   baseMaxHealth: 300
   baseMoveSpeed: 5
   baseCriticalMultiplier: 1.2

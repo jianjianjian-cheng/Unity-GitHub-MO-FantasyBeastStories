@@ -11,11 +11,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c6ac4de24d479641a084135eb430445, type: 3}
   m_Name: BGM_Combat
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   soundId: bgm_combat
   clip: {fileID: 8300000, guid: 231025d6ec067e3408421102d8d6586e, type: 3}
   audioType: 0
-  volume: 0.176
+  volume: 0.096
   pitch: 1
   loop: 1
   spatialBlend: 0

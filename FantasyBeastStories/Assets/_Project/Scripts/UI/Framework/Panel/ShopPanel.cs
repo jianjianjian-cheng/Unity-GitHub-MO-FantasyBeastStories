@@ -50,6 +50,8 @@ public class ShopPanel : UIScreen
   {
     base.OnBeforeOpen();
     EnsureListenerInitialized();
+    if (shopDatabase == null)
+      InitializeShop();
     UpdateCoinDisplay();
     RefreshShopItems();
   }
