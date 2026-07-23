@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using Managers;
 using Core;
 using Core.Channels.Game;
@@ -17,9 +17,9 @@ namespace Controllers.Network
     /// 统一持有所有 Application 层的 [PunRPC] 方法，通过静态方法委托回 Application 管理器
     /// 职责：纯粹的 RPC 转发，不包含业务逻辑
     /// </summary>
-    public class AppRpcBridge : MonoBehaviourPun
+    public class ManagerRpcBridge : MonoBehaviourPun
     {
-        public static AppRpcBridge Instance { get; private set; }
+        public static ManagerRpcBridge Instance { get; private set; }
 
         void Awake()
         {
@@ -206,11 +206,11 @@ namespace Controllers.Network
             if (PhotonNetwork.IsMasterClient)
             {
                 PhotonNetwork.LoadLevel(1);
-                Debug.Log("[AppRpcBridge] 房主发起切换到大厅场景");
+                Debug.Log("[ManagerRpcBridge] 房主发起切换到大厅场景");
             }
             else
             {
-                Debug.Log("[AppRpcBridge] 非主机等待房主同步场景...");
+                Debug.Log("[ManagerRpcBridge] 非主机等待房主同步场景...");
             }
         }
     }

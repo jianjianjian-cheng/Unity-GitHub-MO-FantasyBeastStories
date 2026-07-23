@@ -1,4 +1,4 @@
-using Controllers.Character;
+﻿using Controllers.Character;
 using Core;
 using Controllers.Services;
 using NetworkTarget = Controllers.Network.NetworkTarget;
@@ -37,7 +37,7 @@ namespace Controllers.Enemy
       {
         uint ballId = ExperienceManager.Instance.GenerateBallId();
         NetworkServiceLocator.ObjectService.InvokeRPC(
-            AppRpcBridge.Instance, "RPC_SpawnExpBall",
+            ManagerRpcBridge.Instance, "RPC_SpawnExpBall",
             NetworkTarget.All, (int)ballId, spawnPosition, expValue);
       }
     }

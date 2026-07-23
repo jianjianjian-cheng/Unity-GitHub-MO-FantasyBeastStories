@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -133,7 +133,7 @@ namespace Controllers.Character.Pets
 
           moveDistance = currentMoveDistance;
 
-          // 通过 IDomainRpcService 发送 RPC 到所有客户端
+          // 通过 IControllerRpcService 发送 RPC 到所有客户端
           if (_network != null)
           {
             NetworkServiceLocator.DomainRpcService?.InvokeRPC(
@@ -159,10 +159,10 @@ namespace Controllers.Character.Pets
       }
     }
 
-    // ---- 公共 Handler 方法（供 DomainRpcBridge 调用） ----
+    // ---- 公共 Handler 方法（供 ControllerRpcBridge 调用） ----
 
     /// <summary>
-    /// 由 DomainRpcBridge.RPC_PlayTriggerAnimation 调用
+    /// 由 ControllerRpcBridge.RPC_PlayTriggerAnimation 调用
     /// </summary>
     public void HandlePlayTriggerAnimation(string triggerName)
     {
@@ -170,7 +170,7 @@ namespace Controllers.Character.Pets
     }
 
     /// <summary>
-    /// 由 DomainRpcBridge.RPC_OnPushed 调用
+    /// 由 ControllerRpcBridge.RPC_OnPushed 调用
     /// </summary>
     public void HandleOnPushed(Vector3 pushDir, float moveDist)
     {
@@ -335,10 +335,10 @@ namespace Controllers.Character.Pets
       }
     }
 
-    // ---- 公共 Handler 方法（供 DomainRpcBridge 调用） ----
+    // ---- 公共 Handler 方法（供 ControllerRpcBridge 调用） ----
 
     /// <summary>
-    /// 由 DomainRpcBridge.RPC_StartTransfer 调用
+    /// 由 ControllerRpcBridge.RPC_StartTransfer 调用
     /// </summary>
     public void HandleStartTransfer()
     {

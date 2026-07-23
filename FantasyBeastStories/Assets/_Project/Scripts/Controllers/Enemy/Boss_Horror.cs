@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using NetworkTarget = Controllers.Network.NetworkTarget;
 using UnityEngine;
@@ -503,10 +503,10 @@ namespace Controllers.Enemy
         }
 
 
-        #region  RPC Handlers（供 DomainRpcBridge 调用）
+        #region  RPC Handlers（供 ControllerRpcBridge 调用）
 
         /// <summary>
-        /// 由 DomainRpcBridge.RPC_SyncPlayerTarget 调用
+        /// 由 ControllerRpcBridge.RPC_SyncPlayerTarget 调用
         /// </summary>
         public void HandleSyncPlayerTarget(int targetViewID)
         {
@@ -514,7 +514,7 @@ namespace Controllers.Enemy
         }
 
         /// <summary>
-        /// 由 DomainRpcBridge.RPC_SyncTriggerAnim 调用
+        /// 由 ControllerRpcBridge.RPC_SyncTriggerAnim 调用
         /// </summary>
         public void HandleSyncTriggerAnim(string animName)
         {

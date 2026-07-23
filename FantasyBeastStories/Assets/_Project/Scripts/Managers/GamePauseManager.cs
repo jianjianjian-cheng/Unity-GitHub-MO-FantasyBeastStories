@@ -1,4 +1,4 @@
-using Core;
+﻿using Core;
 using Core.Channels.Game;
 using Controllers.Services;
 using NetworkTarget = Controllers.Network.NetworkTarget;
@@ -38,7 +38,7 @@ namespace Managers
       if (NetworkServiceLocator.PlayerService.IsMasterClient)
       {
         NetworkServiceLocator.PlayerService.SetRoomCustomProperty("IsPaused", isPaused);
-        NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "RPC_SetPauseState", NetworkTarget.All, isPaused);
+        NetworkServiceLocator.ObjectService.InvokeRPC(ManagerRpcBridge.Instance, "RPC_SetPauseState", NetworkTarget.All, isPaused);
       }
     }
 

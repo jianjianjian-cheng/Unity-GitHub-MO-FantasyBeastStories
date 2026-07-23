@@ -1,4 +1,4 @@
-using Controllers.Character;
+﻿using Controllers.Character;
 using Controllers.Character.Pets;
 using Controllers.Enemy;
 using Core;
@@ -15,9 +15,9 @@ namespace Controllers.Network
     /// 统一持有所有 Domain 层的 [PunRPC] 方法，通过公共方法委托回 Domain 对象
     /// 职责：纯粹的 RPC 转发，不包含业务逻辑
     /// </summary>
-    public class DomainRpcBridge : MonoBehaviourPun, IDomainRpcService
+    public class ControllerRpcBridge : MonoBehaviourPun, IControllerRpcService
     {
-        public static DomainRpcBridge Instance { get; private set; }
+        public static ControllerRpcBridge Instance { get; private set; }
 
         private SpiderBoss _spiderBossCache;
 
@@ -228,7 +228,7 @@ namespace Controllers.Network
         }
 
         // ============================================================
-        // IDomainRpcService 实现（供 Domain 层通过接口调用，消除直接依赖）
+        // IControllerRpcService 实现（供 Domain 层通过接口调用，消除直接依赖）
         // ============================================================
 
         /// <summary>
@@ -251,7 +251,7 @@ namespace Controllers.Network
         {
             if (photonView == null)
             {
-                Debug.LogWarning($"[DomainRpcBridge] photonView is null, cannot send RPC {methodName}");
+                Debug.LogWarning($"[ControllerRpcBridge] photonView is null, cannot send RPC {methodName}");
                 return;
             }
             photonView.RPC(methodName, NetworkTargetMapper.ToRpcTarget(target), parameters);

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Core;
@@ -219,7 +219,7 @@ namespace Managers
             {
                 // 房主通过 RPC 通知所有客户端播放加载动画并返回大厅
                 NetworkServiceLocator.ObjectService.InvokeRPC(
-                    AppRpcBridge.Instance,
+                    ManagerRpcBridge.Instance,
                     "RPC_ReturnToLobby",
                     NetworkTarget.All
                 );

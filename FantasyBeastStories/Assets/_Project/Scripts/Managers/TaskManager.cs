@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Core;
 using Core.Channels.Combat;
@@ -72,13 +72,13 @@ namespace Managers
         private void OnEnemyReported(EnemyReportData data)
         {
             if (data == null) return;
-            NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "RPC_ReportCount", NetworkTarget.MasterClient, data.position, data.networkViewID, (int)data.reportType);
+            NetworkServiceLocator.ObjectService.InvokeRPC(ManagerRpcBridge.Instance, "RPC_ReportCount", NetworkTarget.MasterClient, data.position, data.networkViewID, (int)data.reportType);
         }
 
         private void OnTaskNoticeReceived(TaskNoticeData data)
         {
             if (data == null) return;
-            NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "RPC_SetNotice", NetworkTarget.All, data.name, data.description, data.limitTime, data.requiredCount);
+            NetworkServiceLocator.ObjectService.InvokeRPC(ManagerRpcBridge.Instance, "RPC_SetNotice", NetworkTarget.All, data.name, data.description, data.limitTime, data.requiredCount);
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Managers
 
         public void SetNotice(string name, string description, int limitTime, int requeredCount = 1)
         {
-            NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "RPC_SetNotice", NetworkTarget.All, name, description, limitTime, requeredCount);
+            NetworkServiceLocator.ObjectService.InvokeRPC(ManagerRpcBridge.Instance, "RPC_SetNotice", NetworkTarget.All, name, description, limitTime, requeredCount);
         }
 
         private void StartCountdownTime(int time)
@@ -117,15 +117,15 @@ namespace Managers
                 int min = Mathf.FloorToInt(countdownTime / 60);
                 int sec = Mathf.FloorToInt(countdownTime % 60);
                 time = "剩余时间：" + $"{min:D2}:{sec:D2}";
-                NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "RPC_UpdateAllPlayerTimeUI", NetworkTarget.All, time);
+                NetworkServiceLocator.ObjectService.InvokeRPC(ManagerRpcBridge.Instance, "RPC_UpdateAllPlayerTimeUI", NetworkTarget.All, time);
             }
             Debug.LogWarning("任务失败");
-            NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "RPC_TaskFailed", NetworkTarget.All);
+            NetworkServiceLocator.ObjectService.InvokeRPC(ManagerRpcBridge.Instance, "RPC_TaskFailed", NetworkTarget.All);
             yield break;
         }
 
         /// <summary>
-        /// 由 AppRpcBridge 在收到 RPC 后调用：更新所有玩家的任务时间 UI
+        /// 由 ManagerRpcBridge 在收到 RPC 后调用：更新所有玩家的任务时间 UI
         /// </summary>
         public static void HandleUpdateAllPlayerTimeUIRPC(string time)
         {
@@ -133,7 +133,7 @@ namespace Managers
         }
 
         /// <summary>
-        /// 由 AppRpcBridge 在收到 RPC 后调用：任务失败
+        /// 由 ManagerRpcBridge 在收到 RPC 后调用：任务失败
         /// </summary>
         public static void HandleTaskFailedRPC()
         {
@@ -158,7 +158,7 @@ namespace Managers
             {
                 case KillTask killTask:
                     NetworkServiceLocator.ObjectService.InvokeRPC(
-                        AppRpcBridge.Instance,
+                        ManagerRpcBridge.Instance,
                         "RPC_ActivateKillTask",
                         NetworkTarget.All,
                         killTask.TaskId,
@@ -169,7 +169,7 @@ namespace Managers
                     break;
                 case EscortTask escortTask:
                     NetworkServiceLocator.ObjectService.InvokeRPC(
-                        AppRpcBridge.Instance,
+                        ManagerRpcBridge.Instance,
                         "RPC_ActivateEscortTask",
                         NetworkTarget.All,
                         escortTask.TaskId,
@@ -184,7 +184,7 @@ namespace Managers
         }
 
         /// <summary>
-        /// 由 AppRpcBridge 在收到 RPC 后调用：激活击杀任务
+        /// 由 ManagerRpcBridge 在收到 RPC 后调用：激活击杀任务
         /// </summary>
         public static void HandleActivateKillTaskRPC(string taskId, int limitTime, Vector3 zoneCenter, int requiredKills)
         {
@@ -210,7 +210,7 @@ namespace Managers
         }
 
         /// <summary>
-        /// 由 AppRpcBridge 在收到 RPC 后调用：激活护送任务
+        /// 由 ManagerRpcBridge 在收到 RPC 后调用：激活护送任务
         /// </summary>
         public static void HandleActivateEscortTaskRPC(
             string taskId,
@@ -240,11 +240,11 @@ namespace Managers
 
         public void ReportCount(Vector3 killPosition, int enemyViewID, int reportType)
         {
-            NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "RPC_ReportCount", NetworkTarget.MasterClient, killPosition, enemyViewID, reportType);
+            NetworkServiceLocator.ObjectService.InvokeRPC(ManagerRpcBridge.Instance, "RPC_ReportCount", NetworkTarget.MasterClient, killPosition, enemyViewID, reportType);
         }
 
         /// <summary>
-        /// 由 AppRpcBridge 在收到 RPC 后调用：上报击杀计数
+        /// 由 ManagerRpcBridge 在收到 RPC 后调用：上报击杀计数
         /// </summary>
         public static void HandleReportCountRPC(Vector3 killPosition, int enemyViewID, int reportTypeInt)
         {
@@ -282,7 +282,7 @@ namespace Managers
                             task.IsCompleted = true;
                         }
                         NetworkServiceLocator.ObjectService.InvokeRPC(
-                            AppRpcBridge.Instance,
+                            ManagerRpcBridge.Instance,
                             "RPC_UpdateProgress",
                             NetworkTarget.All,
                             task.TaskId,
@@ -312,7 +312,7 @@ namespace Managers
                             escortTask.IsCompleted = true;
                         }
                         NetworkServiceLocator.ObjectService.InvokeRPC(
-                            AppRpcBridge.Instance,
+                            ManagerRpcBridge.Instance,
                             "RPC_UpdateProgress",
                             NetworkTarget.All,
                             task.TaskId,
@@ -327,7 +327,7 @@ namespace Managers
         }
 
         /// <summary>
-        /// 由 AppRpcBridge 在收到 RPC 后调用：更新任务进度
+        /// 由 ManagerRpcBridge 在收到 RPC 后调用：更新任务进度
         /// </summary>
         public static void HandleUpdateProgressRPC(string taskId, int count, bool completed)
         {

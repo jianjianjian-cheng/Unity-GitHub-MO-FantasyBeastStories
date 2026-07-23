@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Managers;
 using Core;
@@ -47,7 +47,7 @@ namespace Controllers.Item
 
             // 联机模式：上报房主 + 本地立刻回收
             NetworkServiceLocator.ObjectService.InvokeRPC(
-                AppRpcBridge.Instance, "RPC_ClaimExpBall",
+                ManagerRpcBridge.Instance, "RPC_ClaimExpBall",
                 NetworkTarget.MasterClient, (int)BallId, ExperienceValue);
 
             // 本地立刻回收（不等 RPC 返回，视觉反馈无延迟）

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Core;
 using Core.Channels.Game;
@@ -153,7 +153,7 @@ namespace Managers
             QuestTaskManager.Instance?.RecordExp();
 
             CheckAndQueueUpgrades();
-            NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "RPC_SyncExperience", NetworkTarget.All, currentExperience);
+            NetworkServiceLocator.ObjectService.InvokeRPC(ManagerRpcBridge.Instance, "RPC_SyncExperience", NetworkTarget.All, currentExperience);
 
             if (pendingLevelUps.Count > 0 && !isProcessingLevelUp)
             {
@@ -196,7 +196,7 @@ namespace Managers
                 EventChannelLocator.MainContainer.magicUpgradeChannel.Raise(true);
                 yield break;
             }
-            NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "OpenMagicUpgradePanel", NetworkTarget.All);
+            NetworkServiceLocator.ObjectService.InvokeRPC(ManagerRpcBridge.Instance, "OpenMagicUpgradePanel", NetworkTarget.All);
         }
 
         private void CheckAndQueueUpgrades()
@@ -219,7 +219,7 @@ namespace Managers
                 }
                 else
                 {
-                    NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "IncreaseLevel", NetworkTarget.All, requiredExp);
+                    NetworkServiceLocator.ObjectService.InvokeRPC(ManagerRpcBridge.Instance, "IncreaseLevel", NetworkTarget.All, requiredExp);
                 }
 
                 pendingLevelUps.Enqueue(currentLevel);
@@ -237,11 +237,11 @@ namespace Managers
 
         public void OnPlayerUpgradeChoiceConfirmed()
         {
-            NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "CloseMagicUpgradePanel", NetworkTarget.All);
+            NetworkServiceLocator.ObjectService.InvokeRPC(ManagerRpcBridge.Instance, "CloseMagicUpgradePanel", NetworkTarget.All);
         }
 
         /// <summary>
-        /// 由 AppRpcBridge 在收到 RPC 后调用
+        /// 由 ManagerRpcBridge 在收到 RPC 后调用
         /// 关闭升级面板并在 Master 客户端启动下一级升级流程
         /// 每 3 级额外触发一次专属卡牌升级（三张不重复专属卡牌）
         /// </summary>
@@ -283,11 +283,11 @@ namespace Managers
                 EventChannelLocator.MainContainer.magicUpgradeChannel.Raise(true);
                 yield break;
             }
-            NetworkServiceLocator.ObjectService.InvokeRPC(AppRpcBridge.Instance, "OpenExMagicUpgradePanel", NetworkTarget.All);
+            NetworkServiceLocator.ObjectService.InvokeRPC(ManagerRpcBridge.Instance, "OpenExMagicUpgradePanel", NetworkTarget.All);
         }
 
         /// <summary>
-        /// 由 AppRpcBridge 在收到 RPC 后调用：同步经验值到所有客户端
+        /// 由 ManagerRpcBridge 在收到 RPC 后调用：同步经验值到所有客户端
         /// </summary>
         public static void HandleSyncExperienceRPC(int syncedExp)
         {
@@ -297,7 +297,7 @@ namespace Managers
         }
 
         /// <summary>
-        /// 由 AppRpcBridge 在收到 RPC 后调用：增加等级
+        /// 由 ManagerRpcBridge 在收到 RPC 后调用：增加等级
         /// </summary>
         public static void HandleIncreaseLevelRPC(int requiredExp)
         {
@@ -314,7 +314,7 @@ namespace Managers
         // ============================================================
 
         /// <summary>
-        /// 由 AppRpcBridge.RPC_SpawnExpBall 调用
+        /// 由 ManagerRpcBridge.RPC_SpawnExpBall 调用
         /// 每个客户端在本地生成一个经验球（非网络对象）
         /// </summary>
         public static void HandleSpawnExpBallRPC(uint ballId, Vector3 position, int expValue)
@@ -324,7 +324,7 @@ namespace Managers
         }
 
         /// <summary>
-        /// 由 AppRpcBridge.RPC_ClaimExpBall 调用（仅房主执行）
+        /// 由 ManagerRpcBridge.RPC_ClaimExpBall 调用（仅房主执行）
         /// 处理经验球认领：去重检查 → 加经验 → 广播隐藏
         /// </summary>
         public static void HandleClaimExpBallRPC(uint ballId, int expValue)
@@ -334,7 +334,7 @@ namespace Managers
         }
 
         /// <summary>
-        /// 由 AppRpcBridge.RPC_ExpBallCollected 调用
+        /// 由 ManagerRpcBridge.RPC_ExpBallCollected 调用
         /// 所有客户端隐藏对应的本地经验球
         /// </summary>
         public static void HandleExpBallCollectedRPC(uint ballId)
@@ -394,7 +394,7 @@ namespace Managers
 
             // 广播隐藏此球到所有客户端
             NetworkServiceLocator.ObjectService.InvokeRPC(
-                AppRpcBridge.Instance, "RPC_ExpBallCollected",
+                ManagerRpcBridge.Instance, "RPC_ExpBallCollected",
                 NetworkTarget.All, (int)ballId);
         }
 

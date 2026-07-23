@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using NetworkTarget = Controllers.Network.NetworkTarget;
@@ -132,10 +132,10 @@ namespace Controllers.Time
             isRunning = !isPaused;
         }
 
-        // ---- 静态 Handler 方法（供 DomainRpcBridge 调用） ----
+        // ---- 静态 Handler 方法（供 ControllerRpcBridge 调用） ----
 
         /// <summary>
-        /// 由 DomainRpcBridge.RPC_SyncStartCaTime 调用
+        /// 由 ControllerRpcBridge.RPC_SyncStartCaTime 调用
         /// </summary>
         public static void HandleSyncStartCaTime()
         {
@@ -143,7 +143,7 @@ namespace Controllers.Time
         }
 
         /// <summary>
-        /// 由 DomainRpcBridge.RPC_OnTimeEventTriggered 调用
+        /// 由 ControllerRpcBridge.RPC_OnTimeEventTriggered 调用
         /// </summary>
         public static void HandleOnTimeEventTriggered(string eventId, float triggerTime)
         {
@@ -161,7 +161,7 @@ namespace Controllers.Time
         }
 
         /// <summary>
-        /// 由 DomainRpcBridge.RPC_GameTimeFinished 调用
+        /// 由 ControllerRpcBridge.RPC_GameTimeFinished 调用
         /// </summary>
         public static void HandleGameTimeFinished()
         {
@@ -172,7 +172,7 @@ namespace Controllers.Time
         }
 
         /// <summary>
-        /// 由 DomainRpcBridge.RPC_BossSpawn 调用
+        /// 由 ControllerRpcBridge.RPC_BossSpawn 调用
         /// 非主机客户端收到通知后，触发本地事件通道 → UI 更新
         /// </summary>
         public static void HandleBossSpawn(string bossName)
@@ -186,7 +186,7 @@ namespace Controllers.Time
         }
 
         /// <summary>
-        /// 由 DomainRpcBridge.RPC_SyncSetTime 调用
+        /// 由 ControllerRpcBridge.RPC_SyncSetTime 调用
         /// </summary>
         public static void HandleSyncSetTime(float time)
         {
@@ -203,7 +203,7 @@ namespace Controllers.Time
         }
 
         /// <summary>
-        /// 由 DomainRpcBridge.RPC_SyncStartTime 调用
+        /// 由 ControllerRpcBridge.RPC_SyncStartTime 调用
         /// </summary>
         public static void HandleSyncStartTime()
         {
@@ -221,7 +221,7 @@ namespace Controllers.Time
         }
 
         /// <summary>
-        /// 由 DomainRpcBridge.RPC_SyncPauseTime 调用
+        /// 由 ControllerRpcBridge.RPC_SyncPauseTime 调用
         /// </summary>
         public static void HandleSyncPauseTime()
         {
@@ -239,7 +239,7 @@ namespace Controllers.Time
         }
 
         /// <summary>
-        /// 由 DomainRpcBridge.RPC_SyncResetTime 调用
+        /// 由 ControllerRpcBridge.RPC_SyncResetTime 调用
         /// </summary>
         public static void HandleSyncResetTime()
         {

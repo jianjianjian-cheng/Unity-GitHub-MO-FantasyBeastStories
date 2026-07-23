@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Controllers.Character;
 using Core;
@@ -34,7 +34,7 @@ namespace UI.Other
                 isEmpty = true;
                 occupiedByPlayer = -1;
                 var viewID = NetworkServiceLocator.ObjectService.GetViewID(gameObject);
-                NetworkServiceLocator.ObjectService.InvokeRPC(PresentationRpcBridge.Instance, "RPC_UpdateSpawnPointState", NetworkTarget.All, viewID, true, -1);
+                NetworkServiceLocator.ObjectService.InvokeRPC(UIRpcBridge.Instance, "RPC_UpdateSpawnPointState", NetworkTarget.All, viewID, true, -1);
             }
             InitializeSpawnPoint();
             transform.LookAt(new Vector3(0.182999998f, transform.position.y, -0.219999999f));
@@ -139,7 +139,7 @@ namespace UI.Other
 
             // 通过 RPC 同步状态
             var viewID = NetworkServiceLocator.ObjectService.GetViewID(gameObject);
-            NetworkServiceLocator.ObjectService.InvokeRPC(PresentationRpcBridge.Instance, "RPC_UpdateSpawnPointState", NetworkTarget.All, viewID, isEmpty, occupiedByPlayer);
+            NetworkServiceLocator.ObjectService.InvokeRPC(UIRpcBridge.Instance, "RPC_UpdateSpawnPointState", NetworkTarget.All, viewID, isEmpty, occupiedByPlayer);
 
             // 更新玩家属性
             if (occupied)
@@ -153,7 +153,7 @@ namespace UI.Other
         }
 
         /// <summary>
-        /// 由 PresentationRpcBridge.RPC_UpdateSpawnPointState 调用
+        /// 由 UIRpcBridge.RPC_UpdateSpawnPointState 调用
         /// </summary>
         public void HandleUpdateSpawnPointState(bool newIsEmpty, int newOccupiedBy)
         {

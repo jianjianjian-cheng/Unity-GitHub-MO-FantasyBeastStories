@@ -1,4 +1,4 @@
-namespace Controllers.Services
+﻿namespace Controllers.Services
 {
     public static class NetworkServiceLocator
     {
@@ -6,7 +6,7 @@ namespace Controllers.Services
         private static INetworkObjectService _objectService;
         private static IObjectPoolService _objectPoolService;
         private static IGameActionService _gameActionService;
-        private static IDomainRpcService _domainRpcService;
+        private static IControllerRpcService _domainRpcService;
 
         public static INetworkPlayerService PlayerService
         {
@@ -56,13 +56,13 @@ namespace Controllers.Services
             }
         }
 
-        public static IDomainRpcService DomainRpcService
+        public static IControllerRpcService DomainRpcService
         {
             get
             {
                 if (_domainRpcService == null)
                 {
-                    UnityEngine.Debug.LogError("[NetworkServiceLocator] IDomainRpcService 未注册。请在游戏启动时调用 RegisterDomainRpcService() 注册DomainRPC服务");
+                    UnityEngine.Debug.LogError("[NetworkServiceLocator] IControllerRpcService 未注册。请在游戏启动时调用 RegisterDomainRpcService() 注册DomainRPC服务");
                 }
                 return _domainRpcService;
             }
@@ -89,10 +89,10 @@ namespace Controllers.Services
             UnityEngine.Debug.Log("[NetworkServiceLocator] IGameActionService 注册完成");
         }
 
-        public static void RegisterDomainRpcService(IDomainRpcService domainRpcService)
+        public static void RegisterDomainRpcService(IControllerRpcService domainRpcService)
         {
             _domainRpcService = domainRpcService;
-            UnityEngine.Debug.Log("[NetworkServiceLocator] IDomainRpcService 注册完成");
+            UnityEngine.Debug.Log("[NetworkServiceLocator] IControllerRpcService 注册完成");
         }
     }
 }

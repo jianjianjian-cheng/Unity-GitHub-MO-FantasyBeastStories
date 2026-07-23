@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Controllers.Item;
 using UnityEngine;
@@ -39,7 +39,7 @@ namespace Controllers.PowerUp
                 // 联机模式：广播 RPC 到所有客户端，各自执行飞行动画
                 int collectorActorNumber = NetworkServiceLocator.ObjectService.GetOwnerActorNumber(player.transform);
                 NetworkServiceLocator.ObjectService.InvokeRPC(
-                    AppRpcBridge.Instance, "RPC_MagnetCollectExpBalls",
+                    ManagerRpcBridge.Instance, "RPC_MagnetCollectExpBalls",
                     NetworkTarget.All, collectorActorNumber, collectDelay, flySpeed);
             }
 

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Controllers.PowerUp;
 using Core;
@@ -103,7 +103,7 @@ namespace Controllers.PowerUp
                 uint itemId = GeneratePowerUpId();
                 int itemIndex = availablePowerUps.IndexOf(data);
                 NetworkServiceLocator.ObjectService.InvokeRPC(
-                    AppRpcBridge.Instance, "RPC_SpawnPowerUp",
+                    ManagerRpcBridge.Instance, "RPC_SpawnPowerUp",
                     NetworkTarget.All, (int)itemId, position, itemIndex);
             }
         }
@@ -129,7 +129,7 @@ namespace Controllers.PowerUp
                 uint itemId = GeneratePowerUpId();
                 int itemIndex = availablePowerUps.IndexOf(randomData);
                 NetworkServiceLocator.ObjectService.InvokeRPC(
-                    AppRpcBridge.Instance, "RPC_SpawnPowerUp",
+                    ManagerRpcBridge.Instance, "RPC_SpawnPowerUp",
                     NetworkTarget.All, (int)itemId, position, itemIndex);
             }
         }
@@ -183,7 +183,7 @@ namespace Controllers.PowerUp
         // ============================================================
 
         /// <summary>
-        /// 由 AppRpcBridge.RPC_SpawnPowerUp 调用
+        /// 由 ManagerRpcBridge.RPC_SpawnPowerUp 调用
         /// 每个客户端在本地生成一个道具（非网络对象）
         /// </summary>
         public static void HandleSpawnPowerUpRPC(uint itemId, Vector3 position, int itemIndex)
@@ -196,7 +196,7 @@ namespace Controllers.PowerUp
         }
 
         /// <summary>
-        /// 由 AppRpcBridge.RPC_CollectPowerUp 调用
+        /// 由 ManagerRpcBridge.RPC_CollectPowerUp 调用
         /// 所有客户端隐藏对应的本地道具
         /// </summary>
         public static void HandleCollectPowerUpRPC(uint itemId)

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using NetworkTarget = Controllers.Network.NetworkTarget;
 using Controllers.Network;
@@ -475,7 +475,7 @@ namespace Controllers.Character
     }
 
     /// <summary>
-    /// 由 DomainRpcBridge.NoticePlayerDeath 调用
+    /// 由 ControllerRpcBridge.NoticePlayerDeath 调用
     /// 在非拥有者客户端上标记该玩家死亡，并隐藏视觉、禁用碰撞器
     /// </summary>
     public static void HandlePlayerDeath(int actorNumber)
@@ -530,10 +530,10 @@ namespace Controllers.Character
       query.attribute?.SetIsDead(true);
     }
 
-    // ---- 静态 Handler 方法（供 DomainRpcBridge 调用） ----
+    // ---- 静态 Handler 方法（供 ControllerRpcBridge 调用） ----
 
     /// <summary>
-    /// 由 DomainRpcBridge.RPC_SyncPlayerElement 调用
+    /// 由 ControllerRpcBridge.RPC_SyncPlayerElement 调用
     /// </summary>
     public static void HandleSyncPlayerElement(int actorNumber, int elementInt)
     {
@@ -736,7 +736,7 @@ namespace Controllers.Character
     }
 
     /// <summary>
-    /// 元素池初始化回调 — 由 DomainRpcBridge.RPC_InitElementPool 调用。
+    /// 元素池初始化回调 — 由 ControllerRpcBridge.RPC_InitElementPool 调用。
     /// 委托到 Lua（对应原 WizardBoy/BingNv 的 HandleInitElementPool）。
     /// </summary>
     public void HandleInitElementPool(int elementInt)

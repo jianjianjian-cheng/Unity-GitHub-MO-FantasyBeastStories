@@ -1,4 +1,4 @@
-using Controllers.PowerUp;
+﻿using Controllers.PowerUp;
 using Core;
 using UnityEngine;
 using Managers;
@@ -90,7 +90,7 @@ namespace Controllers.Item
 
             // 广播 itemId 到所有客户端，各客户端隐藏对应的本地道具
             NetworkServiceLocator.ObjectService?.InvokeRPC(
-                AppRpcBridge.Instance, "RPC_CollectPowerUp",
+                ManagerRpcBridge.Instance, "RPC_CollectPowerUp",
                 NetworkTarget.All, (int)PowerUpId
             );
             Debug.Log($"[PowerUp] 已调用RPC_CollectPowerUp, itemId={PowerUpId}");

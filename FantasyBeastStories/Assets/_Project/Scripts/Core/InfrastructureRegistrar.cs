@@ -1,4 +1,4 @@
-using Managers;
+﻿using Managers;
 using Controllers.Combat;
 using Core;
 using Core.Channels;
@@ -64,41 +64,41 @@ namespace Core
             // 启动 PUN 回调桥接器（用于 OnPlayerPropertiesUpdate 等回调转发）
             PhotonCallbackBridge.EnsureExists();
 
-            // 创建 AppRpcBridge — 统一持有 Application 层的 [PunRPC] 方法
-            EnsureAppRpcBridge();
+            // 创建 ManagerRpcBridge — 统一持有 Application 层的 [PunRPC] 方法
+            EnsureManagerRpcBridge();
 
-            // 创建 DomainRpcBridge — 统一持有 Domain 层的 [PunRPC] 方法
-            EnsureDomainRpcBridge();
+            // 创建 ControllerRpcBridge — 统一持有 Domain 层的 [PunRPC] 方法
+            EnsureControllerRpcBridge();
 
-            // 创建 PresentationRpcBridge — 统一持有 Presentation 层的 [PunRPC] 方法
-            EnsurePresentationRpcBridge();
+            // 创建 UIRpcBridge — 统一持有 Presentation 层的 [PunRPC] 方法
+            EnsureUIRpcBridge();
 
             Debug.Log("[InfrastructureRegistrar] 组件工厂 + 网络服务注册完成");
         }
 
-        private static void EnsureAppRpcBridge()
+        private static void EnsureManagerRpcBridge()
         {
-            var go = new GameObject("AppRpcBridge");
+            var go = new GameObject("ManagerRpcBridge");
             var pv = go.AddComponent<PhotonView>();
-            go.AddComponent<AppRpcBridge>();
+            go.AddComponent<ManagerRpcBridge>();
             Object.DontDestroyOnLoad(go);
             PhotonCallbackBridge.RegisterBridgeView(pv);
         }
 
-        private static void EnsureDomainRpcBridge()
+        private static void EnsureControllerRpcBridge()
         {
-            var go = new GameObject("DomainRpcBridge");
+            var go = new GameObject("ControllerRpcBridge");
             var pv = go.AddComponent<PhotonView>();
-            go.AddComponent<DomainRpcBridge>();
+            go.AddComponent<ControllerRpcBridge>();
             Object.DontDestroyOnLoad(go);
             PhotonCallbackBridge.RegisterBridgeView(pv);
         }
 
-        private static void EnsurePresentationRpcBridge()
+        private static void EnsureUIRpcBridge()
         {
-            var go = new GameObject("PresentationRpcBridge");
+            var go = new GameObject("UIRpcBridge");
             var pv = go.AddComponent<PhotonView>();
-            go.AddComponent<PresentationRpcBridge>();
+            go.AddComponent<UIRpcBridge>();
             Object.DontDestroyOnLoad(go);
             PhotonCallbackBridge.RegisterBridgeView(pv);
         }
