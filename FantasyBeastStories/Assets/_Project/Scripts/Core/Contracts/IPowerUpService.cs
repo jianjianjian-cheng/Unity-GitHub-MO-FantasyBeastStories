@@ -1,7 +1,7 @@
 using UnityEngine;
 using Controllers.PowerUp;
 
-namespace Controllers.Services
+namespace Core.Contracts
 {
     /// <summary>
     /// 道具服务接口

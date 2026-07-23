@@ -14,7 +14,8 @@ using UnityEngine.UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Managers;
 using UI;
-using Controllers.Services;
+using Core.Contracts;
+using Core.Network;
 
 namespace Controllers.Network
 {

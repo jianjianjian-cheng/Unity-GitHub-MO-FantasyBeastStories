@@ -1,4 +1,4 @@
-namespace Controllers.Services
+namespace Core.Contracts
 {
     public interface IGameActionService
     {

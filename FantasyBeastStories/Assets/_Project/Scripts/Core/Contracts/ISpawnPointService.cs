@@ -1,4 +1,4 @@
-namespace Controllers.Services
+namespace Core.Contracts
 {
     /// <summary>
     /// 生成点查询服务接口

@@ -1,11 +1,12 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using Controllers.Network;
-using Controllers.Services;
+using Core.Contracts;
+using Core.Network;
 using NetworkTarget = Controllers.Network.NetworkTarget;
 
 namespace Controllers.Character.Pets

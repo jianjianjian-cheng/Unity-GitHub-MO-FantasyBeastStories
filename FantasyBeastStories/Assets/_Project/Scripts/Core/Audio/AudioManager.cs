@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using Core;
-using Core;
+using Managers;
 using Controllers;
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace Managers
+namespace Core.Audio
 {
     /// <summary>
     /// 音频管理器 — 核心控制器

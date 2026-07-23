@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using NetworkTarget = Controllers.Network.NetworkTarget;
 using Controllers.Network;
@@ -9,7 +9,8 @@ using Core;
 using Core.Channels.Player;
 using Controllers.Player;
 using Controllers.Rune;
-using Controllers.Services;
+using Core.Contracts;
+using Core.Network;
 using UI.Input;
 using UnityEngine;
 using UnityEngine.SceneManagement;

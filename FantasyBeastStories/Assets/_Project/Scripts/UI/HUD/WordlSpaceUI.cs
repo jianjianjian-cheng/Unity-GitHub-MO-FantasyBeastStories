@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using Controllers.Services;
+using Core.Contracts;
+using Core.Network;
 using Controllers.Network;
 using UnityEngine;
 using UnityEngine.UI;

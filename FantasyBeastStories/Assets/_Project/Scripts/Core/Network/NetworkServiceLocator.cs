@@ -1,4 +1,6 @@
-﻿namespace Controllers.Services
+using Core.Contracts;
+
+namespace Core.Network
 {
     public static class NetworkServiceLocator
     {

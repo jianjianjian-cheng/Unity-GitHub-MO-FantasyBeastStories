@@ -1,4 +1,5 @@
-using Controllers.Services;
+using Core.Contracts;
+using Core.Network;
 using UnityEngine;
 
 namespace Controllers.Network

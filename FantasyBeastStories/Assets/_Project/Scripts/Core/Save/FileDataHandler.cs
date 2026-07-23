@@ -1,7 +1,7 @@
 using System.IO;
 using UnityEngine;
 
-namespace Managers
+namespace Core.Save
 {
     /// <summary>
     /// 文件数据处理器 —— 负责将字符串数据写入硬盘 / 从硬盘读取。

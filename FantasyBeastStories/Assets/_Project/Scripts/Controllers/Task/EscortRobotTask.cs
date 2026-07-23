@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using Core;
 using Core.Channels.Combat;
 using Controllers.Character.Pets;
-using Controllers.Services;
+using Core.Contracts;
+using Core.Network;
 using UnityEngine;
 
 namespace Controllers.Task

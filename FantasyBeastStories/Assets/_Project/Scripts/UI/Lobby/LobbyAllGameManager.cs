@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Core.Audio;
 
 namespace UI.Lobby
 {

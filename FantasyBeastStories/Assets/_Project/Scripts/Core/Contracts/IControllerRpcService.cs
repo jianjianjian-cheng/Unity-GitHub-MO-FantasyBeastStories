@@ -1,6 +1,6 @@
-﻿using NetworkTarget = Controllers.Network.NetworkTarget;
+using NetworkTarget = Controllers.Network.NetworkTarget;
 
-namespace Controllers.Services
+namespace Core.Contracts
 {
     /// <summary>
     /// Domain 层 RPC 调用服务接口

@@ -3,7 +3,8 @@ using UnityEngine;
 using Managers;
 using Core;
 using Core.Channels.General;
-using Controllers.Services;
+using Core.Contracts;
+using Core.Network;
 
 namespace Core
 {

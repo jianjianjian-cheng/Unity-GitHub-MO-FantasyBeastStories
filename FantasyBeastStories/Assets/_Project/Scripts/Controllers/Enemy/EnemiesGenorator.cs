@@ -4,11 +4,13 @@ using UnityEngine;
 using Controllers.Enemy;
 using Core.Channels.Game;
 using Core;
-using Controllers.Services;
+using Core.Contracts;
+using Core.Network;
 using Controllers.Time;
 using Controllers.Network;
+using Managers;
 
-namespace Managers
+namespace Controllers.Enemy
 {
     public class EnemiesGenorator : MonoBehaviour
     {

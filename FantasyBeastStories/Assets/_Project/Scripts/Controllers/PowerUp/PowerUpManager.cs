@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using Controllers.PowerUp;
 using Core;
-using Controllers.Services;
+using Core.Contracts;
+using Core.Network;
 using Managers;
 using Controllers.Item;
 using Controllers.Player;

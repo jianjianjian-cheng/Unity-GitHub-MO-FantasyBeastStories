@@ -1,6 +1,7 @@
-﻿using Controllers.Character;
+using Controllers.Character;
 using Core;
-using Controllers.Services;
+using Core.Contracts;
+using Core.Network;
 using NetworkTarget = Controllers.Network.NetworkTarget;
 using Controllers.Network;
 using UnityEngine;

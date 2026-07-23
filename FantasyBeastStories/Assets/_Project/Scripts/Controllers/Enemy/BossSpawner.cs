@@ -1,5 +1,6 @@
 using Core;
-using Controllers.Services;
+using Core.Contracts;
+using Core.Network;
 using UnityEngine;
 
 public class BossSpawner : MonoBehaviour

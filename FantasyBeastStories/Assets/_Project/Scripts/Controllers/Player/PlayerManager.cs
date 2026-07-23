@@ -6,7 +6,8 @@ using Core;
 using Core.Channels;
 using Core.Channels.General;
 using Core.Channels.Player;
-using Controllers.Services;
+using Core.Contracts;
+using Core.Network;
 using Photon.Pun;
 using UnityEngine;
 

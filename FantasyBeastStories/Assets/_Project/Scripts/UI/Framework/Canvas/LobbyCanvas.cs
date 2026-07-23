@@ -3,6 +3,7 @@ using Core.Channels.General;
 using Managers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Core.Audio;
 
 public class LobbyCanvas : MonoBehaviour
 {

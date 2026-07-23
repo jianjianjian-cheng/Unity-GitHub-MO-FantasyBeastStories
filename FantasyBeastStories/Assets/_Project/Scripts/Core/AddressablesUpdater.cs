@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Core.Audio;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -212,9 +213,9 @@ namespace Core
                 Debug.Log("[热更] 资源下载完成");
 
                 // 热更后重新加载音频库（确保使用更新后的音效资源）
-                if (Managers.AudioManager.Instance != null)
+                if (AudioManager.Instance != null)
                 {
-                    Managers.AudioManager.Instance.ReloadSoundLibrary();
+                    AudioManager.Instance.ReloadSoundLibrary();
                 }
             }
             else

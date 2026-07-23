@@ -1,11 +1,12 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using NetworkTarget = Controllers.Network.NetworkTarget;
 using UnityEngine;
 using Core;
 using Controllers.Player;
 using Controllers.Combat;
-using Controllers.Services;
+using Core.Contracts;
+using Core.Network;
 using Controllers.Combat;
 using Managers;
 using Core.Channels.Combat;

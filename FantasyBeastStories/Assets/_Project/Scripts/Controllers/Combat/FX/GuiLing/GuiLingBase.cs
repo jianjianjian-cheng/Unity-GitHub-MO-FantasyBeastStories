@@ -6,6 +6,7 @@ using Controllers.Network;
 using UnityEngine;
 using System;
 using Managers;
+using Core.Audio;
 
 namespace Controllers.Combat
 {

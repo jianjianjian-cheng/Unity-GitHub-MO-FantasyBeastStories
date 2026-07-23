@@ -8,6 +8,7 @@ using Controllers.Network;
 using Controllers.Combat;
 using UnityEngine;
 using Managers;
+using Core.Audio;
 
 namespace Controllers.Combat.ImpactCannon
 {

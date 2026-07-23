@@ -7,6 +7,7 @@ using Controllers.Enemy;
 using Controllers.Network;
 using UnityEngine;
 using Managers;
+using Core.Audio;
 
 namespace Controllers.Combat
 {

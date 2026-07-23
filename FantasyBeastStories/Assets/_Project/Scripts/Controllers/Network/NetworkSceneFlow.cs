@@ -2,7 +2,8 @@ using System.Collections;
 using UnityEngine;
 using ExitGames.Client.Photon;
 using Photon.Pun;
-using Controllers.Services;
+using Core.Contracts;
+using Core.Network;
 using UI.Framework.Panel;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 

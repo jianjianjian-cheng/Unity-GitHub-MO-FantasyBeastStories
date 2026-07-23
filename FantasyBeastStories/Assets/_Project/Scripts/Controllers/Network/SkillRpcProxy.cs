@@ -1,7 +1,8 @@
 using Controllers.Combat;
 using Controllers.Player;
 using Controllers.Network;
-using Controllers.Services;
+using Core.Contracts;
+using Core.Network;
 using Core;
 using UnityEngine;
 

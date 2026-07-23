@@ -1,7 +1,7 @@
 using UnityEngine;
 using NetworkTarget = Controllers.Network.NetworkTarget;
 
-namespace Controllers.Services
+namespace Core.Contracts
 {
     public interface INetworkObjectService
     {

@@ -3,6 +3,7 @@ using Core;
 using UI.Framework.Base;
 using UnityEngine;
 using UnityEngine.UI;
+using Core.Audio;
 
 /// <summary>
 /// 音量设置 Widget — 通过四个 Slider 分别控制 Master / BGM / SFX / UI 音量

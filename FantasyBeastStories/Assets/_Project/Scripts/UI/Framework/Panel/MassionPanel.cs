@@ -6,6 +6,7 @@ using UI.Framework.Base;
 using UI.Framework.Manager;
 using UnityEngine;
 using UnityEngine.UI;
+using Core.Audio;
 
 /// <summary>
 /// 任务面板 — 展示所有任务及其进度。

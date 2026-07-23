@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Managers
+namespace Core.Save
 {
     /// <summary>
     /// AES 加密工具 —— 保护存档文件不被玩家直接修改。

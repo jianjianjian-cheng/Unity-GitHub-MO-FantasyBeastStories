@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using Cinemachine;
 using Core;
 using Controllers.Player;
-using Controllers.Services;
+using Core.Contracts;
+using Core.Network;
 using Managers;
 using UnityEngine;
 

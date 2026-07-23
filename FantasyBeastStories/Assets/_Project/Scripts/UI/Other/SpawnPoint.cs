@@ -1,8 +1,9 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Controllers.Character;
 using Core;
-using Controllers.Services;
+using Core.Contracts;
+using Core.Network;
 using NetworkTarget = Controllers.Network.NetworkTarget;
 using UnityEngine;
 using Managers;
