@@ -15,7 +15,7 @@ MonoBehaviour:
   baseAttackPower: 300
   baseDefensePower: 10
   baseMaxHealth: 300
-  baseMoveSpeed: 5
+  baseMoveSpeed: 6
   baseCriticalMultiplier: 1.2
   baseCriticalChance: 0.2
   maxCriticalChance: 0.8

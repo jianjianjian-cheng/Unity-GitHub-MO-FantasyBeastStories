@@ -18,7 +18,7 @@ namespace Managers
     /// - FinalizeMatch() 在返回大厅时调用，生成最终结果
     /// - 从主菜单进入大厅时 HasPendingMatchResult 为 false，不展示结算
     /// </summary>
-    public class MatchStatisticsManager : MonoBehaviour
+    public class MatchStatisticsManager : MonoBehaviour, ISaveable
     {
         public static MatchStatisticsManager Instance { get; private set; }
 
@@ -66,12 +66,36 @@ namespace Managers
             }
         }
 
+        void Start()
+        {
+            SaveManager.Instance?.RegisterSaveable(this);
+        }
+
         void OnDestroy()
         {
+            SaveManager.Instance?.UnregisterSaveable(this);
             if (Instance == this)
             {
                 Instance = null;
             }
+        }
+
+        // ──────────────────────────────────
+        //  ISaveable 实现
+        // ──────────────────────────────────
+
+        public string SaveId => "MatchStatisticsManager";
+
+        public void OnSave(SaveData data)
+        {
+            data.lifetimeKills = lifetimeKills;
+            data.lifetimeDamage = lifetimeDamage;
+            data.lifetimeMatches = lifetimeMatches;
+        }
+
+        public void OnLoad(SaveData data)
+        {
+            SetLifetimeStats(data.lifetimeKills, data.lifetimeDamage, data.lifetimeMatches);
         }
 
         // ──────────────────────────────────

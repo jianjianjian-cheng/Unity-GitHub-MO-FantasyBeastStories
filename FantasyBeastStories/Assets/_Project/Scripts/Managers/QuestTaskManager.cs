@@ -26,7 +26,7 @@ namespace Managers
     /// - 对局中只暂存在 pendingProgress，面板打开后才写入磁盘
     /// - 面板打开时从磁盘读取最新进度并播放平滑过渡动画
     /// </summary>
-    public class QuestTaskManager : MonoBehaviour
+    public class QuestTaskManager : MonoBehaviour, ISaveable
     {
         public static QuestTaskManager Instance { get; private set; }
 
@@ -58,10 +58,20 @@ namespace Managers
 
         void Start()
         {
+            SaveManager.Instance?.RegisterSaveable(this);
             taskDatabase = AssetLoader.LoadAsset<QuestTaskDatabaseSO>("QuestTask/QuestTaskDatabase");
             if (taskDatabase == null)
                 Debug.LogWarning("[QuestTaskManager] 未找到 QuestTaskDatabase，请在 Resources/QuestTask/ 目录下创建");
         }
+
+        // ──────────────────────────────────
+        //  ISaveable 实现
+        // ──────────────────────────────────
+
+        public string SaveId => "QuestTaskManager";
+
+        public void OnSave(SaveData data) => data.taskProgress = GetAllProgress();
+        public void OnLoad(SaveData data) => SetAllProgress(data.taskProgress);
 
         // ──────────────────────────────────
         //  对局中记录（由其他系统调用）

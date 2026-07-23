@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Managers
 {
-  public class ShopManager : MonoBehaviour
+  public class ShopManager : MonoBehaviour, ISaveable
   {
     public static ShopManager Instance { get; private set; }
 
@@ -26,6 +26,23 @@ namespace Managers
         Destroy(gameObject);
       }
     }
+
+    void Start()
+    {
+      SaveManager.Instance?.RegisterSaveable(this);
+    }
+
+    void OnDestroy()
+    {
+      SaveManager.Instance?.UnregisterSaveable(this);
+    }
+
+    // ========== ISaveable 实现 ==========
+
+    public string SaveId => "ShopManager";
+
+    public void OnSave(SaveData data) => data.shopPurchaseRecords = GetPurchaseRecords();
+    public void OnLoad(SaveData data) => SetPurchaseRecords(data.shopPurchaseRecords);
 
     public bool PurchaseRune(int runeId)
     {

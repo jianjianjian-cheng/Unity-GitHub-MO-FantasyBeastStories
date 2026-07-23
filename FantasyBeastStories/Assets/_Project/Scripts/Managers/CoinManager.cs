@@ -24,7 +24,7 @@ namespace Managers
     /// - 只含一种货币（金币）
     /// - CalculateCoins() 为纯计算方法，不修改余额
     /// </summary>
-    public class CoinManager : MonoBehaviour
+    public class CoinManager : MonoBehaviour, ISaveable
     {
         public static CoinManager Instance { get; private set; }
 
@@ -53,13 +53,26 @@ namespace Managers
             }
         }
 
+        void Start()
+        {
+            SaveManager.Instance?.RegisterSaveable(this);
+        }
+
         void OnDestroy()
         {
+            SaveManager.Instance?.UnregisterSaveable(this);
             if (Instance == this)
             {
                 Instance = null;
             }
         }
+
+        // ========== ISaveable 实现 ==========
+
+        public string SaveId => "CoinManager";
+
+        public void OnSave(SaveData data) => data.coin = currentCoins;
+        public void OnLoad(SaveData data) => SetCoins(data.coin);
 
         // ========== 公开 API ==========
 

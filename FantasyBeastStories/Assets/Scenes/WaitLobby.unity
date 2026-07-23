@@ -15486,7 +15486,6 @@ MonoBehaviour:
   breakdownButton: {fileID: 1870543360}
   runeSlotPrefab: {fileID: 6378762284851964525, guid: 571888b7c3b211c4dbf2c2112257846c, type: 3}
   runeSlotListPanel: {fileID: 171189666}
-  runeDatabase: {fileID: 11400000, guid: bd166d9469a9a354fb450c62748238f6, type: 2}
   runeEquip1: {fileID: 324550046}
   runeEquip2: {fileID: 2064875340}
   dragTargetHighlightColor: {r: 1, g: 0.92, b: 0.46, a: 1}
@@ -17076,7 +17075,6 @@ MonoBehaviour:
   detailPrice: {fileID: 821634007}
   purchaseButton: {fileID: 1235557055}
   coinText: {fileID: 2004867700}
-  shopDatabase: {fileID: 11400000, guid: 7e0aeaf763b611e4aaa94448bb8c4abe, type: 2}
 --- !u!1 &1320634236
 GameObject:
   m_ObjectHideFlags: 0

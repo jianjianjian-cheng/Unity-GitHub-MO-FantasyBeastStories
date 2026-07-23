@@ -20,7 +20,7 @@ namespace Managers
   /// - 账号系统暂未实现，暂时只有本地单存档
   /// - 与 FileDataHandler 组合使用，不直接操作文件
   /// </summary>
-  public class SaveManager : MonoBehaviour
+  public class SaveManager : MonoBehaviour, ISaveable
   {
     public static SaveManager Instance { get; private set; }
 
@@ -30,10 +30,50 @@ namespace Managers
     private FileDataHandler fileHandler;
     private SaveData currentSaveData;
 
+    /// <summary>已注册的可存档系统列表</summary>
+    private List<ISaveable> _saveables = new List<ISaveable>();
+
     private const string SAVE_FILE_NAME = "save";
     private const string SAVE_VERSION = "1.0.0";
 
     public static int SelectedCharacterIndex { get; set; } = 0;
+
+    // ──────────────────────────────────
+    //  ISaveable 注册/注销
+    // ──────────────────────────────────
+
+    /// <summary>注册一个可存档系统。新增系统只需调用此方法，SaveManager 自动在存档/读档时调用。</summary>
+    public void RegisterSaveable(ISaveable saveable)
+    {
+      if (saveable == null || _saveables.Contains(saveable)) return;
+      _saveables.Add(saveable);
+      Debug.Log($"[SaveManager] 注册存档系统: {saveable.SaveId}");
+    }
+
+    /// <summary>注销一个可存档系统。</summary>
+    public void UnregisterSaveable(ISaveable saveable)
+    {
+      if (saveable == null) return;
+      _saveables.Remove(saveable);
+    }
+
+    // ──────────────────────────────────
+    //  SaveManager 自身的 ISaveable 实现（处理生涯经验 + 角色选择）
+    // ──────────────────────────────────
+
+    public string SaveId => "SaveManager";
+
+    public void OnSave(SaveData data)
+    {
+      data.totalExperience = currentSaveData.totalExperience;
+      data.selectedCharacterIndex = SelectedCharacterIndex;
+    }
+
+    public void OnLoad(SaveData data)
+    {
+      currentSaveData.totalExperience = data.totalExperience;
+      SelectedCharacterIndex = data.selectedCharacterIndex;
+    }
 
     // ──────────────────────────────────
     //  单例生命周期
@@ -56,6 +96,9 @@ namespace Managers
 
     void Start()
     {
+      // SaveManager 自身也注册为 ISaveable（处理生涯经验 + 角色选择）
+      RegisterSaveable(this);
+
       // 启动时自动加载存档，确保 SelectedCharacterIndex 等数据从文件恢复
       if (Instance == this && HasSave())
       {
@@ -183,73 +226,41 @@ namespace Managers
     }
 
     // ──────────────────────────────────
-    //  数据收集（存档时调用）
+    //  数据收集（遍历所有已注册的 ISaveable）
     // ──────────────────────────────────
 
     private void CollectDataFromManagers()
     {
-      // 玩家经济
-      if (CoinManager.Instance != null)
-        currentSaveData.coin = CoinManager.Instance.GetCoins();
-
-      // 符文系统
-      currentSaveData.equippedRuneId1 = RuneEquipmentSnapshot.EquippedRuneId1;
-      currentSaveData.equippedRuneId2 = RuneEquipmentSnapshot.EquippedRuneId2;
-      currentSaveData.ownedRuneIds = RuneInventory.GetAllRuneIds();
-
-      // 任务进度（这是存档的核心用途——任务需要跨对局累积）
-      if (QuestTaskManager.Instance != null)
-        currentSaveData.taskProgress = QuestTaskManager.Instance.GetAllProgress();
-
-      // 商店系统
-      if (ShopManager.Instance != null)
-        currentSaveData.shopPurchaseRecords = ShopManager.Instance.GetPurchaseRecords();
-
-      // 累计统计
-      if (MatchStatisticsManager.Instance != null)
+      foreach (var saveable in _saveables)
       {
-        var stats = MatchStatisticsManager.Instance.GetLifetimeStats();
-        currentSaveData.lifetimeKills = stats.kills;
-        currentSaveData.lifetimeDamage = stats.damage;
-        currentSaveData.lifetimeMatches = stats.matches;
+        try
+        {
+          saveable.OnSave(currentSaveData);
+        }
+        catch (System.Exception e)
+        {
+          Debug.LogError($"[SaveManager] 存档失败: {saveable.SaveId} | {e.Message}");
+        }
       }
-
-      // 角色选择
-      currentSaveData.selectedCharacterIndex = SelectedCharacterIndex;
     }
 
     // ──────────────────────────────────
-    //  数据分发（读档时调用）
+    //  数据分发（遍历所有已注册的 ISaveable）
     // ──────────────────────────────────
 
     private void DistributeDataToManagers()
     {
-      // 玩家经济
-      if (CoinManager.Instance != null)
-        CoinManager.Instance.SetCoins(currentSaveData.coin);
-
-      // 符文系统
-      RuneEquipmentSnapshot.SetBoth(currentSaveData.equippedRuneId1, currentSaveData.equippedRuneId2);
-      RuneInventory.RestoreFromSave(currentSaveData.ownedRuneIds);
-
-      // 任务进度
-      if (QuestTaskManager.Instance != null)
-        QuestTaskManager.Instance.SetAllProgress(currentSaveData.taskProgress);
-
-      // 商店系统
-      if (ShopManager.Instance != null)
-        ShopManager.Instance.SetPurchaseRecords(currentSaveData.shopPurchaseRecords);
-
-      // 累计统计
-      if (MatchStatisticsManager.Instance != null)
-        MatchStatisticsManager.Instance.SetLifetimeStats(
-            currentSaveData.lifetimeKills,
-            currentSaveData.lifetimeDamage,
-            currentSaveData.lifetimeMatches
-        );
-
-      // 角色选择
-      SelectedCharacterIndex = currentSaveData.selectedCharacterIndex;
+      foreach (var saveable in _saveables)
+      {
+        try
+        {
+          saveable.OnLoad(currentSaveData);
+        }
+        catch (System.Exception e)
+        {
+          Debug.LogError($"[SaveManager] 读档失败: {saveable.SaveId} | {e.Message}");
+        }
+      }
     }
 
     // ──────────────────────────────────

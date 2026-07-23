@@ -977,7 +977,7 @@ MonoBehaviour:
   isOnlyShow: 0
   virtualCamera: {fileID: 3624956791697639742}
   spectatorCameraController: {fileID: 7169257647919527976}
-  deathEffectPrefab: {fileID: 0}
+  deathEffectAddress: Player/PlayerDeath
   rb: {fileID: 4899305976579583883}
   animator: {fileID: 8771543960658206648}
   isInLobby: 0

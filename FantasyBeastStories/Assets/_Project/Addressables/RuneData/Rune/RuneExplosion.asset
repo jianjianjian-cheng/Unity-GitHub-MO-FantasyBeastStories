@@ -18,7 +18,7 @@ MonoBehaviour:
   iconName: 
   rarity: 3
   powers:
-  - value: 10
+  - value: 15
     label: "%\u57FA\u7840\u4F24\u5BB3"
   - value: 10
     label: "%\u66B4\u51FB\u7387"

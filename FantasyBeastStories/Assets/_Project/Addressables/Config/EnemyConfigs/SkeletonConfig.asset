@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ad083b694e9a7c4e986d2b618e48fc2, type: 3}
   m_Name: SkeletonConfig
   m_EditorClassIdentifier: 
-  maxHealth: 500
+  maxHealth: 450
   attackPower: 50
   moveSpeed: 2
-  attackDamage: 50
+  attackDamage: 40
   attackInterval: 0.7
   attackRange: 0.6
-  expMin: 30
-  expMax: 50
+  expMin: 100
+  expMax: 170
   powerUpDropChance: 0.1
