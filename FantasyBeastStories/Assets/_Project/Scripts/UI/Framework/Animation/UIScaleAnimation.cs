@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 
@@ -12,16 +12,16 @@ namespace UI.Framework.Animation
         [SerializeField] protected Vector3 endScale = Vector3.one;
         [SerializeField] protected bool centerPivot = true;
 
-        public override async Task PlayAsync(GameObject target)
+        public override IEnumerator PlayCoroutine(GameObject target)
         {
             Stop();
 
             RectTransform rect = GetRectTransform(target);
-            
+
             if (rect == null)
             {
                 Debug.LogWarning("UIScaleAnimation: RectTransform 为空");
-                return;
+                yield break;
             }
 
             if (centerPivot)
@@ -35,7 +35,7 @@ namespace UI.Framework.Animation
                 .SetEase(ease)
                 .SetUpdate(true);
 
-            await _currentTween.AsyncWaitForCompletion();
+            yield return _currentTween.WaitForCompletion();
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections;
 using UI.Framework.Animation;
 using UnityEngine;
 
@@ -18,6 +19,11 @@ namespace UI.Framework.Base
 
         /// <summary>当前是否处于选中状态</summary>
         public bool IsSelected { get; private set; }
+
+        private Coroutine _selectCoroutine;
+        private Coroutine _deselectCoroutine;
+        private Coroutine _hoverEnterCoroutine;
+        private Coroutine _hoverExitCoroutine;
 
         protected virtual void Awake()
         {
@@ -48,21 +54,25 @@ namespace UI.Framework.Base
         // ──────────────────────────────────────────────
 
         /// <summary>播放选中动画，同时将 IsSelected 设为 true</summary>
-        public async void PlaySelect()
+        public void PlaySelect()
         {
             IsSelected = true;
+            if (_deselectCoroutine != null)
+                StopCoroutine(_deselectCoroutine);
+
             if (selectAnimation != null)
-                await selectAnimation.PlayAsync(gameObject);
-            OnSelectCompleted();
+                _selectCoroutine = StartCoroutine(PlayAnimationCoroutine(selectAnimation));
         }
 
         /// <summary>播放取消选中动画，同时将 IsSelected 设为 false</summary>
-        public async void PlayDeselect()
+        public void PlayDeselect()
         {
             IsSelected = false;
+            if (_selectCoroutine != null)
+                StopCoroutine(_selectCoroutine);
+
             if (deselectAnimation != null)
-                await deselectAnimation.PlayAsync(gameObject);
-            OnDeselectCompleted();
+                _deselectCoroutine = StartCoroutine(PlayAnimationCoroutine(deselectAnimation));
         }
 
         // ──────────────────────────────────────────────
@@ -70,21 +80,36 @@ namespace UI.Framework.Base
         // ──────────────────────────────────────────────
 
         /// <summary>播放鼠标进入（悬浮）动画</summary>
-        public async void PlayHoverEnter()
+        public void PlayHoverEnter()
         {
             if (IsSelected)
                 return;
+            if (_hoverExitCoroutine != null)
+                StopCoroutine(_hoverExitCoroutine);
+
             if (hoverEnterAnimation != null)
-                await hoverEnterAnimation.PlayAsync(gameObject);
+                _hoverEnterCoroutine = StartCoroutine(PlayAnimationCoroutine(hoverEnterAnimation));
         }
 
         /// <summary>播放鼠标离开动画</summary>
-        public async void PlayHoverExit()
+        public void PlayHoverExit()
         {
             if (IsSelected)
                 return;
+            if (_hoverEnterCoroutine != null)
+                StopCoroutine(_hoverEnterCoroutine);
+
             if (hoverExitAnimation != null)
-                await hoverExitAnimation.PlayAsync(gameObject);
+                _hoverExitCoroutine = StartCoroutine(PlayAnimationCoroutine(hoverExitAnimation));
+        }
+
+        // ──────────────────────────────────────────────
+        //  内部协程
+        // ──────────────────────────────────────────────
+
+        private IEnumerator PlayAnimationCoroutine(UIAnimationBase animation)
+        {
+            yield return animation.PlayCoroutine(gameObject);
         }
 
         // ──────────────────────────────────────────────

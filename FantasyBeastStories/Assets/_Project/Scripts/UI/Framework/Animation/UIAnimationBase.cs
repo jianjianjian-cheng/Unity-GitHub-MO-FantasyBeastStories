@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 
@@ -13,12 +13,7 @@ namespace UI.Framework.Animation
 
         protected Tween _currentTween;
 
-        public abstract Task PlayAsync(GameObject target);
-
-        public virtual void Play(GameObject target)
-        {
-            PlayAsync(target).ConfigureAwait(false);
-        }
+        public abstract IEnumerator PlayCoroutine(GameObject target);
 
         public virtual void Stop()
         {

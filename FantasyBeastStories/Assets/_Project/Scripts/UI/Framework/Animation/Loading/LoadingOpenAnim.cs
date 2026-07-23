@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 
@@ -14,7 +14,7 @@ namespace UI.Framework.Animation
         [SerializeField] private float startAlpha = 0f;
         [SerializeField] private float endAlpha = 1f;
 
-        public override async Task PlayAsync(GameObject target)
+        public override IEnumerator PlayCoroutine(GameObject target)
         {
             Stop();
 
@@ -23,7 +23,7 @@ namespace UI.Framework.Animation
             if (canvasGroup == null)
             {
                 Debug.LogWarning("LoadingOpenAnim: 目标缺少 CanvasGroup 组件");
-                return;
+                yield break;
             }
 
             // 确保从透明开始
@@ -34,7 +34,7 @@ namespace UI.Framework.Animation
                 .SetEase(ease)
                 .SetUpdate(true);
 
-            await _currentTween.AsyncWaitForCompletion();
+            yield return _currentTween.WaitForCompletion();
         }
     }
 }

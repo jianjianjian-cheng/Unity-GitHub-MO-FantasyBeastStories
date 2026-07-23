@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UI 框架架构图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; background: #1a1a2e; color: #e0e0e0; padding: 40px; min-width: 1400px; }
+  h1 { text-align: center; font-size: 28px; color: #e94560; margin-bottom: 40px; letter-spacing: 2px; }
+  .container { max-width: 1600px; margin: 0 auto; }
+
+  /* Layer sections */
+  .layer-section { margin-bottom: 50px; position: relative; }
+  .layer-label { font-size: 14px; color: #7f8c8d; margin-bottom: 8px; padding-left: 4px; letter-spacing: 1px; }
+  .layer-line { height: 2px; background: linear-gradient(90deg, transparent, #2d2d44, transparent); margin-bottom: 24px; }
+
+  /* Card grid */
+  .card-row { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+
+  /* Cards */
+  .card { background: #16213e; border-radius: 12px; padding: 0; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.3); border: 1px solid #2d2d44; transition: transform 0.2s, box-shadow 0.2s; }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(233,69,96,0.15); }
+
+  .card-header { padding: 14px 20px; font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+  .card-body { padding: 12px 20px 18px; }
+
+  /* Color themes */
+  .t-manager .card-header { background: linear-gradient(135deg, #e94560, #c23152); color: #fff; }
+  .t-base .card-header { background: linear-gradient(135deg, #0f3460, #16213e); color: #e0e0e0; border-bottom: 2px solid #e94560; }
+  .t-anim .card-header { background: linear-gradient(135deg, #533483, #2d1b4e); color: #e0e0e0; }
+  .t-util .card-header { background: linear-gradient(135deg, #1a6b5e, #0d3d36); color: #e0e0e0; }
+  .t-panel .card-header { background: linear-gradient(135deg, #e8a87c, #c68b5e); color: #1a1a2e; }
+  .t-widget .card-header { background: linear-gradient(135deg, #41b883, #2d8a63); color: #fff; }
+
+  /* Table inside cards */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  td { padding: 5px 8px; border-bottom: 1px solid #2d2d44; vertical-align: top; }
+  td:first-child { color: #a0a0b8; white-space: nowrap; width: 40%; }
+  td:last-child { color: #d0d0e0; }
+  tr:last-child td { border-bottom: none; }
+
+  /* Arrow connectors */
+  .arrow-down { text-align: center; color: #7f8c8d; font-size: 20px; margin: 8px 0; }
+  .arrow-right { color: #7f8c8d; font-size: 18px; align-self: center; }
+
+  /* Flex row with arrows */
+  .flow-row { display: flex; align-items: flex-start; gap: 16px; justify-content: center; }
+
+  /* Badge */
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .badge-so { background: #533483; color: #c0c0e0; }
+  .badge-mono { background: #0f3460; color: #6b9fff; }
+  .badge-iface { background: #e94560; color: #fff; }
+
+  /* Lifecycle box */
+  .lifecycle { background: #0d1b2a; border-radius: 8px; padding: 10px 14px; margin: 8px 0; font-size: 12px; font-family: 'Consolas', 'Courier New', monospace; line-height: 1.8; }
+  .lc-step { padding: 2px 0; }
+  .lc-arrow { color: #e94560; }
+  .lc-highlight { color: #41b883; font-weight: 600; }
+  .lc-callback { color: #e8a87c; }
+
+  /* Stats footer */
+  .stats { display: flex; justify-content: center; gap: 40px; margin-top: 50px; flex-wrap: wrap; }
+  .stat-item { text-align: center; }
+  .stat-num { font-size: 32px; font-weight: 700; color: #e94560; }
+  .stat-label { font-size: 13px; color: #7f8c8d; margin-top: 4px; }
+
+  /* Legend */
+  .legend { display: flex; gap: 20px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #a0a0b8; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+</style>
+</head>
+<body>
+<h1>UI Framework Architecture</h1>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#e94560"></div> Manager (单例)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#0f3460"></div> Base (抽象基类)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#533483"></div> Animation (ScriptableObject)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#1a6b5e"></div> Utils / Component</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#e8a87c"></div> Panel (UIScreen 子类)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#41b883"></div> Widget (UIWidget 子类)</div>
+</div>
+
+<div class="container">
+
+  <!-- ===== Manager Layer ===== -->
+  <div class="layer-section">
+    <div class="layer-label">MANAGER LAYER — 全局调度</div>
+    <div class="layer-line"></div>
+    <div class="card-row">
+      <!-- UIManager -->
+      <div class="card t-manager" style="width: 420px;">
+        <div class="card-header">⬡ UIManager (单例 · 懒加载)</div>
+        <div class="card-body">
+          <table>
+            <tr><td>RegisteredScreens</td><td>Dictionary&lt;string, UIScreen&gt;</td></tr>
+            <tr><td>LayerCanvases</td><td>Dictionary&lt;UILayer, Canvas&gt; — 6层按需创建</td></tr>
+            <tr><td>LayerMasks</td><td>Dictionary&lt;UILayer, GameObject&gt; — 蒙版遮罩</td></tr>
+            <tr><td>NavigationStack</td><td>UINavigationStack</td></tr>
+          </table>
+          <div style="margin-top:10px; font-size:12px; color:#a0a0b8;">
+            <b>API:</b> RegisterScreen · Open(id) · Close(id) · GoBack() · ClearAll() · GetScreen&lt;T&gt;()
+          </div>
+        </div>
+      </div>
+
+      <!-- UINavigationStack -->
+      <div class="card t-manager" style="width: 280px;">
+        <div class="card-header">⬡ UINavigationStack</div>
+        <div class="card-body">
+          <table>
+            <tr><td>数据结构</td><td>Stack&lt;UIScreen&gt;</td></tr>
+            <tr><td>CurrentScreen</td><td>Peek() 栈顶</td></tr>
+            <tr><td>Push</td><td>入栈</td></tr>
+            <tr><td>Pop</td><td>出栈</td></tr>
+            <tr><td>Remove</td><td>中间移除 (LINQ重建)</td></tr>
+            <tr><td>Clear</td><td>清空</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- UILayer -->
+      <div class="card t-manager" style="width: 320px;">
+        <div class="card-header">⬡ UILayer (枚举 + 扩展方法)</div>
+        <div class="card-body">
+          <table>
+            <tr><td>Background</td><td>sortingOrder = 0</td></tr>
+            <tr><td>Normal</td><td>sortingOrder = 100</td></tr>
+            <tr><td>HUD</td><td>sortingOrder = 200</td></tr>
+            <tr><td>Popup</td><td>sortingOrder = 300</td></tr>
+            <tr><td>Top</td><td>sortingOrder = 400</td></tr>
+            <tr><td>Loading</td><td>sortingOrder = 500</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow-down">↓ 管理</div>
+
+  <!-- ===== Base Layer ===== -->
+  <div class="layer-section">
+    <div class="layer-label">BASE LAYER — 屏幕与组件抽象</div>
+    <div class="layer-line"></div>
+    <div class="card-row">
+
+      <!-- UIScreen -->
+      <div class="card t-base" style="width: 520px;">
+        <div class="card-header">⬢ UIScreen <span class="badge badge-mono">abstract · MonoBehaviour</span></div>
+        <div class="card-body">
+          <table>
+            <tr><td>screenId</td><td>唯一标识，用于注册查找</td></tr>
+            <tr><td>defaultLayer</td><td>UILayer — 默认层级</td></tr>
+            <tr><td>useMask</td><td>bool — 是否显示遮罩</td></tr>
+            <tr><td>closeOnEsc</td><td>bool — ESC 关闭</td></tr>
+            <tr><td>destroyOnClose</td><td>bool — 关闭时销毁</td></tr>
+            <tr><td>openAnimation</td><td>UIAnimationBase — 打开动画 SO</td></tr>
+            <tr><td>closeAnimation</td><td>UIAnimationBase — 关闭动画 SO</td></tr>
+          </table>
+          <div class="lifecycle">
+            <div class="lc-step"><span class="lc-highlight">Open()</span> → StopCoroutine(close) → SetActive(true)</div>
+            <div class="lc-step">&nbsp;&nbsp;<span class="lc-arrow">├─</span> Widget.OnScreenOpened()</div>
+            <div class="lc-step">&nbsp;&nbsp;<span class="lc-arrow">├─</span> <span class="lc-callback">OnBeforeOpen()</span> ← 子类重写：初始化数据</div>
+            <div class="lc-step">&nbsp;&nbsp;<span class="lc-arrow">├─</span> <span class="lc-highlight">yield return</span> openAnimation.PlayCoroutine()</div>
+            <div class="lc-step">&nbsp;&nbsp;<span class="lc-arrow">├─</span> IsOpen = true · IsAnimating = false</div>
+            <div class="lc-step">&nbsp;&nbsp;<span class="lc-arrow">└─</span> <span class="lc-callback">OnAfterOpen()</span> ← 子类重写：注册事件</div>
+          </div>
+          <div class="lifecycle">
+            <div class="lc-step"><span class="lc-highlight">Close()</span> → StopCoroutine(open) → StartCoroutine()</div>
+            <div class="lc-step">&nbsp;&nbsp;<span class="lc-arrow">├─</span> <span class="lc-callback">OnBeforeClose()</span> ← 子类重写：保存状态</div>
+            <div class="lc-step">&nbsp;&nbsp;<span class="lc-arrow">├─</span> <span class="lc-highlight">yield return</span> closeAnimation.PlayCoroutine()</div>
+            <div class="lc-step">&nbsp;&nbsp;<span class="lc-arrow">├─</span> IsOpen = false · IsAnimating = false</div>
+            <div class="lc-step">&nbsp;&nbsp;<span class="lc-arrow">├─</span> <span class="lc-callback">OnAfterClose()</span> ← 子类重写：清理</div>
+            <div class="lc-step">&nbsp;&nbsp;<span class="lc-arrow">├─</span> Widget.OnScreenClosed()</div>
+            <div class="lc-step">&nbsp;&nbsp;<span class="lc-arrow">└─</span> SetActive(false) / [Destroy]</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- UIWidget -->
+      <div class="card t-base" style="width: 440px;">
+        <div class="card-header">⬢ UIWidget <span class="badge badge-mono">abstract · MonoBehaviour</span></div>
+        <div class="card-body">
+          <table>
+            <tr><td>autoBind</td><td>bool — Awake 自动绑定组件</td></tr>
+            <tr><td>selectAnimation</td><td>UIAnimationBase — 选中动画 SO</td></tr>
+            <tr><td>deselectAnimation</td><td>UIAnimationBase — 取消选中动画 SO</td></tr>
+            <tr><td>hoverEnterAnimation</td><td>UIAnimationBase — 悬浮进入动画 SO</td></tr>
+            <tr><td>hoverExitAnimation</td><td>UIAnimationBase — 悬浮离开动画 SO</td></tr>
+            <tr><td>IsSelected</td><td>bool — 选中状态下跳过悬浮动画</td></tr>
+          </table>
+          <div class="lifecycle">
+            <div class="lc-step"><span class="lc-highlight">PlaySelect()</span> → IsSelected=true</div>
+            <div class="lc-step">&nbsp;&nbsp;<span class="lc-arrow">└─</span> StopCoroutine(deselect) → StartCoroutine(select)</div>
+          </div>
+          <div class="lifecycle">
+            <div class="lc-step"><span class="lc-highlight">PlayHoverEnter()</span> → if IsSelected return</div>
+            <div class="lc-step">&nbsp;&nbsp;<span class="lc-arrow">└─</span> StopCoroutine(hoverExit) → StartCoroutine(hoverEnter)</div>
+          </div>
+          <div style="margin-top:8px; font-size:12px; color:#a0a0b8;">
+            <b>Screen 感知:</b> OnScreenOpened() · OnScreenClosed()<br>
+            <b>协程互斥:</b> 每个动画独立 Coroutine 引用，播放前 StopCoroutine 对立动画
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow-down">↓ 使用</div>
+
+  <!-- ===== Animation Layer ===== -->
+  <div class="layer-section">
+    <div class="layer-label">ANIMATION LAYER — ScriptableObject 动画系统</div>
+    <div class="layer-line"></div>
+    <div class="card-row">
+
+      <!-- Interface -->
+      <div class="card t-anim" style="width: 240px;">
+        <div class="card-header">⟢ IUIAnimation <span class="badge badge-iface">interface</span></div>
+        <div class="card-body">
+          <table>
+            <tr><td>PlayCoroutine</td><td>IEnumerator PlayCoroutine(GameObject)</td></tr>
+            <tr><td>Stop</td><td>void Stop()</td></tr>
+            <tr><td>IsPlaying</td><td>bool</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Base -->
+      <div class="arrow-right">→</div>
+
+      <!-- UIAnimationBase -->
+      <div class="card t-anim" style="width: 280px;">
+        <div class="card-header">⟢ UIAnimationBase <span class="badge badge-so">ScriptableObject</span></div>
+        <div class="card-body">
+          <table>
+            <tr><td>duration</td><td>float = 0.3f</td></tr>
+            <tr><td>ease</td><td>Ease = OutQuad</td></tr>
+            <tr><td>useCanvasGroup</td><td>bool = true</td></tr>
+            <tr><td>_currentTween</td><td>Tween (DOTween)</td></tr>
+            <tr><td>SetUpdate(true)</td><td>暂停时仍可播放</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="arrow-right">→</div>
+
+      <!-- Concrete Animations -->
+      <div class="card t-anim" style="width: 360px;">
+        <div class="card-header">⟢ 11 个具体动画子类</div>
+        <div class="card-body">
+          <table>
+            <tr><td>UIFadeAnimation</td><td>CanvasGroup.alpha 淡入淡出</td></tr>
+            <tr><td>UIFastFadeAnimation</td><td>快速淡入 (0.2s)</td></tr>
+            <tr><td>UIFadeScaleAnimation</td><td>淡入 + 弹性缩放 (Sequence)</td></tr>
+            <tr><td>UIScaleAnimation</td><td>纯缩放 (0→1)</td></tr>
+            <tr><td>UISlideAnimation</td><td>滑入 (左/右/上/下)</td></tr>
+            <tr><td>LoadingOpenAnim</td><td>Loading 淡入 + blocksRaycasts</td></tr>
+            <tr><td>LoadingCloseAnim</td><td>Loading 淡出 + blocksRaycasts</td></tr>
+            <tr><td>RuneSelectedAnim</td><td>符文选中: 弹性放大→停留</td></tr>
+            <tr><td>RuneDeSelectedAnim</td><td>符文取消选中: 缩回</td></tr>
+            <tr><td>RuneHoverEnterAnim</td><td>符文悬浮: 放大到 1.05</td></tr>
+            <tr><td>RuneHoverExitAnim</td><td>符文离开: 缩回 1.0</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow-down">↓ 支撑</div>
+
+  <!-- ===== Utils + Component Layer ===== -->
+  <div class="layer-section">
+    <div class="layer-label">UTILS & COMPONENT LAYER — 工具与即插即用组件</div>
+    <div class="layer-line"></div>
+    <div class="card-row">
+
+      <!-- UIConstants -->
+      <div class="card t-util" style="width: 320px;">
+        <div class="card-header">⚙ UIConstants (静态常量)</div>
+        <div class="card-body">
+          <table>
+            <tr><td>名称常量</td><td>CanvasName · EventSystemName</td></tr>
+            <tr><td>路径常量</td><td>ResourcesPath · PrefabsPath</td></tr>
+            <tr><td>前缀常量</td><td>Mask_ · Panel_ · Widget_</td></tr>
+            <tr><td>音效常量</td><td>ButtonClick · PanelOpen/Close</td></tr>
+            <tr><td>时长常量</td><td>DefaultAnim(0.3s) · DefaultFade(0.2s)</td></tr>
+            <tr><td>ScreenIds</td><td>14 个屏幕 ID 常量</td></tr>
+            <tr><td>AnimationNames</td><td>8 个动画名称常量</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- UIComponentFinder -->
+      <div class="card t-util" style="width: 320px;">
+        <div class="card-header">⚙ UIComponentFinder (静态工具)</div>
+        <div class="card-body">
+          <table>
+            <tr><td>FindComponent&lt;T&gt;</td><td>按路径查找组件</td></tr>
+            <tr><td>FindComponentInChildren&lt;T&gt;</td><td>递归按名字查找</td></tr>
+            <tr><td>FindText/Image/Slider</td><td>类型安全快捷方法</td></tr>
+            <tr><td>GetOrAddComponent&lt;T&gt;</td><td>获取或添加组件</td></tr>
+            <tr><td>GetRectTransform</td><td>获取 RectTransform</td></tr>
+            <tr><td>GetOrAddCanvasGroup</td><td>获取或添加 CanvasGroup</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- UISoundEffect -->
+      <div class="card t-util" style="width: 300px;">
+        <div class="card-header">🔊 UISoundEffect <span class="badge badge-mono">MonoBehaviour</span></div>
+        <div class="card-body">
+          <table>
+            <tr><td>hoverSoundId</td><td>悬浮音效 ID</td></tr>
+            <tr><td>clickSoundId</td><td>点击音效 ID</td></tr>
+            <tr><td>hoverCooldown</td><td>0.1s 防频繁触发</td></tr>
+          </table>
+          <div style="margin-top:8px; font-size:12px; color:#a0a0b8;">
+            实现 IPointerEnterHandler + IPointerClickHandler<br>
+            拖到任意 UI 元素即可拥有音效，不干扰原有事件<br>
+            通过 AudioManager.PlayUI() 播放，支持热更
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow-down">↓ 实例化</div>
+
+  <!-- ===== Panels ===== -->
+  <div class="layer-section">
+    <div class="layer-label">PANEL LAYER — UIScreen 子类（实际面板）</div>
+    <div class="layer-line"></div>
+    <div class="card-row">
+      <div class="card t-panel" style="width: 160px;"><div class="card-header" style="justify-content:center; font-size:13px;">ShopPanel</div><div class="card-body" style="text-align:center; font-size:12px;">符文商店</div></div>
+      <div class="card t-panel" style="width: 160px;"><div class="card-header" style="justify-content:center; font-size:13px;">RunePanel</div><div class="card-body" style="text-align:center; font-size:12px;">符文装备面板</div></div>
+      <div class="card t-panel" style="width: 160px;"><div class="card-header" style="justify-content:center; font-size:13px;">Loading</div><div class="card-body" style="text-align:center; font-size:12px;">加载界面 (独立单例)</div></div>
+      <div class="card t-panel" style="width: 160px;"><div class="card-header" style="justify-content:center; font-size:13px;">MassionPanel</div><div class="card-body" style="text-align:center; font-size:12px;">任务面板</div></div>
+      <div class="card t-panel" style="width: 160px;"><div class="card-header" style="justify-content:center; font-size:13px;">MatchResultPanel</div><div class="card-body" style="text-align:center; font-size:12px;">对局结算</div></div>
+      <div class="card t-panel" style="width: 160px;"><div class="card-header" style="justify-content:center; font-size:13px;">CharactorPanel</div><div class="card-body" style="text-align:center; font-size:12px;">角色选择</div></div>
+    </div>
+  </div>
+
+  <div class="arrow-down">↓ 包含</div>
+
+  <!-- ===== Widgets ===== -->
+  <div class="layer-section">
+    <div class="layer-label">WIDGET LAYER — UIWidget 子类（实际组件）</div>
+    <div class="layer-line"></div>
+    <div class="card-row" style="flex-wrap: wrap; gap: 12px;">
+      <div class="card t-widget" style="width: 130px;"><div class="card-header" style="justify-content:center; font-size:12px; padding:10px;">RuneSlot</div></div>
+      <div class="card t-widget" style="width: 130px;"><div class="card-header" style="justify-content:center; font-size:12px; padding:10px;">ShopRuneSlot</div></div>
+      <div class="card t-widget" style="width: 130px;"><div class="card-header" style="justify-content:center; font-size:12px; padding:10px;">RuneEquip</div></div>
+      <div class="card t-widget" style="width: 130px;"><div class="card-header" style="justify-content:center; font-size:12px; padding:10px;">CoinDisplayUI</div></div>
+      <div class="card t-widget" style="width: 130px;"><div class="card-header" style="justify-content:center; font-size:12px; padding:10px;">EXPBar</div></div>
+      <div class="card t-widget" style="width: 130px;"><div class="card-header" style="justify-content:center; font-size:12px; padding:10px;">LobbyNavWidget</div></div>
+      <div class="card t-widget" style="width: 130px;"><div class="card-header" style="justify-content:center; font-size:12px; padding:10px;">LobbyActionWidget</div></div>
+      <div class="card t-widget" style="width: 130px;"><div class="card-header" style="justify-content:center; font-size:12px; padding:10px;">LobbyRuneSlotWidget</div></div>
+      <div class="card t-widget" style="width: 130px;"><div class="card-header" style="justify-content:center; font-size:12px; padding:10px;">MassionItem</div></div>
+      <div class="card t-widget" style="width: 130px;"><div class="card-header" style="justify-content:center; font-size:12px; padding:10px;">CharactorInfoItem</div></div>
+      <div class="card t-widget" style="width: 130px;"><div class="card-header" style="justify-content:center; font-size:12px; padding:10px;">AudioSettingsWidget</div></div>
+      <div class="card t-widget" style="width: 130px;"><div class="card-header" style="justify-content:center; font-size:12px; padding:10px;">TopNotice</div></div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">Manager</div></div>
+    <div class="stat-item"><div class="stat-num">2</div><div class="stat-label">Base 抽象类</div></div>
+    <div class="stat-item"><div class="stat-num">13</div><div class="stat-label">Animation 类</div></div>
+    <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">Utils / Component</div></div>
+    <div class="stat-item"><div class="stat-num">7+</div><div class="stat-label">Panel 子类</div></div>
+    <div class="stat-item"><div class="stat-num">12+</div><div class="stat-label">Widget 子类</div></div>
+    <div class="stat-item"><div class="stat-num">40+</div><div class="stat-label">总类数</div></div>
+  </div>
+
+</div>
+</body>
+</html>

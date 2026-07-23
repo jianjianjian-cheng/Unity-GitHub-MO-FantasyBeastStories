@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 
@@ -16,19 +16,19 @@ namespace UI.Framework.Animation
         [SerializeField] protected float fadeDuration = 0.2f;
         [SerializeField] protected float scaleDuration = 0.3f;
 
-        public override async Task PlayAsync(GameObject target)
+        public override IEnumerator PlayCoroutine(GameObject target)
         {
             Stop();
 
             CanvasGroup canvasGroup = GetCanvasGroup(target);
-            
+
             if (canvasGroup == null)
             {
                 canvasGroup = target.AddComponent<CanvasGroup>();
             }
 
             RectTransform rect = GetRectTransform(target);
-            
+
             if (rect == null)
             {
                 rect = target.GetComponent<RectTransform>();
@@ -53,7 +53,7 @@ namespace UI.Framework.Animation
 
             _currentTween = sequence;
 
-            await sequence.AsyncWaitForCompletion();
+            yield return _currentTween.WaitForCompletion();
         }
     }
 }

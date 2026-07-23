@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 
@@ -14,7 +14,7 @@ namespace UI.Framework.Animation
         [SerializeField] private Vector3 normalScale = Vector3.one;
         [SerializeField] private float durationOut = 0.1f;
 
-        public override async Task PlayAsync(GameObject target)
+        public override IEnumerator PlayCoroutine(GameObject target)
         {
             Stop();
 
@@ -22,14 +22,14 @@ namespace UI.Framework.Animation
             if (rect == null)
             {
                 Debug.LogWarning("RuneHoverExitAnim: 目标没有 RectTransform");
-                return;
+                yield break;
             }
 
             _currentTween = rect.DOScale(normalScale, durationOut)
                 .SetEase(Ease.OutQuad)
                 .SetUpdate(true);
 
-            await _currentTween.AsyncWaitForCompletion();
+            yield return _currentTween.WaitForCompletion();
         }
     }
 }

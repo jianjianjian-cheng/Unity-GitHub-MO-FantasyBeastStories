@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 
@@ -11,12 +11,12 @@ namespace UI.Framework.Animation
         [SerializeField] protected float startAlpha = 0f;
         [SerializeField] protected float endAlpha = 1f;
 
-        public override async Task PlayAsync(GameObject target)
+        public override IEnumerator PlayCoroutine(GameObject target)
         {
             Stop();
 
             CanvasGroup canvasGroup = GetCanvasGroup(target);
-            
+
             if (canvasGroup == null)
             {
                 canvasGroup = target.AddComponent<CanvasGroup>();
@@ -28,7 +28,7 @@ namespace UI.Framework.Animation
                 .SetEase(Ease.Linear)
                 .SetUpdate(true);
 
-            await _currentTween.AsyncWaitForCompletion();
+            yield return _currentTween.WaitForCompletion();
         }
     }
 }

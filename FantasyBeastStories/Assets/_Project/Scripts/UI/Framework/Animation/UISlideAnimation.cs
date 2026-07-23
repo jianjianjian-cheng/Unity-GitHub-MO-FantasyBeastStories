@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 
@@ -19,16 +19,16 @@ namespace UI.Framework.Animation
         [SerializeField] protected SlideDirection direction = SlideDirection.Left;
         [SerializeField] protected float offset = 500f;
 
-        public override async Task PlayAsync(GameObject target)
+        public override IEnumerator PlayCoroutine(GameObject target)
         {
             Stop();
 
             RectTransform rect = GetRectTransform(target);
-            
+
             if (rect == null)
             {
                 Debug.LogWarning("UISlideAnimation: RectTransform 为空");
-                return;
+                yield break;
             }
 
             Vector2 startPos = rect.anchoredPosition;
@@ -56,7 +56,7 @@ namespace UI.Framework.Animation
                 .SetEase(ease)
                 .SetUpdate(true);
 
-            await _currentTween.AsyncWaitForCompletion();
+            yield return _currentTween.WaitForCompletion();
         }
     }
 }

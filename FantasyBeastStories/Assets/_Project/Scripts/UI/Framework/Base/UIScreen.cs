@@ -1,5 +1,5 @@
+using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UI.Framework.Animation;
 using UI.Framework.Manager;
 using UnityEngine;
@@ -27,6 +27,9 @@ namespace UI.Framework.Base
     protected Canvas _canvas;
     protected CanvasGroup _canvasGroup;
     protected List<MonoBehaviour> _childWidgets = new();
+
+    private Coroutine _openCoroutine;
+    private Coroutine _closeCoroutine;
 
     protected virtual void Awake()
     {
@@ -68,12 +71,21 @@ namespace UI.Framework.Base
       }
     }
 
-    public async void Open()
+    public void Open()
     {
       if (IsOpen) return;
-      IsAnimating = true;
+      if (_closeCoroutine != null)
+        StopCoroutine(_closeCoroutine);
 
+      // 必须在 StartCoroutine 之前激活 GameObject，否则协程无法启动
       gameObject.SetActive(true);
+
+      _openCoroutine = StartCoroutine(OpenCoroutine());
+    }
+
+    private IEnumerator OpenCoroutine()
+    {
+      IsAnimating = true;
 
       foreach (var widget in _childWidgets)
       {
@@ -84,22 +96,30 @@ namespace UI.Framework.Base
       OnBeforeOpen();
 
       if (openAnimation != null)
-        await openAnimation.PlayAsync(gameObject);
+        yield return openAnimation.PlayCoroutine(gameObject);
 
       IsOpen = true;
       IsAnimating = false;
       OnAfterOpen();
     }
 
-    public async void Close()
+    public void Close()
     {
       if (!IsOpen) return;
+      if (_openCoroutine != null)
+        StopCoroutine(_openCoroutine);
+
+      _closeCoroutine = StartCoroutine(CloseCoroutine());
+    }
+
+    private IEnumerator CloseCoroutine()
+    {
       IsAnimating = true;
 
       OnBeforeClose();
 
       if (closeAnimation != null)
-        await closeAnimation.PlayAsync(gameObject);
+        yield return closeAnimation.PlayCoroutine(gameObject);
 
       IsOpen = false;
       IsAnimating = false;

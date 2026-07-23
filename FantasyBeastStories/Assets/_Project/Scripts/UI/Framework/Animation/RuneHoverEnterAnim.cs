@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 
@@ -14,7 +14,7 @@ namespace UI.Framework.Animation
         [SerializeField] private float hoverScale = 1.05f;
         [SerializeField] private float durationIn = 0.12f;
 
-        public override async Task PlayAsync(GameObject target)
+        public override IEnumerator PlayCoroutine(GameObject target)
         {
             Stop();
 
@@ -22,7 +22,7 @@ namespace UI.Framework.Animation
             if (rect == null)
             {
                 Debug.LogWarning("RuneHoverEnterAnim: 目标没有 RectTransform");
-                return;
+                yield break;
             }
 
             // 悬浮时只放大，不影响透明度（避免和选中动画冲突）
@@ -30,7 +30,7 @@ namespace UI.Framework.Animation
                 .SetEase(Ease.OutCubic)
                 .SetUpdate(true);
 
-            await _currentTween.AsyncWaitForCompletion();
+            yield return _currentTween.WaitForCompletion();
         }
     }
 }

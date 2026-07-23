@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 
@@ -17,7 +17,7 @@ namespace UI.Framework.Animation
         [SerializeField] private float scaleUpDuration = 0.2f;
         [SerializeField] private float settleDuration = 0.18f;
 
-        public override async Task PlayAsync(GameObject target)
+        public override IEnumerator PlayCoroutine(GameObject target)
         {
             Stop();
 
@@ -25,7 +25,7 @@ namespace UI.Framework.Animation
             if (rect == null)
             {
                 Debug.LogWarning("RuneSelectedAnim: 目标没有 RectTransform");
-                return;
+                yield break;
             }
 
             Sequence seq = DOTween.Sequence();
@@ -40,7 +40,7 @@ namespace UI.Framework.Animation
                 .SetEase(Ease.OutQuad));
 
             _currentTween = seq;
-            await seq.AsyncWaitForCompletion();
+            yield return _currentTween.WaitForCompletion();
         }
     }
 }

@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 
@@ -11,16 +11,16 @@ namespace UI.Framework.Animation
         [SerializeField] protected float startAlpha = 0f;
         [SerializeField] protected float endAlpha = 1f;
 
-        public override async Task PlayAsync(GameObject target)
+        public override IEnumerator PlayCoroutine(GameObject target)
         {
             Stop();
 
             CanvasGroup canvasGroup = GetCanvasGroup(target);
-            
+
             if (canvasGroup == null)
             {
                 Debug.LogWarning("UIFadeAnimation: CanvasGroup 为空");
-                return;
+                yield break;
             }
 
             canvasGroup.alpha = startAlpha;
@@ -29,7 +29,7 @@ namespace UI.Framework.Animation
                 .SetEase(ease)
                 .SetUpdate(true);
 
-            await _currentTween.AsyncWaitForCompletion();
+            yield return _currentTween.WaitForCompletion();
         }
     }
 }
