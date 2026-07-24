@@ -77,9 +77,13 @@ public class AudioSettingsWidget : UIWidget
         // 设置默认标签文字
         SetDefaultLabels();
 
-        // 关闭所有图片的射线检测，避免挡住后面 UI 的点击
+        // 关闭背景图片的射线检测，但保留 Slider 的交互
         foreach (var img in GetComponentsInChildren<Image>(true))
+        {
+            if (img.GetComponentInParent<Slider>() != null)
+                continue;
             img.raycastTarget = false;
+        }
     }
 
     /// <summary>按名称前缀查找子对象中的 Slider，支持递归查找</summary>

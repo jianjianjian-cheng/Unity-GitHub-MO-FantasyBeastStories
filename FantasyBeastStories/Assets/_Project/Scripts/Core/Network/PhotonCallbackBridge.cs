@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Controllers.Network
 {
     /// <summary>
-    /// 轻量级 PUN 回调桥接器 — 将 PUN 的 MonoBehaviourPunCallbacks 事件转发给 NetworkServiceLocator
+    /// PUN 回调桥接器 — 将 PUN 的 MonoBehaviourPunCallbacks 事件转发给 NetworkServiceLocator
     /// </summary>
     public class PhotonCallbackBridge : MonoBehaviourPunCallbacks
     {

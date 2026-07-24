@@ -6,7 +6,6 @@ namespace UI.Framework.Animation
 {
     /// <summary>
     /// 符文「选中」动画：弹性放大 → 停留在比原始略大的尺寸，
-    /// 明确标示"此槽位已被选中"
     /// </summary>
     [CreateAssetMenu(menuName = "UI/Animation/Rune/Selected")]
     public class RuneSelectedAnim : UIAnimationBase
@@ -31,11 +30,11 @@ namespace UI.Framework.Animation
             Sequence seq = DOTween.Sequence();
             seq.SetUpdate(true);
 
-            // ① 弹性放大到峰值（带明显弹性）
+            //弹性放大到峰值（带明显弹性）
             seq.Append(rect.DOScale(peakScale, scaleUpDuration)
                 .SetEase(Ease.OutBack, overshoot: 2f));
 
-            // ② 回落并停留在选中尺寸，比原始大，一眼看出哪个被选中
+            //回落并停留在选中尺寸，比原始大，一眼看出哪个被选中
             seq.Append(rect.DOScale(holdScale, settleDuration)
                 .SetEase(Ease.OutQuad));
 

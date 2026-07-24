@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>幻想兽物语 - Photon PUN2 网络架构图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #1a1a2e;
+    font-family: 'Microsoft YaHei', sans-serif;
+    color: #eee;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+  .diagram {
+    width: 1300px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .title {
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    color: #e94560;
+    margin-bottom: 20px;
+  }
+
+  /* 区域容器 */
+  .zone {
+    border-radius: 14px;
+    padding: 20px 24px;
+    border: 2px solid;
+  }
+  .zone-label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .zone-label .count {
+    font-size: 12px;
+    background: rgba(255,255,255,0.12);
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-weight: normal;
+  }
+
+  /* 业务代码区 */
+  .zone-business { border-color: #4ecdc4; background: rgba(78,205,196,0.05); }
+  .zone-business .zone-label { color: #4ecdc4; }
+
+  /* 接口隔离区 */
+  .zone-interface { border-color: #9b59b6; background: rgba(155,89,182,0.05); }
+  .zone-interface .zone-label { color: #c29de8; }
+
+  /* Photon实现区 */
+  .zone-photon { border-color: #f39c12; background: rgba(243,156,18,0.05); }
+  .zone-photon .zone-label { color: #f5b833; }
+
+  /* Photon底层区 */
+  .zone-core { border-color: #666; background: rgba(100,100,100,0.05); }
+  .zone-core .zone-label { color: #aaa; }
+
+  /* 模块行 */
+  .modules {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .mod {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 12.5px;
+    line-height: 1.4;
+  }
+  .mod .mod-name { font-weight: bold; }
+  .mod .mod-desc { color: #999; font-size: 11px; margin-top: 2px; }
+
+  /* 箭头连接 */
+  .arrow {
+    text-align: center;
+    font-size: 16px;
+    color: #555;
+    padding: 2px 0;
+  }
+  .arrow .arrow-text {
+    font-size: 11px;
+    color: #888;
+    background: #222;
+    padding: 3px 12px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    margin-left: 8px;
+  }
+
+  /* 双列布局 */
+  .two-col {
+    display: flex;
+    gap: 20px;
+  }
+  .col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* 非网络化方案区 */
+  .zone-nonet { border-color: #e94560; background: rgba(233,69,96,0.05); }
+  .zone-nonet .zone-label { color: #ff6b9d; }
+
+  .flow-step {
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .step-num {
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+  .step-text { line-height: 1.5; color: #ccc; }
+  .step-text .highlight { color: #f4d35e; }
+
+  /* 图例 */
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #888;
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; }
+  .legend-dot { width: 14px; height: 14px; border-radius: 3px; border: 2px solid; }
+</style>
+</head>
+<body>
+<div class="diagram">
+  <div class="title">幻想兽物语 · Photon PUN2 网络架构图</div>
+
+  <!-- 业务代码层 -->
+  <div class="zone zone-business">
+    <div class="zone-label">业务代码层（38 个文件） <span class="count">不直接 using Photon.Pun</span></div>
+    <div class="modules">
+      <div class="mod"><div class="mod-name">PlayerController</div><div class="mod-desc">输入处理 · 移动 · 攻击 · 仅处理本地玩家</div></div>
+      <div class="mod"><div class="mod-name">EnemyBase</div><div class="mod-desc">状态机 AI · 仅 MasterClient 执行</div></div>
+      <div class="mod"><div class="mod-name">ExperienceManager</div><div class="mod-desc">经验球生成 · 升级 · RPC 同步</div></div>
+      <div class="mod"><div class="mod-name">PowerUpManager</div><div class="mod-desc">道具生成 · 拾取 · RPC 同步</div></div>
+      <div class="mod"><div class="mod-name">GameManager</div><div class="mod-desc">场景切换 · Boss死亡流程 · RPC</div></div>
+      <div class="mod"><div class="mod-name">TaskManager</div><div class="mod-desc">局内任务 · 击杀上报 · RPC</div></div>
+      <div class="mod"><div class="mod-name">GamePauseManager</div><div class="mod-desc">暂停状态 · RPC 同步</div></div>
+      <div class="mod"><div class="mod-name">ExperienceBallBase</div><div class="mod-desc">经验球拾取 · 非网络化</div></div>
+      <div class="mod"><div class="mod-name">PowerUpItemBase</div><div class="mod-desc">道具拾取 · 非网络化</div></div>
+      <div class="mod"><div class="mod-name">Skeleton / Dragon / Boss</div><div class="mod-desc">敌人子类 · 死亡RPC通知房主</div></div>
+    </div>
+  </div>
+
+  <div class="arrow">↓ 通过 NetworkServiceLocator 访问接口 <span class="arrow-text">不直接依赖 Photon</span></div>
+
+  <!-- 接口隔离层 -->
+  <div class="zone zone-interface">
+    <div class="zone-label">接口隔离层 <span class="count">8 个接口</span></div>
+    <div class="modules">
+      <div class="mod"><div class="mod-name">INetworkPlayerService</div><div class="mod-desc">玩家身份 · 房间属性 · 准备状态</div></div>
+      <div class="mod"><div class="mod-name">INetworkObjectService</div><div class="mod-desc">实例化 · RPC调用 · ViewID查询</div></div>
+      <div class="mod"><div class="mod-name">IObjectPoolService</div><div class="mod-desc">对象池查询 · 本地获取</div></div>
+      <div class="mod"><div class="mod-name">IGameActionService</div><div class="mod-desc">退出大厅 · 准备 · 主菜单</div></div>
+      <div class="mod"><div class="mod-name">IControllerRpcService</div><div class="mod-desc">Domain层RPC调用 · 敌人销毁/元素池</div></div>
+      <div class="mod"><div class="mod-name">IPowerUpService</div><div class="mod-desc">道具生成 · 清除</div></div>
+      <div class="mod"><div class="mod-name">ISpawnPoint</div><div class="mod-desc">生成点接口</div></div>
+      <div class="mod"><div class="mod-name">ISpawnPointService</div><div class="mod-desc">生成点管理</div></div>
+    </div>
+  </div>
+
+  <div class="arrow">↓ 接口由以下类实现 <span class="arrow-text">适配器模式</span></div>
+
+  <!-- Photon实现层 -->
+  <div class="zone zone-photon">
+    <div class="zone-label">Photon 实现层 <span class="count">适配 Photon API</span></div>
+    <div class="two-col">
+      <div class="col">
+        <div class="modules">
+          <div class="mod"><div class="mod-name">PhotonPlayerService</div><div class="mod-desc">→ INetworkPlayerService<br>封装 PhotonNetwork.LocalPlayer · 房间属性 · PlayerProperties</div></div>
+          <div class="mod"><div class="mod-name">PhotonObjectService</div><div class="mod-desc">→ INetworkObjectService<br>封装 PhotonNetwork.Instantiate · RPC · ViewID</div></div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="modules">
+          <div class="mod"><div class="mod-name">Launcher</div><div class="mod-desc">→ IObjectPoolService + IGameActionService<br>继承 MonoBehaviourPunCallbacks · 房间连接/离开 · 场景同步</div></div>
+          <div class="mod"><div class="mod-name">NetworkObjectPoolManager</div><div class="mod-desc">→ 预注册池 · 房主创建→RPC→各客户端本地池取出</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓ <span class="arrow-text">三层 RPC Bridge（DontDestroyOnLoad + 独立 PhotonView）</span></div>
+
+  <!-- RPC Bridge层 -->
+  <div class="zone zone-photon">
+    <div class="zone-label">RPC 三桥分离 <span class="count">InfrastructureRegistrar 启动时自动创建</span></div>
+    <div class="modules">
+      <div class="mod"><div class="mod-name">ManagerRpcBridge</div><div class="mod-desc">Managers 层 RPC<br>场景切换 · 经验同步 · 升级面板 · 暂停 · 金币 · 道具生成/拾取</div></div>
+      <div class="mod"><div class="mod-name">ControllerRpcBridge</div><div class="mod-desc">Controllers 层 RPC<br>敌人销毁 · 元素池初始化 · 击杀上报 · 任务进度</div></div>
+      <div class="mod"><div class="mod-name">UIRpcBridge</div><div class="mod-desc">UI 层 RPC<br>任务通知 · 时间更新 · 结算面板</div></div>
+    </div>
+  </div>
+
+  <div class="arrow">↓ <span class="arrow-text">Photon 底层</span></div>
+
+  <!-- Photon底层 -->
+  <div class="zone zone-core">
+    <div class="zone-label">Photon PUN2 底层</div>
+    <div class="modules">
+      <div class="mod"><div class="mod-name">PhotonNetwork</div><div class="mod-desc">连接 · 房间 · 自动场景同步</div></div>
+      <div class="mod"><div class="mod-name">PhotonView</div><div class="mod-desc">网络身份 · 位置/动画同步</div></div>
+      <div class="mod"><div class="mod-name">PhotonCallbackBridge</div><div class="mod-desc">PUN回调转发 · OnPlayerPropertiesUpdate 等</div></div>
+      <div class="mod"><div class="mod-name">NetworkIdentityBase</div><div class="mod-desc">抽象网络身份 · IsMine / IsMasterClient / ViewID</div></div>
+    </div>
+  </div>
+
+  <!-- 分隔 -->
+  <div style="height:10px"></div>
+
+  <!-- 非网络化方案 -->
+  <div class="zone zone-nonet">
+    <div class="zone-label">经验球/道具 非网络化方案 <span class="count">减少 PhotonNetwork.Instantiate 开销</span></div>
+    <div class="two-col">
+      <div class="col">
+        <div class="flow-step">
+          <div class="step-num">1</div>
+          <div class="step-text">房主生成唯一 <span class="highlight">ballId</span>（自增计数器）</div>
+        </div>
+        <div class="flow-step">
+          <div class="step-num">2</div>
+          <div class="step-text">RPC 广播 <span class="highlight">ballId + 位置 + 数值</span> 到所有客户端</div>
+        </div>
+        <div class="flow-step">
+          <div class="step-num">3</div>
+          <div class="step-text">各客户端从<span class="highlight">本地对象池</span>取出（非 PhotonNetwork.Instantiate）</div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="flow-step">
+          <div class="step-num">4</div>
+          <div class="step-text">玩家拾取 → RPC 发送 <span class="highlight">ClaimExpBall</span> 到房主</div>
+        </div>
+        <div class="flow-step">
+          <div class="step-num">5</div>
+          <div class="step-text">房主 <span class="highlight">去重检查</span>（claimedBalls HashSet）→ 加经验</div>
+        </div>
+        <div class="flow-step">
+          <div class="step-num">6</div>
+          <div class="step-text">RPC 广播 <span class="highlight">ExpBallCollected</span> → 所有客户端隐藏并回池</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 权限模型 -->
+  <div class="zone zone-nonet">
+    <div class="zone-label">MasterClient 权限模型</div>
+    <div class="two-col">
+      <div class="col">
+        <div class="mod"><div class="mod-name">房主（MasterClient）</div>
+          <div class="mod-desc">执行敌人 AI · 生成敌人 · 生成经验球/道具 · 倒计时 · 击杀计数 · 场景切换</div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="mod"><div class="mod-name">非房主客户端</div>
+          <div class="mod-desc">通过 Photon 同步位置/动画 · 显示伤害数字 · 本地生成经验球（收到RPC后） · 死亡时RPC通知房主销毁</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 图例 -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="border-color:#4ecdc4;"></div><span>业务代码（38文件）</span></div>
+    <div class="legend-item"><div class="legend-dot" style="border-color:#9b59b6;"></div><span>接口隔离（8接口）</span></div>
+    <div class="legend-item"><div class="legend-dot" style="border-color:#f39c12;"></div><span>Photon 实现 + RPC桥</span></div>
+    <div class="legend-item"><div class="legend-dot" style="border-color:#666;"></div><span>Photon 底层</span></div>
+    <div class="legend-item"><div class="legend-dot" style="border-color:#e94560;"></div><span>非网络化方案</span></div>
+  </div>
+
+</div>
+</body>
+</html>

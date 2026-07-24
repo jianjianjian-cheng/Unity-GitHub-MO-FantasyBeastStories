@@ -28,7 +28,7 @@ namespace Controllers.Character
     protected PlayerAttributeConfigSO playerAttributeConfig;  // 运行时通过 Addressables 加载，确保热更生效
 
     [SerializeField]
-    protected bool isOnlyShow = false; // 是否只为显示角色而不用于其他操作
+    protected bool isOnlyShow = false;
 
     [SerializeField]
     protected GameObject virtualCamera; // 虚拟摄像机组件
@@ -64,7 +64,7 @@ namespace Controllers.Character
 
     protected PlayerInputHandler playerInputHandler;
 
-    // ==================== Phase 3: Lua bridge ====================
+    // ==================== Lua bridge ====================
     private HeroLuaBridge _luaBridge;
     private readonly HashSet<Element> _unlockedElements = new HashSet<Element>();
     public IReadOnlyCollection<Element> GetUnlockedElements() => _unlockedElements;
@@ -83,7 +83,6 @@ namespace Controllers.Character
       isInLobby = EventChannelLocator.MainContainer.gameSettings.IsStayLobby;
 
       // playerAttributeConfig 延迟到 InitializeCharacter 中按角色名通过 Addressables 加载
-      // Awake 时角色名尚未设置，无法确定使用哪个角色配置
 
       playerInputHandler = new PlayerInputHandler();
     }
@@ -103,7 +102,6 @@ namespace Controllers.Character
       if (!string.IsNullOrEmpty(deathEffectAddress))
         _deathEffectPrefab = Core.AssetLoader.TryLoadAsset<GameObject>(deathEffectAddress);
 
-      // 重新读取 IsStayLobby — Launcher.OnSceneLoaded 在 Awake 之后、Start 之前将其设为 false
       isInLobby = EventChannelLocator.MainContainer.gameSettings.IsStayLobby;
 
       // 应用符文效果（仅在游戏场景，非大厅）— 放在 Start 确保场景切换标志已更新
@@ -123,7 +121,6 @@ namespace Controllers.Character
         isReadyPanel.SetActive(false); // 隐藏准备界面
       }
       movementData.moveSpeed = attributePlayer.GetMoveSpeed();
-      // 获取或添加Rigidbody组件
       if (rb == null)
       {
         rb = gameObject.GetComponent<Rigidbody>();
@@ -135,7 +132,7 @@ namespace Controllers.Character
         rb.useGravity = !isOnlyShow;
       }
       if (!isOnlyShow)
-        rb.useGravity = true; // 启用重力
+        rb.useGravity = true;
       if (animator == null)
       {
         animator = GetComponent<Animator>();
@@ -143,7 +140,7 @@ namespace Controllers.Character
       sceneIndex = SceneManager.GetActiveScene().buildIndex;
       SetAndChangeHPUI();
 
-      // Phase 3: 初始化 Lua 行为桥接器（如果 OnPhotonInstantiate 尚未初始化则在此补上）
+      // 初始化 Lua 行为桥接器
       if (_luaBridge == null && !string.IsNullOrEmpty(_characterName))
       {
         _luaBridge = new HeroLuaBridge(_characterName);
@@ -160,7 +157,7 @@ namespace Controllers.Character
         return;
       if (isOnlyShow)
       {
-        return; // 如果只显示角色，不处理输入
+        return;
       }
       // 死亡后不处理输入
       if (attributePlayer.GetIsDead())
@@ -214,10 +211,6 @@ namespace Controllers.Character
       if (PlayerManager.instance != null)
         EventChannelLocator.MainContainer.playerQueryChannel.Raise(new PlayerQueryData(PlayerQueryType.RegisterPlayerObject) { playerObject = gameObject });
 
-      // 使用该 GameObject 的 Owner ActorNumber 注册属性，避免非拥有者覆盖本地玩家缓存
-      // 说明：同一客户端上所有 PlayerController 共用 localActorNumber，
-      // 若用 localActorNumber 注册非拥有者的属性，会覆盖拥有者的缓存条目，
-      // 导致卡牌效果更新了拥有者属性后，Tab 面板读取的是被覆盖的旧值。
       int ownerActorNumber = NetworkServiceLocator.ObjectService.GetOwnerActorNumber(this);
       EventChannelLocator.MainContainer.playerAttributeChannel.Raise(
           new PlayerAttributeData(PlayerAttributeQueryType.RegisterAttribute, AttributeKeyConst.Main, attributePlayer)
@@ -251,7 +244,6 @@ namespace Controllers.Character
 
     protected virtual void HandleInput()
     {
-      // 驱动输入处理器更新原始输入值
       playerInputHandler.Update();
 
       float h = playerInputHandler.Horizontal;
@@ -290,13 +282,12 @@ namespace Controllers.Character
 
     protected virtual void OnDestroy()
     {
-      // 只有在正常游戏中（非退出流程）才清理生成点
       var playerService = NetworkServiceLocator.PlayerService;
       if (playerService.IsOwnerOf(gameObject) && playerService.IsConnectedAndInRoom)
       {
         ClearSpawnPointOccupation();
       }
-      // 在 OnDestroy 中也进行清理，确保万无一失
+      // 在 OnDestroy 中也进行清理
       if (EventChannelLocator.MainContainer != null)
       {
         EventChannelLocator.MainContainer.playerAttributeChannel.Raise(
@@ -320,8 +311,7 @@ namespace Controllers.Character
         int spawnPointId = (int)spawnPointObj;
         var spawnService = ServiceLocator.Get<ISpawnPointService>();
         ISpawnPoint sp = spawnService?.GetSpawnPointById(spawnPointId);
-        // sp 可能已被场景卸载销毁（场景切换时 SpawnPoint 先于 DontDestroyOnLoad 对象销毁）
-        // 对 Unity 对象必须用 MonoBehaviour 转换判断，不能用 Equals(null)
+
         if (sp != null && (sp as MonoBehaviour) != null && sp.GetOccupiedByPlayer() == playerService.GetLocalActorNumber())
         {
           sp.ForceRelease();
@@ -404,7 +394,7 @@ namespace Controllers.Character
         rb.isKinematic = true;
       }
 
-      // 禁用碰撞器（敌人不再攻击尸体）
+      // 禁用碰撞器
       DisableColliders();
 
       // 禁用攻击组件（停止攻击）
@@ -445,7 +435,7 @@ namespace Controllers.Character
       // 激活观战模式
       spectatorCameraController?.ActivateSpectator();
 
-      // Phase 3: 通知 Lua 做角色专属死亡处理
+      //通知 Lua 做角色专属死亡处理
       _luaBridge?.OnDeath(this);
     }
 
@@ -581,7 +571,7 @@ namespace Controllers.Character
     {
       attributePlayer.SetCurrentElement(element);
       SyncElementToAll(element);
-      // Phase 3: 通知 Lua 做额外处理（VFX、对象池等）
+      // 通知 Lua 做额外处理（VFX、对象池等）
       _luaBridge?.OnSwitchElement(this, element);
     }
 
@@ -600,12 +590,13 @@ namespace Controllers.Character
     }
 
     /// <summary>
-    /// 解锁元素 — 先走 Lua（如 BingNv 多元素解锁），未处理时走 C# 默认逻辑（SwitchElement）
+    /// 解锁元素 
     /// </summary>
     protected virtual void UnlockElement(Element element)
     {
       if (_luaBridge != null && _luaBridge.OnUnlockElement(this, element))
         return;
+      //这里保守处理一下，害怕lua没有处理 
       SwitchElement(element);
     }
 
@@ -662,7 +653,7 @@ namespace Controllers.Character
       return attributePlayer.GetMaxAttackCount();
     }
 
-    // ==================== Phase 2: Public API for Lua bridge ====================
+    // ==================== 对Lua桥接器的公开API ====================
 
     private string _characterName;
 
@@ -678,7 +669,6 @@ namespace Controllers.Character
     public bool IsDead() => attributePlayer?.GetIsDead() ?? false;
     public void SetAttributeConfig(PlayerAttributeConfigSO config) => playerAttributeConfig = config;
 
-    // ==================== Phase 3: PUN Instantiation + Lua bridge wiring ====================
 
     /// <summary>
     /// PUN 实例化回调：接收 instantiationData 中的角色名，初始化角色差异资源 + Lua 行为。
@@ -695,7 +685,6 @@ namespace Controllers.Character
 
     /// <summary>
     /// 初始化角色：设置角色名，加载差异资源，初始化 Lua 桥接器。
-    /// 由 OnPhotonInstantiate 调用（联机），或手动调用（测试）。
     /// </summary>
     public void InitializeCharacter(string characterName)
     {
@@ -703,7 +692,6 @@ namespace Controllers.Character
       Debug.Log($"[PlayerController] InitializeCharacter: {characterName}");
 
       // 通过 Addressables 按角色名加载角色配置（确保热更生效）
-      // characterName 形如 "BingNvRoot"，去掉 "Root" 后缀拼接 Addressables key
       if (playerAttributeConfig == null)
       {
         string configName = characterName;
@@ -721,13 +709,11 @@ namespace Controllers.Character
         }
       }
 
-      // Awake 中延迟了 attributePlayer 的创建，在此补上
       if (attributePlayer == null)
       {
         attributePlayer = new AttributePlayerBase(playerAttributeConfig);
         attributePlayer.SetMoveSpeed(movementData?.moveSpeed ?? 2.6f);
 
-        // OnEnable 在此之前执行，注册了 null 到 PlayerManager，现在重新注册正确的 attributePlayer
         int ownerActorNumber = NetworkServiceLocator.ObjectService.GetOwnerActorNumber(this);
         EventChannelLocator.MainContainer.playerAttributeChannel.Raise(
             new PlayerAttributeData(PlayerAttributeQueryType.RegisterAttribute, AttributeKeyConst.Main, attributePlayer)

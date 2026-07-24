@@ -7,16 +7,8 @@ using UnityEngine;
 
 namespace Core
 {
-    /// <summary>
-    /// 玩家属性缓存服务（纯 C# 类）
-    /// 监听 PlayerAttributeEventChannelSO 维护 (ActorNumber, AttributeKey) → AttributePlayerBase 的字典
-    /// 替代原来的 EventManager（MonoBehaviour + 废弃单例）
-    /// </summary>
     public class AttributeCacheService
     {
-        /// <summary>
-        /// 属性缓存字典：(actorNumber, attributeKey) → AttributePlayerBase
-        /// </summary>
         private readonly Dictionary<(int actorNumber, string key), AttributePlayerBase> _cache =
             new Dictionary<(int, string), AttributePlayerBase>();
 

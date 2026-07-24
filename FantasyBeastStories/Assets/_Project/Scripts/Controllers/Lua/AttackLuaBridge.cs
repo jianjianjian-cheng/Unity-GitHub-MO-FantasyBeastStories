@@ -32,7 +32,6 @@ public class AttackLuaBridge
         }
     }
 
-    /// <summary>尝试执行攻击，返回 true 表示 Lua 处理了</summary>
     public bool TryPerformAttack(AttackRangeBase range, GameObject target)
     {
         if (!_luaEnabled || _behavior == null)

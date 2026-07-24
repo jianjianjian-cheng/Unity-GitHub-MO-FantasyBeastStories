@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>幻想兽物语 - 功能清单与技术实现思维导图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #1a1a2e;
+    font-family: 'Microsoft YaHei', sans-serif;
+    color: #eee;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 10px;
+  }
+  .main-title {
+    font-size: 26px;
+    font-weight: bold;
+    color: #e94560;
+    margin-bottom: 6px;
+  }
+  .sub-title {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 30px;
+  }
+  .mindmap-root {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    width: 100%;
+    max-width: 2000px;
+    overflow-x: auto;
+    padding-bottom: 30px;
+  }
+  .root-node {
+    background: linear-gradient(135deg, #e94560, #c4a52e);
+    border-radius: 16px;
+    padding: 20px 30px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0 4px 20px rgba(233,69,96,0.3);
+    position: sticky;
+    left: 10px;
+    flex-shrink: 0;
+    z-index: 10;
+    min-width: 140px;
+    margin-right: 20px;
+  }
+  .root-node .root-sub { font-size: 11px; color: rgba(255,255,255,0.8); margin-top: 4px; }
+  .h-line {
+    width: 20px;
+    height: 2px;
+    background: #444;
+    flex-shrink: 0;
+    margin-top: 40px;
+  }
+  .branches-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+  .branch-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+  }
+  .branch-node {
+    border-radius: 10px;
+    padding: 10px 18px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    border: 2px solid;
+    min-width: 130px;
+    flex-shrink: 0;
+  }
+  .branch-content {
+    display: flex;
+    gap: 8px;
+    margin-left: 20px;
+    flex-shrink: 0;
+  }
+  .card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 10px 14px;
+    min-width: 200px;
+    max-width: 300px;
+  }
+  .card .card-title {
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .card .card-desc {
+    font-size: 11.5px;
+    line-height: 1.65;
+    color: #ccc;
+  }
+  .card .card-tech {
+    font-size: 11px;
+    color: #4ecdc4;
+    margin-top: 4px;
+    font-style: italic;
+  }
+  .b-core .branch-node { background: rgba(196,165,46,0.15); border-color: #c4a52e; color: #f4d35e; }
+  .b-core .card-title { color: #f4d35e; }
+  .b-core .card { border-color: rgba(196,165,46,0.2); }
+  .b-char .branch-node { background: rgba(45,138,78,0.15); border-color: #2d8a4e; color: #6bcf7f; }
+  .b-char .card-title { color: #6bcf7f; }
+  .b-char .card { border-color: rgba(45,138,78,0.2); }
+  .b-combat .branch-node { background: rgba(233,69,96,0.15); border-color: #e94560; color: #ff6b9d; }
+  .b-combat .card-title { color: #ff6b9d; }
+  .b-combat .card { border-color: rgba(233,69,96,0.2); }
+  .b-enemy .branch-node { background: rgba(180,60,60,0.15); border-color: #b43c3c; color: #e88; }
+  .b-enemy .card-title { color: #e88; }
+  .b-enemy .card { border-color: rgba(180,60,60,0.2); }
+  .b-net .branch-node { background: rgba(26,107,138,0.15); border-color: #1a6b8a; color: #4ecdc4; }
+  .b-net .card-title { color: #4ecdc4; }
+  .b-net .card { border-color: rgba(26,107,138,0.2); }
+  .b-rune .branch-node { background: rgba(155,89,182,0.15); border-color: #9b59b6; color: #c29de8; }
+  .b-rune .card-title { color: #c29de8; }
+  .b-rune .card { border-color: rgba(155,89,182,0.2); }
+  .b-shop .branch-node { background: rgba(243,156,18,0.15); border-color: #f39c12; color: #f5b833; }
+  .b-shop .card-title { color: #f5b833; }
+  .b-shop .card { border-color: rgba(243,156,18,0.2); }
+  .b-task .branch-node { background: rgba(52,152,219,0.15); border-color: #3498db; color: #5dade2; }
+  .b-task .card-title { color: #5dade2; }
+  .b-task .card { border-color: rgba(52,152,219,0.2); }
+  .b-save .branch-node { background: rgba(46,204,113,0.15); border-color: #2ecc71; color: #58d98c; }
+  .b-save .card-title { color: #58d98c; }
+  .b-save .card { border-color: rgba(46,204,113,0.2); }
+  .b-ui .branch-node { background: rgba(232,67,147,0.15); border-color: #e84393; color: #f06ab; }
+  .b-ui .card-title { color: #f06ab; }
+  .b-ui .card { border-color: rgba(232,67,147,0.2); }
+  .b-hotfix .branch-node { background: rgba(230,126,34,0.15); border-color: #e67e22; color: #f0a040; }
+  .b-hotfix .card-title { color: #f0a040; }
+  .b-hotfix .card { border-color: rgba(230,126,34,0.2); }
+</style>
+</head>
+<body>
+
+<div class="main-title">幻想兽物语 · 功能清单与技术实现思维导图</div>
+<div class="sub-title">多人在线 RPG · Unity 2022.3 URP · Photon PUN2 · xLua · Addressables</div>
+
+<div class="mindmap-root">
+  <div class="root-node">
+    幻想兽物语
+    <div class="root-sub">项目总览</div>
+  </div>
+  <div class="h-line"></div>
+
+  <div class="branches-wrap">
+
+    <!-- 1. 多角色系统 -->
+    <div class="branch-row b-char">
+      <div class="branch-node">多角色系统</div>
+      <div class="branch-content">
+        <div class="card">
+          <div class="card-title">角色选择与切换</div>
+          <div class="card-desc">用 ScriptableObject 配置每个角色的名称、图标、Prefab 名和能力介绍，统一由一个角色信息库管理。选择面板读取库展示，选角色后通过 Photon 同步切换。</div>
+          <div class="card-tech">SO 配置 + Photon RPC</div>
+        </div>
+        <div class="card">
+          <div class="card-title">角色属性系统</div>
+          <div class="card-desc">每个角色的血量、攻击力、防御力、暴击率、攻击速度、移动速度等全部由 SO 配置，运行时由属性基类管理增减。卡牌和符文效果最终都作用在属性上。</div>
+          <div class="card-tech">SO 数据驱动</div>
+        </div>
+        <div class="card">
+          <div class="card-title">角色行为 Lua 热更</div>
+          <div class="card-desc">每个角色的元素切换、对象池注册、死亡处理等逻辑用 Lua 实现，C# 通过桥接器调用。Lua 出错时自动降级到 C# 默认行为，不崩游戏。</div>
+          <div class="card-tech">xLua 桥接 + 自动降级</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. 战斗系统 -->
+    <div class="branch-row b-combat">
+      <div class="branch-node">战斗系统</div>
+      <div class="branch-content">
+        <div class="card">
+          <div class="card-title">攻击系统</div>
+          <div class="card-desc">攻击逻辑优先走 Lua，Lua 没实现则走 C# 默认。支持连射机制（一次攻击发射多枚投射物）和攻击间隔冷却。攻击时生成投射物并同步到其他客户端。</div>
+          <div class="card-tech">Lua 优先 + C# 降级 + RPC 同步</div>
+        </div>
+        <div class="card">
+          <div class="card-title">元素切换</div>
+          <div class="card-desc">不同角色拥有不同元素组合（如冰/火/雷/草），切换元素时动态注册对应特效的对象池，并通过 RPC 通知其他客户端初始化。</div>
+          <div class="card-tech">元素枚举 + 动态对象池 + RPC</div>
+        </div>
+        <div class="card">
+          <div class="card-title">投射物与特效</div>
+          <div class="card-desc">包含火球、射线、冲击炮（4 种元素变体）、鬼灵（4 种元素变体）等投射物，通过工厂模式创建，对象池复用，Addressables 加载预制体。</div>
+          <div class="card-tech">工厂模式 + 对象池 + Addressables</div>
+        </div>
+        <div class="card">
+          <div class="card-title">伤害计算</div>
+          <div class="card-desc">伤害数据（值、目标、元素、暴击）通过事件通道广播，敌人订阅事件处理扣血。暴击和元素克制影响最终伤害值。</div>
+          <div class="card-tech">EventChannel 事件广播</div>
+        </div>
+        <div class="card">
+          <div class="card-title">卡牌升级</div>
+          <div class="card-desc">升级时弹出 3 张随机卡牌（普通/史诗/传说），选卡后通过效果接口应用属性加成。每 3 级额外触发一次专属卡牌选择。卡牌数据和效果全部由 SO 配置。</div>
+          <div class="card-tech">SO 卡牌库 + 效果接口 + UI 动画</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. 敌人系统 -->
+    <div class="branch-row b-enemy">
+      <div class="branch-node">敌人系统</div>
+      <div class="branch-content">
+        <div class="card">
+          <div class="card-title">状态机 AI</div>
+          <div class="card-desc">敌人有 Idle、Run、Attack、Die 四种状态，通过状态机管理切换。追踪最近的玩家，进入攻击范围后攻击。仅房主执行 AI 逻辑，其他客户端通过 Photon 同步位置和动画。</div>
+          <div class="card-tech">状态机 + MasterClient 权限</div>
+        </div>
+        <div class="card">
+          <div class="card-title">数据驱动配置</div>
+          <div class="card-desc">敌人的血量、攻击力、移速、攻击间隔、经验掉落、道具掉落概率全部由 SO 配置，策划在 Inspector 调数值就能改平衡。波次生成配置（间隔、上限、预制体）也走 SO。</div>
+          <div class="card-tech">SO 数据驱动</div>
+        </div>
+        <div class="card">
+          <div class="card-title">难度缩放</div>
+          <div class="card-desc">根据游戏时间动态计算怪物数量倍率、生成间隔和精英怪出现概率，游戏越久越难。</div>
+          <div class="card-tech">时间驱动的公式缩放</div>
+        </div>
+        <div class="card">
+          <div class="card-title">对象池回收</div>
+          <div class="card-desc">敌人死亡后不销毁，3 秒后通过事件通道回收到对象池。回收时重置动画、物理、属性、状态机等全部状态，下次生成时直接复用。</div>
+          <div class="card-tech">对象池 + 状态重置</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Boss 系统</div>
+          <div class="card-desc">Boss 有独立配置和生成器，死亡后触发事件链：通知 GameManager → 等 10 秒 → 存档 → RPC 切换场景回大厅。</div>
+          <div class="card-tech">事件链 + 场景切换</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. 符文与背包系统 -->
+    <div class="branch-row b-rune">
+      <div class="branch-node">符文与背包</div>
+      <div class="branch-content">
+        <div class="card">
+          <div class="card-title">符文数据</div>
+          <div class="card-desc">每枚符文的数值（攻击力%、暴击率%、防御%等）和特殊技能由 SO 定义，通过 Addressables 加载。支持角色专属限制（某些符文只有特定角色能用）。</div>
+          <div class="card-tech">SO 配置 + Addressables</div>
+        </div>
+        <div class="card">
+          <div class="card-title">效果映射（可热更）</div>
+          <div class="card-desc">符文效果的"标签→C#方法名"映射表用 Lua 编写，C# 通过反射调用对应属性方法。热更新时在 Lua 里加一行就能新增效果类型，不改 C#。Lua 不可用时走 C# 回退。</div>
+          <div class="card-tech">Lua 映射表 + C# 反射 + 回退</div>
+        </div>
+        <div class="card">
+          <div class="card-title">装备与快照</div>
+          <div class="card-desc">大厅选 2 个符文槽位，出发前捕获装备 ID 存到静态快照，场景切换后应用器读取快照，将符文效果应用到玩家属性。跨场景不丢失。</div>
+          <div class="card-tech">静态快照 + 跨场景传递</div>
+        </div>
+        <div class="card">
+          <div class="card-title">符文背包</div>
+          <div class="card-desc">用内存列表存储已收集的符文 ID，支持去重和查询。数据由存档系统统一持久化，读档时恢复。</div>
+          <div class="card-tech">内存列表 + 存档持久化</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. 商店系统 -->
+    <div class="branch-row b-shop">
+      <div class="branch-node">商店系统</div>
+      <div class="branch-content">
+        <div class="card">
+          <div class="card-title">购买流程</div>
+          <div class="card-desc">检查库存→检查是否已拥有→扣金币→加入符文背包→发事件通知 UI 刷新。支持限量/不限量、允许/禁止重复购买等配置。</div>
+          <div class="card-tech">SO 商店配置 + 事件通知</div>
+        </div>
+        <div class="card">
+          <div class="card-title">金币系统</div>
+          <div class="card-desc">对局结算时按公式计算金币（击杀数×50 + 伤害×0.1），通过事件通道通知 UI 更新显示。金币余额由存档系统持久化。</div>
+          <div class="card-tech">公式计算 + 事件通知 + 存档</div>
+        </div>
+        <div class="card">
+          <div class="card-title">库存与购买记录</div>
+          <div class="card-desc">每个符文的购买次数记录在字典中，计算剩余库存。购买记录随存档持久化，跨对局保持。</div>
+          <div class="card-tech">字典记录 + 存档持久化</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. 局内任务系统 -->
+    <div class="branch-row b-task">
+      <div class="branch-node">局内任务</div>
+      <div class="branch-content">
+        <div class="card">
+          <div class="card-title">任务类型</div>
+          <div class="card-desc">支持击杀任务（区域内击杀 N 只怪）和护送任务（护送 N 个机器人到目标区域）。每种任务有时限，超时判定失败。</div>
+          <div class="card-tech">任务基类 + 子类扩展</div>
+        </div>
+        <div class="card">
+          <div class="card-title">任务调度与同步</div>
+          <div class="card-desc">任务激活后通过 RPC 同步到所有客户端，通过 Addressables 实例化任务区域 Prefab，房主倒计时，进度通过 RPC 实时同步。</div>
+          <div class="card-tech">RPC 同步 + Addressables 实例化</div>
+        </div>
+        <div class="card">
+          <div class="card-title">击杀上报</div>
+          <div class="card-desc">敌人死亡时发事件携带位置和类型，任务管理器检查是否在任务区域内，在区域内则计数，计数达标判定完成。</div>
+          <div class="card-tech">事件上报 + 区域判定</div>
+        </div>
+        <div class="card">
+          <div class="card-title">任务奖励</div>
+          <div class="card-desc">完成后触发卡牌选择（必定 3 张专属强化卡），发放经验奖励，销毁任务区域。失败则清除区域并通知 UI。</div>
+          <div class="card-tech">事件链 + 卡牌系统联动</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. 局外任务系统 -->
+    <div class="branch-row b-task">
+      <div class="branch-node">局外任务</div>
+      <div class="branch-content">
+        <div class="card">
+          <div class="card-title">任务配置</div>
+          <div class="card-desc">用 SO 定义任务（击杀 N 只怪、造成 N 伤害、收集 N 金币等），任务数据库通过 Addressables 加载，可热更。</div>
+          <div class="card-tech">SO 任务库 + Addressables</div>
+        </div>
+        <div class="card">
+          <div class="card-title">进度管理</div>
+          <div class="card-desc">局内打怪/造成伤害等事件实时累加到暂存区，打开任务面板时一次性合并到累计进度，存档，返回增量驱动 UI 动画。</div>
+          <div class="card-tech">暂存 + 合并 + 动画驱动</div>
+        </div>
+        <div class="card">
+          <div class="card-title">跨对局累积</div>
+          <div class="card-desc">累计进度序列化到存档文件，每次对局新增的进度叠加到历史值，跨对局持续累积。支持版本兼容和数据校验。</div>
+          <div class="card-tech">存档持久化 + 版本兼容</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. 存档系统 -->
+    <div class="branch-row b-save">
+      <div class="branch-node">存档系统</div>
+      <div class="branch-content">
+        <div class="card">
+          <div class="card-title">数据收集与分发</div>
+          <div class="card-desc">存档时从金币、符文装备、符文背包、任务进度、商店购买记录、对局统计等各系统收集数据，序列化为 JSON。读档时反序列化后分发给各系统恢复。</div>
+          <div class="card-tech">统一收集 + JSON 序列化</div>
+        </div>
+        <div class="card">
+          <div class="card-title">文件读写</div>
+          <div class="card-desc">存档文件保存在 persistentDataPath，提供存在检查、保存、读取、删除接口。退出游戏时自动保存。</div>
+          <div class="card-tech">文件 IO + 自动保存</div>
+        </div>
+        <div class="card">
+          <div class="card-title">加密与版本兼容</div>
+          <div class="card-desc">JSON 序列化后可选加密写入，防止篡改。旧版本存档按版本号逐步升级补全字段，校验非法 ID。</div>
+          <div class="card-tech">加密 + 版本迁移 + 数据校验</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. 网络系统 -->
+    <div class="branch-row b-net">
+      <div class="branch-node">网络系统</div>
+      <div class="branch-content">
+        <div class="card">
+          <div class="card-title">接口隔离</div>
+          <div class="card-desc">定义了 8 个网络服务接口，所有代码通过服务定位器访问，不直接依赖 Photon。替换网络方案只需改实现类，不动业务代码。</div>
+          <div class="card-tech">接口隔离 + 服务定位器</div>
+        </div>
+        <div class="card">
+          <div class="card-title">RPC 分层</div>
+          <div class="card-desc">RPC 方法按架构分层管理：应用层管场景切换和经验同步，领域层管敌人销毁和元素池，表现层管 UI 动画。各层 RPC 互不混杂。</div>
+          <div class="card-tech">三层 RPC Bridge</div>
+        </div>
+        <div class="card">
+          <div class="card-title">经验球非网络化</div>
+          <div class="card-desc">经验球不走 PhotonNetwork.Instantiate，而是房主生成 ID 后 RPC 通知各客户端从本地对象池生成。拾取时 RPC 认领并隐藏，减少网络带宽和实例化开销。</div>
+          <div class="card-tech">ID 同步 + 本地对象池</div>
+        </div>
+        <div class="card">
+          <div class="card-title">网络对象池</div>
+          <div class="card-desc">敌人、投射物、特效、道具等预制体预注册到网络对象池，房主创建时通知各客户端从本地池取出，回收时还回池。减少 Photon 实例化开销。</div>
+          <div class="card-tech">预注册 + 本地池 + RPC 协调</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10. UI 系统 -->
+    <div class="branch-row b-ui">
+      <div class="branch-node">UI 系统</div>
+      <div class="branch-content">
+        <div class="card">
+          <div class="card-title">自研 UI 框架</div>
+          <div class="card-desc">Unity 没有内置 UI 管理框架，自研了一套：界面基类（打开/关闭/动画/ESC）、单例管理器（注册/导航/遮罩）、导航栈（A→B→关B→回A）、分层渲染（背景/普通/弹窗/覆盖）。</div>
+          <div class="card-tech">基类 + 管理器 + 导航栈 + 分层</div>
+        </div>
+        <div class="card">
+          <div class="card-title">数据更新方式</div>
+          <div class="card-desc">UI 不直接调用业务代码，而是订阅事件通道。血条订阅 HP 变化事件、金币显示订阅金币事件，收到事件后更新显示。业务和 UI 彻底解耦。</div>
+          <div class="card-tech">EventChannel 订阅</div>
+        </div>
+        <div class="card">
+          <div class="card-title">HUD 与小地图</div>
+          <div class="card-desc">战斗 HUD 包含 Boss 血条、伤害数字、属性面板、队伍信息、时间进度。小地图用独立俯视相机渲染到 RenderTexture，标记玩家和敌人位置。</div>
+          <div class="card-tech">事件订阅 + RenderTexture</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 11. 热更新系统 -->
+    <div class="branch-row b-hotfix">
+      <div class="branch-node">热更新</div>
+      <div class="branch-content">
+        <div class="card">
+          <div class="card-title">资源热更</div>
+          <div class="card-desc">游戏启动时对比内置 catalog 和远程 catalog 的 hash，不同则下载新 catalog 重新初始化，然后按标签批量下载变更的资源包。438 个资产支持热更，有进度 UI。</div>
+          <div class="card-tech">Addressables + MD5 对比</div>
+        </div>
+        <div class="card">
+          <div class="card-title">逻辑热更</div>
+          <div class="card-desc">角色行为、攻击逻辑、符文效果映射等用 Lua 编写，Lua 脚本本身也走 Addressables 加载，更新 Lua 等于更新游戏逻辑。C# 桥接器调用，报错自动降级。</div>
+          <div class="card-tech">xLua + Addressables 联动 + 降级</div>
+        </div>
+        <div class="card">
+          <div class="card-title">安全校验</div>
+          <div class="card-desc">加载前校验 Lua 文件 MD5 完整性，预留 RSA 签名验证，防止热更脚本被篡改。</div>
+          <div class="card-tech">MD5 + RSA 预留</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 12. 核心基础设施 -->
+    <div class="branch-row b-core">
+      <div class="branch-node">核心基础设施</div>
+      <div class="branch-content">
+        <div class="card">
+          <div class="card-title">服务定位器</div>
+          <div class="card-desc">两个全局字典按类型存取服务实例，替代到处拖引用和 FindObjectOfType 的混乱方式。游戏启动时自动注册，任何代码按类型获取。</div>
+          <div class="card-tech">ServiceLocator 模式</div>
+        </div>
+        <div class="card">
+          <div class="card-title">事件系统</div>
+          <div class="card-desc">62 个事件通道 SO 分 4 组（战斗/玩家/游戏/UI），发布者发事件，订阅者监听，互不引用。事件通道在 Inspector 拖拽配置，生命周期独立于场景。</div>
+          <div class="card-tech">ScriptableObject 观察者模式</div>
+        </div>
+        <div class="card">
+          <div class="card-title">对象池</div>
+          <div class="card-desc">预注册预制体和数量，取出/归还复用 GameObject，减少 GC 和实例化开销。Lua 也可通过桥接方法调用。</div>
+          <div class="card-tech">对象池模式</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

@@ -34,7 +34,7 @@ namespace Core
             }
         }
 
-        // ========== 功能系统子容器便捷访问 ==========
+        // 功能系统子容器便捷访问 
         public static CombatChannelsSO MatchSystem => MainContainer?.matchSystem;
         public static PlayerChannelsSO ProgressionSystem => MainContainer?.progressionSystem;
         public static GameChannelsSO LobbySystem => MainContainer?.lobbySystem;

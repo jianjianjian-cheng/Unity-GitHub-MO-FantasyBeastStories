@@ -7,8 +7,8 @@ using XLua;
 
 /// <summary>
 /// 角色行为 Lua 桥接器。
-/// 统一调度所有角色虚方法到 Lua，内置 try-catch + 降级机制。
-/// 报错后自动禁用 Lua 调用，降级为 C# 默认行为。
+/// 统一调度所有角色虚方法到 Lua。
+/// 让AI为我编写了预防机制：报错后自动禁用 Lua 调用，降级为 C# 默认行为。
 /// </summary>
 public class HeroLuaBridge
 {

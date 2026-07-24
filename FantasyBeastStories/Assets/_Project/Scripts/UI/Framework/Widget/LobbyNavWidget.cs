@@ -1,7 +1,4 @@
-using System.Collections.Generic;
 using Core;
-using Core.Channels.General;
-using DG.Tweening;
 using UI.Framework.Base;
 using UI.Framework.Manager;
 using UnityEngine;
@@ -11,15 +8,13 @@ using UnityEngine.UI;
 
 namespace UI.Framework.Widget
 {
-    /// <summary>
-    /// 大厅导航组件：管理顶部导航按钮的选中状态、面板开关、模糊效果和 ESC 处理。
-    /// </summary>
     public class LobbyNavWidget : UIWidget
     {
         private const string CharactorPanelId = "CharactorPanel";
         private const string RunePanelId = "RunePanel";
         private const string MassionPanelId = "MassionPanel";
         private const string ShopPanelId = "ShopPanel";
+        private const string SettingsPanelId = "SettingsPanel";
 
         [Header("导航按钮")]
         [SerializeField] private Button lobbyNavButton;
@@ -27,12 +22,15 @@ namespace UI.Framework.Widget
         [SerializeField] private Button runeNavButton;
         [SerializeField] private Button missionNavButton;
         [SerializeField] private Button shopNavButton;
+        [SerializeField] private Button settingsNavButton;
 
         [Header("后处理")]
         [SerializeField] private Volume postProcessVolume;
 
         private Sprite _selectedButtonImage;
         private Sprite _defaultButtonImage;
+        private bool _blurActive;
+        private string _lastActiveScreenId;
 
         protected override void AutoBindComponents()
         {
@@ -52,6 +50,8 @@ namespace UI.Framework.Widget
                 missionNavButton.onClick.AddListener(OnMissionNavClicked);
             if (shopNavButton != null)
                 shopNavButton.onClick.AddListener(OnShopNavClicked);
+            if (settingsNavButton != null)
+                settingsNavButton.onClick.AddListener(OnSettingsNavClicked);
         }
 
         protected override void UnsubscribeEvents()
@@ -66,6 +66,8 @@ namespace UI.Framework.Widget
                 missionNavButton.onClick.RemoveListener(OnMissionNavClicked);
             if (shopNavButton != null)
                 shopNavButton.onClick.RemoveListener(OnShopNavClicked);
+            if (settingsNavButton != null)
+                settingsNavButton.onClick.RemoveListener(OnSettingsNavClicked);
         }
 
         public override void OnScreenOpened()
@@ -73,10 +75,32 @@ namespace UI.Framework.Widget
             SetButtonSelected(lobbyNavButton?.gameObject);
         }
 
-        protected virtual void Update()
+        private void Update()
         {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Escape))
-                HandleEscape();
+            // 根据当前栈顶面板同步导航按钮选中状态
+            if (!UIManager.HasInstance) return;
+
+            var current = UIManager.Instance.GetCurrentScreen();
+            string currentId = current?.ScreenId;
+
+            // 栈空时回到大厅状态
+            if (string.IsNullOrEmpty(currentId))
+            {
+                if (_blurActive)
+                {
+                    SetButtonSelected(lobbyNavButton?.gameObject);
+                    SetBlurAndRotation(false);
+                    _blurActive = false;
+                }
+                return;
+            }
+
+            // 栈顶变化时更新按钮选中
+            if (_blurActive && currentId != _lastActiveScreenId)
+            {
+                _lastActiveScreenId = currentId;
+                UpdateButtonSelection(currentId);
+            }
         }
 
         // ──────────────────────────────────────────────
@@ -86,86 +110,87 @@ namespace UI.Framework.Widget
         private void OnLobbyNavClicked()
         {
             SetButtonSelected(lobbyNavButton?.gameObject);
-            CloseAllPanels();
+            // 关闭所有面板，回到大厅
+            while (UIManager.Instance.GetCurrentScreen() != null)
+                UIManager.Instance.CloseCurrent();
+            _blurActive = false;
+            SetBlurAndRotation(false);
         }
 
         private void OnCharacterNavClicked()
         {
-            ClosePanel(RunePanelId);
-            ClosePanel(MassionPanelId);
-            ClosePanel(ShopPanelId);
             SetButtonSelected(characterNavButton?.gameObject);
-            OpenPanel(CharactorPanelId);
+            // CloseCurrentPanel(); // 旧方式：平级切换，先关再开
+            UIManager.Instance.Open(CharactorPanelId);
+            _lastActiveScreenId = CharactorPanelId;
+            ActivateBlur();
         }
 
         private void OnRuneNavClicked()
         {
-            ClosePanel(CharactorPanelId);
-            ClosePanel(MassionPanelId);
-            ClosePanel(ShopPanelId);
             SetButtonSelected(runeNavButton?.gameObject);
-            OpenPanel(RunePanelId);
+            // CloseCurrentPanel(); // 旧方式：平级切换，先关再开
+            UIManager.Instance.Open(RunePanelId);
+            _lastActiveScreenId = RunePanelId;
+            ActivateBlur();
         }
 
         private void OnMissionNavClicked()
         {
-            ClosePanel(CharactorPanelId);
-            ClosePanel(RunePanelId);
-            ClosePanel(ShopPanelId);
             SetButtonSelected(missionNavButton?.gameObject);
-            OpenPanel(MassionPanelId);
+            // CloseCurrentPanel(); // 旧方式：平级切换，先关再开
+            UIManager.Instance.Open(MassionPanelId);
+            _lastActiveScreenId = MassionPanelId;
+            ActivateBlur();
         }
 
         private void OnShopNavClicked()
         {
-            ClosePanel(CharactorPanelId);
-            ClosePanel(RunePanelId);
-            ClosePanel(MassionPanelId);
             SetButtonSelected(shopNavButton?.gameObject);
-            OpenPanel(ShopPanelId);
+            // CloseCurrentPanel(); // 旧方式：平级切换，先关再开
+            UIManager.Instance.Open(ShopPanelId);
+            _lastActiveScreenId = ShopPanelId;
+            ActivateBlur();
+        }
+
+        private void OnSettingsNavClicked()
+        {
+            UIManager.Instance.Open(SettingsPanelId);
+            _lastActiveScreenId = SettingsPanelId;
+            ActivateBlur();
         }
 
         // ──────────────────────────────────────────────
-        //  面板开关
+        //  辅助方法
         // ──────────────────────────────────────────────
 
-        private void OpenPanel(string panelId)
+        private void CloseCurrentPanel()
         {
-            var panel = UIManager.Instance.GetScreen(panelId);
-            if (panel == null)
-            {
-                Debug.LogError($"[LobbyNavWidget] 未找到面板 {panelId}");
-                return;
-            }
-            panel.Open();
+            var current = UIManager.Instance.GetCurrentScreen();
+            if (current != null)
+                UIManager.Instance.Close(current);
+        }
+
+        private void ActivateBlur()
+        {
             SetBlurAndRotation(true);
+            _blurActive = true;
         }
 
-        private void ClosePanel(string panelId)
+        /// <summary>根据栈顶面板 ID 更新导航按钮选中状态</summary>
+        private void UpdateButtonSelection(string screenId)
         {
-            var panel = UIManager.Instance.GetScreen(panelId);
-            if (panel == null) return;
-            panel.Close();
-            SetBlurAndRotation(false);
+            GameObject target = screenId switch
+            {
+                CharactorPanelId => characterNavButton?.gameObject,
+                RunePanelId => runeNavButton?.gameObject,
+                MassionPanelId => missionNavButton?.gameObject,
+                ShopPanelId => shopNavButton?.gameObject,
+                SettingsPanelId => settingsNavButton?.gameObject,
+                _ => lobbyNavButton?.gameObject,
+            };
+            SetButtonSelected(target);
         }
-
-        private void CloseAllPanels()
-        {
-            ClosePanel(CharactorPanelId);
-            ClosePanel(RunePanelId);
-            ClosePanel(MassionPanelId);
-            ClosePanel(ShopPanelId);
-        }
-
-        private void HandleEscape()
-        {
-            SetButtonSelected(lobbyNavButton?.gameObject);
-            CloseAllPanels();
-        }
-
-        // ──────────────────────────────────────────────
-        //  模糊 / 旋转
-        // ──────────────────────────────────────────────
 
         private void SetBlurAndRotation(bool anyOpen)
         {
@@ -189,6 +214,7 @@ namespace UI.Framework.Widget
             SetNavButtonState(runeNavButton, button);
             SetNavButtonState(missionNavButton, button);
             SetNavButtonState(shopNavButton, button);
+            // 设置按钮不参与选中状态切换
         }
 
         private void SetNavButtonState(Button btn, GameObject selected)

@@ -1,9 +1,8 @@
--- Combat/WizardBoyAttack.lua
--- WizardBoy 攻击行为（从 C# AttackRange_WizardBoy.cs 迁移）
+-- WizardBoy
 
 local M = {}
 
--- 投射物速度（原 AttackRange_WizardBoy.projectileSpeed）
+-- 投射物速度
 local PROJECTILE_SPEED = 10
 
 -- PerformAttack: 对应原 AttackRange_WizardBoy.PerformAttack()

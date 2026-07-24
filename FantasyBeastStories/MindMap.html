@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>幻想兽物语 - 项目思维导图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #1a1a2e;
+    font-family: 'Microsoft YaHei', sans-serif;
+    color: #eee;
+    display: flex;
+    justify-content: center;
+    padding: 30px 20px;
+    overflow-x: auto;
+  }
+  .mindmap {
+    width: 1400px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .title {
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    color: #e94560;
+    margin-bottom: 10px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 20px;
+  }
+
+  /* 中心节点 */
+  .center-node {
+    align-self: center;
+    background: linear-gradient(135deg, #e94560, #c4a52e);
+    border-radius: 16px;
+    padding: 16px 48px;
+    font-size: 20px;
+    font-weight: bold;
+    box-shadow: 0 4px 20px rgba(233,69,96,0.3);
+  }
+
+  /* 主分支行 */
+  .branches {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .branch {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .branch-header {
+    border-radius: 10px;
+    padding: 10px 16px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: bold;
+    border: 2px solid;
+  }
+  .branch-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 0 4px;
+  }
+  .leaf {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .leaf .leaf-name { font-weight: bold; }
+  .leaf .leaf-desc { color: #999; font-size: 11px; }
+  .sub-leaf {
+    background: rgba(255,255,255,0.02);
+    border-left: 2px solid;
+    border-radius: 4px;
+    padding: 4px 8px 4px 12px;
+    font-size: 11px;
+    margin-left: 8px;
+    margin-top: 3px;
+    color: #aaa;
+  }
+
+  /* 各分支配色 */
+  .b-core .branch-header { background: rgba(196,165,46,0.15); border-color: #c4a52e; color: #f4d35e; }
+  .b-core .leaf { border-color: rgba(196,165,46,0.2); }
+  .b-core .sub-leaf { border-color: #c4a52e; }
+
+  .b-controllers .branch-header { background: rgba(45,138,78,0.15); border-color: #2d8a4e; color: #6bcf7f; }
+  .b-controllers .leaf { border-color: rgba(45,138,78,0.2); }
+  .b-controllers .sub-leaf { border-color: #2d8a4e; }
+
+  .b-managers .branch-header { background: rgba(26,107,138,0.15); border-color: #1a6b8a; color: #4ecdc4; }
+  .b-managers .leaf { border-color: rgba(26,107,138,0.2); }
+  .b-managers .sub-leaf { border-color: #1a6b8a; }
+
+  .b-ui .branch-header { background: rgba(139,44,94,0.15); border-color: #8b2c5e; color: #ff6b9d; }
+  .b-ui .leaf { border-color: rgba(139,44,94,0.2); }
+  .b-ui .sub-leaf { border-color: #8b2c5e; }
+
+  .b-tech .branch-header { background: rgba(107,63,160,0.15); border-color: #6b3fa0; color: #c29de8; }
+  .b-tech .leaf { border-color: rgba(107,63,160,0.2); }
+  .b-tech .sub-leaf { border-color: #6b3fa0; }
+
+  .b-scene .branch-header { background: rgba(230,126,34,0.15); border-color: #e67e22; color: #f0a040; }
+  .b-scene .leaf { border-color: rgba(230,126,34,0.2); }
+  .b-scene .sub-leaf { border-color: #e67e22; }
+
+  /* 连接线 */
+  .connector {
+    text-align: center;
+    color: #444;
+    font-size: 18px;
+    line-height: 1;
+  }
+</style>
+</head>
+<body>
+<div class="mindmap">
+
+  <div class="title">幻想兽物语 · 项目思维导图</div>
+  <div class="subtitle">多人在线 RPG · Unity 2022.3 URP · Photon PUN2 · xLua · Addressables</div>
+
+  <!-- 中心节点 -->
+  <div class="center-node">幻想兽物语</div>
+  <div class="connector">↓ ↓ ↓ ↓ ↓ ↓</div>
+
+  <!-- 六大分支 -->
+  <div class="branches">
+
+    <!-- 1. Core -->
+    <div class="branch b-core">
+      <div class="branch-header">Core 基础设施层</div>
+      <div class="branch-content">
+        <div class="leaf"><div class="leaf-name">ServiceLocator</div><div class="leaf-desc">全局服务字典</div></div>
+        <div class="leaf"><div class="leaf-name">EventChannel SO</div><div class="leaf-desc">62个事件通道 · 4组</div>
+          <div class="sub-leaf">Combat · 战斗伤害/Boss</div>
+          <div class="sub-leaf">Player · HP/经验/卡牌</div>
+          <div class="sub-leaf">Game · 时间/状态/对象池</div>
+          <div class="sub-leaf">UI · 金币/任务/Rune</div>
+        </div>
+        <div class="leaf"><div class="leaf-name">AssetLoader</div><div class="leaf-desc">Addressables封装</div></div>
+        <div class="leaf"><div class="leaf-name">AddressablesUpdater</div><div class="leaf-desc">MD5对比 · 资源热更</div></div>
+        <div class="leaf"><div class="leaf-name">LuaEnvManager</div><div class="leaf-desc">xLua单例 · 自定义Loader</div></div>
+        <div class="leaf"><div class="leaf-name">HeroLuaBridge</div><div class="leaf-desc">C#/Lua桥接 · 自动降级</div></div>
+        <div class="leaf"><div class="leaf-name">ObjectPoolManager</div><div class="leaf-desc">对象池 · 复用GO</div></div>
+        <div class="leaf"><div class="leaf-name">InfrastructureRegistrar</div><div class="leaf-desc">启动注册器</div></div>
+      </div>
+    </div>
+
+    <!-- 2. Controllers -->
+    <div class="branch b-controllers">
+      <div class="branch-header">Controllers 领域逻辑层</div>
+      <div class="branch-content">
+        <div class="leaf"><div class="leaf-name">Character</div>
+          <div class="sub-leaf">PlayerController (747行)</div>
+          <div class="sub-leaf">AttributePlayer/Enemy</div>
+          <div class="sub-leaf">CharacterInfoSO/Library</div>
+          <div class="sub-leaf">Pets: Charmander · BallRobot</div>
+        </div>
+        <div class="leaf"><div class="leaf-name">Enemy</div>
+          <div class="sub-leaf">EnemyBase · 状态机</div>
+          <div class="sub-leaf">EnemyConfigSO · WaveConfigSO</div>
+          <div class="sub-leaf">Skeleton · Dragon · Boss</div>
+          <div class="sub-leaf">EnemyScalingCalculator</div>
+        </div>
+        <div class="leaf"><div class="leaf-name">Combat</div>
+          <div class="sub-leaf">AttackRange · Lua桥接</div>
+          <div class="sub-leaf">Trigger · 碰撞检测</div>
+          <div class="sub-leaf">Projectile · 火球/射线</div>
+          <div class="sub-leaf">ImpactCannon · 4元素</div>
+          <div class="sub-leaf">GuiLing · BingNv武器</div>
+        </div>
+        <div class="leaf"><div class="leaf-name">Network</div>
+          <div class="sub-leaf">接口隔离 · 38文件不依赖Photon</div>
+          <div class="sub-leaf">三桥RPC: App/Domain/Presentation</div>
+          <div class="sub-leaf">NetworkObjectPoolManager</div>
+          <div class="sub-leaf">Launcher · PUN连接</div>
+        </div>
+        <div class="leaf"><div class="leaf-name">CardData</div><div class="leaf-desc">卡牌 · SO配置</div></div>
+        <div class="leaf"><div class="leaf-name">Rune</div>
+          <div class="sub-leaf">RuneDataSO · 数值</div>
+          <div class="sub-leaf">RuneEffectApplier · Lua映射</div>
+          <div class="sub-leaf">RuneInventory · 背包</div>
+        </div>
+        <div class="leaf"><div class="leaf-name">PowerUp/QuestTask/Shop/Time/Item</div></div>
+      </div>
+    </div>
+
+    <!-- 3. Managers -->
+    <div class="branch b-managers">
+      <div class="branch-header">Managers 协调层</div>
+      <div class="branch-content">
+        <div class="leaf"><div class="leaf-name">GameManager</div>
+          <div class="sub-leaf">场景切换 · 生成点</div>
+          <div class="sub-leaf">Boss死亡→存档→切场景</div>
+        </div>
+        <div class="leaf"><div class="leaf-name">SaveManager</div>
+          <div class="sub-leaf">收集→JSON→加密→写文件</div>
+          <div class="sub-leaf">版本兼容 · 数据校验</div>
+        </div>
+        <div class="leaf"><div class="leaf-name">AudioManager</div><div class="leaf-desc">BGM/SFX · 热更后重载</div></div>
+        <div class="leaf"><div class="leaf-name">EnemiesGenorator</div>
+          <div class="sub-leaf">读WaveConfigSO</div>
+          <div class="sub-leaf">难度缩放 · 按概率生成</div>
+        </div>
+        <div class="leaf"><div class="leaf-name">BossSpawner</div><div class="leaf-desc">Boss生成</div></div>
+        <div class="leaf"><div class="leaf-name">ExperienceManager</div><div class="leaf-desc">经验/升级</div></div>
+        <div class="leaf"><div class="leaf-name">TaskManager</div><div class="leaf-desc">任务调度</div></div>
+        <div class="leaf"><div class="leaf-name">ShopManager</div><div class="leaf-desc">商店购买</div></div>
+        <div class="leaf"><div class="leaf-name">DifficultyCoefficientManager</div></div>
+        <div class="leaf"><div class="leaf-name">GamePauseManager</div></div>
+        <div class="leaf"><div class="leaf-name">MatchStatisticsManager</div><div class="leaf-desc">对局统计</div></div>
+      </div>
+    </div>
+
+    <!-- 4. UI -->
+    <div class="branch b-ui">
+      <div class="branch-header">UI 表现层</div>
+      <div class="branch-content">
+        <div class="leaf"><div class="leaf-name">自研框架</div>
+          <div class="sub-leaf">UIScreen · 基类</div>
+          <div class="sub-leaf">UIManager · 单例管理</div>
+          <div class="sub-leaf">UINavigationStack · 导航</div>
+          <div class="sub-leaf">UILayer · 分层渲染</div>
+          <div class="sub-leaf">UIAnimationBase · 动画</div>
+        </div>
+        <div class="leaf"><div class="leaf-name">HUD</div>
+          <div class="sub-leaf">血条/Boss血条</div>
+          <div class="sub-leaf">伤害数字/属性面板</div>
+          <div class="sub-leaf">队伍UI/方向指示</div>
+        </div>
+        <div class="leaf"><div class="leaf-name">Task</div><div class="leaf-desc">任务界面/通知</div></div>
+        <div class="leaf"><div class="leaf-name">Minimap</div><div class="leaf-desc">小地图/点/箭头</div></div>
+        <div class="leaf"><div class="leaf-name">MagicUpgrade</div><div class="leaf-desc">魔法升级</div></div>
+        <div class="leaf"><div class="leaf-name">Loading</div><div class="leaf-desc">热更进度UI</div></div>
+        <div class="leaf"><div class="leaf-name">Input</div>
+          <div class="sub-leaf">PlayerInputHandler · 统一入口</div>
+          <div class="sub-leaf">VirtualJoystick · 移动端</div>
+        </div>
+        <div class="leaf"><div class="leaf-name">Lobby</div><div class="leaf-desc">大厅UI</div></div>
+      </div>
+    </div>
+
+    <!-- 5. 技术特性 -->
+    <div class="branch b-tech">
+      <div class="branch-header">技术特性</div>
+      <div class="branch-content">
+        <div class="leaf"><div class="leaf-name">双层热更新</div>
+          <div class="sub-leaf">Addressables · 438资产</div>
+          <div class="sub-leaf">xLua · 8个Lua脚本</div>
+          <div class="sub-leaf">Lua脚本本身走热更</div>
+        </div>
+        <div class="leaf"><div class="leaf-name">数据驱动设计</div>
+          <div class="sub-leaf">SO配置: 敌人/卡牌/符文</div>
+          <div class="sub-leaf">Lua映射: 标签→方法名</div>
+          <div class="sub-leaf">策划Inspector调数值</div>
+        </div>
+        <div class="leaf"><div class="leaf-name">网络接口隔离</div>
+          <div class="sub-leaf">8个接口</div>
+          <div class="sub-leaf">NetworkServiceLocator</div>
+          <div class="sub-leaf">可替换Photon</div>
+        </div>
+        <div class="leaf"><div class="leaf-name">设计模式</div>
+          <div class="sub-leaf">分层架构</div>
+          <div class="sub-leaf">服务定位器</div>
+          <div class="sub-leaf">观察者(EventChannel)</div>
+          <div class="sub-leaf">状态机(EnemyBase)</div>
+          <div class="sub-leaf">桥接器(LuaBridge)</div>
+          <div class="sub-leaf">对象池</div>
+        </div>
+        <div class="leaf"><div class="leaf-name">存档系统</div>
+          <div class="sub-leaf">JSON序列化</div>
+          <div class="sub-leaf">加密保护</div>
+          <div class="sub-leaf">版本兼容</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. 场景 -->
+    <div class="branch b-scene">
+      <div class="branch-header">场景与资产</div>
+      <div class="branch-content">
+        <div class="leaf"><div class="leaf-name">4个场景</div>
+          <div class="sub-leaf">StartMenu · 主菜单</div>
+          <div class="sub-leaf">WaitLobby · 大厅</div>
+          <div class="sub-leaf">NGC1999Void · 战斗</div>
+          <div class="sub-leaf">TestScene · 测试</div>
+        </div>
+        <div class="leaf"><div class="leaf-name">Addressables资产</div>
+          <div class="sub-leaf">Prefab · FX/角色/任务</div>
+          <div class="sub-leaf">Audio · BGM/SFX</div>
+          <div class="sub-leaf">Config · SO配置</div>
+          <div class="sub-leaf">Lua · 8个热更脚本</div>
+          <div class="sub-leaf">Sprites · UI/小地图</div>
+          <div class="sub-leaf">Skybox/Materials</div>
+        </div>
+        <div class="leaf"><div class="leaf-name">第三方库</div>
+          <div class="sub-leaf">Photon PUN2 · 联机</div>
+          <div class="sub-leaf">xLua · 热更</div>
+          <div class="sub-leaf">Cinemachine · 相机</div>
+          <div class="sub-leaf">DOTween · 动画</div>
+          <div class="sub-leaf">AmplifyShader · Shader</div>
+          <div class="sub-leaf">CartoonFX Remaster · 特效</div>
+        </div>
+        <div class="leaf"><div class="leaf-name">Editor工具</div>
+          <div class="sub-leaf">LuaScriptedImporter</div>
+          <div class="sub-leaf">CardMigrationTool</div>
+          <div class="sub-leaf">UnusedAssetDetector</div>
+          <div class="sub-leaf">FolderAssetCleaner</div>
+          <div class="sub-leaf">LayerLabCleaner</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>

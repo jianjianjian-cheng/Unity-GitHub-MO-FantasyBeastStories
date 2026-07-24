@@ -22,10 +22,6 @@ namespace Core.Channels
     [Tooltip("UI系统：界面更新、任务通知、金币显示")]
     public UIChannelsSO uiSystem;
 
-    [Header("商店事件")]
-    public ShopEventChannelSO shopEventChannel;
-
-
     /// <summary>
     /// 下面是快捷访问的
     /// </summary>
@@ -78,6 +74,7 @@ namespace Core.Channels
     public HealthUpdateEventChannelSO healthUpdateChannel => uiSystem != null ? uiSystem.healthUpdateChannel : null;
     public CoinUpdateEventChannelSO coinUpdateChannel => uiSystem != null ? uiSystem.coinUpdateChannel : null;
     public MatchStatsUpdateEventChannelSO matchStatsUpdateChannel => uiSystem != null ? uiSystem.matchStatsUpdateChannel : null;
+    public ShopEventChannelSO shopEventChannel => uiSystem != null ? uiSystem.shopEventChannel : null;
     #endregion
 
     #region 任务事件

@@ -25,7 +25,6 @@ namespace UI.Framework.Manager
       }
     }
 
-    /// <summary>安全判空：不触发自动创建</summary>
     public static bool HasInstance => _instance != null;
 
     private UINavigationStack _navigationStack = new();

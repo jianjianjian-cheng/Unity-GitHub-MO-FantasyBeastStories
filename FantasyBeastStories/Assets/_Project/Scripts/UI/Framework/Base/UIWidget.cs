@@ -17,7 +17,7 @@ namespace UI.Framework.Base
         [SerializeField] protected UIAnimationBase hoverEnterAnimation;
         [SerializeField] protected UIAnimationBase hoverExitAnimation;
 
-        /// <summary>当前是否处于选中状态</summary>
+        ///当前是否处于选中状态
         public bool IsSelected { get; private set; }
 
         private Coroutine _selectCoroutine;
@@ -75,11 +75,7 @@ namespace UI.Framework.Base
                 _deselectCoroutine = StartCoroutine(PlayAnimationCoroutine(deselectAnimation));
         }
 
-        // ──────────────────────────────────────────────
         //  悬浮动画
-        // ──────────────────────────────────────────────
-
-        /// <summary>播放鼠标进入（悬浮）动画</summary>
         public void PlayHoverEnter()
         {
             if (IsSelected)
@@ -91,7 +87,7 @@ namespace UI.Framework.Base
                 _hoverEnterCoroutine = StartCoroutine(PlayAnimationCoroutine(hoverEnterAnimation));
         }
 
-        /// <summary>播放鼠标离开动画</summary>
+        ///播放鼠标离开动画
         public void PlayHoverExit()
         {
             if (IsSelected)
@@ -103,19 +99,13 @@ namespace UI.Framework.Base
                 _hoverExitCoroutine = StartCoroutine(PlayAnimationCoroutine(hoverExitAnimation));
         }
 
-        // ──────────────────────────────────────────────
         //  内部协程
-        // ──────────────────────────────────────────────
-
         private IEnumerator PlayAnimationCoroutine(UIAnimationBase animation)
         {
             yield return animation.PlayCoroutine(gameObject);
         }
 
-        // ──────────────────────────────────────────────
         //  子类可重写的回调
-        // ──────────────────────────────────────────────
-
         /// <summary>选中动画播放完成时回调</summary>
         protected virtual void OnSelectCompleted() { }
 

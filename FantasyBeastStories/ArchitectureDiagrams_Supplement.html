@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>幻想兽物语 - 架构补充图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #1a1a2e;
+    font-family: 'Microsoft YaHei', sans-serif;
+    color: #eee;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    gap: 60px;
+  }
+  .page-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #e94560;
+    letter-spacing: 2px;
+  }
+  .section-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid;
+  }
+  .section {
+    width: 1100px;
+  }
+
+  /* 事件流程图 */
+  .flow-section .section-title { color: #4ecdc4; border-color: #4ecdc4; }
+  .flow-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .flow-box {
+    border-radius: 10px;
+    padding: 14px 20px;
+    min-width: 160px;
+    text-align: center;
+    border: 2px solid;
+  }
+  .flow-box .title-text { font-weight: bold; font-size: 15px; }
+  .flow-box .sub { font-size: 11px; color: #aaa; margin-top: 4px; }
+  .flow-arrow {
+    font-size: 22px;
+    color: #666;
+    padding: 0 12px;
+    flex-shrink: 0;
+  }
+  .flow-arrow-label {
+    font-size: 10px;
+    color: #888;
+    text-align: center;
+    margin-top: -4px;
+  }
+  .box-enemy { border-color: #8b2c5e; background: rgba(139,44,94,0.15); }
+  .box-enemy .title-text { color: #ff6b9d; }
+  .box-channel { border-color: #c4a52e; background: rgba(196,165,46,0.12); }
+  .box-channel .title-text { color: #f4d35e; }
+  .box-player { border-color: #2d8a4e; background: rgba(45,138,78,0.15); }
+  .box-player .title-text { color: #6bcf7f; }
+  .box-ui { border-color: #1a6b8a; background: rgba(26,107,138,0.15); }
+  .box-ui .title-text { color: #4ecdc4; }
+  .box-manager { border-color: #6b3fa0; background: rgba(107,63,160,0.15); }
+  .box-manager .title-text { color: #c29de8; }
+
+  .flow-note {
+    background: rgba(255,255,255,0.04);
+    border: 1px dashed #555;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 12px;
+    color: #999;
+    margin-top: 8px;
+  }
+  .flow-note strong { color: #f4d35e; }
+
+  /* 热更新图 */
+  .hotfix-section .section-title { color: #e8a845; border-color: #e8a845; }
+  .hotfix-container {
+    display: flex;
+    gap: 30px;
+  }
+  .hotfix-column {
+    flex: 1;
+    border-radius: 12px;
+    border: 2px solid;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .hotfix-column h3 { font-size: 16px; margin-bottom: 8px; }
+  .hotfix-step {
+    background: rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .step-num {
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+  .step-content { line-height: 1.5; }
+  .step-content .code { color: #f4d35e; font-family: Consolas, monospace; font-size: 12px; }
+  .hotfix-column.resource { border-color: #4ecdc4; }
+  .hotfix-column.resource h3 { color: #4ecdc4; }
+  .hotfix-column.logic { border-color: #e8a845; }
+  .hotfix-column.logic h3 { color: #e8a845; }
+  .hotfix-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: #666;
+  }
+  .hotfix-link-label {
+    font-size: 11px;
+    color: #888;
+    text-align: center;
+    margin-top: 4px;
+  }
+
+  /* 状态机图 */
+  .state-section .section-title { color: #6bcf7f; border-color: #6bcf7f; }
+  .state-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  .state-flow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .state-box {
+    border-radius: 12px;
+    padding: 16px 28px;
+    text-align: center;
+    border: 2px solid;
+    min-width: 120px;
+  }
+  .state-box .state-name { font-weight: bold; font-size: 18px; }
+  .state-box .state-desc { font-size: 11px; color: #aaa; margin-top: 4px; }
+  .state-idle { border-color: #888; background: rgba(136,136,136,0.15); }
+  .state-idle .state-name { color: #ccc; }
+  .state-run { border-color: #4ecdc4; background: rgba(78,205,196,0.15); }
+  .state-run .state-name { color: #4ecdc4; }
+  .state-attack { border-color: #e94560; background: rgba(233,69,96,0.15); }
+  .state-attack .state-name { color: #e94560; }
+  .state-die { border-color: #666; background: rgba(100,100,100,0.15); }
+  .state-die .state-name { color: #999; }
+  .state-arrow {
+    font-size: 20px;
+    color: #555;
+    padding: 0 10px;
+  }
+  .state-arrow-vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 20px;
+    color: #555;
+  }
+  .state-arrow-label {
+    font-size: 10px;
+    color: #888;
+    margin-top: -4px;
+  }
+  .pool-section {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(196,165,46,0.08);
+    border: 1px dashed #c4a52e;
+    border-radius: 10px;
+    padding: 12px 24px;
+  }
+  .pool-section .pool-icon { font-size: 20px; }
+  .pool-section .pool-text { font-size: 13px; color: #f4d35e; }
+  .state-detail {
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+  }
+  .state-detail-card {
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 12px;
+    flex: 1;
+  }
+  .state-detail-card .card-title { font-weight: bold; color: #6bcf7f; margin-bottom: 6px; }
+  .state-detail-card .card-item { color: #aaa; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<div class="page-title">幻想兽物语 · 架构补充图</div>
+
+<!-- ========== 事件系统通信流程图 ========== -->
+<div class="section flow-section">
+  <div class="section-title">① 事件系统通信流程图</div>
+  <div class="flow-container">
+
+    <!-- 第一行：敌人攻击 → 伤害事件 → 玩家扣血 -->
+    <div class="flow-row">
+      <div class="flow-box box-enemy">
+        <div class="title-text">EnemyBase</div>
+        <div class="sub">敌人攻击玩家</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <div class="flow-arrow">→</div>
+        <div class="flow-arrow-label">Raise</div>
+      </div>
+      <div class="flow-box box-channel">
+        <div class="title-text">DamageEventChannel</div>
+        <div class="sub">ScriptableObject · 观察者模式</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <div class="flow-arrow">→</div>
+        <div class="flow-arrow-label">Raise</div>
+      </div>
+      <div class="flow-box box-channel">
+        <div class="title-text">HPChangedChannel</div>
+        <div class="sub">ScriptableObject</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <div class="flow-arrow">→</div>
+        <div class="flow-arrow-label">Listen</div>
+      </div>
+      <div class="flow-box box-ui">
+        <div class="title-text">HP 血条</div>
+        <div class="sub">UI 订阅事件更新显示</div>
+      </div>
+    </div>
+
+    <!-- 第二行：敌人死亡流程 -->
+    <div class="flow-row" style="margin-top:16px;">
+      <div class="flow-box box-enemy">
+        <div class="title-text">EnemyBase.Die()</div>
+        <div class="sub">状态切换为 Die</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <div class="flow-arrow">→</div>
+        <div class="flow-arrow-label">Raise</div>
+      </div>
+      <div class="flow-box box-channel">
+        <div class="title-text">EnemyReportChannel</div>
+        <div class="sub">通知生成器怪物死亡</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <div class="flow-arrow">→</div>
+        <div class="flow-arrow-label">Listen</div>
+      </div>
+      <div class="flow-box box-manager">
+        <div class="title-text">MatchStatisticsManager</div>
+        <div class="sub">记录击杀</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <div class="flow-arrow">→</div>
+        <div class="flow-arrow-label">Raise</div>
+      </div>
+      <div class="flow-box box-channel">
+        <div class="title-text">PoolOperationChannel</div>
+        <div class="sub">Despawn 回收对象</div>
+      </div>
+    </div>
+
+    <!-- 第三行：Boss死亡流程 -->
+    <div class="flow-row" style="margin-top:16px;">
+      <div class="flow-box box-enemy">
+        <div class="title-text">Boss 死亡</div>
+        <div class="sub">Boss_Horror</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <div class="flow-arrow">→</div>
+        <div class="flow-arrow-label">Raise</div>
+      </div>
+      <div class="flow-box box-channel">
+        <div class="title-text">BossDeathChannel</div>
+        <div class="sub">ScriptableObject</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <div class="flow-arrow">→</div>
+        <div class="flow-arrow-label">Listen</div>
+      </div>
+      <div class="flow-box box-manager">
+        <div class="title-text">GameManager</div>
+        <div class="sub">等待10秒</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <div class="flow-arrow">→</div>
+        <div class="flow-arrow-label">调用</div>
+      </div>
+      <div class="flow-box box-manager">
+        <div class="title-text">SaveManager</div>
+        <div class="sub">存档 → RPC切场景</div>
+      </div>
+    </div>
+
+    <div class="flow-note">
+      <strong>关键点：</strong>所有通信通过 EventChannel SO，发布者不知道订阅者是谁。敌人不知道 GameManager 的存在，UI 不知道 PlayerController 的存在。全程无直接引用。
+    </div>
+  </div>
+</div>
+
+<!-- ========== 热更新双层架构图 ========== -->
+<div class="section hotfix-section">
+  <div class="section-title">② 热更新双层架构图</div>
+  <div class="hotfix-container">
+
+    <!-- 资源热更 -->
+    <div class="hotfix-column resource">
+      <h3>🔗 链路一：Addressables 资源热更</h3>
+      <div class="hotfix-step">
+        <div class="step-num">1</div>
+        <div class="step-content">读取内置 catalog，计算 MD5 hash</div>
+      </div>
+      <div class="hotfix-step">
+        <div class="step-num">2</div>
+        <div class="step-content">下载远程 hash 文件，对比是否一致</div>
+      </div>
+      <div class="hotfix-step">
+        <div class="step-num">3</div>
+        <div class="step-content">不同 → 下载远程 catalog.json 写入缓存</div>
+      </div>
+      <div class="hotfix-step">
+        <div class="step-num">4</div>
+        <div class="step-content">重新初始化 Addressables 加载新 catalog</div>
+      </div>
+      <div class="hotfix-step">
+        <div class="step-num">5</div>
+        <div class="step-content">按 Label 批量下载变更 bundle<br><span class="code">preloadLabels: ["remote_preload"]</span></div>
+      </div>
+      <div class="hotfix-step">
+        <div class="step-num">6</div>
+        <div class="step-content">完成 → 通知 AudioManager 重新加载音效</div>
+      </div>
+      <div class="hotfix-step" style="background:rgba(78,205,196,0.12);border:1px dashed #4ecdc4;">
+        <div class="step-num">✓</div>
+        <div class="step-content"><strong>管理范围：</strong>438个资产<br>Prefab · Audio · Config SO · Sprite · Skybox · Lua脚本</div>
+      </div>
+    </div>
+
+    <!-- 联动标记 -->
+    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;">
+      <div class="hotfix-link">⇌</div>
+      <div class="hotfix-link-label">联动</div>
+    </div>
+
+    <!-- 逻辑热更 -->
+    <div class="hotfix-column logic">
+      <h3>🔧 链路二：xLua 逻辑热更</h3>
+      <div class="hotfix-step">
+        <div class="step-num">1</div>
+        <div class="step-content">C# 调用虚方法（如 UnlockElement）</div>
+      </div>
+      <div class="hotfix-step">
+        <div class="step-num">2</div>
+        <div class="step-content">HeroLuaBridge.SafeCall() 尝试 Lua</div>
+      </div>
+      <div class="hotfix-step">
+        <div class="step-num">3</div>
+        <div class="step-content">LuaEnvManager 自定义 Loader<br><span class="code">require('Heroes.WizardBoy')</span></div>
+      </div>
+      <div class="hotfix-step">
+        <div class="step-num">4</div>
+        <div class="step-content">通过 Addressables 加载 .lua 文件<br><span class="code">Lua/ → Addressables → TextAsset → bytes</span></div>
+      </div>
+      <div class="hotfix-step">
+        <div class="step-num">5</div>
+        <div class="step-content">Lua 执行逻辑，调用 C# 桥接方法<br><span class="code">CS.Core.Lua.LuaPoolHelper.RegisterPool(...)</span></div>
+      </div>
+      <div class="hotfix-step">
+        <div class="step-num">6</div>
+        <div class="step-content">Lua 报错 → <span style="color:#e94560;">_luaEnabled = false</span> → 降级 C# 默认</div>
+      </div>
+      <div class="hotfix-step" style="background:rgba(232,168,69,0.12);border:1px dashed #e8a845;">
+        <div class="step-num">✓</div>
+        <div class="step-content"><strong>管理范围：</strong>8个Lua文件<br>角色行为 · 攻击逻辑 · 符文效果映射 · 特殊技能</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-note" style="margin-top:16px;">
+    <strong>联动关系：</strong>Lua 脚本本身也走 Addressables 加载，意味着更新 Lua 文件 = 更新游戏逻辑，不发包不改 C#。<br>
+    <strong>安全机制：</strong>C# 自动降级（_luaEnabled）+ LuaSecurity MD5/RSA 校验 + HotfixLoadingUI 进度条 UI
+  </div>
+</div>
+
+<!-- ========== 敌人状态机图 ========== -->
+<div class="section state-section">
+  <div class="section-title">③ 敌人状态机图</div>
+  <div class="state-container">
+
+    <div class="state-flow">
+      <div class="state-box state-idle">
+        <div class="state-name">Idle</div>
+        <div class="state-desc">待机 · 追踪最近玩家</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <div class="state-arrow">→</div>
+        <div class="state-arrow-label">发现玩家</div>
+      </div>
+      <div class="state-box state-run">
+        <div class="state-name">Run</div>
+        <div class="state-desc">移动追踪 · 旋转朝向</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <div class="state-arrow">→</div>
+        <div class="state-arrow-label">进入攻击范围</div>
+      </div>
+      <div class="state-box state-attack">
+        <div class="state-name">Attack</div>
+        <div class="state-desc">攻击 · 子类实现</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <div class="state-arrow">→</div>
+        <div class="state-arrow-label">血量为0</div>
+      </div>
+      <div class="state-box state-die">
+        <div class="state-name">Die</div>
+        <div class="state-desc">死亡动画 · 掉落经验</div>
+      </div>
+    </div>
+
+    <!-- 回退箭头 -->
+    <div style="display:flex;gap:40px;margin-top:-8px;">
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <div class="state-arrow-label" style="margin-bottom:2px;">← 失去目标</div>
+        <div class="state-arrow" style="transform:rotate(180deg);">→</div>
+      </div>
+    </div>
+
+    <!-- 对象池回收 -->
+    <div class="pool-section">
+      <div class="pool-icon">♻️</div>
+      <div class="pool-text">
+        <strong>Die 状态 → 3秒后 → PoolOperationChannel.Raise(Despawn) → 对象池回收</strong><br>
+        ResetState() 重置：动画 · 物理(isKinematic) · Collider · 属性(isDead/currentHealth) · 目标 · 状态机
+      </div>
+    </div>
+
+    <!-- 数据来源 -->
+    <div class="state-detail">
+      <div class="state-detail-card">
+        <div class="card-title">数据来源（SO 配置）</div>
+        <div class="card-item">maxHealth · attackPower · moveSpeed</div>
+        <div class="card-item">attackDamage · attackInterval · attackRange</div>
+        <div class="card-item">expMin · expMax · powerUpDropChance</div>
+      </div>
+      <div class="state-detail-card">
+        <div class="card-title">运行时数据</div>
+        <div class="card-item">EnemyData.currentState（当前状态）</div>
+        <div class="card-item">EnemyData.attribute（血量/属性实例）</div>
+        <div class="card-item">EnemyData.isInitialized（池复用标记）</div>
+      </div>
+      <div class="state-detail-card">
+        <div class="card-title">网络权限</div>
+        <div class="card-item">仅 MasterClient 执行 AI 逻辑</div>
+        <div class="card-item">其他客户端通过 Photon 同步位置/动画</div>
+        <div class="card-item">非房主端 → RPC 通知房主销毁</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

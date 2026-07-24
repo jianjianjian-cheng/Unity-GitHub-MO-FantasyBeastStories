@@ -1,4 +1,5 @@
 using Core.Channels.General;
+using Core.Channels.Shop;
 using Core.Channels.Task;
 using UnityEngine;
 
@@ -27,5 +28,8 @@ namespace Core.Channels.UI
         [Header("任务事件")]
         public TaskActivationEventChannelSO taskActivationChannel;
         public TaskNoticeEventChannelSO taskNoticeChannel;
+
+        [Header("商店事件")]
+        public ShopEventChannelSO shopEventChannel;
     }
 }
