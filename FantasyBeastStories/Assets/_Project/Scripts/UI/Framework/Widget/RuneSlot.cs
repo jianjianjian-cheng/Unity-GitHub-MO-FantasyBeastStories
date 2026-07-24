@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Controllers.Rune;
+using Core;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -41,6 +42,12 @@ namespace UI.Framework
 
         // 通过 Setup() 注入的符文数据资产
         private RuneDataSO runeData;
+
+        // 新符文红点（动态创建）
+        private GameObject _runeRedDot;
+
+        /// <summary>该槽位是否有红点</summary>
+        public bool HasRedDot => _runeRedDot != null && _runeRedDot.activeSelf;
 
         // 拖拽状态
         private Image dragGhostImage;
@@ -97,6 +104,55 @@ namespace UI.Framework
         {
             if (equippedMarkObject != null)
                 equippedMarkObject.SetActive(equipped);
+        }
+
+        // ──────────────────────────────────────────────
+        //  新符文红点（由 RunePanel 外部控制）
+        // ──────────────────────────────────────────────
+
+        /// <summary>
+        /// 设置红点可见性。由 RunePanel.BuildRuneSlotList 根据新增数量分配。
+        /// ShopPanel 不调用此方法，因此商店中不会出现红点。
+        /// </summary>
+        public void SetRedDotVisible(bool visible)
+        {
+            if (runeData == null) return;
+
+            if (visible)
+            {
+                if (_runeRedDot == null)
+                    CreateRedDot();
+                _runeRedDot.SetActive(true);
+            }
+            else if (_runeRedDot != null)
+            {
+                _runeRedDot.SetActive(false);
+            }
+        }
+
+        private void CreateRedDot()
+        {
+            _runeRedDot = new GameObject("RuneRedDot");
+            _runeRedDot.transform.SetParent(transform, false);
+
+            var rt = _runeRedDot.AddComponent<RectTransform>();
+            rt.anchorMin = new Vector2(1, 1);
+            rt.anchorMax = new Vector2(1, 1);
+            rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.anchoredPosition = new Vector2(-12, -12);
+            rt.sizeDelta = new Vector2(20, 20);
+
+            var img = _runeRedDot.AddComponent<Image>();
+            img.raycastTarget = false;
+
+            // 通过 Addressables 加载红点精灵
+            var sprite = AssetLoader.LoadAsset<Sprite>("Assets/_Project/Addressables/Sprites/UI/red_dot.png");
+            if (sprite != null)
+                img.sprite = sprite;
+            else
+                img.color = new Color(0.9f, 0.1f, 0.1f, 1f);
+
+            _runeRedDot.SetActive(false);
         }
 
         // ── UIWidget 生命周期 ──
@@ -167,6 +223,13 @@ namespace UI.Framework
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            // 清除该符文的新红点
+            if (runeData != null && HasRedDot)
+            {
+                RuneInventory.ConsumeNew(runeData.runeId);
+                SetRedDotVisible(false);
+            }
+
             OnClicked?.Invoke(this);
         }
 

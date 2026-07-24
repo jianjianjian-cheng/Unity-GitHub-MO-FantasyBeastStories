@@ -10,11 +10,21 @@ public class MinimapCameraFollow : MonoBehaviour
     {
         if (_player == null)
         {
-            // 通过 PlayerManager 获取本地玩家
             var players = PlayerManager.instance?.ActivePlayerObjects;
-            if (players != null && players.Count > 0)
-                _player = players[0].transform;
-            return;
+            if (players == null || players.Count == 0) return;
+
+            foreach (var go in players)
+            {
+                if (go == null) continue;
+                var pc = go.GetComponent<Controllers.Character.PlayerController>();
+                if (pc != null && pc.IsLocalPlayer())
+                {
+                    _player = go.transform;
+                    break;
+                }
+            }
+
+            if (_player == null) return;
         }
         // 只跟随 XZ 位置，不跟随旋转
         transform.position = new Vector3(_player.position.x, height, _player.position.z);

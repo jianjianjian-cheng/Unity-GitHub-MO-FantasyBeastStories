@@ -1,4 +1,5 @@
 using Core.Channels.General;
+using Core.Channels.RedDot;
 using Core.Channels.Shop;
 using Core.Channels.Task;
 using UnityEngine;
@@ -31,5 +32,8 @@ namespace Core.Channels.UI
 
         [Header("商店事件")]
         public ShopEventChannelSO shopEventChannel;
+
+        [Header("红点事件")]
+        public RedDotEventChannelSO redDotChannel;
     }
 }

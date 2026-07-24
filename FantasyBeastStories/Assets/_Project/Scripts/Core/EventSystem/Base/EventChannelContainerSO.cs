@@ -2,6 +2,7 @@ using Core.Channels.Combat;
 using Core.Channels.Game;
 using Core.Channels.General;
 using Core.Channels.Player;
+using Core.Channels.RedDot;
 using Core.Channels.Shop;
 using Core.Channels.Task;
 using Core.Channels.UI;
@@ -75,6 +76,7 @@ namespace Core.Channels
     public CoinUpdateEventChannelSO coinUpdateChannel => uiSystem != null ? uiSystem.coinUpdateChannel : null;
     public MatchStatsUpdateEventChannelSO matchStatsUpdateChannel => uiSystem != null ? uiSystem.matchStatsUpdateChannel : null;
     public ShopEventChannelSO shopEventChannel => uiSystem != null ? uiSystem.shopEventChannel : null;
+    public RedDotEventChannelSO redDotChannel => uiSystem != null ? uiSystem.redDotChannel : null;
     #endregion
 
     #region 任务事件

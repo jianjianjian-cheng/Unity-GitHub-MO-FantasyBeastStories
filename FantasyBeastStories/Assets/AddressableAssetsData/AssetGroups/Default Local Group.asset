@@ -22,6 +22,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2a525cd830ac143498993fa761396ac6
+    m_Address: Assets/_Project/Addressables/Sprites/UI/red_dot.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 473bdc8891f686f4fb6818e12d02b7b4
     m_Address: Characters/BingNv_Anim
     m_ReadOnly: 0
@@ -36,6 +41,12 @@ MonoBehaviour:
     m_Address: Characters/WizardBoy_Anim
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ef1c4b818731ec945a01a122dc1f8e49
+    m_Address: Assets/_Project/Addressables/Sprites/UI/white_dot.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: fb99d6304baf1dc43b9033961371850c, type: 2}

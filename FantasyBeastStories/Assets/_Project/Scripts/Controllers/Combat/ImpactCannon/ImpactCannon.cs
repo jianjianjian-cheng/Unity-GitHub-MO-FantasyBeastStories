@@ -84,7 +84,11 @@ namespace Controllers.Combat.ImpactCannon
     public void SetAttributeFromPlayer(AttributePlayerBase attributePlayer)
     {
       this.attributePlayer = attributePlayer;
+      _element = attributePlayer.GetCurrentElement();
     }
+
+    /// <summary>供远程客户端设置元素类型（无需 attributePlayer）</summary>
+    public void SetElement(Element element) => _element = element;
 
     public void SetCanSplit(bool value) => _canSplit = value;
 
@@ -102,12 +106,6 @@ namespace Controllers.Combat.ImpactCannon
     {
       base.OnTriggerEnter(other);
 
-      if (attributePlayer == null)
-      {
-        Debug.LogWarning("[ImpactCannon] attributePlayer 为空");
-        return;
-      }
-
       if (ignoreEnemy != null && other.gameObject == ignoreEnemy)
         return;
 
@@ -118,6 +116,12 @@ namespace Controllers.Combat.ImpactCannon
 
       if (_isMine)
       {
+        if (attributePlayer == null)
+        {
+          Debug.LogWarning("[ImpactCannon] attributePlayer 为空");
+          return;
+        }
+
         if (_canSplit)
         {
           SplitToNearestEnemies(hitPoint, other.gameObject);
@@ -145,7 +149,10 @@ namespace Controllers.Combat.ImpactCannon
         }
 
         if (attackCount >= maxAttackCount)
+        {
           RecycleWithEffect();
+          return;
+        }
       }
       else
       {
@@ -237,7 +244,7 @@ namespace Controllers.Combat.ImpactCannon
 
     private void PlayHitEffect(Vector3 hitPosition)
     {
-      string poolKey = AttackRangeBase.GetImpactCannonHitPoolByElement(attributePlayer.GetCurrentElement());
+      string poolKey = AttackRangeBase.GetImpactCannonHitPoolByElement(_element);
       GameObject hitEffect = PoolHelper.Get(poolKey, hitPosition);
       if (hitEffect != null)
         hitEffect.GetComponentInChildren<ParticleSystem>()?.Play();

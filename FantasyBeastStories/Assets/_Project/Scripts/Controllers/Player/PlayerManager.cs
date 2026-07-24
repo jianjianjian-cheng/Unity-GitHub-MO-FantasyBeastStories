@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,9 @@ namespace Controllers.Player
 {
     public class PlayerManager : MonoBehaviour
     {
+        /// <summary>玩家死亡时触发，参数为死亡的 ActorNumber（字符串形式）</summary>
+        public static event Action<string> OnPlayerDeath;
+
         /// <summary>
         /// 属性缓存服务（统一管理 AttributePlayerBase 的增删查）
         /// </summary>
@@ -277,7 +281,10 @@ namespace Controllers.Player
         /// <summary>标记玩家死亡</summary>
         public void SetPlayerDead(string playerId)
         {
-            deadPlayerIds.Add(playerId);
+            if (deadPlayerIds.Add(playerId))
+            {
+                OnPlayerDeath?.Invoke(playerId);
+            }
         }
 
         /// <summary>标记玩家复活（预留，当前不使用）</summary>

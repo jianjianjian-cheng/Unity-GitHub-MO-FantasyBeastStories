@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using UI.Framework.Utils;
+using UI.RedDot;
 using UnityEngine;
 
 namespace Controllers.Rune
@@ -12,6 +14,9 @@ namespace Controllers.Rune
     {
         private static List<int> _collectedIds = new List<int>();
 
+        /// <summary>每个 runeId 尚未查看的新增数量</summary>
+        private static Dictionary<int, int> _newCounts = new Dictionary<int, int>();
+
         /// <summary>获取所有已收集的符文 ID</summary>
         public static List<int> GetAllRuneIds()
         {
@@ -22,7 +27,47 @@ namespace Controllers.Rune
         public static void AddRune(int runeId)
         {
             _collectedIds.Add(runeId);
-            Debug.Log($"[RuneInventory] 收集符文 ID={runeId}，当前背包共 {_collectedIds.Count} 个");
+
+            if (!_newCounts.ContainsKey(runeId))
+                _newCounts[runeId] = 0;
+            _newCounts[runeId]++;
+
+            // 激活符文导航按钮红点
+            RedDotController.Instance?.ActivateRedDot(RedDotKeys.RuneNew);
+
+            Debug.Log($"[RuneInventory] 收集符文 ID={runeId}，当前背包共 {_collectedIds.Count} 个，新红点剩余 {_newCounts[runeId]}");
+        }
+
+        /// <summary>获取指定 runeId 的新增（未查看）数量</summary>
+        public static int GetNewCount(int runeId)
+        {
+            return _newCounts.TryGetValue(runeId, out var count) ? count : 0;
+        }
+
+        /// <summary>
+        /// 消费一个新增名额。当所有 runeId 的新增数量都归零时，
+        /// 自动关闭符文导航按钮红点。
+        /// </summary>
+        public static void ConsumeNew(int runeId)
+        {
+            if (!_newCounts.TryGetValue(runeId, out var count) || count <= 0)
+                return;
+
+            _newCounts[runeId] = count - 1;
+
+            // 检查是否全部归零
+            bool anyRemaining = false;
+            foreach (var kvp in _newCounts)
+            {
+                if (kvp.Value > 0)
+                {
+                    anyRemaining = true;
+                    break;
+                }
+            }
+
+            if (!anyRemaining)
+                RedDotController.Instance?.MarkAsRead(RedDotKeys.RuneNew);
         }
 
         /// <summary>检查是否已拥有某个符文</summary>
@@ -62,6 +107,7 @@ namespace Controllers.Rune
         public static void Clear()
         {
             _collectedIds.Clear();
+            _newCounts.Clear();
             Debug.Log("[RuneInventory] 背包已清空");
         }
     }

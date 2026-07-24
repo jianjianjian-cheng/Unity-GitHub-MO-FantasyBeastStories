@@ -34,6 +34,12 @@ namespace UI
             _rectTransform.sizeDelta = new Vector2(size, size);
         }
 
+        public void SetSprite(Sprite sprite)
+        {
+            if (_image != null && sprite != null)
+                _image.sprite = sprite;
+        }
+
         public void SetVisible(bool visible)
         {
             gameObject.SetActive(visible);

@@ -4,6 +4,8 @@ using Core;
 using Managers;
 using UI.Framework.Base;
 using UI.Framework.Manager;
+using UI.Framework.Utils;
+using UI.RedDot;
 using UnityEngine;
 using UnityEngine.UI;
 using Core.Audio;
@@ -54,6 +56,9 @@ public class MassionPanel : UIScreen
     {
         base.OnAfterClose();
         ClearTaskList();
+
+        // 标记任务红点已读
+        RedDotController.Instance?.MarkAsRead(RedDotKeys.MissionNew);
     }
 
     // ──────────────────────────────────────────────

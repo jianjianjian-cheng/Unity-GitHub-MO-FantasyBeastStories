@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Controllers.Enemy;
 using Controllers.Player;
 using Core;
+using Core.Network;
 using UI.Framework.Base;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ namespace UI
     /// 小地图红点控件：继承 UIWidget，与 BossHPUIListener / EXPBar 同模式。
     /// 通过 poolOperationChannel 监听敌人 Spawn/Despawn 事件（脏标记），
     /// 定时扫描场景中 EnemyBase 并在小地图上更新红点位置。
+    /// 同时追踪存活队友（白点），超出范围贴边显示。
     /// </summary>
     public class MinimapWidget : UIWidget
     {
@@ -23,20 +25,33 @@ namespace UI
         [SerializeField] private RectTransform playerArrow;
         [SerializeField] private GameObject dotPrefab;
 
-        [Header("Dot 样式")]
+        [Header("敌人 Dot 样式")]
         [SerializeField] private Color enemyColor = new Color(0.85f, 0.15f, 0.15f, 1f);
         [SerializeField] private Color bossColor = new Color(0.6f, 0f, 0f, 1f);
         [SerializeField] private float dotSize = 8f;
         [SerializeField] private float bossDotSize = 12f;
 
+        [Header("队友 Dot 样式")]
+        [SerializeField] private Color teammateColor = Color.white;
+        [SerializeField] private float teammateDotSize = 8f;
+
         private readonly List<EnemyBase> _trackedEnemies = new();
         private readonly List<MinimapDot> _activeDots = new();
         private readonly Stack<MinimapDot> _dotPool = new();
 
+        private readonly List<Transform> _trackedTeammates = new();
+        private readonly List<MinimapDot> _activeTeammateDots = new();
+        private readonly Stack<MinimapDot> _teammateDotPool = new();
+
+        private Sprite _teammateSprite;
+
         private float _timer;
-        private bool _needFullRefresh;
+        private bool _needFullRefresh = true;
         private bool _hasSubscribed;
         private RectTransform _containerRect;
+
+        private float _forceRefreshTimer;
+        private const float ForceRefreshInterval = 5f;
 
         protected override void AutoBindComponents()
         {
@@ -46,6 +61,9 @@ namespace UI
                 playerArrow = transform.Find("Mask/PlayerArrow") as RectTransform;
 
             _containerRect = dotContainer;
+
+            _teammateSprite = AssetLoader.TryLoadAsset<Sprite>(
+                "Assets/_Project/Addressables/Sprites/UI/white_dot.png");
         }
 
         protected override void SubscribeEvents()
@@ -74,12 +92,21 @@ namespace UI
             if (_timer < updateInterval) return;
             _timer = 0f;
 
+            // 定期强制刷新，确保非主机端也能追踪到敌人
+            _forceRefreshTimer += updateInterval;
+            if (_forceRefreshTimer >= ForceRefreshInterval)
+            {
+                _forceRefreshTimer = 0f;
+                _needFullRefresh = true;
+            }
+
             if (_needFullRefresh)
             {
                 RefreshTrackedEnemies();
                 _needFullRefresh = false;
             }
 
+            RefreshTrackedTeammates();
             UpdateDotPositions();
         }
 
@@ -164,6 +191,54 @@ namespace UI
                 _activeDots[i].SetPosition(minimapPos);
                 _activeDots[i].SetVisible(true);
             }
+
+            // ── 队友 Dot ──
+            for (int i = 0; i < _trackedTeammates.Count && i < _activeTeammateDots.Count; i++)
+            {
+                var teammate = _trackedTeammates[i];
+                if (teammate == null)
+                {
+                    _activeTeammateDots[i].SetVisible(false);
+                    continue;
+                }
+
+                var teammatePos = teammate.position;
+                var teammateOffset = new Vector2(teammatePos.x - playerPos.x, teammatePos.z - playerPos.z);
+                var teammateNorm = teammateOffset / mapRange;
+
+                // 超出范围贴边
+                if (teammateNorm.magnitude > 1f)
+                    teammateNorm = teammateNorm.normalized;
+
+                _activeTeammateDots[i].SetPosition(teammateNorm * maxRadius);
+                _activeTeammateDots[i].SetVisible(true);
+            }
+        }
+
+        private void RefreshTrackedTeammates()
+        {
+            _trackedTeammates.Clear();
+
+            if (PlayerManager.instance != null && NetworkServiceLocator.IsInitialized)
+            {
+                int localActorNumber = NetworkServiceLocator.PlayerService.GetLocalActorNumber();
+                var teammates = PlayerManager.instance.GetAliveTeammateTransforms(localActorNumber);
+                if (teammates != null)
+                    _trackedTeammates.AddRange(teammates);
+            }
+
+            // 同步队友 dot 数量
+            while (_activeTeammateDots.Count < _trackedTeammates.Count)
+            {
+                var dot = GetTeammateDot();
+                _activeTeammateDots.Add(dot);
+            }
+            while (_activeTeammateDots.Count > _trackedTeammates.Count)
+            {
+                int idx = _activeTeammateDots.Count - 1;
+                ReturnTeammateDot(_activeTeammateDots[idx]);
+                _activeTeammateDots.RemoveAt(idx);
+            }
         }
 
         private GameObject GetLocalPlayer()
@@ -214,9 +289,39 @@ namespace UI
             _dotPool.Push(dot);
         }
 
+        private MinimapDot GetTeammateDot()
+        {
+            MinimapDot dot;
+            if (_teammateDotPool.Count > 0)
+            {
+                dot = _teammateDotPool.Pop();
+                dot.gameObject.SetActive(true);
+            }
+            else
+            {
+                var go = Instantiate(dotPrefab, dotContainer);
+                dot = go.GetComponent<MinimapDot>();
+                if (dot == null)
+                    dot = go.AddComponent<MinimapDot>();
+                dot.SetSprite(_teammateSprite);
+                dot.SetColor(teammateColor);
+                dot.SetSize(teammateDotSize);
+            }
+            return dot;
+        }
+
+        private void ReturnTeammateDot(MinimapDot dot)
+        {
+            if (dot == null) return;
+            dot.SetVisible(false);
+            _teammateDotPool.Push(dot);
+        }
+
         private void OnDisable()
         {
             base.OnDisable();
+
+            // 敌人 dots 回收
             foreach (var dot in _activeDots)
             {
                 if (dot != null)
@@ -230,6 +335,21 @@ namespace UI
             }
             _activeDots.Clear();
             _trackedEnemies.Clear();
+
+            // 队友 dots 回收
+            foreach (var dot in _activeTeammateDots)
+            {
+                if (dot != null)
+                    dot.gameObject.SetActive(false);
+            }
+            _teammateDotPool.Clear();
+            foreach (var dot in _activeTeammateDots)
+            {
+                if (dot != null)
+                    _teammateDotPool.Push(dot);
+            }
+            _activeTeammateDots.Clear();
+            _trackedTeammates.Clear();
         }
     }
 }

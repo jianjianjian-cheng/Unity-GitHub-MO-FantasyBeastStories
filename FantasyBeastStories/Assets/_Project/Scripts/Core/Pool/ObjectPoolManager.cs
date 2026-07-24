@@ -10,9 +10,7 @@ namespace Core
 {
     public class ObjectPoolManager : MonoBehaviour
     {
-        private PoolConfigSO poolConfig;  // 运行时通过 Addressables 加载，确保热更生效
-
-        // ===== GC 优化：使用 Queue 替代 List 线性查找，O(1) 获取/归还 =====
+        private PoolConfigSO poolConfig;
         private class PoolData
         {
             public List<GameObject> allObjects = new List<GameObject>();
@@ -125,11 +123,9 @@ namespace Core
 
                 if (prefab == null)
                 {
-                    Debug.LogWarning($"[ObjectPoolManager] 跳过无法加载的池配置: {entry.poolName} (key={entry.addressableKey})");
                     continue;
                 }
 
-                Debug.Log($"[ObjectPoolManager] 初始化池: {entry.poolName} → {prefab.name} (key={entry.addressableKey})");
 
                 CachePrefab(entry.poolName, prefab);
 
@@ -213,8 +209,6 @@ namespace Core
                         return newObj;
                     }
                 }
-
-                Debug.LogWarning($"对象池 '{poolName}' 没有可用对象且无法扩容");
             }
             else
             {

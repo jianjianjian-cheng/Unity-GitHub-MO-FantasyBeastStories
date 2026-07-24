@@ -258,6 +258,15 @@ public class RunePanel : UIScreen
     // 对 ownedRuneIds 排序（自动按 runeId 升序排列）
     ownedRuneIds.Sort();
 
+    // 复制新增计数，遍历时逐个消费
+    var remainingNew = new Dictionary<int, int>();
+    foreach (var kvp in ownedRuneIds)
+    {
+      int n = RuneInventory.GetNewCount(kvp);
+      if (n > 0)
+        remainingNew[kvp] = n;
+    }
+
     // 每个 ID 生成一个插槽（支持重复符文）
     for (int i = 0; i < ownedRuneIds.Count; i++)
     {
@@ -284,6 +293,13 @@ public class RunePanel : UIScreen
         bool isEquipped = (runeEquip1 != null && runeEquip1.EquippedRuneId == runeId) ||
                           (runeEquip2 != null && runeEquip2.EquippedRuneId == runeId);
         runeSlot.SetEquipped(isEquipped);
+
+        // 仅给新增名额分配红点（同一 runeId 只点亮前 N 个，N=新增数量）
+        if (remainingNew.TryGetValue(runeId, out var remaining) && remaining > 0)
+        {
+          runeSlot.SetRedDotVisible(true);
+          remainingNew[runeId] = remaining - 1;
+        }
       }
 
       runeSlotList.Add(go);

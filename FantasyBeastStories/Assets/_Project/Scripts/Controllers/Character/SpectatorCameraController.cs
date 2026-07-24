@@ -19,7 +19,7 @@ namespace Controllers.Character
     public class SpectatorCameraController : MonoBehaviour
     {
         [SerializeField] private float deathDelay = 2f;       // 死亡后等待特效播放的时间
-        [SerializeField] private float blendDuration = 1.5f;   // 摄像机切换 blend 时长
+        [SerializeField] private float blendDuration = 1.5f;   // 摄像机平移时长
 
         private CinemachineVirtualCamera virtualCamera;
         private CinemachineBrain cinemachineBrain;
@@ -27,6 +27,9 @@ namespace Controllers.Character
         private int currentIndex = 0;
         private bool isActive = false;
         private int localActorNumber;
+
+        private Coroutine _panCoroutine;
+        private GameObject _panBridge;
 
         void Awake()
         {
@@ -100,17 +103,72 @@ namespace Controllers.Character
 
         private void SetCameraTarget(Transform target)
         {
-            // 通过临时 blend 实现平滑切换
-            if (cinemachineBrain != null)
+            // 取消正在进行的平移
+            if (_panCoroutine != null)
+                StopCoroutine(_panCoroutine);
+
+            // 清理上一轮的桥接对象
+            if (_panBridge != null)
+                Destroy(_panBridge);
+
+            _panCoroutine = StartCoroutine(SmoothPanToTarget(target, blendDuration));
+        }
+
+        /// <summary>
+        /// 使用桥接 GameObject 平滑平移摄像机：
+        /// 创建一个位于当前 Follow 目标位置的桥接对象，
+        /// 让虚拟摄像机跟随桥接对象，再将桥接对象平滑移动到新目标位置，
+        /// 完成后将 Follow/LookAt 直接切换到新目标。
+        /// </summary>
+        private IEnumerator SmoothPanToTarget(Transform newTarget, float duration)
+        {
+            if (newTarget == null)
+                yield break;
+
+            // 记录起始位置（当前 Follow 目标位置或摄像机自身位置）
+            Vector3 startPos = virtualCamera.Follow != null
+                ? virtualCamera.Follow.position
+                : transform.position;
+
+            // 创建桥接对象
+            _panBridge = new GameObject("SpectatorPanBridge");
+            _panBridge.transform.position = startPos;
+
+            // 虚拟摄像机跟随桥接对象，始终注视新目标
+            virtualCamera.Follow = _panBridge.transform;
+            virtualCamera.LookAt = newTarget;
+
+            float elapsed = 0f;
+            while (elapsed < duration)
             {
-                cinemachineBrain.m_DefaultBlend = new CinemachineBlendDefinition(
-                    CinemachineBlendDefinition.Style.EaseInOut,
-                    blendDuration
-                );
+                if (newTarget == null)
+                    break;
+
+                elapsed += UnityEngine.Time.deltaTime;
+                float t = Mathf.Clamp01(elapsed / duration);
+                // EaseInOutQuad 缓动曲线
+                float eased = t < 0.5f
+                    ? 2f * t * t
+                    : 1f - Mathf.Pow(-2f * t + 2f, 2f) / 2f;
+
+                _panBridge.transform.position = Vector3.Lerp(startPos, newTarget.position, eased);
+                yield return null;
             }
 
-            virtualCamera.Follow = target;
-            virtualCamera.LookAt = target;
+            // 平移完成，直接跟随新目标
+            if (newTarget != null)
+            {
+                virtualCamera.Follow = newTarget;
+                virtualCamera.LookAt = newTarget;
+            }
+
+            if (_panBridge != null)
+            {
+                Destroy(_panBridge);
+                _panBridge = null;
+            }
+
+            _panCoroutine = null;
         }
 
         private void RefreshAliveTeammates()
@@ -139,6 +197,19 @@ namespace Controllers.Character
         private void HandleAllTeammatesDead()
         {
             isActive = false;
+
+            // 停止正在进行的平移并清理桥接对象
+            if (_panCoroutine != null)
+            {
+                StopCoroutine(_panCoroutine);
+                _panCoroutine = null;
+            }
+            if (_panBridge != null)
+            {
+                Destroy(_panBridge);
+                _panBridge = null;
+            }
+
             Debug.Log("[SpectatorCameraController] 所有队友已死亡，返回大厅");
 
             // 延迟2秒后返回大厅
@@ -146,6 +217,12 @@ namespace Controllers.Character
             {
                 GameManager.instance.TriggerLobbyTransition(2f);
             }
+        }
+
+        void OnDestroy()
+        {
+            if (_panBridge != null)
+                Destroy(_panBridge);
         }
     }
 }

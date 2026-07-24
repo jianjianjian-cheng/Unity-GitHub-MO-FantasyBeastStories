@@ -74,6 +74,7 @@ namespace Controllers.Network
           vfxPoolName = visualPool,
         };
         cannon.SetToken(token);
+        cannon.SetElement(element);
         cannon.StartShoot(direction, isMine: false);
       }
     }
@@ -421,6 +422,7 @@ namespace Controllers.Network
         ImpactCannon cannon = triggerObj.GetComponent<ImpactCannon>();
         if (cannon != null)
         {
+          cannon.SetElement(element);
           cannon.StartShoot(direction, isMine: false);
           cannon.SetCanSplit(false);
 
@@ -430,6 +432,7 @@ namespace Controllers.Network
             vfxEffect = visualObj,
             vfxPoolName = visualPool,
           };
+          cannon.SetToken(token);
         }
       }
     }

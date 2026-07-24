@@ -26,3 +26,4 @@ MonoBehaviour:
   taskActivationChannel: {fileID: 11400000, guid: a877e6b7ad546204787f6bda98a06a0a, type: 2}
   taskNoticeChannel: {fileID: 11400000, guid: 5fda20fc9cb6bf54eab384b86d1323c8, type: 2}
   shopEventChannel: {fileID: 11400000, guid: 8b823bdf2333653429840367f58d73b7, type: 2}
+  redDotChannel: {fileID: 11400000, guid: 002496f648f833448834392572ac927f, type: 2}
