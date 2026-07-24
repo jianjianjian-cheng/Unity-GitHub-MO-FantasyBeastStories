@@ -9,15 +9,6 @@ using UnityEngine.AI;
 
 namespace Controllers.Enemy
 {
-    /// <summary>
-    /// 可攻击玩家的敌人类，继承自 EnemyBase。
-    /// 通过距离判定替代碰撞体触发，提高大批量怪物时的性能。
-    /// 无攻击动画，怪物紧贴玩家时自动按间隔造成伤害。
-    ///
-    /// LOD (Level of Detail) 分级优化：
-    /// 根据与最近玩家的距离动态调整行为精度，远处敌人降低更新频率以提升性能。
-    /// 在大批量怪物场景中，远处怪物消耗显著降低。
-    /// </summary>
     public class AttackableEnemy : EnemyBase
     {
         [Header("NavMesh 设置")]

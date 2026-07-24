@@ -53,12 +53,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - remote_preload
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1a3d49816e540734a9e3d83cbd37cf91
-    m_Address: "UI/Characters/jimeng-2026-04-18-1501-\u53C2\u8003@\u56FE\u72471\u4E2D\u7684\u53E4\u98CEQ\u7248\u5C0F\u5973\u5B69\u548C\u7EA2\u8272\u5C0F\u9F99\u5F62\u8C61\uFF0C\u6539\u4E3A\u6CB9\u753B\u4E8C\u6B21\u5143\u7F8E\u6F2B\u98CE\u683C\uFF0C\u6E38\u620F\u89D2\u8272\u7ACB..."
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - remote_preload
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1f4ecb0fb79f643409a6e83c642054c9
     m_Address: UI/TopNotice/png/12
     m_ReadOnly: 0
@@ -103,12 +97,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 43950611bce45094eaa5ac33a841a7d0
     m_Address: UI/SelectedButton
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - remote_preload
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 45b46dd60ee52394f94b9133be58d382
-    m_Address: UI/Characters/0
     m_ReadOnly: 0
     m_SerializedLabels:
     - remote_preload
