@@ -338,7 +338,7 @@ public class RunePanel : UIScreen
     if (selectedRuneListItem != null && selectedRuneListItem != item)
     {
       var prevSlot = selectedRuneListItem.GetComponent<RuneSlot>();
-      prevSlot?.PlayDeselect();
+      prevSlot?.ForceDeselect();
     }
 
     selectedRuneListItem = item;
@@ -630,6 +630,14 @@ public class RunePanel : UIScreen
 
   private void DeselectAllItems()
   {
+    // ForceDeselect 所有 RuneSlot
+    var slots = GetComponentsInChildren<RuneSlot>(true);
+    foreach (var slot in slots)
+    {
+      if (slot != null)
+        slot.ForceDeselect();
+    }
+
     selectedRuneListItem = null;
     selectedEquip?.SetSelected(false);
     selectedEquip = null;

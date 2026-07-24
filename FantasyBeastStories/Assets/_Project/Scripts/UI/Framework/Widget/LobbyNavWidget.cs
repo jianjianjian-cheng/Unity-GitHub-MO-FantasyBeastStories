@@ -120,7 +120,7 @@ namespace UI.Framework.Widget
         private void OnCharacterNavClicked()
         {
             SetButtonSelected(characterNavButton?.gameObject);
-            // CloseCurrentPanel(); // 旧方式：平级切换，先关再开
+            CloseCurrentPanel();
             UIManager.Instance.Open(CharactorPanelId);
             _lastActiveScreenId = CharactorPanelId;
             ActivateBlur();
@@ -129,7 +129,7 @@ namespace UI.Framework.Widget
         private void OnRuneNavClicked()
         {
             SetButtonSelected(runeNavButton?.gameObject);
-            // CloseCurrentPanel(); // 旧方式：平级切换，先关再开
+            CloseCurrentPanel();
             UIManager.Instance.Open(RunePanelId);
             _lastActiveScreenId = RunePanelId;
             ActivateBlur();
@@ -138,7 +138,7 @@ namespace UI.Framework.Widget
         private void OnMissionNavClicked()
         {
             SetButtonSelected(missionNavButton?.gameObject);
-            // CloseCurrentPanel(); // 旧方式：平级切换，先关再开
+            CloseCurrentPanel();
             UIManager.Instance.Open(MassionPanelId);
             _lastActiveScreenId = MassionPanelId;
             ActivateBlur();
@@ -147,7 +147,7 @@ namespace UI.Framework.Widget
         private void OnShopNavClicked()
         {
             SetButtonSelected(shopNavButton?.gameObject);
-            // CloseCurrentPanel(); // 旧方式：平级切换，先关再开
+            CloseCurrentPanel();
             UIManager.Instance.Open(ShopPanelId);
             _lastActiveScreenId = ShopPanelId;
             ActivateBlur();
@@ -155,6 +155,7 @@ namespace UI.Framework.Widget
 
         private void OnSettingsNavClicked()
         {
+            CloseCurrentPanel();
             UIManager.Instance.Open(SettingsPanelId);
             _lastActiveScreenId = SettingsPanelId;
             ActivateBlur();

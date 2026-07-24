@@ -153,6 +153,16 @@ namespace UI.Framework
                 bgcImage.sprite = deselectedSprite;
         }
 
+        /// <summary>手动取消选中（供 RunePanel.DeselectAllItems 调用）</summary>
+        public void ForceDeselect()
+        {
+            if (IsSelected)
+                PlayDeselect();
+            // 立即切换图片，不依赖动画回调
+            if (bgcImage != null && deselectedSprite != null)
+                bgcImage.sprite = deselectedSprite;
+        }
+
         // ── 指针事件（点击 + 悬浮） ──
 
         public void OnPointerClick(PointerEventData eventData)

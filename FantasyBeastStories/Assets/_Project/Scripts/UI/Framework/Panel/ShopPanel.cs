@@ -195,7 +195,7 @@ public class ShopPanel : UIScreen
     // 取消上一个选中项的背景图
     if (selectedRuneSlot != null && selectedRuneSlot != runeSlot)
     {
-      selectedRuneSlot.PlayDeselect();
+      selectedRuneSlot.ForceDeselect();
     }
 
     // 选中当前项，切换背景图
@@ -289,7 +289,7 @@ public class ShopPanel : UIScreen
   {
     if (selectedRuneSlot != null && selectedRuneSlot.IsSelected)
     {
-      selectedRuneSlot.PlayDeselect();
+      selectedRuneSlot.ForceDeselect();
     }
     selectedRuneSlot = null;
     selectedRune = null;
