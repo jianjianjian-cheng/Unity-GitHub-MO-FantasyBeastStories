@@ -1,0 +1,235 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Remote_Level1
+  m_EditorClassIdentifier: 
+  m_GroupName: Remote_Level1
+  m_Data:
+    m_SerializedData: []
+  m_GUID: f641ab0451ddd374db506d9666023f60
+  m_SerializeEntries:
+  - m_GUID: 0266abb1138817747bcb23e85063a8d0
+    m_Address: Level1_ImpactCannon_ImpactCannonGrass
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 07f80b4d38e31244098c16b0ed43d8e8
+    m_Address: Level1_Config_BossConfigSO
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 14bab58889d70614abe5345f193fddf7
+    m_Address: Level1_GuiLing_GuiLingGrass
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1e362cb8ecc754f468b97c9635ea68f1
+    m_Address: Level1_GuiLing_GuiLingFire
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2342899d2b649dd45bb301e1919c37e8
+    m_Address: Level1_ImpactCannon_ImpactCannonTrigger
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2a525cd830ac143498993fa761396ac6
+    m_Address: Level1_Sprites_UI_red_dot
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 30b6ae37fb3ff4045b06444887cdd4ac
+    m_Address: Level1_Config_EnemyConfigs_SkeletonConfig
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3396ca5f12c9b7a41a86755fd762589d
+    m_Address: Level1_PoolPrefabs_PowerUpItem
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4ba95f1e657e3044a91a3c94c168e8bd
+    m_Address: Level1_GuiLing_GuiLingHitWinter
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 50bb26c31a111ad4397535e404c3b404
+    m_Address: Level1_PoolPrefabs_DamageNum
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5337f55a35380bb46aabe1897116ff79
+    m_Address: Level1_PoolPrefabs_ExperienceBall_Blue
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 577b09a2f221f0d45af3bbc26432a16b
+    m_Address: Level1_ImpactCannon_ImpactCannonWinter
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 57a0a59dae22bbf46904ae8c7a63670d
+    m_Address: Level1_ImpactCannon_ImpactCannonHitLighten
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 58f2c80d5f672be4da4738cdad68b639
+    m_Address: Level1_GuiLing_GuiLingHitLightning
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 65496e104399b644db2e6ad1d978de37
+    m_Address: Level1_Config_EnemyConfigs_DragonConfig
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6743fade321668b46bba45d00c9621ff
+    m_Address: Level1_Audio_sfx_wizard_hit
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 67628f21e4b9a2b458177da498d3aff3
+    m_Address: Level1_Assets__Project_Art_Textures_UI_Rune_PowerGrowth
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6c069b2d830a26d4394e6764c9be226b
+    m_Address: Level1_TaskPrefab_EscortRobot
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6f34ef0d986e9db4199cf75805f79753
+    m_Address: Level1_ImpactCannon_ImpactCannonHitCommon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 720b95ce4539ed745bfa246beaf35137
+    m_Address: Level1_GuiLing_GuiLingHitGrass
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 783b5a6ddad67ab43bd5968b4be24bcf
+    m_Address: Level1_GuiLing_GuiLingWinter
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7cc4816b9186e0e46bc0353739c34ff1
+    m_Address: Level1_Audio_sfx_wizard_fire
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9fe86f2f5bb8d6449a5014493dd002c9
+    m_Address: Level1_ImpactCannon_ImpactCannonHitWinter
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: af5d9b9ab3fc24a30a9334b4576d5a04
+    m_Address: Level1_Icons_KillSacrifice
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b22b153d95193cc41b7d8e1efd0a0290
+    m_Address: Level1_TaskPrefab_KillSacrifice
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b4046f1a1c994f44baacffb105302bd5
+    m_Address: Level1_GuiLing_GuiLingHitFire
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b5c8ca7ed10b61e499cce8ec3b6e2e4c
+    m_Address: Level1_Player_PlayerDeath
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b871e56a3d277c942a360caf1c06a2b2
+    m_Address: Level1_ImpactCannon_ImpactCannonCommon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: be31333daffe42c4790b118c7d82e8f8
+    m_Address: Level1_Audio_sfx_GuiLingHit
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bfdb864115dd04df2b18cd36ec8d65d6
+    m_Address: Level1_Icons_EscortRobot
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d82118f277b2b724a94d1620fa87ff5c
+    m_Address: Level1_ImpactCannon_ImpactCannonHitGrass
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: de01ba9d2b8bef342b9068f5eb3264ab
+    m_Address: Level1_ImpactCannon_ImpactCannonLighten
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eacf5cd5ee179ca40bcc141cbaa60aec
+    m_Address: Level1_Assets__Project_Art_Textures_UI_Rune_suiyan
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ef1c4b818731ec945a01a122dc1f8e49
+    m_Address: Level1_Sprites_UI_white_dot
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: efbbe76f14dacf446b9dd0a494771bd6
+    m_Address: Level1_GuiLing_GuiLingLightning
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fb99d6304baf1dc43b9033961371850c, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 2dbc3934eca2da34284664a5cd2e28dd, type: 2}
+    - {fileID: 11400000, guid: 1672894cde9bba441807a26bccd8199c, type: 2}

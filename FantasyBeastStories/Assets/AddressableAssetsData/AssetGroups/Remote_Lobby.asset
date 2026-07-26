@@ -1,0 +1,529 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Remote_Lobby
+  m_EditorClassIdentifier: 
+  m_GroupName: Remote_Lobby
+  m_Data:
+    m_SerializedData: []
+  m_GUID: bdae37ed18fdc9a4d92d411e53a5e00b
+  m_SerializeEntries:
+  - m_GUID: 01102205f4b983643b96d74f0c4039d3
+    m_Address: Lobby_Shop_2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 02f159f40a2666043bd3d095a23f9378
+    m_Address: Lobby_UI_TopNotice_png_22
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 04d8a18e20730d240a7f483cb4a1de7b
+    m_Address: Lobby_Lua_Logic_RuneEffect
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 053339c266ce65a45bca82e0f52e6c9b
+    m_Address: Lobby_UI_TopNotice_png_17
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0b1f868e0e600914ca05728b2446b9cc
+    m_Address: Lobby_UI_CharactorInfo_CharacterInfoLibrarySO
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0b864cb2accee2a47acdd5287c84a8fc
+    m_Address: Lobby_QuestTask_QuestTaskDatabase
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 103bff245473f5b45a73458ee1f1814c
+    m_Address: Lobby_UI_CharactorInfo_Icon_BingNv
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 10d78078f680c6a4ca086f845088a2d0
+    m_Address: Lobby_Characters_WizardBoy_Model
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1f4ecb0fb79f643409a6e83c642054c9
+    m_Address: Lobby_UI_TopNotice_png_12
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2031ca785274ba64da16882692401733
+    m_Address: Lobby_UI_TopNotice_png_10
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 20c46466d71ee0541b2abb08577bffcf
+    m_Address: Lobby_UI_TopNotice_png_4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 215ccb0ce3b052344b69c68795099973
+    m_Address: Lobby_UI_TopNotice_png_6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 26b7fd95b54a7ad44b80f2a2be25c8b1
+    m_Address: Lobby_QuestTask_Massion_DamageGross_1500k 4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2e2a5fcc453c2d742b1d80cae7b61ac8
+    m_Address: Lobby_CardData_CardDatabasePublic
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 33600b15c9d43bd4bab4cc96172821b0
+    m_Address: Lobby_Json_UpgradeCard_WizardBoy
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 33803c91ff902fd4d99412c6be4c2f69
+    m_Address: Lobby_Audio_BGM_MainMenu
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3b59e09efc19d12428516f29f908801b
+    m_Address: Lobby_UI_TopNotice_png_20
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3c2992604c05de444aa7a4229f9ff69b
+    m_Address: Lobby_UIAnim_Rune_RuneHoverEnterAnim
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3ca1ed470ed9ac142acaecbb11335849
+    m_Address: Lobby_QuestTask_Massion_DamageGross_1000k
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 43308a003d6f599428404a177ba35e05
+    m_Address: Lobby_UI_TopNotice_png_2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 43950611bce45094eaa5ac33a841a7d0
+    m_Address: Lobby_UI_SelectedButton
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 44dbfc5159e285d438a719296e9f37b4
+    m_Address: Lobby_RuneData_Rune_Rune3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 462d062baec544946b05bea9892a0b21
+    m_Address: Lobby_UI_TopNotice_png_15
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 473bdc8891f686f4fb6818e12d02b7b4
+    m_Address: Lobby_Characters_BingNv_Anim
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4a46ea076e35e6241809874edb7f326a
+    m_Address: Lobby_Config_PlayerConfig_BingNvAttr
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4abc3c7bb0be2f34c955b19881d0d526
+    m_Address: Lobby_Shop_5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4bae876e23948204281b1b794d9c5c36
+    m_Address: Lobby_UI_TopNotice_TopNotice
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5212d3b8290103d4cbad750b2f61b446
+    m_Address: Lobby_Json_PublicUpgradeCard_Normal
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 52519bc5f51a88c4a845c3da0074f6ca
+    m_Address: Lobby_RuneData_Rune_RuneExplosion
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5582927e13a75ed41a851d36bfbdfb78
+    m_Address: Lobby_UIAnim_Loading_LoadingOpenAnim
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 582188b2361f00948aa81a98f45ba1db
+    m_Address: Lobby_UIAnim_Rune_RuneDeSelectedAnim
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 591f610572472114f90e890af0eae335
+    m_Address: Lobby_UI_Model_0
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 62f2c5ee3681e8641bafb3cc674bfd38
+    m_Address: Lobby_Json_PublicUpgradeCard_Special
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6595ece2322178a49b9b7eca818a7048
+    m_Address: Lobby_RuneData_Rune_Rune4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6604ae41b96df604f85450fc5ef642f6
+    m_Address: Lobby_Config_PlayerConfig_WizardBoyAttr
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6bdd09a23d026184bac66c8238ba2eed
+    m_Address: Lobby_QuestTask_Massion_KillEnemies_500
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6fae4a39a33660541a61a9330c32319a
+    m_Address: Lobby_UI_Model_2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7753df66ae90cc84793d34cf50639b92
+    m_Address: Lobby_UI_TopNotice_png_13
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 77c6215af1caf534ebbde1443ead0d58
+    m_Address: Lobby_UI_TopNotice_png_19
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7c0a3de308036194187548be9a7db945
+    m_Address: Lobby_UI_TopNotice_png_5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7e0aeaf763b611e4aaa94448bb8c4abe
+    m_Address: Lobby_Shop_ShopRuneDatabase
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 87d136d76d1e05a46b45ece16f99dd55
+    m_Address: Lobby_QuestTask_Massion_DamageGross_1500k 1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8bd242f922f482040b53d23439d99737
+    m_Address: Lobby_PowerUpData_SO_ExperienceMagnet
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8c25fef75f1087940802335e7674491d
+    m_Address: Lobby_Shop_ShopRuneConfig
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8c4d50de4d711c445b5c2838d8c4b648
+    m_Address: Lobby_Characters_BingNv_Model
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e74fba55c5f93e4796d1209f59b3f20
+    m_Address: Lobby_UI_Model_1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 91892447cc180f7448dc85f1f8aeb94e
+    m_Address: Lobby_CardData_CardDatabaseWizardBoy
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9287d83a106dbe84594362e33f42f78c
+    m_Address: Lobby_UIAnim_Rune_RuneSelectedAnim
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 934b0e2260c14e84ebd449183800be30
+    m_Address: Lobby_UI_TopNotice_png_7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9566d8175e533384590c7f5907b7f07a
+    m_Address: Lobby_QuestTask_Massion_DamageGross_1500k 3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 97dc7529d3e773f49afd6c6bba242867
+    m_Address: Lobby_Lua_Config_RuneConfig
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 99043395d6867194ba9a70e62516c0e7
+    m_Address: Lobby_QuestTask_Massion_KillEnemies_1000 3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9ab6383e925fdfe4fb922aebc7ef65c4
+    m_Address: Lobby_Lua_Heroes_BingNv
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9cf252f2445805c4594f04765e5da363
+    m_Address: Lobby_UI_TopNotice_png_21
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a66e3d360972efa458aa09a73c53288a
+    m_Address: Lobby_QuestTask_Massion_KillEnemies_1000
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a9fcea25ad4aa2c4f97d84cec414532d
+    m_Address: Lobby_QuestTask_Massion_KillEnemies_1000 2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ab2497c5c1472e94c99e7e8d3158f599
+    m_Address: Lobby_UI_TopNotice_png_14
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b1cf1f6ad0471da44a7137c969ad44e5
+    m_Address: Lobby_UI_TopNotice_png_8
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ba8ee9fa8de2d4f4b881c8e08a98ba82
+    m_Address: Lobby_Lua_Heroes_WizardBoy
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bab64b815249de24e9287e71e68ae80c
+    m_Address: Lobby_Json_PublicUpgradeCard_Legend
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bd166d9469a9a354fb450c62748238f6
+    m_Address: Lobby_RuneData_RuneDatabase
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bd9a2c848289f864b97b53b8f1dc9d04
+    m_Address: Lobby_UI_TopNotice_png_3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bf1128a57f1a94a458dd8673a9d99130
+    m_Address: Lobby_UIAnim_Rune_RuneHoverExitAnim
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c28ae390d3c5e2a40a439c510098401f
+    m_Address: Lobby_Json_PublicUpgradeCard_Epic
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c527a2b5b22be2f4cb36c374672096db
+    m_Address: Lobby_Shop_4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c77eff1598e23584ca0d9c49dfbc4930
+    m_Address: Lobby_QuestTask_Massion_DamageGross_1500k
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c84b3b221ce44e441ac06e22b118e824
+    m_Address: Lobby_Lua_Logic_RuneSpecialPower
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c9bf3fc03d159484e969cb0c641aaadd
+    m_Address: Lobby_UI_CharactorInfo_BingNv
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cae2c58e8ca02ef47a08475b703eb9dd
+    m_Address: Lobby_RuneData_Rune_RuneTripleBoost
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd573bdd47555b94eb0ab7b078cd3753
+    m_Address: Lobby_QuestTask_Massion_DamageGross_1500k 2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cf0df028ee600884ea3fd48f896f4eb9
+    m_Address: Lobby_Characters_WizardBoy_Anim
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d153686760228ad47a26bfe2ed09c110
+    m_Address: Lobby_UI_TopNotice_png_16
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d56c05b4be2a3a54aa94f1674ae300da
+    m_Address: Lobby_QuestTask_Massion_KillEnemies_1000 1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d836e8058a3b98d45bc428d04a5c0821
+    m_Address: Lobby_UI_TopNotice_png_1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d8ccd6caeae44524aa0b308569b6b6cb
+    m_Address: Lobby_Lua_Combat_WizardBoyAttack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: db04ffc853ec0ee4889de3c69e3bfc87
+    m_Address: Lobby_QuestTask_Massion_KillEnemies_1000 4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e30da6b8c55cf5e4db1b1eff72b3ba09
+    m_Address: Lobby_Lua_Combat_BingNvAttack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e3383afed76530f4d917bce2c103559b
+    m_Address: Lobby_RuneData_Rune_Rune5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e5b6d49c87a964a44bd98945c9ec53af
+    m_Address: Lobby_UI_TopNotice_png_9
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e61a5af95da7df640b395b1cbe349ae0
+    m_Address: Lobby_UI_TopNotice_png_18
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f2c564d0f2df1a141ab744af6df6d2ff
+    m_Address: Lobby_UI_TopNotice_png_11
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f5bf20fbc5ed30146b2a8d8aa1fbff4a
+    m_Address: Lobby_Shop_3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fa9b4ba5e4a979f4ea6ff96818d8284e
+    m_Address: Lobby_UI_CharactorInfo_WizardBoy
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: febf2b8e5d27dcd4ab82841aa43d4af4
+    m_Address: Lobby_UIAnim_Loading_LoadingCloseAnim 1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Lobby
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fb99d6304baf1dc43b9033961371850c, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 42216fca7321a3640bfeb801219a4dea, type: 2}
+    - {fileID: 11400000, guid: 71fc57f46d0f6f845917e696e1842f8e, type: 2}

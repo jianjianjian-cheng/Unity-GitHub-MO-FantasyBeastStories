@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Remote_Public
+  m_EditorClassIdentifier: 
+  m_GroupName: Remote_Public
+  m_Data:
+    m_SerializedData: []
+  m_GUID: f04841c81463ad7468006a10ca918032
+  m_SerializeEntries:
+  - m_GUID: 180a48a5e9f09a8439d01471ad7d4182
+    m_Address: Public_UIAnim_Open_UISlideAnim
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Public
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 19d8f09dbcd58bf45b453badb1c76b43
+    m_Address: Public_UI_DefaultButton
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Public
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1cd2ec1c62ff55d4fb400cdca11643c0
+    m_Address: Public_Audio_sfx_btn_hover
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Public
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 413e5b32ea82e4743ba09b7e0afe071a
+    m_Address: Public_Audio_sfx_button_click
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Public
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5e43469f8ebbd9e46817857f439f0408
+    m_Address: Public_Audio_sfx_PickUp
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Public
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6d6e608d3095cf14a8bb97342b28e34f
+    m_Address: Public_UIAnim_Close_UISlideAnim 1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Public
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b749df6dc76ec2941bd67199b7d3e3f3
+    m_Address: Public_Audio_sfx_Coin
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Public
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e431699bc2e9d9a41ba02e3aa6fb9210
+    m_Address: Public_UIAnim_UIFadeScaleAnimation
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Public
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fb99d6304baf1dc43b9033961371850c, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 026625bab0adab345aef126cf143c38d, type: 2}
+    - {fileID: 11400000, guid: 6164cdeb56f71244db7872e0c307363a, type: 2}
