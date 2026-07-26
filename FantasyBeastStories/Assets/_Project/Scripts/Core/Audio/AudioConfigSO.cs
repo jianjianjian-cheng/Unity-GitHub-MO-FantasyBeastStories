@@ -22,7 +22,7 @@ namespace Core
         public float bgmCrossfadeDuration = 2f;
 
         [Header("SFX 对象池")]
-        public int poolSize = 20;
+        public int poolSize = 50;
         public bool poolAutoExpand = true;
     }
 }

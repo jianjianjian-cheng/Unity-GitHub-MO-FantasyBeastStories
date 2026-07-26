@@ -15,3 +15,8 @@ MonoBehaviour:
   shopRunes:
   - {fileID: 11400000, guid: 8c25fef75f1087940802335e7674491d, type: 2}
   - {fileID: 11400000, guid: 01102205f4b983643b96d74f0c4039d3, type: 2}
+  - {fileID: 11400000, guid: f5bf20fbc5ed30146b2a8d8aa1fbff4a, type: 2}
+  - {fileID: 11400000, guid: c527a2b5b22be2f4cb36c374672096db, type: 2}
+  - {fileID: 11400000, guid: 4abc3c7bb0be2f34c955b19881d0d526, type: 2}
+  - {fileID: 11400000, guid: 4bfc9f833ee06734795c4c60dc85fb9f, type: 2}
+  - {fileID: 11400000, guid: 50903ee9c3be0d4489ed72dd42a6d8a4, type: 2}

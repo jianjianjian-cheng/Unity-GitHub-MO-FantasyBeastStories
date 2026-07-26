@@ -43,6 +43,8 @@ namespace Managers
                 EventChannelLocator.MainContainer.gameSettings.IsTest = isTestInspector;
                 DontDestroyOnLoad(gameObject);
 
+                SetCustomCursor();
+
                 // ── 等待 Addressables 热更预下载完成后再初始化 ──
                 StartCoroutine(InitAfterUpdate());
             }
@@ -50,6 +52,50 @@ namespace Managers
             {
                 Destroy(gameObject);
             }
+        }
+
+        [Header("鼠标指针")]
+        [SerializeField] private Texture2D cursorTexture;
+        [SerializeField] private Vector2 cursorHotspot = Vector2.zero;
+
+        private void SetCustomCursor()
+        {
+            if (cursorTexture == null)
+                cursorTexture = Core.AssetLoader.TryLoadAsset<Texture2D>("Assets/_Project/Art/Textures/UI/Cursor/GameCursor.png");
+            if (cursorTexture != null)
+            {
+                Cursor.SetCursor(cursorTexture, cursorHotspot, CursorMode.Auto);
+                Debug.Log($"[GameManager] 自定义光标已设置: {cursorTexture.name}");
+            }
+            else
+            {
+                Debug.LogWarning("[GameManager] 未能加载自定义光标纹理，使用系统默认");
+            }
+        }
+
+        private bool isInBattle = false;
+
+        private void Update()
+        {
+            UpdateCursorVisibility();
+        }
+
+        private void UpdateCursorVisibility()
+        {
+            if (!isInBattle)
+            {
+                if (!Cursor.visible) Cursor.visible = true;
+                return;
+            }
+
+            // 战斗场景：Ctrl 按住 或 卡牌选择面板打开时显示鼠标
+            bool showCursor = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
+
+            if (!showCursor && UI.MagicUpgradeManager.instance != null && UI.MagicUpgradeManager.instance.IsPanelActive)
+                showCursor = true;
+
+            if (Cursor.visible != showCursor)
+                Cursor.visible = showCursor;
         }
 
         /// <summary>等待 Addressables 热更预下载完成后初始化 Lua 环境</summary>
@@ -79,9 +125,13 @@ namespace Managers
         {
             FindSpawnPoints();
 
+            isInBattle = scene.buildIndex == sceneConfig.battleSceneIndex;
+
             // 进入大厅时自动加载存档
             if (scene.buildIndex == sceneConfig.lobbySceneIndex)
             {
+                Cursor.visible = true;
+
                 if (SaveManager.Instance != null)
                     SaveManager.Instance.LoadGame();
 

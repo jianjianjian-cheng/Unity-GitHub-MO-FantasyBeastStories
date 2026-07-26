@@ -51,6 +51,17 @@ namespace Controllers.Item
     {
       dropItemData.isFlyingToPlayer = false;
       moveTarget = null;
+
+      // 重置刚体状态：拾取流程会将 useGravity=false / isKinematic=true，
+      // 回池后不重置会导致下次取出的球漂浮在空中
+      if (rb != null)
+      {
+        rb.isKinematic = false;
+        rb.useGravity = true;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+      }
+
       ApplyExplosionEffect();
     }
 

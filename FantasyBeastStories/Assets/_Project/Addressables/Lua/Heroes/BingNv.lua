@@ -85,12 +85,7 @@ function M.UnlockElementInternal(player, elementInt)
     -- 网络同步
     local gameSettings = CS.Core.EventChannelLocator.MainContainer.gameSettings
     if gameSettings and not gameSettings.IsTest then
-        local domainRpc = NetworkServiceLocator.DomainRpcService
-        if domainRpc then
-            domainRpc:InvokeRPC("RPC_InitElementPool", NetworkTarget.Others,
-                NetworkServiceLocator.ObjectService:GetViewID(player.gameObject),
-                elementInt)
-        end
+        player:BroadcastInitElementPool(elementInt)
     end
 end
 

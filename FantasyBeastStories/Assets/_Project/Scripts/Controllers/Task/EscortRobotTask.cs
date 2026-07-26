@@ -94,24 +94,30 @@ namespace Controllers.Task
             if (CheckCount())
             {
                 yield return new WaitForSeconds(delayBeforeTransfer);
-                portalParticle.Play();
+
+                // 激活传送特效子物体
+                var teleport = transform.Find("Teleport_5");
+                if (teleport != null)
+                {
+                    teleport.gameObject.SetActive(true);
+                    Debug.Log("[EscortRobotTask] 已激活 Teleport_5 传送特效");
+                }
+
+                if (portalParticle != null)
+                    portalParticle.Play();
+
                 foreach (var obj in currentObjects)
                 {
                     yield return new WaitForSeconds(1f);
-                    obj.GetComponent<BallRobot_Blue>().StartTransfer();
+                    if (obj != null)
+                        obj.GetComponent<BallRobot_Blue>()?.StartTransfer();
                 }
             }
         }
 
         void OnDestroy()
         {
-            foreach (var obj in currentObjects)
-            {
-                if (obj != null)
-                {
-                    Destroy(obj);
-                }
-            }
+            // 不在此强制销毁机器人 — BallRobot_Blue.Transfer() 完成后会自行 Destroy
         }
     }
 }

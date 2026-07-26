@@ -15,9 +15,9 @@ MonoBehaviour:
   events:
   - eventId: KillSacrifice
     eventName: "\u6740\u622E\u732E\u796D"
-    triggerTime: 240
+    triggerTime: 540
     limittime: 120
-    requireCount: 10
+    requireCount: 30
     eventIcon: {fileID: 21300000, guid: af5d9b9ab3fc24a30a9334b4576d5a04, type: 3}
     iconResourcePath: Icons/KillSacrifice
     iconColor: {r: 1, g: 1, b: 1, a: 1}
@@ -25,10 +25,10 @@ MonoBehaviour:
     isTriggered: 0
     description: "\u51FB\u6740\u654C\u4EBA\u732E\u796D\u4ED6\u4EEC\u7684\u7075\u9B42"
   - eventId: EscortRobot
-    eventName: "\u4E92\u52A8\u673A\u5668\u4EBA"
-    triggerTime: 540
-    limittime: 180
-    requireCount: 3
+    eventName: "\u62A4\u9001\u673A\u5668\u4EBA"
+    triggerTime: 5
+    limittime: 250
+    requireCount: 2
     eventIcon: {fileID: 21300000, guid: bfdb864115dd04df2b18cd36ec8d65d6, type: 3}
     iconResourcePath: Icons/EscortRobot
     iconColor: {r: 1, g: 1, b: 1, a: 1}

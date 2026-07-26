@@ -11,12 +11,7 @@ using Core.Channels.General;
 namespace Controllers.Network
 {
   /// <summary>
-  /// 统一网络对象池管理器（怪物 + 掉落物）
-  /// 用法：
-  ///   生成怪物：NetworkObjectPoolManager.instance.Spawn(NetworkObjectPoolConst.Skeleton, position);
-  ///   回收怪物：NetworkObjectPoolManager.instance.Despawn(NetworkObjectPoolConst.Skeleton, gameObject);
-  ///   生成掉落物：NetworkObjectPoolManager.instance.Spawn(NetworkObjectPoolConst.ExperienceBall_Blue, position);
-  ///   回收掉落物：NetworkObjectPoolManager.instance.Despawn(NetworkObjectPoolConst.ExperienceBall_Blue, gameObject);
+  /// 统一网络对象池管理器
   /// </summary>
   public class NetworkObjectPoolManager : MonoBehaviourPunCallbacks, IPunPrefabPool
   {
@@ -124,6 +119,12 @@ namespace Controllers.Network
           Debug.LogWarning($"[NetworkObjectPool] {cfg.poolName} 未配置预制体");
           continue;
         }
+        // 跳过已由 RegisterPool 运行时注册的池，避免覆盖和重复预加载
+        if (pools.ContainsKey(cfg.poolName))
+        {
+          Debug.Log($"[NetworkObjectPool] 池 {cfg.poolName} 已存在，跳过 InitPools 重复注册");
+          continue;
+        }
         prefabs[cfg.poolName] = cfg.prefab;
         pools[cfg.poolName] = new Queue<GameObject>();
         Preload(cfg.poolName, cfg.preloadCount);
@@ -153,7 +154,7 @@ namespace Controllers.Network
       Debug.Log($"[NetworkObjectPool] 运行时注册池: {poolName}, 预加载 x{preloadCount}");
     }
 
-    /// <summary>生成对象，自动处理测试模式与网络模式</summary>
+    /// <summary>生成对象</summary>
     public GameObject Spawn(string poolName, Vector3 position, Quaternion rotation = default)
     {
       if (rotation == default)
@@ -170,7 +171,7 @@ namespace Controllers.Network
       return PhotonNetwork.Instantiate(poolName, position, rotation);
     }
 
-    /// <summary>回收对象，支持延迟回收</summary>
+    /// <summary>回收对象</summary>
     public void Despawn(string poolName, GameObject obj, float delay = 0f)
     {
       if (obj == null)
@@ -212,9 +213,6 @@ namespace Controllers.Network
       if (prefabs.ContainsKey(prefabId))
         return GetFromPool(prefabId, position, rotation, activateOnGet: false);
 
-      // 非库内对象（如玩家）必须从 Resources 加载
-      // Photon PUN2 的 prefabId 是 Resources 路径，Photon prefabs 必须留在 Resources 中
-      // 不可使用 Addressables — Photon 序列化机制要求 prefabId 对应 Resources 路径
       var prefab = Resources.Load<GameObject>(prefabId);
       if (prefab != null)
         return Object.Instantiate(prefab, position, rotation);
@@ -289,6 +287,7 @@ namespace Controllers.Network
           if (activateOnGet)
             obj.SetActive(true);
           TrackActive(poolName, obj);
+          NotifyPoolOperation(PoolOperationType.GetFromPoolAndActivate, poolName);
           return obj;
         }
       }
@@ -307,6 +306,7 @@ namespace Controllers.Network
         else
           newObj.SetActive(false);
         TrackActive(poolName, newObj);
+        NotifyPoolOperation(PoolOperationType.GetFromPoolAndActivate, poolName);
         return newObj;
       }
 
@@ -314,12 +314,17 @@ namespace Controllers.Network
       return null;
     }
 
-    private void ReturnToPool(string poolName, GameObject obj)
+    private void ReturnToPool(string poolName, GameObject obj, bool notify = true)
     {
       if (obj == null)
         return;
 
       UntrackActive(poolName, obj);
+      if (notify)
+        NotifyPoolOperation(PoolOperationType.ReturnToPool, poolName);
+      // 调试日志
+      if (poolName == "Enemies/SkeletonRoot" || poolName == "Enemies/DragonRoot")
+        Debug.Log($"[NetworkPool] ReturnToPool: {poolName} (name={obj.name}) notify={notify}");
 
       // 重置对应组件状态
       obj.GetComponent<EnemyBase>()?.ResetState();
@@ -351,7 +356,8 @@ namespace Controllers.Network
         var photonView = obj.GetComponent<PhotonView>();
         if (photonView != null)
           photonView.enabled = false;
-        ReturnToPool(poolName, obj);
+        // Preload 不触发 ReturnToPool 事件，避免 MonsterCountMonitor 收到虚假 Decrement
+        ReturnToPool(poolName, obj, notify: false);
       }
       Debug.Log($"[NetworkObjectPool] 预创建 {poolName} x{count}");
     }
@@ -369,6 +375,12 @@ namespace Controllers.Network
         if (obj.name.Contains(kvp.Value.name) || obj.name.Contains(kvp.Key))
           return kvp.Key;
       }
+
+      // 最后尝试通过组件匹配（Dragon/Skeleton 等有特定组件）
+      if (obj.GetComponent<Dragon>() != null)
+        return PoolConst.Dragon;
+      if (obj.GetComponent<Skeleton>() != null)
+        return PoolConst.Skeleton;
 
       Debug.LogWarning($"[NetworkObjectPool] FindPoolName 失败，无法识别对象: {obj.name}");
       return null;
@@ -390,6 +402,13 @@ namespace Controllers.Network
     {
       if (_activeObjects.TryGetValue(poolName, out var set))
         set.Remove(obj);
+    }
+
+    /// <summary>通知 MonsterCountMonitor 等监听者池操作发生（仅运行时取/还时调用，预加载不调用）</summary>
+    private void NotifyPoolOperation(PoolOperationType type, string poolName)
+    {
+      EventChannelLocator.MainContainer.poolOperationChannel?.Raise(
+          new PoolOperationData { operationType = type, poolName = poolName });
     }
 
     // ===================== 调试工具 =====================

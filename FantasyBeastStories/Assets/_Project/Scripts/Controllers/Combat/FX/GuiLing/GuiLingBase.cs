@@ -120,7 +120,7 @@ namespace Controllers.Combat
         {
             _canSplit = isSplit;
             _splitCount = splitCount;
-            _splitDamageMultiplier = 0.6f;  // 分裂弹伤害衰减为 60%
+            _splitDamageMultiplier = 0.3f;  // 分裂弹伤害衰减为 60%
         }
 
         public void SetVfxLayer(LayerMask vfxLayer)
@@ -353,7 +353,7 @@ namespace Controllers.Combat
         private bool IsTargetDead()
         {
             if (_target == null) return true;
-            var enemyBase = _target.GetComponent<EnemyBase>();
+            var enemyBase = _target.GetComponentInParent<EnemyBase>();
             return enemyBase != null && enemyBase.IsDeadOrDying();
         }
 

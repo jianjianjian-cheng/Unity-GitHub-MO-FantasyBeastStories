@@ -35,7 +35,7 @@ public class HeroLuaBridge
         }
     }
 
-    /// <summary>统一调用入口，返回 true 表示 Lua 处理了该回调</summary>
+    /// <summary>统一调用入口（void 返回），返回 true 表示 Lua 处理了该回调</summary>
     private bool SafeCall(string functionName, params object[] args)
     {
         if (!_luaEnabled || _behavior == null)
@@ -55,10 +55,40 @@ public class HeroLuaBridge
         {
             Debug.LogError(
                 $"[HeroLuaBridge] 角色({_characterName}).{functionName} 异常:\n" +
-                $"  Error: {e.Message}\n" +
-                $"  StackTrace: {e.StackTrace}"
+                $"  Error: {e.Message}\n"
             );
-            _luaEnabled = false; // 防止反复报错刷屏
+            return false;
+        }
+        finally
+        {
+            fn?.Dispose();
+        }
+    }
+
+    /// <summary>调用返回 bool 的 Lua 函数，正确捕获返回值</summary>
+    private bool SafeCallBool(string functionName, params object[] args)
+    {
+        if (!_luaEnabled || _behavior == null)
+            return false;
+
+        LuaFunction fn = null;
+        try
+        {
+            fn = _behavior.Get<LuaFunction>(functionName);
+            if (fn == null)
+                return false;
+
+            var results = fn.Call(args);
+            if (results != null && results.Length > 0)
+                return Convert.ToBoolean(results[0]);
+            return true;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(
+                $"[HeroLuaBridge] 角色({_characterName}).{functionName} 异常:\n" +
+                $"  Error: {e.Message}\n"
+            );
             return false;
         }
         finally
@@ -79,7 +109,7 @@ public class HeroLuaBridge
         => SafeCall("OnSwitchElement", player, (int)element);
 
     public bool OnUnlockElement(PlayerController player, Element element)
-        => SafeCall("OnUnlockElement", player, (int)element);
+        => SafeCallBool("OnUnlockElement", player, (int)element);
 
     public void OnSceneLoaded(PlayerController player, int sceneIndex)
         => SafeCall("OnSceneLoaded", player, sceneIndex);

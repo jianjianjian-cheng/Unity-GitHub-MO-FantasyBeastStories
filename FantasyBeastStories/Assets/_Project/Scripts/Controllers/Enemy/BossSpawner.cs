@@ -1,6 +1,5 @@
 using Core;
-using Core.Contracts;
-using Core.Network;
+using Photon.Pun;
 using UnityEngine;
 
 public class BossSpawner : MonoBehaviour
@@ -20,12 +19,15 @@ public class BossSpawner : MonoBehaviour
 
     private void OnBossSpawn(string bossName)
     {
-        if (!NetworkServiceLocator.PlayerService.IsMasterClient) return;
+        if (!PhotonNetwork.IsMasterClient) return;
 
-        // 选择生成点
         var spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
 
-        NetworkServiceLocator.ObjectService.InstantiateRoomObject(bossPrefabPath,
+        // Boss 只生成一次，不走对象池，直接用 Photon 原生网络实例化
+        var savedPool = PhotonNetwork.PrefabPool;
+        PhotonNetwork.PrefabPool = new DefaultPool();
+        PhotonNetwork.InstantiateRoomObject(bossPrefabPath,
             spawnPoint.position, spawnPoint.rotation);
+        PhotonNetwork.PrefabPool = savedPool;
     }
 }

@@ -121,7 +121,7 @@ namespace Core.Audio
             _ambientSource = CreateAudioSource("Ambient", AudioChannelType.Ambient, true);
 
             // ——— 创建 SFX 对象池 ———
-            int poolSize = _config != null ? _config.poolSize : 20;
+            int poolSize = _config != null ? _config.poolSize : 50;
             bool autoExpand = _config != null ? _config.poolAutoExpand : true;
             AudioMixerGroup sfxGroup = _useMixer ? _mixerController.GetGroup(AudioChannelType.SFX) : null;
             _sfxPool = new AudioSourcePool(poolSize, autoExpand, transform, sfxGroup);

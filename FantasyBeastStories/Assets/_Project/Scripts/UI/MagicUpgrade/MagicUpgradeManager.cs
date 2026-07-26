@@ -99,6 +99,8 @@ namespace UI
     private bool isConfirmed = false;
     // 防止面板重复打开
     private bool _isPanelActive = false;
+    /// <summary>卡牌选择面板是否处于打开状态</summary>
+    public bool IsPanelActive => _isPanelActive;
 
     private const string PLAYER_UPGRADE_READY_KEY = "UpgradeReady";
 

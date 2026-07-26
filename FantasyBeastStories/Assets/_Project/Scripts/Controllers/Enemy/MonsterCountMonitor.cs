@@ -112,12 +112,11 @@ namespace Controllers.Enemy
 
             switch (data.operationType)
             {
-                case PoolOperationType.Spawn:
+                // 仅监听 IPunPrefabPool 回调（在所有客户端触发），不监听 Spawn/Despawn（仅房主触发）
                 case PoolOperationType.GetFromPoolAndActivate:
                     Increment(data.poolName);
                     break;
 
-                case PoolOperationType.Despawn:
                 case PoolOperationType.ReturnToPool:
                     Decrement(data.poolName);
                     break;
@@ -129,6 +128,9 @@ namespace Controllers.Enemy
             if (_lookup.TryGetValue(poolName, out var entry))
             {
                 entry.currentCount++;
+                // 调试日志：每 50 次输出一次
+                if (entry.currentCount % 50 == 0)
+                    Debug.Log($"[MonsterCountMonitor] +1 {poolName} → current={entry.currentCount}/{entry.maxCount}");
             }
         }
 
@@ -138,7 +140,10 @@ namespace Controllers.Enemy
             {
                 entry.currentCount--;
                 if (entry.currentCount < 0)
-                    entry.currentCount = 0; // 防御性：防止负数
+                {
+                    Debug.LogWarning($"[MonsterCountMonitor] {poolName} 计数异常为负，重置为 0");
+                    entry.currentCount = 0;
+                }
             }
         }
     }

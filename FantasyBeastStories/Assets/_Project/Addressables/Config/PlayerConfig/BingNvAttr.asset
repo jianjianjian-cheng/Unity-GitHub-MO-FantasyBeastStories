@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c815cb468f328e47be4be55c724ace2, type: 3}
   m_Name: BingNvAttr
   m_EditorClassIdentifier: 
-  baseAttackPower: 125
+  baseAttackPower: 250
   baseDefensePower: 10
   baseMaxHealth: 300
   baseMoveSpeed: 6.5

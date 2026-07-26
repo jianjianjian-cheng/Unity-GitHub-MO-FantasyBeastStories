@@ -8,6 +8,7 @@ using Core.Contracts;
 using Core.Network;
 using Controllers.Time;
 using Controllers.Network;
+using Controllers.Player;
 using Managers;
 
 namespace Controllers.Enemy
@@ -63,12 +64,24 @@ namespace Controllers.Enemy
             spawnInterval = waveConfig.baseSpawnInterval;
         }
 
+        private float _diagTimer = 0f;
+
         void Update()
         {
             if (waveConfig == null)
                 return;
             if (GamePauseManager.isPaused)
+            {
+                // 每秒打印一次暂停诊断
+                _diagTimer += UnityEngine.Time.deltaTime;
+                if (_diagTimer >= 1f)
+                {
+                    _diagTimer = 0f;
+                    var tm = ServiceLocator.Get<SyncedGameTimeManager>();
+                    Debug.LogWarning($"[EnemiesGenorator] ⏸ 暂停中，无法生成 | gameTime={tm?.GetCurrentTime():F0}s | frame={UnityEngine.Time.frameCount}");
+                }
                 return;
+            }
             if (!NetworkServiceLocator.PlayerService.IsMasterClient)
                 return;
             if (!isPhotonReady)
@@ -115,9 +128,12 @@ namespace Controllers.Enemy
                 var timeManager = ServiceLocator.Get<SyncedGameTimeManager>();
                 float currentTime = timeManager != null ? timeManager.GetCurrentTime() : 0f;
 
+                int playerCount = PlayerManager.instance != null ? PlayerManager.instance.PlayerCount : 1;
+                float countMultiplier = EnemyScalingCalculator.GetCountMultiplier(currentTime)
+                                        * EnemyScalingCalculator.GetPlayerCountMultiplier(playerCount);
+
                 // 基础间隔 × 间隔倍率（1/数量倍率）
-                float intervalMultiplier = EnemyScalingCalculator.GetSpawnIntervalMultiplier(currentTime);
-                spawnInterval = waveConfig.baseSpawnInterval * intervalMultiplier;
+                spawnInterval = waveConfig.baseSpawnInterval / countMultiplier;
 
                 // 确保不低于最小间隔
                 spawnInterval = Mathf.Max(spawnInterval, waveConfig.minSpawnInterval);
@@ -139,7 +155,10 @@ namespace Controllers.Enemy
             // 获取当前游戏时间
             var timeManager = ServiceLocator.Get<SyncedGameTimeManager>();
             float currentTime = timeManager != null ? timeManager.GetCurrentTime() : 0f;
-            float countMultiplier = EnemyScalingCalculator.GetCountMultiplier(currentTime);
+            int playerCount = PlayerManager.instance != null ? PlayerManager.instance.PlayerCount : 1;
+            float countMultiplier = EnemyScalingCalculator.GetCountMultiplier(currentTime)
+                                    * EnemyScalingCalculator.GetPlayerCountMultiplier(playerCount);
+            float maxCountMultiplier = EnemyScalingCalculator.GetPlayerMaxCountMultiplier(playerCount);
 
             // 决定生成 Skeleton 还是 Dragon
             bool spawnDragon = false;
@@ -158,9 +177,14 @@ namespace Controllers.Enemy
 
             if (baseMaxCount > 0)
             {
-                // 动态上限 = 配置上限 × 数量倍率
-                int dynamicMaxCount = Mathf.RoundToInt(baseMaxCount * countMultiplier);
+                // 动态上限 = 配置上限 × 玩家数量倍率 × 时间数量倍率
+                int dynamicMaxCount = Mathf.RoundToInt(baseMaxCount * maxCountMultiplier * countMultiplier);
                 int currentCount = _countMonitor.GetCount(targetPoolName);
+                // 调试日志：每 10 次生成输出一次状态
+                if (UnityEngine.Time.frameCount % 600 == 0)
+                {
+                    Debug.Log($"[EnemiesGenorator] {targetPoolName} → current={currentCount}/{dynamicMaxCount} | time={currentTime:F0}s | players={playerCount} | countMul={countMultiplier:F2} | maxMul={maxCountMultiplier:F2} | interval={spawnInterval:F2}s");
+                }
                 if (currentCount >= dynamicMaxCount)
                 {
                     // Dragon 池满了，尝试生成 Skeleton
@@ -172,14 +196,18 @@ namespace Controllers.Enemy
                             : -1;
                         if (baseMaxCount > 0)
                         {
-                            dynamicMaxCount = Mathf.RoundToInt(baseMaxCount * countMultiplier);
+                            dynamicMaxCount = Mathf.RoundToInt(baseMaxCount * maxCountMultiplier * countMultiplier);
                             currentCount = _countMonitor.GetCount(targetPoolName);
                             if (currentCount >= dynamicMaxCount)
+                            {
+                                Debug.LogWarning($"[EnemiesGenorator] 🚫 两个池均已满 → {dragonPoolName}={_countMonitor.GetCount(dragonPoolName)}/{dynamicMaxCount}, {actualPoolName}={currentCount}/{dynamicMaxCount} | time={currentTime:F0}s");
                                 return;
+                            }
                         }
                     }
                     else
                     {
+                        Debug.LogWarning($"[EnemiesGenorator] 🚫 Skeleton池已满 → {actualPoolName}={currentCount}/{dynamicMaxCount} | time={currentTime:F0}s");
                         return;
                     }
                 }

@@ -24,7 +24,7 @@ namespace Controllers.Enemy
         private const float EarlyGameCountMultiplier = 0.5f;  // 前 3 分钟数量减半
         private const float MidGameCountMultiplier = 1f;      // 3 分钟后恢复正常数量
         private const float PeakCountMultiplier = 2f;          // 峰值数量倍率（初始的 2 倍）
-        private const float PostBossCountMultiplier = 0.5f;    // Boss 出现后数量倍率（限制防卡）
+        private const float PostBossCountMultiplier = 1f;     // Boss 出现后数量倍率
 
         // ── 血量倍率 ──
         private const float InitialHpMultiplier = 1f;   // 初始血量倍率
@@ -108,6 +108,53 @@ namespace Controllers.Enemy
 
         /// <summary>Boss 是否已出现</summary>
         public static bool IsBossPhase(float currentTime) => currentTime >= BossSpawnTime;
+
+        // ── 玩家数量倍率（1 人为基准 1x）──
+
+        /// <summary>
+        /// 根据玩家数量获取怪物数量倍率（影响生成频率）
+        /// 1人: 1x | 2人: 1.5x | 3人: 2x | 4人: 2.5x
+        /// </summary>
+        public static float GetPlayerCountMultiplier(int playerCount)
+        {
+            switch (playerCount)
+            {
+                case 1: return 1f;
+                case 2: return 1.5f;
+                case 3: return 2f;
+                default: return playerCount >= 4 ? 2.5f : 1f;
+            }
+        }
+
+        /// <summary>
+        /// 根据玩家数量获取怪物血量倍率
+        /// 1人: 1x | 2人: 2x | 3人: 2.5x | 4人: 3x
+        /// </summary>
+        public static float GetPlayerHpMultiplier(int playerCount)
+        {
+            switch (playerCount)
+            {
+                case 1: return 1f;
+                case 2: return 2f;
+                case 3: return 2.5f;
+                default: return playerCount >= 4 ? 3f : 1f;
+            }
+        }
+
+        /// <summary>
+        /// 根据玩家数量获取怪物最大数量倍率（影响上限）
+        /// 1人: 1x | 2人: 1.5x | 3人: 2x | 4人: 2.5x
+        /// </summary>
+        public static float GetPlayerMaxCountMultiplier(int playerCount)
+        {
+            switch (playerCount)
+            {
+                case 1: return 1f;
+                case 2: return 1.5f;
+                case 3: return 2f;
+                default: return playerCount >= 4 ? 2.5f : 1f;
+            }
+        }
 
         // ── Dragon 生成概率 ──
         private const float DragonPeakTime = 480f;       // 8 分钟达到峰值

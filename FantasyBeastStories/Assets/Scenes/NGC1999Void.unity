@@ -113429,7 +113429,7 @@ MonoBehaviour:
   monitoredTypes:
   - poolName: Enemies/SkeletonRoot
     displayName: SkeletonPool
-    maxCount: 80
+    maxCount: 60
     currentCount: 0
   - poolName: Enemies/DragonRoot
     displayName: Dragon
@@ -168743,6 +168743,8 @@ MonoBehaviour:
   bossColor: {r: 0.6, g: 0, b: 0, a: 1}
   dotSize: 8
   bossDotSize: 12
+  teammateColor: {r: 1, g: 1, b: 1, a: 1}
+  teammateDotSize: 8
 --- !u!1 &1493055319
 GameObject:
   m_ObjectHideFlags: 0
@@ -226126,7 +226128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2005817347}
-  - component: {fileID: 2005817346}
+  - component: {fileID: 2005817348}
   m_Layer: 0
   m_Name: BossSpawner
   m_TagString: Untagged
@@ -226134,7 +226136,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2005817346
+--- !u!4 &2005817347
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2005817345}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 58.06, y: 1, z: 91.52}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2005817348
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -226147,22 +226164,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPoints:
-  - {fileID: 464730120}
---- !u!4 &2005817347
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2005817345}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 57.44761, y: 1, z: 89.703514}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  - {fileID: 2005817347}
 --- !u!1 &2007205315
 GameObject:
   m_ObjectHideFlags: 0

@@ -34,6 +34,7 @@ namespace Managers
 
     public void SetPause(bool pause)
     {
+      Debug.LogWarning($"[GamePauseManager] SetPause({pause}) → wasPaused={isPaused} | isMaster={NetworkServiceLocator.PlayerService.IsMasterClient} | stack:\n{System.Environment.StackTrace}");
       HandlePauseStateRPC(pause);
 
       if (NetworkServiceLocator.PlayerService.IsMasterClient)

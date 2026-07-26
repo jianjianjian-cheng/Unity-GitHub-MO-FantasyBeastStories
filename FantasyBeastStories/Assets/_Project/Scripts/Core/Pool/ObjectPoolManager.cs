@@ -41,6 +41,10 @@ namespace Core
 
         private void OnPoolOperation(PoolOperationData data)
         {
+            // 仅处理本池管理器已注册的池，忽略 NetworkObjectPoolManager 的网络池事件
+            if (!objectPools.ContainsKey(data.poolName) && !prefabCache.ContainsKey(data.poolName))
+                return;
+
             switch (data.operationType)
             {
                 case PoolOperationType.GetFromPoolAndActivate:
@@ -363,7 +367,7 @@ namespace Core
         }
     }
 
-    // ===== 向后兼容的常量引用（推荐使用 PoolConst） =====
+    // ===== 之前快速原型的时候用的，暂时留着 =====
     public static class ObjectPoolConst
     {
         public const string ImpactCannonCommonPool = PoolConst.ImpactCannonCommonPool;

@@ -17,6 +17,12 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 8e887aa1d6abd3147b8ad619cc3b6aeb
   m_SerializeEntries:
+  - m_GUID: 01102205f4b983643b96d74f0c4039d3
+    m_Address: Shop/2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 10d78078f680c6a4ca086f845088a2d0
     m_Address: Characters/WizardBoy_Model
     m_ReadOnly: 0
@@ -27,13 +33,39 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 44dbfc5159e285d438a719296e9f37b4
+    m_Address: Assets/_Project/Addressables/RuneData/Rune/Rune3.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 473bdc8891f686f4fb6818e12d02b7b4
     m_Address: Characters/BingNv_Anim
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4abc3c7bb0be2f34c955b19881d0d526
+    m_Address: Assets/_Project/Addressables/Shop/5.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6595ece2322178a49b9b7eca818a7048
+    m_Address: Assets/_Project/Addressables/RuneData/Rune/Rune4.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8c25fef75f1087940802335e7674491d
+    m_Address: Shop/ShopRuneConfig
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote_preload
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8c4d50de4d711c445b5c2838d8c4b648
     m_Address: Characters/BingNv_Model
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c527a2b5b22be2f4cb36c374672096db
+    m_Address: Assets/_Project/Addressables/Shop/4.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -42,11 +74,20 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e3383afed76530f4d917bce2c103559b
+    m_Address: Assets/_Project/Addressables/RuneData/Rune/Rune5.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ef1c4b818731ec945a01a122dc1f8e49
     m_Address: Assets/_Project/Addressables/Sprites/UI/white_dot.png
     m_ReadOnly: 0
-    m_SerializedLabels:
-    - UI
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f5bf20fbc5ed30146b2a8d8aa1fbff4a
+    m_Address: Assets/_Project/Addressables/Shop/3.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: fb99d6304baf1dc43b9033961371850c, type: 2}

@@ -56,7 +56,10 @@ namespace Controllers.Character.Pets
     [SerializeField]
     private float rotateSpeed = 90f;
     [SerializeField]
-    private AnimationCurve raiseCurve;
+    private AnimationCurve raiseCurve = new AnimationCurve(
+        new Keyframe(0, 0, 0, 0),
+        new Keyframe(1, 1, 2, 0)
+    );
 
     private Vector3 networkPosition;
     private Quaternion networkRotation;
@@ -345,6 +348,10 @@ namespace Controllers.Character.Pets
     {
       isTransfering = true;
       StopAllCoroutines();
+      if (agent != null && agent.enabled)
+      {
+        agent.enabled = false;
+      }
       StartCoroutine(Transfer());
     }
 

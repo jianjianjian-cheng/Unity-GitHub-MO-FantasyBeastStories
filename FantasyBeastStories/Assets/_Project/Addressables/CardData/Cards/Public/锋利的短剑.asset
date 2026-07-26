@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f5cca440418683249a3b80fe5b389e02, type: 3}
-  m_Name: "\u5F11\u795E\u7684\u9B54\u5251"
+  m_Name: "\u950B\u5229\u7684\u77ED\u5251"
   m_EditorClassIdentifier: 
-  cardId: "\u5F11\u795E\u7684\u9B54\u5251"
-  cardName: "\u5F11\u795E\u7684\u9B54\u5251"
-  description: "\u653B\u51FB\u529B\u6781\u5927\u63D0\u5347"
-  value: 40
-  quality: 2
+  cardId: "\u950B\u5229\u7684\u77ED\u5251"
+  cardName: "\u950B\u5229\u7684\u77ED\u5251"
+  description: "\u653B\u51FB\u529B\u63D0\u5347"
+  value: 10
+  quality: 0
   scope: 0
   characterType: 
   stackable: 0
   Effects:
-  - rid: 4210315273836167184
+  - rid: 4210315273836167168
   references:
     version: 2
     RefIds:
-    - rid: 4210315273836167184
+    - rid: 4210315273836167168
       type: {class: AddAttackPowerEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
       data:
-        value: 40
+        value: 8

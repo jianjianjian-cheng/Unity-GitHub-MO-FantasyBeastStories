@@ -596,7 +596,7 @@ namespace Controllers.Character
     {
       if (_luaBridge != null && _luaBridge.OnUnlockElement(this, element))
         return;
-      //这里保守处理一下，害怕lua没有处理 
+      AddUnlockedElement(element);
       SwitchElement(element);
     }
 
@@ -667,7 +667,16 @@ namespace Controllers.Character
     public Vector3 GetPosition() => transform.position;
     public bool IsLocalPlayer() => NetworkServiceLocator.PlayerService.IsOwnerOf(gameObject);
     public bool IsDead() => attributePlayer?.GetIsDead() ?? false;
+    public int GetViewID() => NetworkServiceLocator.ObjectService.GetViewID(gameObject);
     public void SetAttributeConfig(PlayerAttributeConfigSO config) => playerAttributeConfig = config;
+
+    public void BroadcastInitElementPool(int elementInt)
+    {
+        if (EventChannelLocator.MainContainer.gameSettings.IsTest) return;
+        NetworkServiceLocator.DomainRpcService?.InvokeRPC(
+            "RPC_InitElementPool", NetworkTarget.Others,
+            GetViewID(), elementInt);
+    }
 
 
     /// <summary>

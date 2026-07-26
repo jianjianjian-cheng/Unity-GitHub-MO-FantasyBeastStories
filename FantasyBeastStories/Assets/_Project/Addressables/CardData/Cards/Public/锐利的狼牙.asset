@@ -15,7 +15,7 @@ MonoBehaviour:
   cardId: "\u9510\u5229\u7684\u72FC\u7259"
   cardName: "\u9510\u5229\u7684\u72FC\u7259"
   description: "\u653B\u51FB\u529B\u63D0\u5347"
-  value: 20
+  value: 15
   quality: 1
   scope: 0
   characterType: 

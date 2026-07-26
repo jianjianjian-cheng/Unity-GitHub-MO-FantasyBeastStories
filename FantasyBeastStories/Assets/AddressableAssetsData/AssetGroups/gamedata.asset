@@ -17,12 +17,6 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 637ad01d53507ac41a4eac851e91832e
   m_SerializeEntries:
-  - m_GUID: 01102205f4b983643b96d74f0c4039d3
-    m_Address: Shop/2
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - remote_preload
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 07f80b4d38e31244098c16b0ed43d8e8
     m_Address: Config/BossConfigSO
     m_ReadOnly: 0
@@ -121,12 +115,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8bd242f922f482040b53d23439d99737
     m_Address: PowerUpData/SO_ExperienceMagnet
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - remote_preload
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8c25fef75f1087940802335e7674491d
-    m_Address: Shop/ShopRuneConfig
     m_ReadOnly: 0
     m_SerializedLabels:
     - remote_preload

@@ -13,22 +13,22 @@ namespace Controllers.Enemy
     {
         [Header("NavMesh 设置")]
         [SerializeField]
-        protected float pathUpdateInterval = 0.3f; // NavMesh寻路更新间隔（秒）
+        protected float pathUpdateInterval = 0.3f; // NavMesh寻路更新间隔
 
         [Header("LOD 分级优化")]
-        [SerializeField, Tooltip("LOD 0 近距离阈值（米），小于此值执行完整行为")]
+        [SerializeField, Tooltip("LOD 0 近距离阈值")]
         private float lod0Distance = 10f;
 
-        [SerializeField, Tooltip("LOD 1 中距离阈值（米），在此值与 lod0 之间执行降级行为")]
+        [SerializeField, Tooltip("LOD 1 中距离阈值")]
         private float lod1Distance = 30f;
 
-        [SerializeField, Tooltip("LOD 等级更新间隔（秒），每隔多久重新计算一次 LOD")]
+        [SerializeField, Tooltip("LOD每隔多久重新计算一次 LOD")]
         private float lodRefreshInterval = 0.5f;
 
-        [SerializeField, Tooltip("LOD 1 攻击检测间隔倍率（越大攻击检测越慢）")]
+        [SerializeField, Tooltip("LOD 1 攻击检测间隔倍率")]
         private float lod1AttackIntervalMultiplier = 3f;
 
-        [SerializeField, Tooltip("LOD 2 是否冻结动画（animator.speed = 0，恢复时自动还原）")]
+        [SerializeField, Tooltip("LOD 2 是否冻结动画")]
         private bool lod2FreezeAnimation = true;
 
         [SerializeField, Tooltip("LOD 2 是否完全禁用攻击检测")]
@@ -56,9 +56,9 @@ namespace Controllers.Enemy
         /// </summary>
         protected enum LODLevel
         {
-            Full,    // 近距离（< lod0Distance）：完整行为
-            Reduced, // 中距离（lod0Distance ~ lod1Distance）：降级行为
-            Minimal  // 远距离（> lod1Distance）：最小行为
+            Full,    // 近距离
+            Reduced, // 中距离：降级行为，降低攻击检测频率
+            Minimal  // 远距离：最小行为，要求冻结动画、禁用 NavMesh、禁用攻击检测
         }
 
         protected override void Start()
@@ -146,7 +146,7 @@ namespace Controllers.Enemy
         }
 
         /// <summary>
-        /// LOD 等级切换时的回调，处理动画冻结 / NavMesh 禁用等副作用。
+        /// LOD 等级切换时的回调
         /// </summary>
         private void OnLODLevelChanged(LODLevel from, LODLevel to)
         {
@@ -186,7 +186,7 @@ namespace Controllers.Enemy
         }
 
         /// <summary>
-        /// 获取距离最近玩家的平方距离（使用 sqrMagnitude 避免开根号）
+        /// 获取距离最近玩家的平方距离
         /// </summary>
         private float GetSqrDistanceToNearestPlayer()
         {
@@ -218,12 +218,10 @@ namespace Controllers.Enemy
 
         /// <summary>
         /// 距离判定：对攻击范围内的所有玩家造成伤害。
-        /// 使用 sqrMagnitude 避免开根号，提高性能。
-        ///
         /// LOD 优化：
         /// - LOD 0：正常攻击间隔
         /// - LOD 1：攻击间隔乘以倍率，降低检测频率
-        /// - LOD 2：在调用前已被跳过（由 lod2DisableAttack 控制）
+        /// - LOD 2：完全禁用攻击检测、冻结动画、禁用collider和ai
         /// </summary>
         private void DealDamageToPlayers()
         {
@@ -296,6 +294,11 @@ namespace Controllers.Enemy
 
             // 根据游戏时间计算血量倍率（1x → 4x，Boss 出现后回落至 1x）
             float hpMultiplier = EnemyScalingCalculator.GetHpMultiplier(currentTime);
+
+            // 根据玩家数量叠加血量倍率
+            int playerCount = PlayerManager.instance != null ? PlayerManager.instance.PlayerCount : 1;
+            hpMultiplier *= EnemyScalingCalculator.GetPlayerHpMultiplier(playerCount);
+
             float newMaxHealth = baseMaxHealth * hpMultiplier;
             enemyData.attribute.maxHealth = newMaxHealth;
             enemyData.attribute.currentHealth = newMaxHealth;
