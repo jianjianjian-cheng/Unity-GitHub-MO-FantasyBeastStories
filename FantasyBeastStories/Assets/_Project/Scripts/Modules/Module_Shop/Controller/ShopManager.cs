@@ -20,7 +20,7 @@ namespace Managers
   /// </summary>
   public class ShopManager : MonoBehaviour, ISaveable
   {
-    
+    private static ShopManager _instance;
 
     [Header("商店配置")]
     [SerializeField] private ShopRuneDatabaseSO shopDatabase;
@@ -30,6 +30,13 @@ namespace Managers
 
     void Awake()
     {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        _instance = this;
         ServiceLocator.Register(this);
         DontDestroyOnLoad(gameObject);
         Model = new ShopModel();
@@ -42,8 +49,12 @@ namespace Managers
 
     void OnDestroy()
     {
-            ServiceLocator.Unregister<ShopManager>();
-      ServiceLocator.Get<SaveManager>()?.UnregisterSaveable(this);
+            if (_instance == this)
+            {
+                _instance = null;
+                ServiceLocator.Unregister<ShopManager>();
+                ServiceLocator.Get<SaveManager>()?.UnregisterSaveable(this);
+            }
     }
 
     // ========== ISaveable 实现 ==========

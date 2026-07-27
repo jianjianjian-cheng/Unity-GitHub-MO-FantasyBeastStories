@@ -10,16 +10,25 @@ namespace UI.RedDot
 {
     /// <summary>
     /// 红点控制器：监听各系统事件 → 更新 Model → 通过事件通道广播变更。
-    /// 外部系统（如 RuneInventory、MassionPanel）通过 Instance 调用 ActivateRedDot / MarkAsRead。
+    /// 外部系统（如 RuneInventory、MassionPanel）通过 _instance 调用 ActivateRedDot / MarkAsRead。
     /// </summary>
     public class RedDotController : MonoBehaviour
     {
-        
+        private static RedDotController _instance;
 
         private readonly RedDotModel _model = new();
+        private bool _isDuplicate;
 
         void Awake()
         {
+            if (_instance != null && _instance != this)
+            {
+                _isDuplicate = true;
+                Destroy(gameObject);
+                return;
+            }
+
+            _instance = this;
             ServiceLocator.Register(this);
             DontDestroyOnLoad(gameObject);
 
@@ -28,6 +37,7 @@ namespace UI.RedDot
 
         void OnEnable()
         {
+            if (_isDuplicate) return;
             var container = EventChannelLocator.MainContainer;
             if (container != null)
             {
@@ -37,6 +47,7 @@ namespace UI.RedDot
 
         void OnDisable()
         {
+            if (_isDuplicate) return;
             var container = EventChannelLocator.MainContainer;
             if (container != null)
             {
@@ -46,7 +57,11 @@ namespace UI.RedDot
 
         void OnDestroy()
         {
-            ServiceLocator.Unregister<RedDotController>();
+            if (_instance == this)
+            {
+                _instance = null;
+                ServiceLocator.Unregister<RedDotController>();
+            }
         }
 
         // ──────────────────────────────────────────────

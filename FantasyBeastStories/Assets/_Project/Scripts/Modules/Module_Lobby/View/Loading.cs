@@ -30,9 +30,21 @@ namespace UI.Framework.Panel
         private int _charCount;
 
         #region 单例模式
-                
+
+        private static Loading _instance;
+
+        private bool _isDuplicate;
+
         void Awake()
         {
+            if (_instance != null && _instance != this)
+            {
+                _isDuplicate = true;
+                Destroy(gameObject);
+                return;
+            }
+
+            _instance = this;
             ServiceLocator.Register(this);
             DontDestroyOnLoad(gameObject);
             Initialize();
@@ -76,17 +88,23 @@ namespace UI.Framework.Panel
 
         private void OnEnable()
         {
+            if (_isDuplicate) return;
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
         private void OnDisable()
         {
+            if (_isDuplicate) return;
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
         private void OnDestroy()
         {
-            ServiceLocator.Unregister<Loading>();
+            if (_instance == this)
+            {
+                _instance = null;
+                ServiceLocator.Unregister<Loading>();
+            }
             KillIconTweens();
             StopBounceAnimation();
             SceneManager.sceneLoaded -= OnSceneLoaded;
@@ -266,15 +284,17 @@ namespace UI.Framework.Panel
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            Debug.Log($"[Loading] OnSceneLoaded 触发，场景: {scene.name}");
-            StartCoroutine(HideWithMinDisplay());
+            Debug.Log($"[Loading] OnSceneLoaded 触发，场景: {scene.name} (buildIndex={scene.buildIndex})");
+            // 只有返回大厅时才执行结算，进入战斗场景不结算
+            bool isLobby = scene.buildIndex == 1;
+            StartCoroutine(HideWithMinDisplay(isLobby));
         }
 
-        private IEnumerator HideWithMinDisplay()
+        private IEnumerator HideWithMinDisplay(bool finalizeMatch)
         {
             // 延迟 1s，场景已切换成功，但 loading 动画继续播放
             yield return new WaitForSeconds(1f);
-            yield return StartCoroutine(Hide());
+            yield return StartCoroutine(Hide(finalizeMatch));
         }
 
         #endregion
@@ -305,7 +325,7 @@ namespace UI.Framework.Panel
             yield return new WaitForSeconds(1f);
         }
 
-        public IEnumerator Hide()
+        public IEnumerator Hide(bool finalizeMatch = false)
         {
             _canvasGroup.alpha = 0.5f;
             _canvasGroup.blocksRaycasts = true;
@@ -367,9 +387,10 @@ namespace UI.Framework.Panel
 
             yield return new WaitForSeconds(1f);
 
-            // 1) 对局结算（有实际数据时才发放金币并弹结算面板）
-            if (ServiceLocator.TryGet<MatchStatisticsManager>(out var matchStats))
+            // 1) 对局结算（仅返回大厅时执行，有实际数据时才发放金币并弹结算面板）
+            if (finalizeMatch && ServiceLocator.TryGet<MatchStatisticsManager>(out var matchStats))
             {
+                Debug.Log($"[Loading.Hide] FinalizeMatch called: kills={matchStats.GetTotalKillsInMatch()}, damage={matchStats.Model.TotalDamageInMatch}, exp={matchStats.Model.TotalExpInMatch}");
                 matchStats.FinalizeMatch();
             }
 

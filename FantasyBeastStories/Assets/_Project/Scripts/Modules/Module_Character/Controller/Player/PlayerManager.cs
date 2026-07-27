@@ -17,6 +17,8 @@ namespace Controllers.Player
 {
     public class PlayerManager : MonoBehaviour
     {
+        private static PlayerManager _instance;
+
         /// <summary>玩家死亡时触发，参数为死亡的 ActorNumber（字符串形式）</summary>
         public static event Action<string> OnPlayerDeath;
 
@@ -28,8 +30,18 @@ namespace Controllers.Player
         #region 单例模式
         
 
+        private bool _isDuplicate;
+
         void Awake()
         {
+            if (_instance != null && _instance != this)
+            {
+                _isDuplicate = true;
+                Destroy(gameObject);
+                return;
+            }
+
+            _instance = this;
             ServiceLocator.Register(this);
             DontDestroyOnLoad(gameObject);
             attributeCache = new AttributeCacheService();
@@ -37,6 +49,7 @@ namespace Controllers.Player
 
         void OnEnable()
         {
+            if (_isDuplicate) return;
             EventChannelLocator.MainContainer.gameActionChannel.RegisterListener(OnGameAction);
             EventChannelLocator.MainContainer.playerQueryChannel.RegisterListener(OnPlayerQuery);
             if (NetworkServiceLocator.IsInitialized)
@@ -49,6 +62,7 @@ namespace Controllers.Player
 
         void OnDisable()
         {
+            if (_isDuplicate) return;
             EventChannelLocator.MainContainer.gameActionChannel.UnregisterListener(OnGameAction);
             EventChannelLocator.MainContainer.playerQueryChannel.UnregisterListener(OnPlayerQuery);
             if (NetworkServiceLocator.IsInitialized)
@@ -62,7 +76,11 @@ namespace Controllers.Player
 
         void OnDestroy()
         {
-            ServiceLocator.Unregister<PlayerManager>();
+            if (_instance == this)
+            {
+                _instance = null;
+                ServiceLocator.Unregister<PlayerManager>();
+            }
         }
 
         private void OnGameAction(GameActionType actionType)

@@ -86,6 +86,8 @@ namespace Core.SharedModel
         {
             bool hasActualData = TotalKillsInMatch > 0 || TotalDamageInMatch > 0 || TotalExpInMatch > 0;
 
+            Debug.Log($"[MatchStatisticsModel.FinalizeMatch] hasActualData={hasActualData}, kills={TotalKillsInMatch}, damage={TotalDamageInMatch}, exp={TotalExpInMatch}, earnedCoins={earnedCoins}");
+
             int matchDurationSeconds = _matchStartTime > 0
                 ? Mathf.RoundToInt(currentTime - _matchStartTime)
                 : 0;
@@ -108,7 +110,12 @@ namespace Core.SharedModel
                 LifetimeDamage += TotalDamageInMatch;
                 LifetimeMatches++;
 
+                Debug.Log($"[MatchStatisticsModel.FinalizeMatch] Raising matchStatsUpdateChannel with isFinal=true");
                 RaiseMatchStatsUpdate(result);
+            }
+            else
+            {
+                Debug.LogWarning("[MatchStatisticsModel.FinalizeMatch] hasActualData=false — 结算面板不会弹出！统计数据全为零。");
             }
 
             // 重置对局数据，准备下一局

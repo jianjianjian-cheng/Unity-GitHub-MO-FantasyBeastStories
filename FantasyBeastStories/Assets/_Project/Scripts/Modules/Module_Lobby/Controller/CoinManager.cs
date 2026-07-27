@@ -18,7 +18,7 @@ namespace Managers
     /// </summary>
     public class CoinManager : MonoBehaviour, ISaveable
     {
-        
+        private static CoinManager _instance;
 
         [Header("金币计算参数")]
         [SerializeField] private int baseCoinPerKill = 50;
@@ -29,6 +29,13 @@ namespace Managers
 
         void Awake()
         {
+            if (_instance != null && _instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            _instance = this;
             ServiceLocator.Register(this);
             DontDestroyOnLoad(gameObject);
             Model = new CoinModel(baseCoinPerKill, damageCoinFactor);
@@ -41,8 +48,12 @@ namespace Managers
 
         void OnDestroy()
         {
-            ServiceLocator.Unregister<CoinManager>();
-            ServiceLocator.Get<SaveManager>()?.UnregisterSaveable(this);
+            if (_instance == this)
+            {
+                _instance = null;
+                ServiceLocator.Unregister<CoinManager>();
+                ServiceLocator.Get<SaveManager>()?.UnregisterSaveable(this);
+            }
         }
 
         // ========== ISaveable 实现 ==========

@@ -78,7 +78,6 @@ namespace Controllers.Combat
             if (Instance == null)
             {
                 Instance = this;
-                DontDestroyOnLoad(gameObject);
                 InitPrefabRegistry();
                 PreallocateTriggers(32);
             }

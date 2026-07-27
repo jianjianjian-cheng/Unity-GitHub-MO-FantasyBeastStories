@@ -21,7 +21,6 @@ namespace Controllers.Network
     void Awake()
     {
       ServiceLocator.Register(this);
-      DontDestroyOnLoad(gameObject);
     }
 
     void OnEnable()

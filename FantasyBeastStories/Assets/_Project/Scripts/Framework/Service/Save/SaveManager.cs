@@ -23,6 +23,7 @@ namespace Managers
   /// </summary>
   public class SaveManager : MonoBehaviour, ISaveable
   {
+    private static SaveManager _instance;
     
     [Header("存档配置")]
     [SerializeField] private bool useEncryption = false;
@@ -81,6 +82,13 @@ namespace Managers
 
     void Awake()
     {
+                if (_instance != null && _instance != this)
+                {
+                    Destroy(gameObject);
+                    return;
+                }
+
+                _instance = this;
                 ServiceLocator.Register(this);
         DontDestroyOnLoad(gameObject);
         fileHandler = new FileDataHandler(UnityEngine.Application.persistentDataPath);

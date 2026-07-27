@@ -56,6 +56,7 @@ public class MatchResultPanel : UIScreen
         // ★ 关键：在 Awake 中直接订阅事件通道
         // 因为 base.Awake() 已设为 inactive，OnEnable 不会触发
         SubscribeToChannel();
+        Debug.Log($"[MatchResultPanel.Awake] Subscribed to channel, _hasSubscribed={_hasSubscribed}");
     }
 
     public void OnDestroy()
@@ -95,6 +96,7 @@ public class MatchResultPanel : UIScreen
 
     private void OnMatchStatsUpdated(MatchStatsUpdateData data)
     {
+        Debug.Log($"[MatchResultPanel.OnMatchStatsUpdated] Received: IsFinal={data.IsFinal}, kills={data.TotalKills}, damage={data.TotalDamage}");
         if (!data.IsFinal) return;
 
         // 填充数据

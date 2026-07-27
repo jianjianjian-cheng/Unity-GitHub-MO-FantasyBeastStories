@@ -196,7 +196,7 @@ namespace Managers
             if (NetworkServiceLocator.PlayerService.IsMasterClient)
                 inst.StartCountdownTime(limitTime);
 
-            inst._taskZone = AssetLoader.Instantiate("Level1_Prefabs_Tasks_" + taskId, zoneCenter, Quaternion.identity);
+            inst._taskZone = AssetLoader.Instantiate("Level1_TaskPrefab_" + taskId, zoneCenter, Quaternion.identity);
 
             inst.Model.ClearTasks();
             var killTask = new KillTask(taskId, zoneCenter, 7, requiredKills, limitTime);
@@ -212,7 +212,7 @@ namespace Managers
             if (NetworkServiceLocator.PlayerService.IsMasterClient)
                 inst.StartCountdownTime(limitTime);
 
-            inst._taskZone = AssetLoader.Instantiate("Level1_Prefabs_Tasks_" + taskId, zoneCenter, Quaternion.identity);
+            inst._taskZone = AssetLoader.Instantiate("Level1_TaskPrefab_" + taskId, zoneCenter, Quaternion.identity);
 
             inst.Model.ClearTasks();
             var escortTask = new EscortTask(taskId, zoneCenter, 4, requiredEscorts, limitTime);

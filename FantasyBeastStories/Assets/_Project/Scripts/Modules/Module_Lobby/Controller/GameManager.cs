@@ -17,6 +17,7 @@ namespace Managers
 {
     public class GameManager : MonoBehaviour, ISpawnPointService
     {
+        private static GameManager _instance;
         
 
         public int sceneIndex = 2;
@@ -37,8 +38,19 @@ namespace Managers
         /// <summary>游戏模型实例（纯 C#，可单测）</summary>
         public GameModel Model { get; private set; }
 
+        private bool _isDuplicate;
+
         void Awake()
         {
+            if (_instance != null && _instance != this)
+            {
+                _isDuplicate = true;
+                Destroy(gameObject);
+                return;
+            }
+
+            _instance = this;
+
             Model = new GameModel();
 
             ServiceLocator.Register(this);
@@ -101,6 +113,7 @@ namespace Managers
 
         void OnEnable()
         {
+            if (_isDuplicate) return;
             SceneManager.sceneLoaded += OnSceneLoaded;
             EventChannelLocator.MainContainer.gameActionChannel.RegisterListener(OnGameActionReceived);
             EventChannelLocator.MainContainer.bossDeathChannel?.RegisterListener(OnBossDeath);
@@ -108,6 +121,7 @@ namespace Managers
 
         void OnDisable()
         {
+            if (_isDuplicate) return;
             SceneManager.sceneLoaded -= OnSceneLoaded;
             EventChannelLocator.MainContainer.gameActionChannel.UnregisterListener(OnGameActionReceived);
             EventChannelLocator.MainContainer.bossDeathChannel?.UnregisterListener(OnBossDeath);
@@ -115,8 +129,12 @@ namespace Managers
 
         void OnDestroy()
         {
-            ServiceLocator.Unregister<GameManager>();
-            ServiceLocator.Unregister<ISpawnPointService>();
+            if (_instance == this)
+            {
+                _instance = null;
+                ServiceLocator.Unregister<GameManager>();
+                ServiceLocator.Unregister<ISpawnPointService>();
+            }
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -137,6 +155,8 @@ namespace Managers
             else if (scene.buildIndex == sceneConfig.battleSceneIndex)
             {
                 AudioManager.Instance?.PlayBGM("bgm_combat");
+                ServiceLocator.Get<MatchStatisticsManager>()?.ResetMatchStats();
+                Debug.Log("[GameManager.OnSceneLoaded] 进入战斗场景，ResetMatchStats 已调用");
             }
         }
 

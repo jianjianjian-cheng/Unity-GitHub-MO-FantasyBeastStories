@@ -17,16 +17,25 @@ namespace Managers
     /// </summary>
     public class MatchStatisticsManager : MonoBehaviour, ISaveable
     {
-        
+        private static MatchStatisticsManager _instance;
 
         /// <summary>统计模型实例（纯 C#，可单测）</summary>
         public MatchStatisticsModel Model { get; private set; }
 
         void Awake()
         {
+            if (_instance != null && _instance != this)
+            {
+                Debug.LogWarning($"[MatchStatisticsManager.Awake] 重复实例销毁: new={GetHashCode()}, existing={_instance.GetHashCode()}");
+                Destroy(gameObject);
+                return;
+            }
+
+            _instance = this;
             ServiceLocator.Register(this);
             DontDestroyOnLoad(gameObject);
             Model = new MatchStatisticsModel();
+            Debug.Log($"[MatchStatisticsManager.Awake] instance={GetHashCode()}, scene={gameObject.scene.name}");
         }
 
         void Start()
@@ -36,7 +45,11 @@ namespace Managers
 
         void OnDestroy()
         {
-            ServiceLocator.Unregister<MatchStatisticsManager>();
+            if (_instance == this)
+            {
+                _instance = null;
+                ServiceLocator.Unregister<MatchStatisticsManager>();
+            }
             ServiceLocator.Get<SaveManager>()?.UnregisterSaveable(this);
         }
 
@@ -63,23 +76,27 @@ namespace Managers
         public void RecordKill()
         {
             Model.RecordKill();
+            Debug.Log($"[MatchStatisticsManager.RecordKill] kills={Model.TotalKillsInMatch} (instance={GetHashCode()})");
             ServiceLocator.Get<QuestTaskManager>()?.RecordKill();
         }
 
         public void RecordDamage(int damage)
         {
             Model.RecordDamage(damage);
+            Debug.Log($"[MatchStatisticsManager.RecordDamage] damage={Model.TotalDamageInMatch} (instance={GetHashCode()})");
         }
 
         public void RecordExperience(int exp)
         {
             Model.RecordExperience(exp);
+            Debug.Log($"[MatchStatisticsManager.RecordExperience] exp={Model.TotalExpInMatch} (instance={GetHashCode()})");
         }
 
         // ========== 对局生命周期 ==========
 
         public void ResetMatchStats()
         {
+            Debug.Log($"[MatchStatisticsManager.ResetMatchStats] BEFORE: kills={Model.TotalKillsInMatch}, damage={Model.TotalDamageInMatch}, exp={Model.TotalExpInMatch} (instance={GetHashCode()})");
             Model.ResetMatchStats(Time.time);
         }
 

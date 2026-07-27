@@ -18,7 +18,7 @@ namespace Managers
     /// </summary>
     public class QuestTaskManager : MonoBehaviour, ISaveable
     {
-        
+        private static QuestTaskManager _instance;
 
         /// <summary>任务进度模型实例（纯 C#，可单测）</summary>
         public QuestTaskModel Model { get; private set; }
@@ -27,6 +27,13 @@ namespace Managers
 
         void Awake()
         {
+            if (_instance != null && _instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            _instance = this;
             ServiceLocator.Register(this);
             DontDestroyOnLoad(gameObject);
             Model = new QuestTaskModel();
@@ -100,7 +107,11 @@ namespace Managers
 
         void OnDestroy()
         {
-            ServiceLocator.Unregister<QuestTaskManager>();
+            if (_instance == this)
+            {
+                _instance = null;
+                ServiceLocator.Unregister<QuestTaskManager>();
+            }
         }
     }
 }

@@ -47,7 +47,6 @@ namespace Controllers.PowerUp
         private void Awake()
         {
                   ServiceLocator.Register(this);
-            DontDestroyOnLoad(gameObject);
         }
 
         private void Start()
