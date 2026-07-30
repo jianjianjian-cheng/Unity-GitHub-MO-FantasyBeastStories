@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UI.Rune;
 
 namespace Controllers.Rune
 {

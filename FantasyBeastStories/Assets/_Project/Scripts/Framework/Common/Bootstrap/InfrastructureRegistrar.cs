@@ -1,18 +1,14 @@
-using Managers;
-using Controllers.Combat;
 using Core;
 using Core.Channels;
-using Core.Contracts;
 using Core.Network;
-using Controllers.Combat.ImpactCannon;
-using Controllers.Network;
 using Photon.Pun;
 using UnityEngine;
 
 namespace Core
 {
     /// <summary>
-    /// Infrastructure 层启动注册器 — 在游戏启动时注册组件工厂和网络服务，供 Domain 层使用
+    /// Infrastructure 层启动注册器 — 在游戏启动时注册基础服务，供 Domain 层使用。
+    /// Module 级别的服务注册由各 Module 的 Bootstrap 类负责。
     /// </summary>
     public static class InfrastructureRegistrar
     {
@@ -22,12 +18,6 @@ namespace Core
             // 全局网络配置，只设置一次（原先在 PlayerStateSync.Awake 中，每个玩家实例都会重复设置）
             PhotonNetwork.SendRate = 30;
             PhotonNetwork.SerializationRate = 30;
-
-            // 注册网络服务（玩家身份 + 对象同步）
-            NetworkServiceLocator.Register(
-                new PhotonPlayerService(),
-                new PhotonObjectService()
-            );
 
             // 预加载事件通道容器并注册到 ServiceLocator
             // EventChannels 必须用 Resources.Load — 在 BeforeSceneLoad 阶段 Addressables 尚未初始化
@@ -44,64 +34,10 @@ namespace Core
             // 注册早期游戏服务（在 Launcher 加载前，确保 LobbyCanvas 等组件可用）
             GameServiceRegistrar.EnsureRegistered();
 
-            // 注册 ImpactCannon 创建方法
-            ComponentFactory.RegisterImpactCannonCreator(obj =>
-            {
-                var existing = obj.GetComponent<ImpactCannon>();
-                if (existing != null)
-                    return existing;
-                return obj.AddComponent<ImpactCannon>();
-            });
-
-            // 注册网络火球发射器创建方法
-            ComponentFactory.RegisterNetworkCasterCreator(obj =>
-            {
-                var existing = obj.GetComponent<CastNetwork>();
-                if (existing != null)
-                    return existing;
-                return obj.AddComponent<CastNetwork>();
-            });
-
             // 启动 PUN 回调桥接器（用于 OnPlayerPropertiesUpdate 等回调转发）
             PhotonCallbackBridge.EnsureExists();
 
-            // 创建 ManagerRpcBridge — 统一持有 Application 层的 [PunRPC] 方法
-            EnsureManagerRpcBridge();
-
-            // 创建 ControllerRpcBridge — 统一持有 Domain 层的 [PunRPC] 方法
-            EnsureControllerRpcBridge();
-
-            // 创建 UIRpcBridge — 统一持有 Presentation 层的 [PunRPC] 方法
-            EnsureUIRpcBridge();
-
-            Debug.Log("[InfrastructureRegistrar] 组件工厂 + 网络服务注册完成");
-        }
-
-        private static void EnsureManagerRpcBridge()
-        {
-            var go = new GameObject("ManagerRpcBridge");
-            var pv = go.AddComponent<PhotonView>();
-            go.AddComponent<ManagerRpcBridge>();
-            Object.DontDestroyOnLoad(go);
-            PhotonCallbackBridge.RegisterBridgeView(pv);
-        }
-
-        private static void EnsureControllerRpcBridge()
-        {
-            var go = new GameObject("ControllerRpcBridge");
-            var pv = go.AddComponent<PhotonView>();
-            go.AddComponent<ControllerRpcBridge>();
-            Object.DontDestroyOnLoad(go);
-            PhotonCallbackBridge.RegisterBridgeView(pv);
-        }
-
-        private static void EnsureUIRpcBridge()
-        {
-            var go = new GameObject("UIRpcBridge");
-            var pv = go.AddComponent<PhotonView>();
-            go.AddComponent<UIRpcBridge>();
-            Object.DontDestroyOnLoad(go);
-            PhotonCallbackBridge.RegisterBridgeView(pv);
+            Debug.Log("[InfrastructureRegistrar] 基础服务注册完成");
         }
     }
 }

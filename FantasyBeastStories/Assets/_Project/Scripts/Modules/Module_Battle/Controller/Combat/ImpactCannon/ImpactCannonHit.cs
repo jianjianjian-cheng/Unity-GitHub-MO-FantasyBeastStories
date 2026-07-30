@@ -2,7 +2,7 @@ using Photon.Pun;
 using UnityEngine;
 using Core;
 
-namespace Controllers.Combat.ImpactCannon
+namespace Controllers.Battle.ImpactCannon
 {
     public class ImpactCannonHit : MonoBehaviourPun
     {

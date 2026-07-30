@@ -1,17 +1,17 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
-using NetworkTarget = Controllers.Network.NetworkTarget;
 using UnityEngine;
 using Core;
 using Controllers.Player;
-using Controllers.Combat;
+using Controllers.Battle;
 using Core.Contracts;
 using Core.Network;
-using Controllers.Combat;
-using Managers;
+using Controllers.Battle;
 using Core.Channels.Combat;
+using Core.SharedModel;
+using Controllers.Battle;
 
-namespace Controllers.Enemy
+namespace Controllers.Battle
 {
     /// <summary>
     /// 蜘蛛Boss - 攻击方式：向前咬、吐火球、连续火球、滚动追踪
@@ -763,8 +763,8 @@ namespace Controllers.Enemy
         public void StartfireBallBurst()
         {
             GameObject fireballBurst = Instantiate(fireballPrefab, fireballBurstPoint.transform.position, Quaternion.identity);
-            IFIreBallProjectile fireBallProjectile = fireballBurst.GetComponent<IFIreBallProjectile>();
-            fireBallProjectile.SetTargetAndDamage(PlayerTarget.transform, enemyData.attribute.GetAttackPower() * config.fireballDamageMultiplier);
+            IFIreBallProjectile FireBallProjectile = fireballBurst.GetComponent<IFIreBallProjectile>();
+            FireBallProjectile.SetTargetAndDamage(PlayerTarget.transform, enemyData.attribute.GetAttackPower() * config.fireballDamageMultiplier);
         }
 
 

@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Core;
-using Controllers.Rune;
 using UnityEngine;
 using Core.Save;
 
-namespace Managers
+namespace Core.Save
 {
   /// <summary>
   /// 存档总管 —— 统一管理所有数据的存/读/删。

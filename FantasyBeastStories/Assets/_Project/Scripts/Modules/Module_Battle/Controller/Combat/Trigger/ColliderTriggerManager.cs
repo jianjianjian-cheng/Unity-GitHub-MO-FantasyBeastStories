@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Core;
 using UnityEngine;
+using Core.SharedModel;
 
-namespace Controllers.Combat
+namespace Controllers.Battle
 {
     /// <summary>
     /// 统一管理所有碰撞体触发器的单例管理器。

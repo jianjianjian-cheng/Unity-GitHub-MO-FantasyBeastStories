@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using Core.Channels.Combat;
-using Controllers.Task;
 using UnityEngine;
 
 namespace Core.SharedModel

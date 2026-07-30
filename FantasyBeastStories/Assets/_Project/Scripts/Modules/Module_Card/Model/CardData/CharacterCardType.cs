@@ -1,4 +1,4 @@
-namespace Controllers.CardData
+namespace Controllers.Card
 {
     /// <summary>
     /// 角色卡牌类型标识符

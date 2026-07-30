@@ -1,10 +1,9 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using ExitGames.Client.Photon;
 using Photon.Pun;
-using Managers;
 using Core;
 using Core.Contracts;
 using Core.Network;
@@ -12,6 +11,8 @@ using Controllers.Player;
 using Controllers.Character;
 using UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using Core.Save;
+using Controllers.Game;
 
 namespace Controllers.Network
 {
@@ -306,7 +307,7 @@ namespace Controllers.Network
                 _nameUI.text = _localPlayer.NickName;
             }
 
-            var worldSpaceUI = player.GetComponentInChildren<WordlSpaceUI>();
+            var worldSpaceUI = player.GetComponentInChildren<WorldSpaceUI>();
             if (worldSpaceUI != null)
             {
                 worldSpaceUI.UpDatePlayerName(_localPlayer.NickName);

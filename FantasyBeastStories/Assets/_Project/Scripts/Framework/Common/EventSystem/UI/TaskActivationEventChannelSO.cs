@@ -1,6 +1,6 @@
 using Core.Channels.Base;
-using Controllers.Task;
 using UnityEngine;
+using Core.SharedModel;
 
 namespace Core.Channels.Task
 {

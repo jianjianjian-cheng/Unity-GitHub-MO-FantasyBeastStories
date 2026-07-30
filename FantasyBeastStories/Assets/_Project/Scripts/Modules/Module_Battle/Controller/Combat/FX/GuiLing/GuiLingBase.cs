@@ -1,14 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using Core;
-using Controllers.Enemy;
+using Controllers.Battle;
 using Controllers.Network;
 using UnityEngine;
 using System;
-using Managers;
 using Core.Audio;
+using Core.SharedModel;
 
-namespace Controllers.Combat
+namespace Controllers.Battle
 {
     /// <summary>
     /// 鬼灵弹（GuiLing）抛射体系统

@@ -1,11 +1,10 @@
-﻿using Controllers.Player;
+using Controllers.Player;
 using UnityEngine;
-using Controllers.Enemy;
-using Managers;
+using Controllers.Battle;
 
 #if UNITY_EDITOR
 using UnityEditor;
-using Managers;
+using Core;
 #endif
 
 namespace Utilities

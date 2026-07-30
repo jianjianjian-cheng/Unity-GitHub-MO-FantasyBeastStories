@@ -1,48 +1,11 @@
-using Controllers.CardData;
 using Core.Channels.Base;
+using Core.SharedModel;
 using UnityEngine;
 
 namespace Core.Channels.Player
 {
-  public enum SkillQueryType
-  {
-    GetMaxAttackCount,
-    GetLuckRate,
-    GetRandomEXCard,
-    GetThreeRandomEXCards,
-    GetThreeRandomCards,
-    AddLuckRate,
-    GetUpgradeExperience
-  }
-
   [CreateAssetMenu(menuName = "Events/Player/Skill Query Event Channel")]
   public class SkillQueryEventChannelSO : BaseEventChannelSO<SkillQueryData>
   {
-  }
-
-  public class SkillQueryData : EventArgsBase
-  {
-    public SkillQueryType queryType;
-    public string cardType;
-    public int intValue;
-    public CardConfigSO[] cardsResult;
-    public CardConfigSO cardResult;
-
-    public SkillQueryData(SkillQueryType queryType)
-    {
-      this.queryType = queryType;
-    }
-
-    public SkillQueryData(SkillQueryType queryType, string cardType)
-    {
-      this.queryType = queryType;
-      this.cardType = cardType;
-    }
-
-    public SkillQueryData(SkillQueryType queryType, int intValue)
-    {
-      this.queryType = queryType;
-      this.intValue = intValue;
-    }
   }
 }

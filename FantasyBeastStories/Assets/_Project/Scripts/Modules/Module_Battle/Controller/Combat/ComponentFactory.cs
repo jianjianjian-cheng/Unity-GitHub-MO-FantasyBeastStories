@@ -1,7 +1,7 @@
 using Controllers.Network;
 using UnityEngine;
 
-namespace Controllers.Combat
+namespace Controllers.Battle
 {
     /// <summary>
     /// 组件工厂 — 允许 Domain 层间接创建 Infrastructure 层的组件（绕过 AddComponent<T> 需要具体类型的限制）

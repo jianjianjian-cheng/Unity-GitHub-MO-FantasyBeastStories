@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Core;
 using Core.SharedModel;
 using Controllers.Rune;
 using Core.Audio;
 using UnityEngine;
 using Core.Save;
-using Managers;
+using Controllers.Game;
+using Controllers.Shop;
 
-namespace Managers
+namespace Controllers.Shop
 {
   /// <summary>
   /// 商店控制器 — 薄层 MonoBehaviour，持有 ShopModel 实例。

@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using Controllers.Enemy;
-using Controllers.Combat;
+using Controllers.Battle;
+using Controllers.Battle;
 using UnityEngine;
 
-namespace Controllers.Combat.FireBall
+namespace Controllers.Battle.FireBall
 {
     public class FireBallBase : MonoBehaviour, IFireBallBase
     {

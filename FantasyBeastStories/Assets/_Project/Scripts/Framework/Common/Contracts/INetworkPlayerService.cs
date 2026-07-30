@@ -28,5 +28,11 @@ namespace Core.Contracts
         event System.Action<int, string> OnPlayerEnteredRoom;
         event System.Action<int, string> OnPlayerLeftRoom;
         event System.Action OnLocalJoinedRoom;
+
+        // ── PUN 回调通知方法（由 PhotonCallbackBridge 调用）──
+        void NotifyPropertyChanged(int actorNumber, string key, object value);
+        void NotifyPlayerEnteredRoom(int actorNumber, string userId);
+        void NotifyPlayerLeftRoom(int actorNumber, string userId);
+        void NotifyLocalJoinedRoom();
     }
 }

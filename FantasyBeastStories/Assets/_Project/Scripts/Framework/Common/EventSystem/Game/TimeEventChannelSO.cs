@@ -1,7 +1,7 @@
 using UnityEngine;
 using Core;
 using Core.Channels.Base;
-using Controllers.Time;
+using Core.SharedModel;
 
 namespace Core.Channels.Game
 {

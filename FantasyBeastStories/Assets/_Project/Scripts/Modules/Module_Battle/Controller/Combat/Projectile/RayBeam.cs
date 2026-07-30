@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using Core;
 using Unity.VisualScripting;
 using UnityEngine;
+using Core.SharedModel;
 
-namespace Controllers.Combat
+namespace Controllers.Battle
 {
     public class RayBeam : MonoBehaviour
     {

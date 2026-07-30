@@ -7,6 +7,7 @@ using Controllers.Character.Pets;
 using Core.Contracts;
 using Core.Network;
 using UnityEngine;
+using Core.SharedModel;
 
 namespace Controllers.Task
 {

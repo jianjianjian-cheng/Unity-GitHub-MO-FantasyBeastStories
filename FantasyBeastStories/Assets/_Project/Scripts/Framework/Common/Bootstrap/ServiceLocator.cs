@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Managers
+namespace Core
 {
     public static class ServiceLocator
     {

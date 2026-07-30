@@ -1,4 +1,3 @@
-using Controllers.CardData;
 
 namespace Core.SharedModel
 {

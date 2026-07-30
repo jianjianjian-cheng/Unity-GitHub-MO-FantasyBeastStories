@@ -27,10 +27,10 @@ MonoBehaviour:
     version: 2
     RefIds:
     - rid: 4210315273836167203
-      type: {class: AddHealthRecoverEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddHealthRecoverEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 2
     - rid: 4210315273836167204
-      type: {class: UnlockElementEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: UnlockElementEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         element: 3

@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Managers;
 using Core;
 using UnityEngine;
 
-namespace Controllers.Enemy
+namespace Controllers.Battle
 {
     /// <summary>
     /// 全局怪物数量监听器

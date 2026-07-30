@@ -1,6 +1,4 @@
 using System;
-using Controllers.Character;
-using Controllers.Enemy;
 
 namespace Core.SharedModel
 {

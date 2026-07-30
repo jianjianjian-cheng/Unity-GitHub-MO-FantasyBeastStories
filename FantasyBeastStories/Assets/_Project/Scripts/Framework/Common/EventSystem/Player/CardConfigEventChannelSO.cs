@@ -1,6 +1,6 @@
 using UnityEngine;
 using Core.Channels.Base;
-using Controllers.CardData;
+using Core.SharedModel;
 
 namespace Core.Channels
 {

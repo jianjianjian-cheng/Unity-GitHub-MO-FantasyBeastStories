@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Controllers.Combat
+namespace Controllers.Battle
 {
     /// <summary>
     /// 投射物模板注册表：ID → Addressable 路径映射，支持运行时动态注册。

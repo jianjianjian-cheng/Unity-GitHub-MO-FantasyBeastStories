@@ -1,7 +1,7 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Controllers.CardData;
+using Controllers.Card;
 using Controllers.Character;
 using Controllers.Player;
 using Core;
@@ -10,7 +10,6 @@ using Core.Channels.General;
 using Core.Channels.Player;
 using Core.Contracts;
 using Core.Network;
-using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -30,9 +29,11 @@ namespace UI
   {
     #region 单例模式
     
+    public static MagicUpgradeManager instance { get; private set; }
 
     void Awake()
     {
+        instance = this;
         ServiceLocator.Register(this);
         Model = new MagicUpgradeModel();
         Model.SetCurrentEventName(eventName);

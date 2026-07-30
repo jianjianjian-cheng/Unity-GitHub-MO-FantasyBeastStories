@@ -2,6 +2,32 @@
 
 <linker>
 
+	<assembly fullname="FantasyBeastStories.Core">
+	    <type fullname="Core.SharedModel.Element" preserve="all"/>
+		<type fullname="Core.SharedModel.EnemyState" preserve="all"/>
+		<type fullname="Core.SharedModel.NetworkTarget" preserve="all"/>
+		<type fullname="Core.SharedModel.SkillQueryType" preserve="all"/>
+		<type fullname="Core.SharedModel.SkillQueryData" preserve="all"/>
+		<type fullname="Core.SharedModel.AttributePlayerBase" preserve="all"/>
+		<type fullname="Core.SharedModel.PlayerMovementData" preserve="all"/>
+		<type fullname="Core.SharedModel.PlayerAttributeConfigSO" preserve="all"/>
+		<type fullname="Core.SharedModel.CardConfigSO" preserve="all"/>
+		
+	</assembly>
+
+	<assembly fullname="FantasyBeastStories.Framework">
+	    <type fullname="Core.Network.NetworkServiceLocator" preserve="all"/>
+		<type fullname="Core.EventChannelLocator" preserve="all"/>
+		<type fullname="Core.ServiceLocator" preserve="all"/>
+		<type fullname="Core.GameServiceRegistrar" preserve="all"/>
+		<type fullname="Core.Audio.AudioManager" preserve="all"/>
+		<type fullname="Core.PoolHelper" preserve="all"/>
+		<type fullname="Core.PoolConst" preserve="all"/>
+		<type fullname="Core.Lua.LuaPoolHelper" preserve="all"/>
+		<type fullname="Core.AssetLoader" preserve="all"/>
+		
+	</assembly>
+
 	<assembly fullname="mscorlib">
 	    <type fullname="System.Object" preserve="all"/>
 		<type fullname="System.Collections.Generic.List`1[System.Int32]" preserve="all"/>
@@ -47,7 +73,7 @@
 		
 	</assembly>
 
-	<assembly fullname="Assembly-CSharp">
+	<assembly fullname="XLua">
 	    <type fullname="Tutorial.BaseClass" preserve="all"/>
 		<type fullname="Tutorial.TestEnum" preserve="all"/>
 		<type fullname="Tutorial.DerivedClass" preserve="all"/>

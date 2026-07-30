@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using Controllers.Enemy;
+using System.Collections.Generic;
+using Controllers.Battle;
 using Controllers.Player;
 using Core;
 using Core.Network;
 using UI.Framework.Base;
 using UnityEngine;
-using Managers;
 
 namespace UI
 {

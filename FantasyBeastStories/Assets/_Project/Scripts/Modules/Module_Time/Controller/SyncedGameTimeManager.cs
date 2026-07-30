@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Core;
 using Core.SharedModel;
@@ -6,8 +6,6 @@ using Core.Contracts;
 using Core.Network;
 using Core.Channels.Game;
 using Controllers.Time;
-using Managers;
-using NetworkTarget = Controllers.Network.NetworkTarget;
 using UnityEngine;
 
 namespace Controllers.Time

@@ -27,10 +27,10 @@ MonoBehaviour:
     version: 2
     RefIds:
     - rid: 4210315273836167194
-      type: {class: SwitchElementEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: SwitchElementEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         element: 1
     - rid: 4210315273836167195
-      type: {class: AddAttackPowerEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddAttackPowerEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 20

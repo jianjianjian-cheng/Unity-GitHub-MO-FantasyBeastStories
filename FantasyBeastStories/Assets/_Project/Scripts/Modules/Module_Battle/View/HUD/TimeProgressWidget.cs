@@ -5,6 +5,7 @@ using UI.Framework.Base;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Core.SharedModel;
 
 namespace UI
 {

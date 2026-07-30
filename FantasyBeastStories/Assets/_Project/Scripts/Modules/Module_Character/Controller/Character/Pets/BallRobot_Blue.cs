@@ -7,7 +7,7 @@ using UnityEngine.AI;
 using Controllers.Network;
 using Core.Contracts;
 using Core.Network;
-using NetworkTarget = Controllers.Network.NetworkTarget;
+using Core.SharedModel;
 
 namespace Controllers.Character.Pets
 {

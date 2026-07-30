@@ -44,7 +44,7 @@ function M.PerformAttack(range, target)
     local unlockedElements = range:GetUnlockedElementsForLua()
     if unlockedElements == nil or unlockedElements.Count == 0 then
         -- 没有已解锁元素，使用默认 Winter
-        M.FireAtTargets(range, sorted, targetCount, totalShots, spawnPos, {CS.Element.Winter})
+        M.FireAtTargets(range, sorted, targetCount, totalShots, spawnPos, {CS.Core.SharedModel.Element.Winter})
         return
     end
 

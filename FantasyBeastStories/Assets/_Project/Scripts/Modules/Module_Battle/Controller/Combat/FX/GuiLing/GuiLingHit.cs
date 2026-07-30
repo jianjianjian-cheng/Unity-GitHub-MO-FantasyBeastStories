@@ -2,7 +2,7 @@ using Core;
 using Core;
 using UnityEngine;
 
-namespace Controllers.Combat
+namespace Controllers.Battle
 {
     /// <summary>
     /// GuiLing 击中特效自动归还脚本

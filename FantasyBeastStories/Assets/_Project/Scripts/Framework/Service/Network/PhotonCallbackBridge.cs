@@ -5,7 +5,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 
-namespace Controllers.Network
+namespace Core.Network
 {
     /// <summary>
     /// PUN 回调桥接器 — 将 PUN 的 MonoBehaviourPunCallbacks 事件转发给 NetworkServiceLocator
@@ -32,13 +32,13 @@ namespace Controllers.Network
                 _pendingBridgeViews.Add(pv);
         }
 
-        private PhotonPlayerService PlayerService
+        private INetworkPlayerService PlayerService
         {
             get
             {
-                var service = NetworkServiceLocator.PlayerService as PhotonPlayerService;
+                var service = NetworkServiceLocator.PlayerService;
                 if (service == null)
-                    Debug.LogWarning("[PhotonCallbackBridge] PlayerService 未注册或不是 PhotonPlayerService");
+                    Debug.LogWarning("[PhotonCallbackBridge] PlayerService 未注册");
                 return service;
             }
         }

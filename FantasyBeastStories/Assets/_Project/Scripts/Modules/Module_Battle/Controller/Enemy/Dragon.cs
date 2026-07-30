@@ -1,13 +1,13 @@
-﻿using Core;
+using Core;
 using Core.Contracts;
 using Core.Network;
-using NetworkTarget = Controllers.Network.NetworkTarget;
 using Controllers.Network;
 using UnityEngine;
 using Core;
-using Managers;
+using Core.SharedModel;
+using Controllers.Experience;
 
-namespace Controllers.Enemy
+namespace Controllers.Battle
 {
   public class Dragon : AttackableEnemy
   {

@@ -1,10 +1,10 @@
-using Managers;
 using Core.Channels;
 using Core.Channels.Combat;
 using Core.Channels.Game;
 using Core.Channels.Player;
 using Core.Channels.UI;
 using UnityEngine;
+using Core;
 
 namespace Core
 {

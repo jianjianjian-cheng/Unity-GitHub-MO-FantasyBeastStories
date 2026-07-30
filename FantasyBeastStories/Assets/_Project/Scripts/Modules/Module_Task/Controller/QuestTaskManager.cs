@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Core;
 using Core.SharedModel;
 using Core.Save;
 using UnityEngine;
-using Managers;
+using Controllers.Task;
 
-namespace Managers
+namespace Controllers.Task
 {
     /// <summary>
     /// 任务进度控制器 — 薄层 MonoBehaviour，持有 QuestTaskModel 实例。

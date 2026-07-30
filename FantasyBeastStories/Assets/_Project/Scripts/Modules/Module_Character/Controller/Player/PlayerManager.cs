@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ using Core.Contracts;
 using Core.Network;
 using Photon.Pun;
 using UnityEngine;
-using Managers;
+using Core.SharedModel;
 
 namespace Controllers.Player
 {

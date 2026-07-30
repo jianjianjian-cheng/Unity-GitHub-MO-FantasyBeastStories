@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Controllers.Character;
 using Core;
@@ -7,14 +7,13 @@ using Core.Channels.Combat;
 using Controllers.Player;
 using Core.Contracts;
 using Core.Network;
-using NetworkTarget = Controllers.Network.NetworkTarget;
 using Controllers.Network;
-using Controllers.PowerUp;
 using UnityEngine;
 using UnityEngine.AI;
-using Managers;
+using Controllers.Battle;
+using Controllers.Task;
 
-namespace Controllers.Enemy
+namespace Controllers.Battle
 {
   public class EnemyBase : MonoBehaviour
   {

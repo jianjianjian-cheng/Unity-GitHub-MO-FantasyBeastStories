@@ -1,5 +1,5 @@
 using UnityEngine;
-using Controllers.PowerUp;
+using Core.SharedModel;
 
 namespace Core.Contracts
 {

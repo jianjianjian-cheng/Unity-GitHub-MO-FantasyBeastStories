@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
-using Controllers.CardData;
+using Controllers.Card;
+using Core.SharedModel;
 using UnityEditor;
 using UnityEngine;
 

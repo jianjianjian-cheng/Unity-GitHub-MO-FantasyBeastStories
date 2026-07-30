@@ -1,17 +1,16 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
-using Controllers.PowerUp;
+using Controllers.Battle;
 using Core;
 using Core.Contracts;
 using Core.Network;
-using Managers;
-using Controllers.Item;
+using Controllers.Experience;
 using Controllers.Player;
 using Controllers.Network;
-using NetworkTarget = Controllers.Network.NetworkTarget;
 using Photon.Pun;
+using Core.SharedModel;
 
-namespace Controllers.PowerUp
+namespace Controllers.Battle
 {
     /// <summary>
     /// 道具管理器 - 单例服务

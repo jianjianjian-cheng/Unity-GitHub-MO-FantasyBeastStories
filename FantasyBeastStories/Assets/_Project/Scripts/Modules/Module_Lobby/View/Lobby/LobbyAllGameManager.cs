@@ -1,8 +1,7 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Core;
-using Managers;
 using UI.Framework.Panel;
 using Unity.VisualScripting;
 using UnityEngine;

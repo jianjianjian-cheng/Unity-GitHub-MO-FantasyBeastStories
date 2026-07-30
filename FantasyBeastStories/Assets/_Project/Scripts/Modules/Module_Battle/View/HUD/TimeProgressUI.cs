@@ -3,6 +3,7 @@ using Core.Channels.Game;
 using Controllers.Time;
 using UnityEngine;
 using UnityEngine.UI;
+using Core.SharedModel;
 
 namespace UI
 {

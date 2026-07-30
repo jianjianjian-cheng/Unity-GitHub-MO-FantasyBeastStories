@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using Controllers.Combat;
+using Controllers.Battle;
 using UnityEngine;
 using Core;
 
-namespace Controllers.Combat.ImpactCannon
+namespace Controllers.Battle.ImpactCannon
 {
     public class ImpactCannonCommonGrass : ImpactCannonCommonBase
     {

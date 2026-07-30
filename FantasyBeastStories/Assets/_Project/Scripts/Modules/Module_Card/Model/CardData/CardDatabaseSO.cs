@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Core.SharedModel;
 
-namespace Controllers.CardData
+namespace Controllers.Card
 {
     /// <summary>
     /// 统一卡牌数据库（ScriptableObject）

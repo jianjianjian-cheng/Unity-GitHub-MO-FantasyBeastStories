@@ -37,10 +37,17 @@ namespace XLua
 				translator.RegisterPushAndGetAndUpdate<XLuaTest.Pedding>(translator.PushXLuaTestPedding, translator.Get, translator.UpdateXLuaTestPedding);
 				translator.RegisterPushAndGetAndUpdate<XLuaTest.MyStruct>(translator.PushXLuaTestMyStruct, translator.Get, translator.UpdateXLuaTestMyStruct);
 				translator.RegisterPushAndGetAndUpdate<XLuaTest.PushAsTableStruct>(translator.PushXLuaTestPushAsTableStruct, translator.Get, translator.UpdateXLuaTestPushAsTableStruct);
+				translator.RegisterPushAndGetAndUpdate<Core.SharedModel.Element>(translator.PushCoreSharedModelElement, translator.Get, translator.UpdateCoreSharedModelElement);
+				translator.RegisterPushAndGetAndUpdate<Core.SharedModel.EnemyState>(translator.PushCoreSharedModelEnemyState, translator.Get, translator.UpdateCoreSharedModelEnemyState);
+				translator.RegisterPushAndGetAndUpdate<Core.SharedModel.NetworkTarget>(translator.PushCoreSharedModelNetworkTarget, translator.Get, translator.UpdateCoreSharedModelNetworkTarget);
+				translator.RegisterPushAndGetAndUpdate<Core.SharedModel.SkillQueryType>(translator.PushCoreSharedModelSkillQueryType, translator.Get, translator.UpdateCoreSharedModelSkillQueryType);
 				translator.RegisterPushAndGetAndUpdate<Tutorial.TestEnum>(translator.PushTutorialTestEnum, translator.Get, translator.UpdateTutorialTestEnum);
 				translator.RegisterPushAndGetAndUpdate<XLuaTest.MyEnum>(translator.PushXLuaTestMyEnum, translator.Get, translator.UpdateXLuaTestMyEnum);
 				translator.RegisterPushAndGetAndUpdate<Tutorial.DerivedClass.TestEnumInner>(translator.PushTutorialDerivedClassTestEnumInner, translator.Get, translator.UpdateTutorialDerivedClassTestEnumInner);
 			
+				translator.RegisterCaster<Core.SharedModel.RunePower>(translator.Get);
+				translator.RegisterCaster<Core.SharedModel.DamageResult>(translator.Get);
+				translator.RegisterCaster<Core.SharedModel.PlayerDamageResult>(translator.Get);
 			}
         }
         
@@ -771,6 +778,342 @@ namespace XLua
             }
         }
         
+        int CoreSharedModelElement_TypeID = -1;
+		int CoreSharedModelElement_EnumRef = -1;
+        
+        public void PushCoreSharedModelElement(RealStatePtr L, Core.SharedModel.Element val)
+        {
+            if (CoreSharedModelElement_TypeID == -1)
+            {
+			    bool is_first;
+                CoreSharedModelElement_TypeID = getTypeId(L, typeof(Core.SharedModel.Element), out is_first);
+				
+				if (CoreSharedModelElement_EnumRef == -1)
+				{
+				    Utils.LoadCSTable(L, typeof(Core.SharedModel.Element));
+				    CoreSharedModelElement_EnumRef = LuaAPI.luaL_ref(L, LuaIndexes.LUA_REGISTRYINDEX);
+				}
+				
+            }
+			
+			if (LuaAPI.xlua_tryget_cachedud(L, (int)val, CoreSharedModelElement_EnumRef) == 1)
+            {
+			    return;
+			}
+			
+            IntPtr buff = LuaAPI.xlua_pushstruct(L, 4, CoreSharedModelElement_TypeID);
+            if (!CopyByValue.Pack(buff, 0, (int)val))
+            {
+                throw new Exception("pack fail fail for Core.SharedModel.Element ,value="+val);
+            }
+			
+			LuaAPI.lua_getref(L, CoreSharedModelElement_EnumRef);
+			LuaAPI.lua_pushvalue(L, -2);
+			LuaAPI.xlua_rawseti(L, -2, (int)val);
+			LuaAPI.lua_pop(L, 1);
+			
+        }
+		
+        public void Get(RealStatePtr L, int index, out Core.SharedModel.Element val)
+        {
+		    LuaTypes type = LuaAPI.lua_type(L, index);
+            if (type == LuaTypes.LUA_TUSERDATA )
+            {
+			    if (LuaAPI.xlua_gettypeid(L, index) != CoreSharedModelElement_TypeID)
+				{
+				    throw new Exception("invalid userdata for Core.SharedModel.Element");
+				}
+				
+                IntPtr buff = LuaAPI.lua_touserdata(L, index);
+				int e;
+                if (!CopyByValue.UnPack(buff, 0, out e))
+                {
+                    throw new Exception("unpack fail for Core.SharedModel.Element");
+                }
+				val = (Core.SharedModel.Element)e;
+                
+            }
+            else
+            {
+                val = (Core.SharedModel.Element)objectCasters.GetCaster(typeof(Core.SharedModel.Element))(L, index, null);
+            }
+        }
+		
+        public void UpdateCoreSharedModelElement(RealStatePtr L, int index, Core.SharedModel.Element val)
+        {
+		    
+            if (LuaAPI.lua_type(L, index) == LuaTypes.LUA_TUSERDATA)
+            {
+			    if (LuaAPI.xlua_gettypeid(L, index) != CoreSharedModelElement_TypeID)
+				{
+				    throw new Exception("invalid userdata for Core.SharedModel.Element");
+				}
+				
+                IntPtr buff = LuaAPI.lua_touserdata(L, index);
+                if (!CopyByValue.Pack(buff, 0,  (int)val))
+                {
+                    throw new Exception("pack fail for Core.SharedModel.Element ,value="+val);
+                }
+            }
+			
+            else
+            {
+                throw new Exception("try to update a data with lua type:" + LuaAPI.lua_type(L, index));
+            }
+        }
+        
+        int CoreSharedModelEnemyState_TypeID = -1;
+		int CoreSharedModelEnemyState_EnumRef = -1;
+        
+        public void PushCoreSharedModelEnemyState(RealStatePtr L, Core.SharedModel.EnemyState val)
+        {
+            if (CoreSharedModelEnemyState_TypeID == -1)
+            {
+			    bool is_first;
+                CoreSharedModelEnemyState_TypeID = getTypeId(L, typeof(Core.SharedModel.EnemyState), out is_first);
+				
+				if (CoreSharedModelEnemyState_EnumRef == -1)
+				{
+				    Utils.LoadCSTable(L, typeof(Core.SharedModel.EnemyState));
+				    CoreSharedModelEnemyState_EnumRef = LuaAPI.luaL_ref(L, LuaIndexes.LUA_REGISTRYINDEX);
+				}
+				
+            }
+			
+			if (LuaAPI.xlua_tryget_cachedud(L, (int)val, CoreSharedModelEnemyState_EnumRef) == 1)
+            {
+			    return;
+			}
+			
+            IntPtr buff = LuaAPI.xlua_pushstruct(L, 4, CoreSharedModelEnemyState_TypeID);
+            if (!CopyByValue.Pack(buff, 0, (int)val))
+            {
+                throw new Exception("pack fail fail for Core.SharedModel.EnemyState ,value="+val);
+            }
+			
+			LuaAPI.lua_getref(L, CoreSharedModelEnemyState_EnumRef);
+			LuaAPI.lua_pushvalue(L, -2);
+			LuaAPI.xlua_rawseti(L, -2, (int)val);
+			LuaAPI.lua_pop(L, 1);
+			
+        }
+		
+        public void Get(RealStatePtr L, int index, out Core.SharedModel.EnemyState val)
+        {
+		    LuaTypes type = LuaAPI.lua_type(L, index);
+            if (type == LuaTypes.LUA_TUSERDATA )
+            {
+			    if (LuaAPI.xlua_gettypeid(L, index) != CoreSharedModelEnemyState_TypeID)
+				{
+				    throw new Exception("invalid userdata for Core.SharedModel.EnemyState");
+				}
+				
+                IntPtr buff = LuaAPI.lua_touserdata(L, index);
+				int e;
+                if (!CopyByValue.UnPack(buff, 0, out e))
+                {
+                    throw new Exception("unpack fail for Core.SharedModel.EnemyState");
+                }
+				val = (Core.SharedModel.EnemyState)e;
+                
+            }
+            else
+            {
+                val = (Core.SharedModel.EnemyState)objectCasters.GetCaster(typeof(Core.SharedModel.EnemyState))(L, index, null);
+            }
+        }
+		
+        public void UpdateCoreSharedModelEnemyState(RealStatePtr L, int index, Core.SharedModel.EnemyState val)
+        {
+		    
+            if (LuaAPI.lua_type(L, index) == LuaTypes.LUA_TUSERDATA)
+            {
+			    if (LuaAPI.xlua_gettypeid(L, index) != CoreSharedModelEnemyState_TypeID)
+				{
+				    throw new Exception("invalid userdata for Core.SharedModel.EnemyState");
+				}
+				
+                IntPtr buff = LuaAPI.lua_touserdata(L, index);
+                if (!CopyByValue.Pack(buff, 0,  (int)val))
+                {
+                    throw new Exception("pack fail for Core.SharedModel.EnemyState ,value="+val);
+                }
+            }
+			
+            else
+            {
+                throw new Exception("try to update a data with lua type:" + LuaAPI.lua_type(L, index));
+            }
+        }
+        
+        int CoreSharedModelNetworkTarget_TypeID = -1;
+		int CoreSharedModelNetworkTarget_EnumRef = -1;
+        
+        public void PushCoreSharedModelNetworkTarget(RealStatePtr L, Core.SharedModel.NetworkTarget val)
+        {
+            if (CoreSharedModelNetworkTarget_TypeID == -1)
+            {
+			    bool is_first;
+                CoreSharedModelNetworkTarget_TypeID = getTypeId(L, typeof(Core.SharedModel.NetworkTarget), out is_first);
+				
+				if (CoreSharedModelNetworkTarget_EnumRef == -1)
+				{
+				    Utils.LoadCSTable(L, typeof(Core.SharedModel.NetworkTarget));
+				    CoreSharedModelNetworkTarget_EnumRef = LuaAPI.luaL_ref(L, LuaIndexes.LUA_REGISTRYINDEX);
+				}
+				
+            }
+			
+			if (LuaAPI.xlua_tryget_cachedud(L, (int)val, CoreSharedModelNetworkTarget_EnumRef) == 1)
+            {
+			    return;
+			}
+			
+            IntPtr buff = LuaAPI.xlua_pushstruct(L, 4, CoreSharedModelNetworkTarget_TypeID);
+            if (!CopyByValue.Pack(buff, 0, (int)val))
+            {
+                throw new Exception("pack fail fail for Core.SharedModel.NetworkTarget ,value="+val);
+            }
+			
+			LuaAPI.lua_getref(L, CoreSharedModelNetworkTarget_EnumRef);
+			LuaAPI.lua_pushvalue(L, -2);
+			LuaAPI.xlua_rawseti(L, -2, (int)val);
+			LuaAPI.lua_pop(L, 1);
+			
+        }
+		
+        public void Get(RealStatePtr L, int index, out Core.SharedModel.NetworkTarget val)
+        {
+		    LuaTypes type = LuaAPI.lua_type(L, index);
+            if (type == LuaTypes.LUA_TUSERDATA )
+            {
+			    if (LuaAPI.xlua_gettypeid(L, index) != CoreSharedModelNetworkTarget_TypeID)
+				{
+				    throw new Exception("invalid userdata for Core.SharedModel.NetworkTarget");
+				}
+				
+                IntPtr buff = LuaAPI.lua_touserdata(L, index);
+				int e;
+                if (!CopyByValue.UnPack(buff, 0, out e))
+                {
+                    throw new Exception("unpack fail for Core.SharedModel.NetworkTarget");
+                }
+				val = (Core.SharedModel.NetworkTarget)e;
+                
+            }
+            else
+            {
+                val = (Core.SharedModel.NetworkTarget)objectCasters.GetCaster(typeof(Core.SharedModel.NetworkTarget))(L, index, null);
+            }
+        }
+		
+        public void UpdateCoreSharedModelNetworkTarget(RealStatePtr L, int index, Core.SharedModel.NetworkTarget val)
+        {
+		    
+            if (LuaAPI.lua_type(L, index) == LuaTypes.LUA_TUSERDATA)
+            {
+			    if (LuaAPI.xlua_gettypeid(L, index) != CoreSharedModelNetworkTarget_TypeID)
+				{
+				    throw new Exception("invalid userdata for Core.SharedModel.NetworkTarget");
+				}
+				
+                IntPtr buff = LuaAPI.lua_touserdata(L, index);
+                if (!CopyByValue.Pack(buff, 0,  (int)val))
+                {
+                    throw new Exception("pack fail for Core.SharedModel.NetworkTarget ,value="+val);
+                }
+            }
+			
+            else
+            {
+                throw new Exception("try to update a data with lua type:" + LuaAPI.lua_type(L, index));
+            }
+        }
+        
+        int CoreSharedModelSkillQueryType_TypeID = -1;
+		int CoreSharedModelSkillQueryType_EnumRef = -1;
+        
+        public void PushCoreSharedModelSkillQueryType(RealStatePtr L, Core.SharedModel.SkillQueryType val)
+        {
+            if (CoreSharedModelSkillQueryType_TypeID == -1)
+            {
+			    bool is_first;
+                CoreSharedModelSkillQueryType_TypeID = getTypeId(L, typeof(Core.SharedModel.SkillQueryType), out is_first);
+				
+				if (CoreSharedModelSkillQueryType_EnumRef == -1)
+				{
+				    Utils.LoadCSTable(L, typeof(Core.SharedModel.SkillQueryType));
+				    CoreSharedModelSkillQueryType_EnumRef = LuaAPI.luaL_ref(L, LuaIndexes.LUA_REGISTRYINDEX);
+				}
+				
+            }
+			
+			if (LuaAPI.xlua_tryget_cachedud(L, (int)val, CoreSharedModelSkillQueryType_EnumRef) == 1)
+            {
+			    return;
+			}
+			
+            IntPtr buff = LuaAPI.xlua_pushstruct(L, 4, CoreSharedModelSkillQueryType_TypeID);
+            if (!CopyByValue.Pack(buff, 0, (int)val))
+            {
+                throw new Exception("pack fail fail for Core.SharedModel.SkillQueryType ,value="+val);
+            }
+			
+			LuaAPI.lua_getref(L, CoreSharedModelSkillQueryType_EnumRef);
+			LuaAPI.lua_pushvalue(L, -2);
+			LuaAPI.xlua_rawseti(L, -2, (int)val);
+			LuaAPI.lua_pop(L, 1);
+			
+        }
+		
+        public void Get(RealStatePtr L, int index, out Core.SharedModel.SkillQueryType val)
+        {
+		    LuaTypes type = LuaAPI.lua_type(L, index);
+            if (type == LuaTypes.LUA_TUSERDATA )
+            {
+			    if (LuaAPI.xlua_gettypeid(L, index) != CoreSharedModelSkillQueryType_TypeID)
+				{
+				    throw new Exception("invalid userdata for Core.SharedModel.SkillQueryType");
+				}
+				
+                IntPtr buff = LuaAPI.lua_touserdata(L, index);
+				int e;
+                if (!CopyByValue.UnPack(buff, 0, out e))
+                {
+                    throw new Exception("unpack fail for Core.SharedModel.SkillQueryType");
+                }
+				val = (Core.SharedModel.SkillQueryType)e;
+                
+            }
+            else
+            {
+                val = (Core.SharedModel.SkillQueryType)objectCasters.GetCaster(typeof(Core.SharedModel.SkillQueryType))(L, index, null);
+            }
+        }
+		
+        public void UpdateCoreSharedModelSkillQueryType(RealStatePtr L, int index, Core.SharedModel.SkillQueryType val)
+        {
+		    
+            if (LuaAPI.lua_type(L, index) == LuaTypes.LUA_TUSERDATA)
+            {
+			    if (LuaAPI.xlua_gettypeid(L, index) != CoreSharedModelSkillQueryType_TypeID)
+				{
+				    throw new Exception("invalid userdata for Core.SharedModel.SkillQueryType");
+				}
+				
+                IntPtr buff = LuaAPI.lua_touserdata(L, index);
+                if (!CopyByValue.Pack(buff, 0,  (int)val))
+                {
+                    throw new Exception("pack fail for Core.SharedModel.SkillQueryType ,value="+val);
+                }
+            }
+			
+            else
+            {
+                throw new Exception("try to update a data with lua type:" + LuaAPI.lua_type(L, index));
+            }
+        }
+        
         int TutorialTestEnum_TypeID = -1;
 		int TutorialTestEnum_EnumRef = -1;
         
@@ -1026,6 +1369,123 @@ namespace XLua
         
 		// table cast optimze
 		
+		public void Get(RealStatePtr L, int index, out Core.SharedModel.RunePower val)
+        {
+		    LuaTypes type = LuaAPI.lua_type(L, index);
+            if (type == LuaTypes.LUA_TUSERDATA )
+            {
+			    val = (Core.SharedModel.RunePower)FastGetCSObj(L, index);
+            }
+			else if (type == LuaTypes.LUA_TTABLE)
+			{
+			    val = new Core.SharedModel.RunePower();
+				int top = LuaAPI.lua_gettop(L);
+				
+				if (Utils.LoadField(L, index, "value"))
+				{
+					Get(L, top + 1, out val.value);
+				}
+				LuaAPI.lua_pop(L, 1);
+				
+				if (Utils.LoadField(L, index, "label"))
+				{
+					Get(L, top + 1, out val.label);
+				}
+				LuaAPI.lua_pop(L, 1);
+				
+			}
+            else
+            {
+                throw new Exception("can not cast " + LuaAPI.lua_type(L, index) + " to " + typeof(Core.SharedModel.RunePower));
+            }
+        }
+		
+		public void Get(RealStatePtr L, int index, out Core.SharedModel.DamageResult val)
+        {
+		    LuaTypes type = LuaAPI.lua_type(L, index);
+            if (type == LuaTypes.LUA_TUSERDATA )
+            {
+			    val = (Core.SharedModel.DamageResult)FastGetCSObj(L, index);
+            }
+			else if (type == LuaTypes.LUA_TTABLE)
+			{
+			    val = new Core.SharedModel.DamageResult();
+				int top = LuaAPI.lua_gettop(L);
+				
+				if (Utils.LoadField(L, index, "FinalDamage"))
+				{
+					Get(L, top + 1, out val.FinalDamage);
+				}
+				LuaAPI.lua_pop(L, 1);
+				
+				if (Utils.LoadField(L, index, "Died"))
+				{
+					Get(L, top + 1, out val.Died);
+				}
+				LuaAPI.lua_pop(L, 1);
+				
+				if (Utils.LoadField(L, index, "WasAlreadyDead"))
+				{
+					Get(L, top + 1, out val.WasAlreadyDead);
+				}
+				LuaAPI.lua_pop(L, 1);
+				
+			}
+            else
+            {
+                throw new Exception("can not cast " + LuaAPI.lua_type(L, index) + " to " + typeof(Core.SharedModel.DamageResult));
+            }
+        }
+		
+		public void Get(RealStatePtr L, int index, out Core.SharedModel.PlayerDamageResult val)
+        {
+		    LuaTypes type = LuaAPI.lua_type(L, index);
+            if (type == LuaTypes.LUA_TUSERDATA )
+            {
+			    val = (Core.SharedModel.PlayerDamageResult)FastGetCSObj(L, index);
+            }
+			else if (type == LuaTypes.LUA_TTABLE)
+			{
+			    val = new Core.SharedModel.PlayerDamageResult();
+				int top = LuaAPI.lua_gettop(L);
+				
+				if (Utils.LoadField(L, index, "FinalDamage"))
+				{
+					Get(L, top + 1, out val.FinalDamage);
+				}
+				LuaAPI.lua_pop(L, 1);
+				
+				if (Utils.LoadField(L, index, "CurrentHealth"))
+				{
+					Get(L, top + 1, out val.CurrentHealth);
+				}
+				LuaAPI.lua_pop(L, 1);
+				
+				if (Utils.LoadField(L, index, "MaxHealth"))
+				{
+					Get(L, top + 1, out val.MaxHealth);
+				}
+				LuaAPI.lua_pop(L, 1);
+				
+				if (Utils.LoadField(L, index, "Died"))
+				{
+					Get(L, top + 1, out val.Died);
+				}
+				LuaAPI.lua_pop(L, 1);
+				
+				if (Utils.LoadField(L, index, "WasAlreadyDead"))
+				{
+					Get(L, top + 1, out val.WasAlreadyDead);
+				}
+				LuaAPI.lua_pop(L, 1);
+				
+			}
+            else
+            {
+                throw new Exception("can not cast " + LuaAPI.lua_type(L, index) + " to " + typeof(Core.SharedModel.PlayerDamageResult));
+            }
+        }
+		
         
     }
 	
@@ -1098,6 +1558,30 @@ namespace XLua
 			{
 			    XLuaTest.PushAsTableStruct[] array = obj as XLuaTest.PushAsTableStruct[];
 				translator.PushXLuaTestPushAsTableStruct(L, array[index]);
+				return true;
+			}
+			else if (type == typeof(Core.SharedModel.Element[]))
+			{
+			    Core.SharedModel.Element[] array = obj as Core.SharedModel.Element[];
+				translator.PushCoreSharedModelElement(L, array[index]);
+				return true;
+			}
+			else if (type == typeof(Core.SharedModel.EnemyState[]))
+			{
+			    Core.SharedModel.EnemyState[] array = obj as Core.SharedModel.EnemyState[];
+				translator.PushCoreSharedModelEnemyState(L, array[index]);
+				return true;
+			}
+			else if (type == typeof(Core.SharedModel.NetworkTarget[]))
+			{
+			    Core.SharedModel.NetworkTarget[] array = obj as Core.SharedModel.NetworkTarget[];
+				translator.PushCoreSharedModelNetworkTarget(L, array[index]);
+				return true;
+			}
+			else if (type == typeof(Core.SharedModel.SkillQueryType[]))
+			{
+			    Core.SharedModel.SkillQueryType[] array = obj as Core.SharedModel.SkillQueryType[];
+				translator.PushCoreSharedModelSkillQueryType(L, array[index]);
 				return true;
 			}
 			else if (type == typeof(Tutorial.TestEnum[]))
@@ -1190,6 +1674,30 @@ namespace XLua
 				translator.Get(L, obj_idx, out array[array_idx]);
 				return true;
 			}
+			else if (type == typeof(Core.SharedModel.Element[]))
+			{
+			    Core.SharedModel.Element[] array = obj as Core.SharedModel.Element[];
+				translator.Get(L, obj_idx, out array[array_idx]);
+				return true;
+			}
+			else if (type == typeof(Core.SharedModel.EnemyState[]))
+			{
+			    Core.SharedModel.EnemyState[] array = obj as Core.SharedModel.EnemyState[];
+				translator.Get(L, obj_idx, out array[array_idx]);
+				return true;
+			}
+			else if (type == typeof(Core.SharedModel.NetworkTarget[]))
+			{
+			    Core.SharedModel.NetworkTarget[] array = obj as Core.SharedModel.NetworkTarget[];
+				translator.Get(L, obj_idx, out array[array_idx]);
+				return true;
+			}
+			else if (type == typeof(Core.SharedModel.SkillQueryType[]))
+			{
+			    Core.SharedModel.SkillQueryType[] array = obj as Core.SharedModel.SkillQueryType[];
+				translator.Get(L, obj_idx, out array[array_idx]);
+				return true;
+			}
 			else if (type == typeof(Tutorial.TestEnum[]))
 			{
 			    Tutorial.TestEnum[] array = obj as Tutorial.TestEnum[];
@@ -1205,6 +1713,24 @@ namespace XLua
 			else if (type == typeof(Tutorial.DerivedClass.TestEnumInner[]))
 			{
 			    Tutorial.DerivedClass.TestEnumInner[] array = obj as Tutorial.DerivedClass.TestEnumInner[];
+				translator.Get(L, obj_idx, out array[array_idx]);
+				return true;
+			}
+			else if (type == typeof(Core.SharedModel.RunePower[]))
+			{
+			    Core.SharedModel.RunePower[] array = obj as Core.SharedModel.RunePower[];
+				translator.Get(L, obj_idx, out array[array_idx]);
+				return true;
+			}
+			else if (type == typeof(Core.SharedModel.DamageResult[]))
+			{
+			    Core.SharedModel.DamageResult[] array = obj as Core.SharedModel.DamageResult[];
+				translator.Get(L, obj_idx, out array[array_idx]);
+				return true;
+			}
+			else if (type == typeof(Core.SharedModel.PlayerDamageResult[]))
+			{
+			    Core.SharedModel.PlayerDamageResult[] array = obj as Core.SharedModel.PlayerDamageResult[];
 				translator.Get(L, obj_idx, out array[array_idx]);
 				return true;
 			}

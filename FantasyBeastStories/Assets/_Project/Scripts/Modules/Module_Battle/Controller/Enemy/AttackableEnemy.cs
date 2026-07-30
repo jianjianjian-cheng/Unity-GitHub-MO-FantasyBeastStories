@@ -1,13 +1,14 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
-using Managers; // TODO: GamePauseManager.isPaused 移到事件通道后移除
 using Core;
 using Core.Channels.Game;
 using Controllers.Player;
+using Controllers.Battle;
 using UnityEngine;
 using UnityEngine.AI;
+using Core.SharedModel;
 
-namespace Controllers.Enemy
+namespace Controllers.Battle
 {
     public class AttackableEnemy : EnemyBase
     {

@@ -1,14 +1,13 @@
-using Controllers.PowerUp;
+using Controllers.Battle;
 using Core;
 using UnityEngine;
-using Managers;
 using Core.Contracts;
 using Core.Network;
-using NetworkTarget = Controllers.Network.NetworkTarget;
 using Controllers.Network;
 using Photon.Pun;
+using Core.SharedModel;
 
-namespace Controllers.Item
+namespace Controllers.Experience
 {
     /// <summary>
     /// 道具基类 - 继承自DropItemBase，增加效果执行逻辑

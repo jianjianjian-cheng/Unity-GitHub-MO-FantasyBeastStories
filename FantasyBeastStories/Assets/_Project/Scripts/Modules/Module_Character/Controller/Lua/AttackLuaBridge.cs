@@ -1,111 +1,116 @@
 using System;
-using Controllers.Combat;
+using Controllers.Battle;
 using UnityEngine;
 using XLua;
+using Controllers.Game;
+using Core.SharedModel;
 
-/// <summary>
-/// 攻击行为 Lua 桥接器。
-/// 调度 PerformAttack / UpdateEnemyTarget 到 Lua。
-/// </summary>
-public class AttackLuaBridge
+namespace Controllers.Character
 {
-    private LuaTable _behavior;
-    private readonly string _characterName;
-    private bool _luaEnabled = true;
+  /// <summary>
+  /// 攻击行为 Lua 桥接器。
+  /// 使用强类型委托替代 LuaFunction.Call()，零 GC、类型安全。
+  /// </summary>
+  public class AttackLuaBridge
+  {
+      private LuaTable _behavior;
+      private readonly string _characterName;
+      private bool _luaEnabled = true;
 
-    public AttackLuaBridge(string characterName)
-    {
-        _characterName = characterName;
+      // 缓存委托
+      private LuaAttackAction _performAttack;
+      private LuaBoolAction _updateEnemyTarget;
+      private bool _delegatesCached;
 
-        try
-        {
-            _behavior = LuaEnvManager.Instance.LoadAttackBehavior(characterName);
-            if (_behavior != null)
-                Debug.Log($"[AttackLuaBridge] {characterName} 攻击行为 Lua 加载成功");
-            else
-                Debug.Log($"[AttackLuaBridge] {characterName} 无攻击行为 Lua（使用 C# 默认）");
-        }
-        catch (Exception e)
-        {
-            Debug.LogWarning($"[AttackLuaBridge] {characterName} Lua 加载失败: {e.Message}");
-            _luaEnabled = false;
-        }
-    }
+      public AttackLuaBridge(string characterName)
+      {
+          _characterName = characterName;
 
-    public bool TryPerformAttack(AttackRangeBase range, GameObject target)
-    {
-        if (!_luaEnabled || _behavior == null)
-            return false;
+          try
+          {
+              _behavior = LuaEnvManager.Instance.LoadAttackBehavior(characterName);
+              if (_behavior != null)
+                  Debug.Log($"[AttackLuaBridge] {characterName} 攻击行为 Lua 加载成功");
+              else
+                  Debug.Log($"[AttackLuaBridge] {characterName} 无攻击行为 Lua（使用 C# 默认）");
+          }
+          catch (Exception e)
+          {
+              Debug.LogWarning($"[AttackLuaBridge] {characterName} Lua 加载失败: {e.Message}");
+              _luaEnabled = false;
+          }
+      }
 
-        LuaFunction fn = null;
-        try
-        {
-            fn = _behavior.Get<LuaFunction>("PerformAttack");
-            if (fn == null)
-                return false;
+      private void EnsureDelegatesCached()
+      {
+          if (_delegatesCached || _behavior == null) return;
+          _delegatesCached = true;
 
-            fn.Call(range, target);
-            return true;
-        }
-        catch (Exception e)
-        {
-            Debug.LogError(
-                $"[AttackLuaBridge] {_characterName}.PerformAttack 异常:\n" +
-                $"  Error: {e.Message}\n"
-            );
-            _luaEnabled = false;
-            return false;
-        }
-        finally
-        {
-            fn?.Dispose();
-        }
-    }
+          try
+          {
+              _performAttack = _behavior.Get<LuaAttackAction>("PerformAttack");
+              _updateEnemyTarget = _behavior.Get<LuaBoolAction>("UpdateEnemyTarget");
+          }
+          catch (Exception e)
+          {
+              Debug.LogWarning($"[AttackLuaBridge] 委托缓存失败: {e.Message}");
+          }
+      }
 
-    /// <summary>尝试更新目标列表，返回 true 表示 Lua 处理了</summary>
-    public bool TryUpdateEnemyTarget(AttackRangeBase range)
-    {
-        if (!_luaEnabled || _behavior == null)
-            return false;
+      public bool TryPerformAttack(AttackRangeBase range, GameObject target)
+      {
+          if (!_luaEnabled || _behavior == null) return false;
+          EnsureDelegatesCached();
+          if (_performAttack == null) return false;
 
-        LuaFunction fn = null;
-        try
-        {
-            fn = _behavior.Get<LuaFunction>("UpdateEnemyTarget");
-            if (fn == null)
-                return false;
+          try
+          {
+              _performAttack(range, target);
+              return true;
+          }
+          catch (Exception e)
+          {
+              Debug.LogError($"[AttackLuaBridge] {_characterName}.PerformAttack 异常: {e.Message}");
+              _luaEnabled = false;
+              return false;
+          }
+      }
 
-            fn.Call(range);
-            return true;
-        }
-        catch (Exception e)
-        {
-            Debug.LogError(
-                $"[AttackLuaBridge] {_characterName}.UpdateEnemyTarget 异常:\n" +
-                $"  Error: {e.Message}\n"
-            );
-            _luaEnabled = false;
-            return false;
-        }
-        finally
-        {
-            fn?.Dispose();
-        }
-    }
+      public bool TryUpdateEnemyTarget(AttackRangeBase range)
+      {
+          if (!_luaEnabled || _behavior == null) return false;
+          EnsureDelegatesCached();
+          if (_updateEnemyTarget == null) return false;
 
-    /// <summary>热修复后重新加载</summary>
-    public void Reload()
-    {
-        _luaEnabled = true;
-        try
-        {
-            _behavior = LuaEnvManager.Instance.LoadAttackBehavior(_characterName);
-            Debug.Log($"[AttackLuaBridge] {_characterName} 攻击行为重新加载");
-        }
-        catch (Exception e)
-        {
-            Debug.LogWarning($"[AttackLuaBridge] 重新加载失败: {e.Message}");
-            _luaEnabled = false;
-        }
-    }
+          try
+          {
+              return _updateEnemyTarget(range);
+          }
+          catch (Exception e)
+          {
+              Debug.LogError($"[AttackLuaBridge] {_characterName}.UpdateEnemyTarget 异常: {e.Message}");
+              _luaEnabled = false;
+              return false;
+          }
+      }
+
+      public void Reload()
+      {
+          _luaEnabled = true;
+          _delegatesCached = false;
+          _performAttack = null;
+          _updateEnemyTarget = null;
+
+          try
+          {
+              _behavior = LuaEnvManager.Instance.LoadAttackBehavior(_characterName);
+              Debug.Log($"[AttackLuaBridge] {_characterName} 攻击行为重新加载");
+          }
+          catch (Exception e)
+          {
+              Debug.LogWarning($"[AttackLuaBridge] 重新加载失败: {e.Message}");
+              _luaEnabled = false;
+          }
+      }
+  }
 }

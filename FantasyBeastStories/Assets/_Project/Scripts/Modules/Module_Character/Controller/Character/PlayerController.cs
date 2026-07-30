@@ -1,9 +1,8 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
-using NetworkTarget = Controllers.Network.NetworkTarget;
 using Controllers.Network;
 using Controllers.Character;
-using Controllers.CardData;
+using Controllers.Card;
 using Core;
 using Core.SharedModel;
 using Core.Channels.Player;
@@ -14,9 +13,9 @@ using Core.Network;
 using UI.Input;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Managers;
 using Photon.Pun;
 using UI;
+using Controllers.Battle;
 
 namespace Controllers.Character
 {
@@ -350,7 +349,7 @@ namespace Controllers.Character
     {
       foreach (var mb in GetComponentsInChildren<MonoBehaviour>())
       {
-        if (mb is Controllers.Combat.AttackRangeBase)
+        if (mb is Controllers.Battle.AttackRangeBase)
           mb.enabled = false;
       }
     }

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Controllers.Item
+namespace Controllers.Experience
 {
     /// <summary>
     /// 掉落物纯数据类

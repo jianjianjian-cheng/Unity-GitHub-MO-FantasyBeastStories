@@ -1,8 +1,9 @@
 using System.Collections.Generic;
-using Controllers.CardData;
+using Controllers.Card;
 using Core;
 using Core.Channels.Player;
 using UnityEngine;
+using Core.SharedModel;
 
 namespace UI
 {

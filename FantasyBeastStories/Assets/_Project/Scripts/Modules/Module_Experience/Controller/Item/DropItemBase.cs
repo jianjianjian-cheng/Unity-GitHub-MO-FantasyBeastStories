@@ -2,10 +2,9 @@ using System.Collections;
 using Core;
 using Core.Contracts;
 using Core.Network;
-using Managers;
 using UnityEngine;
 
-namespace Controllers.Item
+namespace Controllers.Experience
 {
   public class DropItemBase : MonoBehaviour
   {

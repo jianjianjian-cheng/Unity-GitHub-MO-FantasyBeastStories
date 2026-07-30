@@ -1,12 +1,12 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using Core;
 using Controllers.Player;
 using Core.Contracts;
 using Core.Network;
-using Managers;
 using UnityEngine;
+using Controllers.Game;
 
 namespace Controllers.Character
 {

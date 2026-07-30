@@ -1,16 +1,15 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Core;
 using Core.Channels.RedDot;
 using Core.Channels.UI;
 using UI.Framework.Utils;
 using UnityEngine;
-using Managers;
 
 namespace UI.RedDot
 {
     /// <summary>
     /// 红点控制器：监听各系统事件 → 更新 Model → 通过事件通道广播变更。
-    /// 外部系统（如 RuneInventory、MassionPanel）通过 _instance 调用 ActivateRedDot / MarkAsRead。
+    /// 外部系统（如 RuneInventory、MissionPanel）通过 _instance 调用 ActivateRedDot / MarkAsRead。
     /// </summary>
     public class RedDotController : MonoBehaviour
     {
@@ -105,7 +104,7 @@ namespace UI.RedDot
 
         /// <summary>
         /// 标记红点为已读（关闭）。
-        /// 面板打开时调用（如 MassionPanel.OnAfterClose → MarkAsRead(MissionNew)）。
+        /// 面板打开时调用（如 MissionPanel.OnAfterClose → MarkAsRead(MissionNew)）。
         /// </summary>
         public void MarkAsRead(string key)
         {

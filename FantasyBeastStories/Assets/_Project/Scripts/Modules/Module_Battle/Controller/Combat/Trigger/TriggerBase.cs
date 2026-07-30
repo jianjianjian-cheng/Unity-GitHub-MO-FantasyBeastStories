@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using Controllers.Enemy;
+using Controllers.Battle;
 using UnityEngine;
 
-namespace Controllers.Combat
+namespace Controllers.Battle
 {
   public class TriggerBase : MonoBehaviour
   {

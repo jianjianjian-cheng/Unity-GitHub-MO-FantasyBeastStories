@@ -22,6 +22,60 @@ namespace XLua.CSObjectWrap
         static void wrapInit0(LuaEnv luaenv, ObjectTranslator translator)
         {
         
+            translator.DelayWrapLoader(typeof(Core.SharedModel.Element), CoreSharedModelElementWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Core.SharedModel.EnemyState), CoreSharedModelEnemyStateWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Core.SharedModel.NetworkTarget), CoreSharedModelNetworkTargetWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Core.SharedModel.SkillQueryType), CoreSharedModelSkillQueryTypeWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Core.SharedModel.SkillQueryData), CoreSharedModelSkillQueryDataWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Core.SharedModel.AttributePlayerBase), CoreSharedModelAttributePlayerBaseWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Core.SharedModel.PlayerMovementData), CoreSharedModelPlayerMovementDataWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Core.SharedModel.PlayerAttributeConfigSO), CoreSharedModelPlayerAttributeConfigSOWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Core.SharedModel.CardConfigSO), CoreSharedModelCardConfigSOWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Core.Network.NetworkServiceLocator), CoreNetworkNetworkServiceLocatorWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Core.EventChannelLocator), CoreEventChannelLocatorWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Core.ServiceLocator), CoreServiceLocatorWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Core.GameServiceRegistrar), CoreGameServiceRegistrarWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Core.Audio.AudioManager), CoreAudioAudioManagerWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Core.PoolHelper), CorePoolHelperWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Core.PoolConst), CorePoolConstWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Core.Lua.LuaPoolHelper), CoreLuaLuaPoolHelperWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Core.AssetLoader), CoreAssetLoaderWrap.__Register);
+        
+        
             translator.DelayWrapLoader(typeof(object), SystemObjectWrap.__Register);
         
         
@@ -120,6 +174,10 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(Tutorial.DerivedClassExtensions), TutorialDerivedClassExtensionsWrap.__Register);
         
+        }
+        
+        static void wrapInit1(LuaEnv luaenv, ObjectTranslator translator)
+        {
         
             translator.DelayWrapLoader(typeof(XLuaTest.LuaBehaviour), XLuaTestLuaBehaviourWrap.__Register);
         
@@ -170,6 +228,8 @@ namespace XLua.CSObjectWrap
         {
             
             wrapInit0(luaenv, translator);
+            
+            wrapInit1(luaenv, translator);
             
             
             translator.AddInterfaceBridgeCreator(typeof(System.Collections.IEnumerator), SystemCollectionsIEnumeratorBridge.__Create);

@@ -7,31 +7,31 @@ local M = {}
 -- C# 引用
 local PoolHelper = CS.Core.Lua.LuaPoolHelper
 local PoolConst = CS.Core.PoolConst
-local Element = CS.Element
-local NetworkServiceLocator = CS.Controllers.Services.NetworkServiceLocator
-local NetworkTarget = CS.Controllers.Network.NetworkTarget
+local Element = CS.Core.SharedModel.Element
+local NetworkServiceLocator = CS.Core.Network.NetworkServiceLocator
+local NetworkTarget = CS.Core.SharedModel.NetworkTarget
 
 -- 各元素对应的 GuiLing 投射物 + 命中特效 Addressable 路径
 local ELEMENT_POOL_MAP = {
-    [CS.Element.Winter] = {
+    [CS.Core.SharedModel.Element.Winter] = {
         projectile = "GuiLing/GuiLingWinter",
         hit = "GuiLing/GuiLingHitWinter",
         projPool = PoolConst.GuiLingWinterPool,
         hitPool = PoolConst.GuiLingHitWinterPool,
     },
-    [CS.Element.Fire] = {
+    [CS.Core.SharedModel.Element.Fire] = {
         projectile = "GuiLing/GuiLingFire",
         hit = "GuiLing/GuiLingHitFire",
         projPool = PoolConst.GuiLingFirePool,
         hitPool = PoolConst.GuiLingHitFirePool,
     },
-    [CS.Element.Lightning] = {
+    [CS.Core.SharedModel.Element.Lightning] = {
         projectile = "GuiLing/GuiLingLightning",
         hit = "GuiLing/GuiLingHitLightning",
         projPool = PoolConst.GuiLingLightningPool,
         hitPool = PoolConst.GuiLingHitLightningPool,
     },
-    [CS.Element.Grass] = {
+    [CS.Core.SharedModel.Element.Grass] = {
         projectile = "GuiLing/GuiLingGrass",
         hit = "GuiLing/GuiLingHitGrass",
         projPool = PoolConst.GuiLingGrassPool,
@@ -45,12 +45,12 @@ function M.OnStart(player)
         -- 设置 MagicUpgradeManager 卡牌类型
         local mgr = CS.UI.MagicUpgradeManager.instance
         if mgr then
-            mgr:SetCurrentEventName(CS.Controllers.CardData.CharacterCardType.BingNv)
+            mgr:SetCurrentEventName(CS.Controllers.Card.CharacterCardType.BingNv)
         end
 
         -- 默认解锁 Winter（冰女初始冰霜属性）
         player:GetAttributeBase():SetCurrentElement(Element.Winter)
-        M.UnlockElementInternal(player, CS.Element.Winter)
+        M.UnlockElementInternal(player, CS.Core.SharedModel.Element.Winter)
     end
 end
 

@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UI.Framework.Utils;
 using UI.RedDot;
 using UnityEngine;
-using Managers;
+using Core;
+using Core.Save;
 
 namespace Controllers.Rune
 {

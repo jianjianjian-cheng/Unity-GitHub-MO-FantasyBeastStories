@@ -8,6 +8,7 @@ using Core.Channels.Player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Core.SharedModel;
 
 namespace UI
 {

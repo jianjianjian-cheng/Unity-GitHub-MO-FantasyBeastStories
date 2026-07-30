@@ -1,17 +1,16 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
-using Controllers.Item;
+using Controllers.Experience;
 using UnityEngine;
 using Core;
 using Core;
 using Core.Contracts;
 using Core.Network;
-using Managers;
-using Controllers.PowerUp;
-using NetworkTarget = Controllers.Network.NetworkTarget;
+using Controllers.Battle;
 using Controllers.Network;
+using Core.SharedModel;
 
-namespace Controllers.PowerUp
+namespace Controllers.Battle
 {
     /// <summary>
     /// 经验磁铁效果 - 吸收地图上所有经验球

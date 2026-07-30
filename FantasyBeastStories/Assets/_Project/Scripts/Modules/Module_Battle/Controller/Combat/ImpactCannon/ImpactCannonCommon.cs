@@ -1,7 +1,7 @@
 using Core;
 using UnityEngine;
 
-namespace Controllers.Combat.ImpactCannon
+namespace Controllers.Battle.ImpactCannon
 {
     public class ImpactCannonCommon : ImpactCannonCommonBase
     {

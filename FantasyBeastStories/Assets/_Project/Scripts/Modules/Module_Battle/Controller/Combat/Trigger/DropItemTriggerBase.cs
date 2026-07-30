@@ -1,8 +1,8 @@
 using System.Collections;
-using Controllers.Item;
+using Controllers.Experience;
 using UnityEngine;
 
-namespace Controllers.Combat
+namespace Controllers.Battle
 {
     public class DropItemTriggerBase : MonoBehaviour
     {

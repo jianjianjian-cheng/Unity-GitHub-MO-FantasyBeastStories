@@ -5,7 +5,7 @@ using UnityEngine;
 using Core;
 using Core;
 
-namespace Controllers.Combat.ImpactCannon
+namespace Controllers.Battle.ImpactCannon
 {
     public class ImpactCannonCommonBase : MonoBehaviour
     {

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Core;
 using Core.SharedModel;
@@ -10,11 +10,10 @@ using Core.Channels.Player;
 using Controllers.Task;
 using Controllers.Network;
 using UI;
-using NetworkTarget = Controllers.Network.NetworkTarget;
 using UnityEngine;
-using Managers;
+using Controllers.Task;
 
-namespace Managers
+namespace Controllers.Task
 {
     /// <summary>
     /// 任务控制器 — 薄层 MonoBehaviour，持有 TaskModel 实例。

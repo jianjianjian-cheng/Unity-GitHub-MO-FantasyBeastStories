@@ -5,12 +5,12 @@ using Core;
 using Core.Channels.Combat;
 using Core.Channels.Player;
 using Controllers.Network;
-using Controllers.Combat;
+using Controllers.Battle;
 using UnityEngine;
-using Managers;
 using Core.Audio;
+using Core.SharedModel;
 
-namespace Controllers.Combat.ImpactCannon
+namespace Controllers.Battle.ImpactCannon
 {
   /// <summary>
   /// ImpactCannon 投射物 — 直线飞行 + 穿透 + 分裂。
@@ -85,6 +85,8 @@ namespace Controllers.Combat.ImpactCannon
     {
       this.attributePlayer = attributePlayer;
       _element = attributePlayer.GetCurrentElement();
+      _canSplit = attributePlayer.GetSplit();
+      _splitCount = attributePlayer.GetSplitCount();
     }
 
     /// <summary>供远程客户端设置元素类型（无需 attributePlayer）</summary>

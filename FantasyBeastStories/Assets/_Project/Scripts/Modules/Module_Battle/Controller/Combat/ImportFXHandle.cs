@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Core;
 
-namespace Controllers.Combat
+namespace Controllers.Battle
 {
     public class ImportFXHandle : MonoBehaviour
     {

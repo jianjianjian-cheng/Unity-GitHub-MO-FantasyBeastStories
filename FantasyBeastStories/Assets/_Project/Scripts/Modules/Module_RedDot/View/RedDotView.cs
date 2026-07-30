@@ -1,8 +1,7 @@
-﻿using Core;
+using Core;
 using Core.Channels.RedDot;
 using UI.Framework.Base;
 using UnityEngine;
-using Managers;
 
 namespace UI.RedDot
 {

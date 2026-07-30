@@ -1,18 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
-using Managers;
 using Core;
 using Core.Channels;
 using Core;
 using Core.Contracts;
 using Core.Network;
-using NetworkTarget = Controllers.Network.NetworkTarget;
 using Controllers.Network;
 using UnityEngine;
 using Core.Audio;
+using Core.SharedModel;
 
 
-namespace Controllers.Item
+namespace Controllers.Experience
 {
     public class ExperienceBallBase : DropItemBase
     {

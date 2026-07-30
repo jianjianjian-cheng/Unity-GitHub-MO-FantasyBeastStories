@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Core;
 using Core.Channels.Game;
 using Core.Channels.General;
@@ -9,9 +9,11 @@ using Core.Network;
 using Controllers.Task;
 using Controllers.Time;
 using UnityEngine;
-using Managers;
+using Core.SharedModel;
+using Controllers.Task;
+using Controllers.Time;
 
-namespace Managers
+namespace Controllers.Time
 {
     /// <summary>
     /// 时间事件协调器（Application 层）

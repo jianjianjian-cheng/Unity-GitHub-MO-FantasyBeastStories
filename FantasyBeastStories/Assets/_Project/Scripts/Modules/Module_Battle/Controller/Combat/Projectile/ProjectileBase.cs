@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
-using Controllers.Enemy;
+using Controllers.Battle;
 using Controllers.Network;
 using Core;
 using UnityEngine;
+using Core.SharedModel;
 
-namespace Controllers.Combat
+namespace Controllers.Battle
 {
     /// <summary>
     /// 统一投射物基类：提供公共字段、伤害判定框架、分裂逻辑和 GC 优化。

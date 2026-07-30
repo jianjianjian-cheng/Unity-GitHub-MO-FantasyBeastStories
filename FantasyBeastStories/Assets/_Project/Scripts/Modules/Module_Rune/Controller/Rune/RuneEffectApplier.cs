@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
+using System;
+using System.Collections.Generic;
 using Controllers.Character;
+using Controllers.Game;
 using Core;
 using UnityEngine;
 using XLua;
+using Core.SharedModel;
 
 namespace Controllers.Rune
 {
@@ -20,6 +22,23 @@ namespace Controllers.Rune
         // RuneDatabase 缓存（通过 Addressables 加载，确保使用热更后的数据）
         private static RuneDatabaseSO _database;
         private static bool _databaseLoaded;
+
+        // ────────────────────────────────────
+        //  委托字典：方法名 → 委托（替代反射）
+        //  Lua 返回方法名字符串后，直接查字典调用，零反射开销
+        // ────────────────────────────────────
+
+        private static readonly Dictionary<string, Action<AttributePlayerBase, float>> _effectActions = new()
+        {
+            { "AddAttackPower",      (attr, v) => attr.AddAttackPower(v) },
+            { "AddCriticalChance",   (attr, v) => attr.AddCriticalChance(v) },
+            { "AddDefensePower",     (attr, v) => attr.AddDefensePower(v) },
+            { "ReduceAttackInterval",(attr, v) => attr.ReduceAttackInterval((int)v) },
+            { "AddMaxHealth",        (attr, v) => attr.AddMaxHealth(v) },
+            { "AddCriticalMultiplier",(attr, v) => attr.AddCriticalMultiplier(v) },
+            { "AddMoveSpeed",        (attr, v) => attr.AddMoveSpeed(v) },
+            { "SetHealthRecover",    (attr, v) => attr.SetHealthRecover(v) },
+        };
 
         /// <summary>获取 RuneDatabase（通过 Addressables 加载，确保热更生效）</summary>
         private static RuneDatabaseSO GetDatabase()
@@ -162,15 +181,14 @@ namespace Controllers.Rune
 
                 if (!string.IsNullOrEmpty(methodName))
                 {
-                    var method = typeof(AttributePlayerBase).GetMethod(
-                        methodName, BindingFlags.Public | BindingFlags.Instance);
-                    if (method != null)
+                    // 委托字典查找（替代反射）
+                    if (_effectActions.TryGetValue(methodName, out var action))
                     {
-                        method.Invoke(attr, new object[] { power.value });
+                        action(attr, power.value);
                         Debug.Log($"[RuneEffectApplier] Lua映射: {power.label} → {methodName}({power.value})");
                         return;
                     }
-                    Debug.LogWarning($"[RuneEffectApplier] Lua 映射的方法不存在: {methodName}，回退到 C#");
+                    Debug.LogWarning($"[RuneEffectApplier] 委托字典中未找到方法: {methodName}，回退到 C#");
                 }
             }
 
@@ -264,7 +282,7 @@ namespace Controllers.Rune
 
         private static string DetectCurrentCharacterType()
         {
-            var player = Object.FindObjectOfType<PlayerController>();
+            var player = UnityEngine.Object.FindObjectOfType<PlayerController>();
             if (player == null)
             {
                 Debug.LogWarning("[RuneEffectApplier] 未找到场景中的 PlayerController，无法检测角色类型");

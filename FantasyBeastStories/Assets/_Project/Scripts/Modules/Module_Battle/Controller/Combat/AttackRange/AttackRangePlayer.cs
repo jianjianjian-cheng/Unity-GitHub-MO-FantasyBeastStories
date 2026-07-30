@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Controllers.Combat;
+using Controllers.Battle;
 using Core;
 
-namespace Controllers.Combat
+namespace Controllers.Battle
 {
   public class AttackRangePlayer : MonoBehaviour
   {

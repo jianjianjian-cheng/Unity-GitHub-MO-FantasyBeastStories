@@ -1,9 +1,9 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
-using Managers;
-using Controllers;
+using Core.Audio;
 using UnityEngine;
 using UnityEngine.Audio;
+using Core;
 
 namespace Core.Audio
 {

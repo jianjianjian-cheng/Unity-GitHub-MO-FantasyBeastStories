@@ -163,98 +163,98 @@ MonoBehaviour:
     version: 2
     RefIds:
     - rid: 4210315237150425088
-      type: {class: AddAttackPowerEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddAttackPowerEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 8
     - rid: 4210315237150425089
-      type: {class: AddDefensePowerEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddDefensePowerEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 8
     - rid: 4210315237150425090
-      type: {class: AddMaxHealthEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddMaxHealthEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 30
     - rid: 4210315237150425091
-      type: {class: AddHealthRecoverEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddHealthRecoverEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 2
     - rid: 4210315237150425092
-      type: {class: AddCriticalChanceEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddCriticalChanceEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 6
     - rid: 4210315237150425093
-      type: {class: AddCriticalMultiplierEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddCriticalMultiplierEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 10
     - rid: 4210315237150425094
-      type: {class: ReduceAttackIntervalEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: ReduceAttackIntervalEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 5
     - rid: 4210315237150425095
-      type: {class: AddLuckRateEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddLuckRateEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 5
     - rid: 4210315237150425096
-      type: {class: AddAttackPowerEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddAttackPowerEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 20
     - rid: 4210315237150425097
-      type: {class: AddDefensePowerEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddDefensePowerEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 18
     - rid: 4210315237150425098
-      type: {class: AddMaxHealthEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddMaxHealthEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 80
     - rid: 4210315237150425099
-      type: {class: AddHealthRecoverEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddHealthRecoverEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 3
     - rid: 4210315237150425100
-      type: {class: AddCriticalChanceEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddCriticalChanceEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 15
     - rid: 4210315237150425101
-      type: {class: AddCriticalMultiplierEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddCriticalMultiplierEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 20
     - rid: 4210315237150425102
-      type: {class: ReduceAttackIntervalEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: ReduceAttackIntervalEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 10
     - rid: 4210315237150425103
-      type: {class: AddLuckRateEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddLuckRateEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 10
     - rid: 4210315237150425104
-      type: {class: AddAttackPowerEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddAttackPowerEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 40
     - rid: 4210315237150425105
-      type: {class: AddDefensePowerEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddDefensePowerEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 25
     - rid: 4210315237150425106
-      type: {class: AddMaxHealthEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddMaxHealthEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 150
     - rid: 4210315237150425107
-      type: {class: AddHealthRecoverEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddHealthRecoverEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 5
     - rid: 4210315237150425108
-      type: {class: AddCriticalChanceEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddCriticalChanceEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 25
     - rid: 4210315237150425109
-      type: {class: AddCriticalMultiplierEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddCriticalMultiplierEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 50
     - rid: 4210315237150425110
-      type: {class: ReduceAttackIntervalEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: ReduceAttackIntervalEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 15
     - rid: 4210315237150425111
-      type: {class: AddLuckRateEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddLuckRateEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 20

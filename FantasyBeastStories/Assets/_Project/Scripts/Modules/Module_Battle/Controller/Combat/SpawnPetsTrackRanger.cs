@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Controllers.Combat
+namespace Controllers.Battle
 {
     public class SpawnPetsTrackRanger : MonoBehaviour
     {

@@ -1,6 +1,6 @@
-using Controllers.Character;
 using Core.Channels.Base;
 using UnityEngine;
+using Core.SharedModel;
 
 namespace Core.Channels.Player
 {

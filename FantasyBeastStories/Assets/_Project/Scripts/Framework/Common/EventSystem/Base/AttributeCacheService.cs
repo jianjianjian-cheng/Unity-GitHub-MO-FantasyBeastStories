@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using Controllers.Character;
 using Core.Channels.Player;
 using Core.Contracts;
 using Core.Network;
 using UnityEngine;
+using Core.SharedModel;
 
 namespace Core
 {

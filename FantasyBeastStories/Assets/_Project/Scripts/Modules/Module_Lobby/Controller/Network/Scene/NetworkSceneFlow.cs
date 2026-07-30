@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using ExitGames.Client.Photon;
 using Photon.Pun;
@@ -6,7 +6,7 @@ using Core.Contracts;
 using Core.Network;
 using UI.Framework.Panel;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
-using Managers;
+using Core;
 
 namespace Controllers.Network
 {

@@ -4,11 +4,10 @@ using Controllers.Character;
 using Core;
 using Core.Contracts;
 using Core.Network;
-using NetworkTarget = Controllers.Network.NetworkTarget;
 using UnityEngine;
-using Managers;
 using Controllers.Network;
 using Photon.Pun;
+using Core.SharedModel;
 
 namespace UI.Other
 {

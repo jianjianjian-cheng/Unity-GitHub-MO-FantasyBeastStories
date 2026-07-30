@@ -1,4 +1,5 @@
 using Core.Channels.Base;
+using Core.SharedModel;
 using UnityEngine;
 
 namespace Core.Channels.Combat
@@ -6,12 +7,6 @@ namespace Core.Channels.Combat
     [CreateAssetMenu(menuName = "Events/Combat/Enemy Report Event Channel")]
     public class EnemyReportEventChannelSO : BaseEventChannelSO<EnemyReportData>
     {
-    }
-
-    public enum EnemyReportType
-    {
-        Kill,
-        EscortArrive,
     }
 
     public class EnemyReportData : EventArgsBase

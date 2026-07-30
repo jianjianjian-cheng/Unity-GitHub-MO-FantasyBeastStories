@@ -1,15 +1,16 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Controllers.Character;
 using Core;
 using Controllers.Player;
-using Controllers.Enemy;
+using Controllers.Battle;
 using Controllers.Network;
 using UnityEngine;
-using Managers;
 using Core.Audio;
+using Core.SharedModel;
+using Controllers.Battle;
 
-namespace Controllers.Combat
+namespace Controllers.Battle
 {
     /// <summary>
     /// 攻击范围基类：负责检测范围内的敌人，攻击逻辑由子类实现或 Lua 回调驱动

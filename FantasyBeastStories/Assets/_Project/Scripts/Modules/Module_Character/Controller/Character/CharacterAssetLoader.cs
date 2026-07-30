@@ -1,5 +1,6 @@
-﻿using Core;
+using Core;
 using UnityEngine;
+using Core.SharedModel;
 
 namespace Controllers.Character
 {

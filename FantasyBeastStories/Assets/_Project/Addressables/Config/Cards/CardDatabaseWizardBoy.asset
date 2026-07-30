@@ -108,76 +108,76 @@ MonoBehaviour:
     version: 2
     RefIds:
     - rid: 4210315237150425112
-      type: {class: AddMaxAttackCountEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddMaxAttackCountEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 1
     - rid: 4210315237150425113
-      type: {class: AddComboCountEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddComboCountEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 1
     - rid: 4210315237150425114
-      type: {class: SwitchElementEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: SwitchElementEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         element: 1
     - rid: 4210315237150425115
-      type: {class: AddAttackPowerEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddAttackPowerEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 20
     - rid: 4210315237150425116
-      type: {class: SwitchElementEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: SwitchElementEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         element: 3
     - rid: 4210315237150425117
-      type: {class: AddHealthRecoverEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddHealthRecoverEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 2
     - rid: 4210315237150425118
-      type: {class: SetSplitEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: SetSplitEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         enabled: 1
         splitCount: 1
     - rid: 4210315237150425119
-      type: {class: SwitchElementEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: SwitchElementEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         element: 2
     - rid: 4210315237150425120
-      type: {class: AddAttackPowerEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddAttackPowerEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 20
     - rid: 4210315237150425121
-      type: {class: AddAttackPowerEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddAttackPowerEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 20
     - rid: 4210315237150425122
-      type: {class: UnlockElementEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: UnlockElementEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         element: 4
     - rid: 4210315237150425123
-      type: {class: AddHealthRecoverEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddHealthRecoverEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 2
     - rid: 4210315237150425124
-      type: {class: UnlockElementEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: UnlockElementEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         element: 3
     - rid: 4210315237150425125
-      type: {class: UnlockElementEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: UnlockElementEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         element: 1
     - rid: 4210315237150425126
-      type: {class: AddAttackPowerEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddAttackPowerEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 20
     - rid: 4210315237150425127
-      type: {class: AddComboCountEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddComboCountEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 1
     - rid: 4210315237150425128
-      type: {class: AddMultiTargetCountEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: AddMultiTargetCountEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         value: 1
     - rid: 4210315237150425129
-      type: {class: SetSplitEffect, ns: Controllers.CardData, asm: Assembly-CSharp}
+      type: {class: SetSplitEffect, ns: Core.SharedModel, asm: FantasyBeastStories.Core}
       data:
         enabled: 1
         splitCount: 1

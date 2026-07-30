@@ -1,7 +1,8 @@
 using UnityEngine;
 using Core;
+using Core.SharedModel;
 
-namespace Controllers.Combat
+namespace Controllers.Battle
 {
     public class ColliderTriggerBase : MonoBehaviour
     {

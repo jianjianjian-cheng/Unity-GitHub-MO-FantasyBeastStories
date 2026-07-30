@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using Core;
-using Controllers.Combat;
+using Controllers.Battle;
 using UnityEngine;
+using Core.SharedModel;
 
-namespace Controllers.Combat.FireBallBoss
+namespace Controllers.Battle.FireBallBoss
 {
-  public class FIreBallProjectile : MonoBehaviour, IFIreBallProjectile
+  public class FireBallProjectile : MonoBehaviour, IFIreBallProjectile
   {
     [Header("运动相关参数")]
     [SerializeField]

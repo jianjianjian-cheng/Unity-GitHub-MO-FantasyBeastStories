@@ -1,3 +1,4 @@
+using Core.SharedModel;
 using System.Collections.Generic;
 using UnityEngine;
 

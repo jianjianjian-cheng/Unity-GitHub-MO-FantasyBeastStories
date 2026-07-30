@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using Controllers.Character;
 using Core;
 using Core.SharedModel;
@@ -10,9 +10,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Hashtable = ExitGames.Client.Photon;
-using Managers;
 using Core.Contracts;
 using Core.Network;
+using Controllers.Battle;
+using Controllers.Game;
 
 namespace Controllers.Network
 {
@@ -60,6 +61,11 @@ namespace Controllers.Network
         DontDestroyOnLoad(gameObject);
         NetworkServiceLocator.RegisterObjectPoolService(this);
         NetworkServiceLocator.RegisterGameActionService(this);
+
+        // 设置早期服务回调（GameServiceRegistrar 中的 EarlyXxxService 会委托到这些回调）
+        GameServiceRegistrar.ReturnToLobbyCallback = () => ReturnToLobby();
+        GameServiceRegistrar.QuitToMainMenuCallback = () => QuitToMainMenu();
+        GameServiceRegistrar.SetLocalReadyCallback = (ready) => SetLocalReady(ready);
 
         Model = new LobbyModel();
       }
@@ -337,7 +343,7 @@ namespace Controllers.Network
       {
         EventChannelLocator.MainContainer.gameSettings.IsStayLobby = true;
 
-        if (Managers.GamePauseManager.isPaused)
+        if (Controllers.Battle.GamePauseManager.isPaused)
           EventChannelLocator.MainContainer.pauseChannel?.Raise(false);
 
         InitGetUI();
@@ -368,7 +374,7 @@ namespace Controllers.Network
         ServiceLocator.Get<GameManager>().isReady = false;
         EventChannelLocator.MainContainer.gameSettings.IsStayLobby = false;
 
-        if (Managers.GamePauseManager.isPaused)
+        if (Controllers.Battle.GamePauseManager.isPaused)
           EventChannelLocator.MainContainer.pauseChannel?.Raise(false);
 
         _sceneFlow.ResetForLobby();

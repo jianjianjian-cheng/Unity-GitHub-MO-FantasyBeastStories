@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Core.SharedModel;
 
-namespace Controllers.CardData
+namespace Controllers.Card
 {
     public class CardConfigBase
     {

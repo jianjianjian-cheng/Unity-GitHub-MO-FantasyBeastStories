@@ -16,7 +16,7 @@ namespace Core
             get
             {
                 if (_mgr == null)
-                    _mgr = Managers.ServiceLocator.Get<ObjectPoolManager>();
+                    _mgr = ServiceLocator.Get<ObjectPoolManager>();
                 return _mgr;
             }
         }

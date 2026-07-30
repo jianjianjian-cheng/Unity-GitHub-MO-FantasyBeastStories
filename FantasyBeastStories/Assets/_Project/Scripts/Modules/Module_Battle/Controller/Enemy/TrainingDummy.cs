@@ -1,7 +1,8 @@
 using Core;
 using UnityEngine;
+using Core.SharedModel;
 
-namespace Controllers.Enemy
+namespace Controllers.Battle
 {
     public class TrainingDummy : EnemyBase
     {

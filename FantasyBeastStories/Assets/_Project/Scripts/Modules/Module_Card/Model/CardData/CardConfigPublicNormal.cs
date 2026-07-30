@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Controllers.CardData
+namespace Controllers.Card
 {
     [System.Serializable]
     public class CardConfigPublicNormal : CardConfigBase { }

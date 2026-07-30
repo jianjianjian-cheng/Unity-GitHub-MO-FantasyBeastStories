@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace Controllers.Combat
+namespace Controllers.Battle
 {
     public class KillSacrificeTrigger : MonoBehaviour
     {

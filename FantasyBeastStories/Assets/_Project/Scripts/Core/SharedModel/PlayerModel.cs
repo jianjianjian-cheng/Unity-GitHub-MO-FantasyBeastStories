@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Controllers.Character;
 
 namespace Core.SharedModel
 {

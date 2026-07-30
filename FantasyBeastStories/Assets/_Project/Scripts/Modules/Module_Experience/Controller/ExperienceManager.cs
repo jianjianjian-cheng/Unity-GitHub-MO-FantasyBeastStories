@@ -1,21 +1,22 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Core;
 using Core.SharedModel;
 using Core.Channels.Game;
 using Core.Channels.General;
 using Core.Channels.Player;
-using Controllers.Item;
+using Controllers.Experience;
 using Core.Contracts;
 using Core.Network;
-using NetworkTarget = Controllers.Network;
 using Controllers.Network;
 using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Managers;
+using Controllers.Battle;
+using Controllers.Experience;
+using Controllers.Task;
 
-namespace Managers
+namespace Controllers.Experience
 {
     /// <summary>
     /// 经验控制器 — 薄层 MonoBehaviour，持有 ExperienceModel 实例。
@@ -112,7 +113,7 @@ namespace Managers
             {
                 NetworkServiceLocator.ObjectService.InvokeRPC(
                     ManagerRpcBridge.Instance, "RPC_SyncExperience",
-                    NetworkTarget.NetworkTarget.All, Model.CurrentExperience);
+                    NetworkTarget.All, Model.CurrentExperience);
             }
 
             if (Model.HasPendingLevelUps && !Model.IsProcessingLevelUp)
@@ -131,7 +132,7 @@ namespace Managers
             {
                 NetworkServiceLocator.ObjectService.InvokeRPC(
                     ManagerRpcBridge.Instance, "RPC_SyncExperience",
-                    NetworkTarget.NetworkTarget.All, Model.CurrentExperience);
+                    NetworkTarget.All, Model.CurrentExperience);
             }
 
             if (Model.HasPendingLevelUps && !Model.IsProcessingLevelUp)
@@ -175,14 +176,14 @@ namespace Managers
             }
             NetworkServiceLocator.ObjectService.InvokeRPC(
                 ManagerRpcBridge.Instance, "OpenMagicUpgradePanel",
-                NetworkTarget.NetworkTarget.All);
+                NetworkTarget.All);
         }
 
         public void OnPlayerUpgradeChoiceConfirmed()
         {
             NetworkServiceLocator.ObjectService.InvokeRPC(
                 ManagerRpcBridge.Instance, "CloseMagicUpgradePanel",
-                NetworkTarget.NetworkTarget.All);
+                NetworkTarget.All);
         }
 
         // ──────────────────────────────────
@@ -228,7 +229,7 @@ namespace Managers
             }
             NetworkServiceLocator.ObjectService.InvokeRPC(
                 ManagerRpcBridge.Instance, "OpenExMagicUpgradePanel",
-                NetworkTarget.NetworkTarget.All);
+                NetworkTarget.All);
         }
 
         public static void HandleSyncExperienceRPC(int syncedExp)
@@ -310,7 +311,7 @@ namespace Managers
 
             NetworkServiceLocator.ObjectService.InvokeRPC(
                 ManagerRpcBridge.Instance, "RPC_ExpBallCollected",
-                NetworkTarget.NetworkTarget.All, (int)ballId);
+                NetworkTarget.All, (int)ballId);
         }
 
         private void HideLocalExpBall(uint ballId)

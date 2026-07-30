@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using Controllers.Enemy;
-using Controllers.Combat;
+using Controllers.Battle;
+using Controllers.Battle;
 using Core;
 using UnityEngine;
 
-namespace Controllers.Combat
+namespace Controllers.Battle
 {
   public class FlyBallTrigger : TriggerBase
   {

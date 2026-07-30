@@ -1,4 +1,5 @@
-using NetworkTarget = Controllers.Network.NetworkTarget;
+using Core.SharedModel;
+
 
 namespace Core.Contracts
 {

@@ -3,7 +3,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 using Core;
-using Managers;
+using Controllers.Battle;
 using UI.Framework.Manager;
 
 public static class DiagMatchResult

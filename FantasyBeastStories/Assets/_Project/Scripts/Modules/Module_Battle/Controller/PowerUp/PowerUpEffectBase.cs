@@ -1,7 +1,8 @@
 using UnityEngine;
-using Controllers.PowerUp;
+using Controllers.Battle;
+using Core.SharedModel;
 
-namespace Controllers.PowerUp
+namespace Controllers.Battle
 {
     /// <summary>
     /// 道具效果抽象基类
